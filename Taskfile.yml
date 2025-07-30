@@ -1,0 +1,19 @@
+version: '3'
+
+dotenv: [.env]
+
+tasks:
+  default:
+    desc: Display all tasks
+    cmds:
+      - task: list
+  
+  list:
+    desc: List all tasks
+    cmds:
+      - task -l
+
+  gen:sqlc:
+    desc: Generate sqlc
+    cmds:
+      - cd back-end && sqlc generate
