@@ -87,7 +87,7 @@ func (db *DB) runMigrations(ctx context.Context) error {
 }
 
 func loadMigrations() ([]Migration, error) {
-	entries, err := migrationFiles.ReadDir("migrations/postgres")
+	entries, err := migrationFiles.ReadDir("migrations")
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +108,7 @@ func loadMigrations() ([]Migration, error) {
 			continue
 		}
 
-		content, err := migrationFiles.ReadFile(filepath.Join("migrations/postgres", entry.Name()))
+		content, err := migrationFiles.ReadFile(filepath.Join("migrations", entry.Name()))
 		if err != nil {
 			return nil, err
 		}

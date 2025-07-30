@@ -17,6 +17,21 @@ CREATE TYPE user_role AS ENUM (
     'GUEST'
 );
 
+
+  CREATE TABLE IF NOT EXISTS users (
+    id TEXT NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    image TEXT,
+    email TEXT NOT NULL,
+    email_verified timestamp(3) with time zone,
+    password TEXT,
+    provider TEXT,
+    external_user boolean DEFAULT false NOT NULL,
+    role user_role DEFAULT 'USER'::user_role NOT NULL,
+    created_at timestamp(3) with time zone DEFAULT CURRENT_TIMESTAMP,
+    tos boolean DEFAULT false NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS facility (
     id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name TEXT NOT NULL,
@@ -47,18 +62,6 @@ CREATE TABLE IF NOT EXISTS notifications (
     CONSTRAINT fk_facility_id FOREIGN KEY (facility_id) REFERENCES facility (id),
     CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users (id)
 );
-
--- CREATE TABLE IF NOT EXISTS "Events" (
---     "id" TEXT NOT NULL,
---     "calendarId" TEXT,
---     "title" TEXT,
---     "start" timestamp(3) with time zone,
---     "end" timestamp(3) with time zone,
---     "location" TEXT,
---     "recurringEventId" TEXT,
---     "facilityId" bigint,
---     "placeholder" boolean DEFAULT false
--- );
 
 
 CREATE TABLE IF NOT EXISTS reservation (
@@ -163,20 +166,6 @@ CREATE TABLE IF NOT EXISTS reservation_date (
 
 
 
-
-  CREATE TABLE IF NOT EXISTS users (
-    id TEXT NOT NULL PRIMARY KEY,
-    name TEXT NOT NULL,
-    image TEXT,
-    email TEXT NOT NULL,
-    email_verified timestamp(3) with time zone,
-    password TEXT,
-    provider TEXT,
-    external_user boolean DEFAULT false NOT NULL,
-    role user_role DEFAULT 'USER'::user_role NOT NULL,
-    created_at timestamp(3) with time zone DEFAULT CURRENT_TIMESTAMP,
-    tos boolean DEFAULT false NOT NULL
-);
 
 
 
