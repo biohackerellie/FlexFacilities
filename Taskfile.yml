@@ -16,4 +16,33 @@ tasks:
   gen:sqlc:
     desc: Generate sqlc
     cmds:
-      - cd back-end && sqlc generate
+      - cd api && sqlc generate
+  clean:bun:
+    desc: clean files
+    cmds:
+      - cd app && bun run clean
+  lint:bun:
+    desc: lint files
+    cmds: 
+      - cd app && bun run check:fix
+  typecheck:
+    desc: typecheck files
+    cmds:
+      - cd app && bun run typecheck
+  dev:bun:
+    desc: start dev server
+    cmds:
+      - cd app && bun --bun --env-file=../.env run dev
+  install:bun:
+    desc: install dependencies
+    cmds:
+      - cd app && bun install
+  install:go:
+    desc: install dependencies
+    cmds:
+      - cd api && go install
+  install:
+    desc: install dependencies
+    cmds:
+      - task install:bun
+      - task install:go
