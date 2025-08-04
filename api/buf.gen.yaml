@@ -1,0 +1,12 @@
+version: v2
+plugins:
+  - local: protoc-gen-go
+    out: internal/
+    opt: paths=source_relative
+  - local: protoc-gen-connect-go
+    out: internal/
+    opt: paths=source_relative
+  - local: protoc-gen-es
+    out: ../app/src/lib/rpc/
+    include_imports: true
+    opt: target=ts

@@ -17,6 +17,11 @@ tasks:
     desc: Generate sqlc
     cmds:
       - cd api && sqlc generate
+  gen:proto:
+    desc: Generate proto
+    cmds:
+      - cd api && buf generate
+
   clean:bun:
     desc: clean files
     cmds:
@@ -33,6 +38,10 @@ tasks:
     desc: start dev server
     cmds:
       - cd app && bun --bun --env-file=../.env run dev
+  dev:
+    desc: start dev go and bun servers
+    cmds:
+      - concurrently "cd api && air -c .air.toml -- -env ../.env" "cd app && bun --bun --env-file=../.env run dev"
   install:bun:
     desc: install dependencies
     cmds:
@@ -40,9 +49,13 @@ tasks:
   install:go:
     desc: install dependencies
     cmds:
-      - cd api && go install
+      - cd api && go mod tidy
   install:
     desc: install dependencies
     cmds:
       - task install:bun
       - task install:go
+  bun:
+    desc: run bun commands
+    cmds:
+      - cd app && bun {{.CLI_ARGS}}

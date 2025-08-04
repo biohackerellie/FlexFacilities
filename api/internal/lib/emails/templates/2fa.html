@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+    <meta charset="UTF-8">
+		<title>{{.Subject}}</title>
+    <style>
+      body {
+				font-family: Arial, sans-serif;
+				line-height: 1.6;
+				color: #333;
+			}
+      .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #007cba;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+      }
+    </style> 
+	</head>
+	<body>
+		<h1>{{.Subject}}</h1>
+    <h2>Two-factor authentication code: {{.Code}}</h2>
+    <p>Click here to verify <a href="{{.URL}}" class="btn" target="_blank">Open</a></p>
+		<hr />
+		<p style="font-style: italic; font-size: small; color: gray">
+			This is an automated email. Replies will not be processed or read.
+		</p>
+	</body>
+</html>

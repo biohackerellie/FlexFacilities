@@ -1,9 +1,10 @@
 package models
 
 import (
+	"api/internal/lib/utils"
+	pbUsers "api/internal/proto/users"
 	"database/sql/driver"
 	"fmt"
-
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
@@ -121,6 +122,10 @@ const (
 	UserRoleSTAFF UserRole = "STAFF"
 	UserRoleGUEST UserRole = "GUEST"
 )
+
+func (u UserRole) String() string {
+	return string(u)
+}
 
 func (e *UserRole) Scan(src any) error {
 	switch s := src.(type) {
@@ -268,9 +273,10 @@ type ReservationFee struct {
 
 type Session struct {
 	ID           string             `db:"id" json:"id"`
-	SessionToken string             `db:"session_token" json:"session_token"`
 	UserID       string             `db:"user_id" json:"user_id"`
-	Expires      pgtype.Timestamptz `db:"expires" json:"expires"`
+	RefreshToken *string            `db:"refresh_token" json:"refresh_token"`
+	CreatedAt    pgtype.Timestamptz `db:"created_at" json:"created_at"`
+	ExpiresAt    pgtype.Timestamptz `db:"expires_at" json:"expires_at"`
 }
 
 type Users struct {
@@ -279,12 +285,27 @@ type Users struct {
 	Image         *string            `db:"image" json:"image"`
 	Email         string             `db:"email" json:"email"`
 	EmailVerified pgtype.Timestamptz `db:"email_verified" json:"email_verified"`
-	Password      *string            `db:"password" json:"password"`
+	Password      *string            `db:"password" json:"password,omitempty"`
 	Provider      *string            `db:"provider" json:"provider"`
 	ExternalUser  bool               `db:"external_user" json:"external_user"`
 	Role          UserRole           `db:"role" json:"role"`
 	CreatedAt     pgtype.Timestamptz `db:"created_at" json:"created_at"`
 	Tos           bool               `db:"tos" json:"tos"`
+}
+
+func (u *Users) ToProto() *pbUsers.Users {
+	return &pbUsers.Users{
+		Id:            u.ID,
+		Name:          u.Name,
+		Image:         u.Image,
+		Email:         u.Email,
+		EmailVerified: utils.PgTimestamptzToString(u.EmailVerified),
+		Password:      u.Password,
+		Role:          u.Role.String(),
+		Provider:      u.Provider,
+		ExternalUser:  u.ExternalUser,
+		Tos:           u.Tos,
+	}
 }
 
 type VerificationToken struct {

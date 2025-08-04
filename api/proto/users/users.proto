@@ -8,7 +8,7 @@ message Notifications {
   int32 id = 1;
   int32 facility_id = 2;
   string building = 3;
-  repeated User users = 4;
+  repeated Users users = 4;
 }
 
 message Users {
@@ -20,16 +20,9 @@ message Users {
   optional string password = 6;
   optional string provider = 7;
   bool external_user = 8;
-  UserRole role = 9;
+  string role = 9;
   string created_at = 10; // RFC3339 string
   bool tos = 11;
-}
-enum UserRole {
-  USER_ROLE_UNSPECIFIED = 0;
-  USER = 1;
-  ADMIN = 2;
-  STAFF = 3;
-  GUEST = 4;
 }
 
 message VerificationToken {
@@ -39,19 +32,35 @@ message VerificationToken {
 }
 
 service UsersService {
-  rpc GetUserByEmail (UserByEmailRequest) returns (User);
-  rpc GetUser (GetUserRequest) returns (User);
-  rpc GetUsers (GetUsersRequest) returns (repeated User);
-  rpc CreateUser (CreateUserRequest) returns (User);
-  rpc UpdateUser (UpdateUserRequest) returns (User);
+  rpc GetUserByEmail (UserByEmailRequest) returns (Users);
+  rpc GetUser (GetUserRequest) returns (Users);
+  rpc GetUsers (GetUsersRequest) returns (GetUsersResponse){
+    option idempotency_level = NO_SIDE_EFFECTS;
+  };
+  rpc CreateUser (CreateUserRequest) returns (Users);
+  rpc UpdateUser (UpdateUserRequest) returns (Users);
   rpc DeleteUser (DeleteUserRequest) returns (DeleteUserResponse);
-  rpc GetNotifications (GetNotificationsRequest) returns (repeated Notifications);
-  rpc GetUserNotifications (GetUserNotificationsRequest) returns (repeated Notifications);
+  rpc GetNotifications (GetNotificationsRequest) returns (GetNotificationsResponse){
+    option idempotency_level = NO_SIDE_EFFECTS;
+  };
+  rpc GetUserNotifications (GetUserNotificationsRequest) returns (GetUserNotificationsResponse){
+    option idempotency_level = NO_SIDE_EFFECTS;
+  };
   rpc CreateNotification (CreateNotificationRequest) returns (Notifications);
   rpc EditNotification (EditNotificationRequest) returns (Notifications);
   rpc DeleteNotification (DeleteNotificationRequest) returns (DeleteNotificationResponse);
 }
 
+message GetUserNotificationsResponse {
+  repeated Notifications notifications = 1;
+}
+message GetNotificationsResponse {
+  repeated Notifications notifications = 1;
+}
+
+message GetUsersResponse {
+  repeated Users users = 1;
+}
 message UserByEmailRequest {
   string email = 1;
 }
@@ -62,11 +71,11 @@ message GetUserRequest {
 message GetUsersRequest {}
 
 message CreateUserRequest {
- User user = 1;
+ Users user = 1;
 }
 
 message UpdateUserRequest {
-  User user = 1;
+  Users user = 1;
 }
 
 message DeleteUserRequest {

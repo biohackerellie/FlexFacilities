@@ -23,3 +23,83 @@ message Category {
   double price = 4;
   int64 facility_id = 5;
 }
+
+message FacilityWithCategories {
+  Facility facility = 1;
+  repeated Category categories = 2;
+}
+
+service FacilitiesService {
+  rpc GetAllFacilities (GetAllFacilitiesRequest) returns (GetAllFacilitiesResponse){
+    option idempotency_level = NO_SIDE_EFFECTS;
+  };
+  rpc GetFacility (GetFacilityRequest) returns (FacilityWithCategories){
+    option idempotency_level = NO_SIDE_EFFECTS;
+  };
+  rpc GetFacilityCategories (GetFacilityCategoriesRequest) returns (GetFacilityCategoriesResponse){
+    option idempotency_level = NO_SIDE_EFFECTS;
+  };
+  rpc GetBuildingFacilities (GetBuildingFacilitiesRequest) returns (GetBuildingFacilitiesResponse){
+    option idempotency_level = NO_SIDE_EFFECTS;
+  };
+  rpc CreateFacility (CreateFacilityRequest) returns (FacilityWithCategories);
+  rpc UpdateFacility (UpdateFacilityRequest) returns (FacilityWithCategories);
+  rpc DeleteFacility (DeleteFacilityRequest) returns (DeleteFacilityResponse);
+  rpc CreateFacilityCategory (CreateFacilityCategoryRequest) returns (Category);
+  rpc UpdateFacilityCategory (UpdateFacilityCategoryRequest) returns (Category);
+  rpc DeleteFacilityCategory (DeleteFacilityCategoryRequest) returns (DeleteFacilityCategoryResponse);
+}
+
+message GetAllFacilitiesRequest {
+}
+
+message GetFacilityRequest {
+  int64 id = 1;
+}
+
+message GetFacilityCategoriesRequest {
+  int64 id = 1;
+}
+
+message GetBuildingFacilitiesRequest {
+  string building = 1;
+}
+message GetAllFacilitiesResponse {
+  repeated FacilityWithCategories facilities = 1;
+}
+
+message GetFacilityCategoriesResponse {
+  repeated Category categories = 1;
+}
+
+message GetBuildingFacilitiesResponse {
+  repeated FacilityWithCategories facilities = 1;
+}
+
+message CreateFacilityRequest {
+  Facility facility = 1;
+  repeated Category categories = 2;
+}
+
+message UpdateFacilityRequest {
+  Facility facility = 1;
+  repeated Category categories = 2;
+}
+
+message DeleteFacilityRequest {
+  int64 id = 1;
+}
+
+message DeleteFacilityCategoryResponse {}
+message DeleteFacilityCategoryRequest {
+  int64 id = 1;
+}
+message DeleteFacilityResponse {}
+message CreateFacilityCategoryRequest {
+  Category category = 1;
+}
+message UpdateFacilityCategoryRequest {
+  Category category = 1;
+}
+
+

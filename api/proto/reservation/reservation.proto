@@ -1,0 +1,189 @@
+syntax = "proto3";
+
+package api.reservation;
+
+option go_package = "api/internal/proto/reservation;reservationservice";
+import "proto/facilities/facilities.proto";
+
+
+message Reservation {
+  int64 id = 1;
+  string user_id = 2;
+  string event_name = 3;
+  int64 facility_id = 4;
+  string approved = 5;
+  string created_at = 6;
+  string updated_at = 7;
+  optional string details = 8;
+  string fees = 9;                // pgtype.Numeric as string
+  bool insurance = 10;
+  optional string primary_contact = 11;
+  optional bool door_access = 12;
+  optional string doors_details = 13;
+  optional string name = 14;
+  optional string people = 15;
+  optional string tech_details = 16;
+  optional bool tech_support = 17;
+  optional string phone = 18;
+  int64 category_id = 19;
+  optional double total_hours = 20;
+  bool in_person = 21;
+  bool paid = 22;
+  optional string payment_url = 23;
+  optional string payment_link_id = 24;
+  bool ticket_made = 25;
+  bool conflicts = 26;
+  optional string insurance_link = 27;
+  string cost_override = 28;      // pgtype.Numeric as string
+}
+
+
+
+message ReservationDate {
+  int64 id = 1;
+  string start_date = 2;                  // "YYYY-MM-DD"
+  string end_date = 3;                    // "YYYY-MM-DD"
+  string start_time = 4;                  // "HH:MM"
+  string end_time = 5;                    // "HH:MM"
+  int64 reservation_id = 6;
+  string approved = 7;
+  optional string gcal_eventid = 8;
+}
+
+message ReservationFee {
+  int64 id = 1;
+  string additional_fees = 2;             // pgtype.Numeric as string
+  optional string fees_type = 3;
+  int64 reservation_id = 4;
+}
+
+message FullReservation {
+  Reservation reservation = 1;
+  repeated ReservationDate dates = 2;
+  repeated ReservationFee fees = 3;
+  facilities.Facility facility = 4;
+}
+
+
+service ReservationService {
+  rpc GetAllReservations (GetAllReservationsRequest) returns (AllReservationsResponse){
+    option idempotency_level = NO_SIDE_EFFECTS;
+  };
+  rpc GetReservation (GetReservationRequest) returns (FullReservation){
+    option idempotency_level = NO_SIDE_EFFECTS;
+  };
+  rpc RequestCount (RequestCountRequest) returns (RequestCountResponse){
+    option idempotency_level = NO_SIDE_EFFECTS;
+  };
+  rpc GetRequestsThisWeek (GetRequestsThisWeekRequest) returns (RequestThisWeekResponse){
+    option idempotency_level = NO_SIDE_EFFECTS;
+  };
+  rpc GetAllApprovedReservations (GetAllApprovedReservationsRequest) returns (ApprovedReservationsResponse){
+    option idempotency_level = NO_SIDE_EFFECTS;
+  };
+  rpc GetAllPendingReservations (GetAllPendingReservationsRequest) returns (PendingReservationsResponse){
+    option idempotency_level = NO_SIDE_EFFECTS;
+  };
+  rpc CreateReservation (CreateReservationRequest) returns (CreateReservationResponse);
+  rpc UpdateReservation (UpdateReservationRequest) returns (UpdateReservationResponse);
+  rpc DeleteReservation (DeleteReservationRequest) returns (DeleteReservationResponse);
+  rpc UserReservations (UserReservationsRequest) returns (UserReservationsResponse){
+    option idempotency_level = NO_SIDE_EFFECTS;
+  };
+  rpc CreateReservationDate (CreateReservationDateRequest) returns (CreateReservationDateResponse);
+  rpc UpdateReservationDate (UpdateReservationDateRequest) returns (UpdateReservationDateResponse);
+  rpc DeleteReservationDate (DeleteReservationDateRequest) returns (DeleteReservationDateResponse);
+  rpc CreateReservationFee (CreateReservationFeeRequest) returns (CreateReservationFeeResponse);
+  rpc UpdateReservationFee (UpdateReservationFeeRequest) returns (UpdateReservationFeeResponse);
+  rpc DeleteReservationFee (DeleteReservationFeeRequest) returns (DeleteReservationFeeResponse);
+}
+
+message AllReservationsResponse {
+  repeated FullReservation reservations = 1;
+}
+
+message RequestThisWeekResponse {
+  repeated FullReservation reservations = 1;
+}
+
+message ApprovedReservationsResponse {
+  repeated FullReservation reservations = 1;
+}
+
+message PendingReservationsResponse {
+  repeated FullReservation reservations = 1;
+}
+
+message UserReservationsResponse {
+  repeated FullReservation reservations = 1;
+}
+
+
+message GetAllReservationsRequest {}
+
+message GetReservationRequest {
+  int64 id = 1;
+}
+
+message RequestCountRequest {}
+
+message RequestCountResponse {
+  int64 count = 1;
+}
+
+message GetRequestsThisWeekRequest {}
+message GetAllApprovedReservationsRequest {}
+message GetAllPendingReservationsRequest {}
+message CreateReservationRequest {
+  FullReservation reservation = 1;
+}
+message CreateReservationResponse {
+  int64 id = 1;
+}
+
+message UpdateReservationRequest {
+  FullReservation reservation = 1;
+}
+message UpdateReservationResponse {}
+
+message DeleteReservationRequest {
+  int64 id = 1;
+}
+message DeleteReservationResponse {}
+
+message UserReservationsRequest {
+  string user_id = 1;
+}
+
+message CreateReservationDateRequest {
+  repeated ReservationDate date = 1; 
+}
+
+message CreateReservationDateResponse {}
+
+message UpdateReservationDateResponse {}
+message DeleteReservationDateResponse {}
+message CreateReservationFeeResponse {}
+message UpdateReservationFeeResponse {}
+message DeleteReservationFeeResponse {}
+
+message UpdateReservationDateRequest {
+  repeated ReservationDate date = 1; 
+}
+
+message DeleteReservationDateRequest {
+  int64 id = 1;
+}
+
+message CreateReservationFeeRequest {
+  repeated ReservationFee fee = 1; 
+}
+
+message UpdateReservationFeeRequest {
+  repeated ReservationFee fee = 1; 
+}
+
+message DeleteReservationFeeRequest {
+  int64 id = 1;
+}
+
