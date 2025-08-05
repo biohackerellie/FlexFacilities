@@ -58,9 +58,15 @@ func (s *AuthService) Verify2FACode(w http.ResponseWriter, r *http.Request) {
 	s.SetJWTCookie(w, accessToken)
 
 	sessionID := utils.GenerateRandomID()
+
+	refreshToken, err := s.createRefreshToken(user.ID, user.Name, user.Email, sessionID, *user.Provider, absoluteExpiration)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	session := &models.Session{
 		ID:           sessionID,
-		RefreshToken: &accessToken,
+		RefreshToken: &refreshToken,
 		UserID:       user.ID,
 		CreatedAt:    utils.TimeToPgTimestamptz(time.Now()),
 		ExpiresAt:    utils.TimeToPgTimestamptz(time.Now().Add(absoluteExpiration)),
@@ -73,6 +79,7 @@ func (s *AuthService) Verify2FACode(w http.ResponseWriter, r *http.Request) {
 	s.SetSessionCookie(w, sessionID)
 	http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 }
+
 func (s *AuthService) Begin2FA(w http.ResponseWriter, r *http.Request) {
 	type twoFARequest struct {
 		Email    string `json:"email"`

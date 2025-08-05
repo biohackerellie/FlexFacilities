@@ -51,6 +51,7 @@ const (
 
 	jwtCookieName     = "%flexauth_token"
 	sessionCookieName = "%flexauth_session"
+	TwoProviderName   = "email"
 )
 
 func NewAuthService(db ports.DBService, logger *slog.Logger) *AuthService {
@@ -199,6 +200,38 @@ func (a *AuthService) BeginOauth(w http.ResponseWriter, r *http.Request) {
 		MaxAge:   600,
 	})
 	http.Redirect(w, r, authURL, http.StatusTemporaryRedirect)
+}
+
+func (s *AuthService) RefreshToken(w http.ResponseWriter, r *http.Request) {
+	var U *models.Users
+	cookie, err := r.Cookie("session")
+	if err != nil {
+		http.Error(w, "Invalid session cookie", http.StatusUnauthorized)
+	}
+
+	sessionID := cookie.Value
+	session, err := s.db.GetSession(r.Context(), sessionID)
+	if err != nil {
+		http.Error(w, "Invalid session cookie", http.StatusUnauthorized)
+	}
+	token, err := VerifyToken(*session.RefreshToken, &RefreshClaims{}, s.key)
+	if err != nil {
+		http.Error(w, "Invalid session cookie", http.StatusUnauthorized)
+	}
+	claims, ok := token.Claims.(*RefreshClaims)
+	if !ok {
+		http.Error(w, "Invalid session cookie", http.StatusUnauthorized)
+		return
+	}
+	providerName := claims.Provider
+	p, exists := s.providers[providerName]
+	if !exists {
+		http.Error(w, "Invalid session cookie", http.StatusUnauthorized)
+		return
+	}
+	if providerName != TwoProviderName {
+		newAuthToken, err := p.RefreshToken()
+	}
 }
 
 func createToken(userId, userName, userEmail, provider string, role models.UserRole, key []byte) (string, error) {
