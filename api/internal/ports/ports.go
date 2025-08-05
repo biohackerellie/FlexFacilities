@@ -18,6 +18,7 @@ type UserStore interface {
 	CreateSession(ctx context.Context, session *models.Session) error
 	GetSession(ctx context.Context, id string) (*models.Session, error)
 	DeleteSession(ctx context.Context, id string) error
+	UpdateSession(ctx context.Context, session *models.Session) error
 	DeleteExpiredSessions(ctx context.Context) error
 }
 

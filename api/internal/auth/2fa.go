@@ -7,12 +7,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/google/uuid"
+	"golang.org/x/crypto/bcrypt"
 	"net/http"
 	"net/url"
 	"time"
-
-	"github.com/google/uuid"
-	"golang.org/x/crypto/bcrypt"
 )
 
 type TwoFACode struct {
@@ -55,19 +54,22 @@ func (s *AuthService) Verify2FACode(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	s.SetJWTCookie(w, accessToken)
+	http.SetCookie(w, &http.Cookie{
+		Name:     fmt.Sprintf("%s%s", s.cookiePrefix, jwtCookieName),
+		Value:    accessToken,
+		Path:     "/",
+		HttpOnly: true,
+		Secure:   s.secure,
+		SameSite: http.SameSiteLaxMode,
+	})
 
 	sessionID := utils.GenerateRandomID()
 
-	refreshToken, err := s.createRefreshToken(user.ID, user.Name, user.Email, sessionID, *user.Provider, absoluteExpiration)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
 	session := &models.Session{
 		ID:           sessionID,
-		RefreshToken: &refreshToken,
+		RefreshToken: &accessToken,
 		UserID:       user.ID,
+		Provider:     *user.Provider,
 		CreatedAt:    utils.TimeToPgTimestamptz(time.Now()),
 		ExpiresAt:    utils.TimeToPgTimestamptz(time.Now().Add(absoluteExpiration)),
 	}

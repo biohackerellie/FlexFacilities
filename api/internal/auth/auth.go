@@ -5,6 +5,7 @@ import (
 	"api/internal/models"
 	"api/internal/ports"
 	"context"
+	"encoding/json"
 
 	"fmt"
 	"log/slog"
@@ -147,15 +148,10 @@ func (a *AuthService) AuthCallback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	a.SetJWTCookie(w, accessToken)
-	refreshToken, err := a.createRefreshToken(user.ID, user.Name, user.Email, tokens.RefreshToken, *user.Provider, sessionLife)
-	if err != nil {
-		http.Error(w, "failed to get user info from auth provider", http.StatusBadRequest)
-		return
-	}
 	sessionID := utils.GenerateRandomID()
 	session := &models.Session{
 		ID:           sessionID,
-		RefreshToken: &refreshToken,
+		RefreshToken: &tokens.RefreshToken,
 		UserID:       user.ID,
 		CreatedAt:    utils.TimeToPgTimestamptz(time.Now()),
 		ExpiresAt:    utils.TimeToPgTimestamptz(time.Now().Add(absoluteExpiration)),
@@ -203,35 +199,80 @@ func (a *AuthService) BeginOauth(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *AuthService) RefreshToken(w http.ResponseWriter, r *http.Request) {
-	var U *models.Users
 	cookie, err := r.Cookie("session")
 	if err != nil {
 		http.Error(w, "Invalid session cookie", http.StatusUnauthorized)
+		s.ClearJWTCookie(w)
+		return
 	}
-
 	sessionID := cookie.Value
 	session, err := s.db.GetSession(r.Context(), sessionID)
 	if err != nil {
-		http.Error(w, "Invalid session cookie", http.StatusUnauthorized)
-	}
-	token, err := VerifyToken(*session.RefreshToken, &RefreshClaims{}, s.key)
-	if err != nil {
-		http.Error(w, "Invalid session cookie", http.StatusUnauthorized)
-	}
-	claims, ok := token.Claims.(*RefreshClaims)
-	if !ok {
-		http.Error(w, "Invalid session cookie", http.StatusUnauthorized)
+		http.Error(w, "Invalid session", http.StatusUnauthorized)
+		s.ClearJWTCookie(w)
 		return
 	}
-	providerName := claims.Provider
+	providerName := session.Provider
+
+	s.providerMu.RLock()
 	p, exists := s.providers[providerName]
+	s.providerMu.RUnlock()
 	if !exists {
-		http.Error(w, "Invalid session cookie", http.StatusUnauthorized)
+		http.Error(w, "Invalid session", http.StatusUnauthorized)
+		s.ClearJWTCookie(w)
 		return
 	}
-	if providerName != TwoProviderName {
-		newAuthToken, err := p.RefreshToken()
+	newAuthToken, err := p.RefreshToken(r.Context(), *session.RefreshToken)
+	if err != nil {
+		s.logger.Error("Error refreshing token", "error", err, "provider", providerName)
+		http.Error(w, "Unable to refresh token", http.StatusUnauthorized)
+		return
 	}
+	ctx, cancel := context.WithTimeout(r.Context(), 30*time.Second)
+	defer cancel()
+
+	u, err := p.GetUserInfo(ctx, newAuthToken.AccessToken)
+	if err != nil {
+		s.logger.Error("Error getting user info", "error", err, "provider", providerName)
+		http.Error(w, "Unable to get user info", http.StatusInternalServerError)
+		s.ClearJWTCookie(w)
+		return
+	}
+	user, err := s.db.GetUser(r.Context(), u.ID)
+	if err != nil {
+		s.logger.Error("Error getting user", "error", err, "provider", providerName)
+		http.Error(w, "Unable to get user", http.StatusInternalServerError)
+		s.ClearJWTCookie(w)
+		return
+	}
+	newToken, err := createToken(user.ID, user.Name, user.Email, providerName, user.Role, s.key)
+	if err != nil {
+		http.Error(w, "Unable to create new token", http.StatusInternalServerError)
+		s.ClearJWTCookie(w)
+		return
+	}
+	err = s.db.UpdateSession(r.Context(), &models.Session{
+		ID:           session.ID,
+		RefreshToken: &newAuthToken.RefreshToken,
+		ExpiresAt:    utils.TimeToPgTimestamptz(time.Now().Add(absoluteExpiration)),
+	})
+	if err != nil {
+		http.Error(w, "Unable to update session", http.StatusInternalServerError)
+		s.ClearJWTCookie(w)
+		return
+	}
+	s.SetJWTCookie(w, newToken)
+	s.SetSessionCookie(w, sessionID)
+	s.SetCSRFCookie(w)
+
+	// Return JSON response
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	response := map[string]string{
+		"status":  "success",
+		"message": "Token refreshed successfully",
+	}
+	_ = json.NewEncoder(w).Encode(response)
 }
 
 func createToken(userId, userName, userEmail, provider string, role models.UserRole, key []byte) (string, error) {

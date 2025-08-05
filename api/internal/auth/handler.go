@@ -33,7 +33,7 @@ func (s *AuthService) SetSessionCookie(w http.ResponseWriter, id string) {
 		Path:     "/",
 		HttpOnly: true,
 		Secure:   s.secure,
-		SameSite: http.SameSiteStrictMode,
+		SameSite: http.SameSiteLaxMode,
 		MaxAge:   int(absoluteExpiration.Seconds()),
 	})
 }

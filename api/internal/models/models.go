@@ -275,6 +275,7 @@ type Session struct {
 	ID           string             `db:"id" json:"id"`
 	UserID       string             `db:"user_id" json:"user_id"`
 	RefreshToken *string            `db:"refresh_token" json:"refresh_token"`
+	Provider     string             `db:"provider" json:"provider"`
 	CreatedAt    pgtype.Timestamptz `db:"created_at" json:"created_at"`
 	ExpiresAt    pgtype.Timestamptz `db:"expires_at" json:"expires_at"`
 }
