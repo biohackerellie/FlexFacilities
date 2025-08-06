@@ -2,6 +2,9 @@ package models
 
 import (
 	"api/internal/lib/utils"
+	pbSessions "api/internal/proto/auth"
+	pbFacilities "api/internal/proto/facilities"
+	pbReservation "api/internal/proto/reservation"
 	pbUsers "api/internal/proto/users"
 	"database/sql/driver"
 	"fmt"
@@ -27,6 +30,10 @@ func (e *ReservationApproved) Scan(src any) error {
 		return fmt.Errorf("unsupported scan type for ReservationApproved: %T", src)
 	}
 	return nil
+}
+
+func (e ReservationApproved) String() string {
+	return string(e)
 }
 
 type NullReservationApproved struct {
@@ -80,6 +87,10 @@ func (e *ReservationDateApproved) Scan(src any) error {
 		return fmt.Errorf("unsupported scan type for ReservationDateApproved: %T", src)
 	}
 	return nil
+}
+
+func (e ReservationDateApproved) String() string {
+	return string(e)
 }
 
 type NullReservationDateApproved struct {
@@ -171,28 +182,22 @@ func AllUserRoleValues() []UserRole {
 	}
 }
 
-type Account struct {
-	ID                string  `db:"id" json:"id"`
-	UserID            string  `db:"user_id" json:"user_id"`
-	AccountType       string  `db:"account_type" json:"account_type"`
-	Provider          string  `db:"provider" json:"provider"`
-	ProviderAccountID string  `db:"provider_account_id" json:"provider_account_id"`
-	RefreshToken      *string `db:"refresh_token" json:"refresh_token"`
-	AccessToken       *string `db:"access_token" json:"access_token"`
-	ExpiresAt         *int64  `db:"expires_at" json:"expires_at"`
-	TokenType         *string `db:"token_type" json:"token_type"`
-	Scope             *string `db:"scope" json:"scope"`
-	IDToken           *string `db:"id_token" json:"id_token"`
-	SessionState      *string `db:"session_state" json:"session_state"`
-	ExtExpiresIn      *int64  `db:"ext_expires_in" json:"ext_expires_in"`
-}
-
 type Category struct {
 	ID          int64   `db:"id" json:"id"`
 	Name        string  `db:"name" json:"name"`
 	Description string  `db:"description" json:"description"`
 	Price       float64 `db:"price" json:"price"`
 	FacilityID  int64   `db:"facility_id" json:"facility_id"`
+}
+
+func (c *Category) ToProto() *pbFacilities.Category {
+	return &pbFacilities.Category{
+		Id:          c.ID,
+		Name:        c.Name,
+		Description: c.Description,
+		Price:       c.Price,
+		FacilityId:  c.FacilityID,
+	}
 }
 
 type Facility struct {
@@ -205,6 +210,25 @@ type Facility struct {
 	CreatedAt        pgtype.Timestamptz `db:"created_at" json:"created_at"`
 	UpdatedAt        pgtype.Timestamptz `db:"updated_at" json:"updated_at"`
 	GoogleCalendarID string             `db:"google_calendar_id" json:"google_calendar_id"`
+}
+
+func (f *Facility) ToProto() *pbFacilities.Facility {
+	return &pbFacilities.Facility{
+		Id:               f.ID,
+		Name:             f.Name,
+		Building:         f.Building,
+		Address:          f.Address,
+		ImagePath:        f.ImagePath,
+		Capacity:         f.Capacity,
+		CreatedAt:        utils.PgTimestamptzToString(f.CreatedAt),
+		UpdatedAt:        utils.PgTimestamptzToString(f.UpdatedAt),
+		GoogleCalendarId: f.GoogleCalendarID,
+	}
+}
+
+type FacilityWithCategories struct {
+	Facility
+	Categories []Category `db:"categories" json:"categories"`
 }
 
 type InsuranceFile struct {
@@ -253,6 +277,65 @@ type Reservation struct {
 	CostOverride   pgtype.Numeric      `db:"cost_override" json:"cost_override"`
 }
 
+func (r *Reservation) ToProto() *pbReservation.Reservation {
+	return &pbReservation.Reservation{
+		Id:             r.ID,
+		UserId:         r.UserID,
+		EventName:      r.EventName,
+		FacilityId:     r.FacilityID,
+		Approved:       r.Approved.String(),
+		CreatedAt:      utils.PgTimestamptzToString(r.CreatedAt),
+		UpdatedAt:      utils.PgTimestamptzToString(r.UpdatedAt),
+		Details:        r.Details,
+		Fees:           utils.PgNumericToString(r.Fees),
+		Insurance:      r.Insurance,
+		PrimaryContact: r.PrimaryContact,
+		DoorAccess:     r.DoorAccess,
+		DoorsDetails:   r.DoorsDetails,
+		Name:           r.Name,
+		People:         r.People,
+		TechDetails:    r.TechDetails,
+		TechSupport:    r.TechSupport,
+		Phone:          r.Phone,
+		CategoryId:     r.CategoryID,
+		TotalHours:     r.TotalHours,
+		InPerson:       r.InPerson,
+		Paid:           r.Paid,
+		PaymentUrl:     r.PaymentUrl,
+		PaymentLinkId:  r.PaymentLinkID,
+		TicketMade:     r.TicketMade,
+		Conflicts:      r.Conflicts,
+		InsuranceLink:  r.InsuranceLink,
+		CostOverride:   utils.PgNumericToString(r.CostOverride),
+	}
+}
+
+type FullReservation struct {
+	Reservation *Reservation
+	Dates       []ReservationDate
+	Fees        []ReservationFee
+	Facility    *Facility
+}
+
+func (r *FullReservation) ToProto() *pbReservation.FullReservation {
+	dates := make([]*pbReservation.ReservationDate, len(r.Dates))
+	for i, date := range r.Dates {
+		dates[i] = date.ToProto()
+	}
+
+	fees := make([]*pbReservation.ReservationFee, len(r.Fees))
+	for i, fee := range r.Fees {
+		fees[i] = fee.ToProto()
+	}
+
+	return &pbReservation.FullReservation{
+		Reservation: r.Reservation.ToProto(),
+		Dates:       dates,
+		Fees:        fees,
+		Facility:    r.Facility.ToProto(),
+	}
+}
+
 type ReservationDate struct {
 	ID            int64                   `db:"id" json:"id"`
 	StartDate     pgtype.Date             `db:"start_date" json:"start_date"`
@@ -264,11 +347,33 @@ type ReservationDate struct {
 	GcalEventid   *string                 `db:"gcal_eventid" json:"gcal_eventid"`
 }
 
+func (r *ReservationDate) ToProto() *pbReservation.ReservationDate {
+	return &pbReservation.ReservationDate{
+		Id:            r.ID,
+		StartDate:     utils.PgDateToString(r.StartDate),
+		EndDate:       utils.PgDateToString(r.EndDate),
+		StartTime:     utils.PgTimeToString(r.StartTime),
+		EndTime:       utils.PgTimeToString(r.EndTime),
+		ReservationId: r.ReservationID,
+		Approved:      r.Approved.String(),
+		GcalEventid:   r.GcalEventid,
+	}
+}
+
 type ReservationFee struct {
 	ID             int64          `db:"id" json:"id"`
 	AdditionalFees pgtype.Numeric `db:"additional_fees" json:"additional_fees"`
 	FeesType       *string        `db:"fees_type" json:"fees_type"`
 	ReservationID  int64          `db:"reservation_id" json:"reservation_id"`
+}
+
+func (r *ReservationFee) ToProto() *pbReservation.ReservationFee {
+	return &pbReservation.ReservationFee{
+		Id:             r.ID,
+		AdditionalFees: utils.PgNumericToString(r.AdditionalFees),
+		FeesType:       r.FeesType,
+		ReservationId:  r.ReservationID,
+	}
 }
 
 type Session struct {
@@ -278,6 +383,17 @@ type Session struct {
 	Provider     string             `db:"provider" json:"provider"`
 	CreatedAt    pgtype.Timestamptz `db:"created_at" json:"created_at"`
 	ExpiresAt    pgtype.Timestamptz `db:"expires_at" json:"expires_at"`
+}
+
+func (s *Session) ToProto() *pbSessions.Session {
+	return &pbSessions.Session{
+		Id:           s.ID,
+		UserId:       s.UserID,
+		RefreshToken: *s.RefreshToken,
+		Provider:     s.Provider,
+		CreatedAt:    utils.PgTimestamptzToString(s.CreatedAt),
+		ExpiresAt:    utils.PgTimestamptzToString(s.ExpiresAt),
+	}
 }
 
 type Users struct {

@@ -135,27 +135,6 @@ CREATE TABLE IF NOT EXISTS reservation_date (
   );
 
 
-
-  CREATE TABLE IF NOT EXISTS account (
-    id TEXT NOT NULL,
-    user_id TEXT NOT NULL,
-    account_type TEXT NOT NULL,
-    provider TEXT NOT NULL,
-    provider_account_id TEXT NOT NULL,
-    refresh_token text,
-    access_token text,
-    expires_at BIGINT,
-    token_type TEXT,
-    scope TEXT,
-    id_token text,
-    session_state TEXT,
-    ext_expires_in BIGINT,
-    CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users (id)
-  );
-
-
-
-
   CREATE TABLE IF NOT EXISTS sessions (
     id TEXT NOT NULL PRIMARY KEY,
     session_token TEXT NOT NULL,
@@ -165,17 +144,6 @@ CREATE TABLE IF NOT EXISTS reservation_date (
   );
 
 
-
-
-
-
-
-
-CREATE UNIQUE INDEX idx_30089_Account_provider_providerAccountId_key ON account (provider, provider_Account_id);
-
-
-
-CREATE INDEX idx_30089_Account_userId_fkey ON account (user_id);
 
 
 

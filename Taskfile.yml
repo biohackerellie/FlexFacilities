@@ -13,14 +13,10 @@ tasks:
     cmds:
       - task -l
 
-  gen:sqlc:
-    desc: Generate sqlc
-    cmds:
-      - cd api && sqlc generate
   gen:proto:
     desc: Generate proto
     cmds:
-      - cd api && buf generate
+      - buf generate
 
   clean:bun:
     desc: clean files

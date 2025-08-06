@@ -31,6 +31,7 @@ message VerificationToken {
   string expires = 3;  // RFC3339 string
 }
 
+
 service UsersService {
   rpc GetUserByEmail (UserByEmailRequest) returns (Users);
   rpc GetUser (GetUserRequest) returns (Users);
@@ -49,6 +50,7 @@ service UsersService {
   rpc CreateNotification (CreateNotificationRequest) returns (Notifications);
   rpc EditNotification (EditNotificationRequest) returns (Notifications);
   rpc DeleteNotification (DeleteNotificationRequest) returns (DeleteNotificationResponse);
+
 }
 
 message GetUserNotificationsResponse {
@@ -96,3 +98,5 @@ message DeleteNotificationRequest {
   int64 id = 1;
 }
 message DeleteNotificationResponse {}
+
+

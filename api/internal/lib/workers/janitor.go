@@ -9,10 +9,10 @@ import (
 )
 
 type Janitor struct {
-	DB       ports.DBService
-	Auth     ports.AuthService
-	Interval time.Duration
-	Logger   *slog.Logger
+	UserStore ports.UserStore
+	Auth      ports.AuthService
+	Interval  time.Duration
+	Logger    *slog.Logger
 }
 
 func (j *Janitor) Name() string { return "Janitor" }
@@ -32,7 +32,7 @@ func (j *Janitor) Run(ctx context.Context) {
 			j.Logger.Info("Exiting", "name", j.Name())
 			return
 		case <-ticker.C:
-			err := j.DB.DeleteExpiredSessions(ctx)
+			err := j.UserStore.DeleteExpiredSessions(ctx)
 			j.Auth.CleanupExpiredTokens(ctx)
 			if err != nil {
 				j.Logger.Error("Failed to delete expired sessions", "error", err)

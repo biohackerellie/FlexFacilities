@@ -34,12 +34,50 @@ func TimeToPgTimestamptz(t time.Time) pgtype.Timestamptz {
 	return pgtype.Timestamptz{Time: t, Valid: true}
 }
 
+func PgDateToString(date pgtype.Date) string {
+	t, err := date.Value()
+	if err != nil {
+		return ""
+	}
+	if t == nil {
+		return ""
+	}
+	return t.(time.Time).Format("2006-01-02")
+}
+
 func StringToPgTimestamptz(s string) pgtype.Timestamptz {
 	t, err := time.Parse(time.RFC3339, s)
 	if err != nil {
 		return pgtype.Timestamptz{}
 	}
 	return pgtype.Timestamptz{Time: t, Valid: true}
+}
+
+func StringToPgDate(s string) pgtype.Date {
+	t, err := time.Parse("2006-01-02", s)
+	if err != nil {
+		return pgtype.Date{}
+	}
+	return pgtype.Date{Time: t, Valid: true}
+}
+
+func PgTimeToString(ti pgtype.Time) string {
+	t, err := ti.Value()
+	if err != nil {
+		return ""
+	}
+	if t == nil {
+		return ""
+	}
+	return t.(time.Time).Format("15:04")
+}
+
+func StringToPgTime(s string) pgtype.Time {
+	t, err := time.Parse("15:04", s)
+	if err != nil {
+		return pgtype.Time{}
+	}
+	return pgtype.Time{Microseconds: t.UnixMicro(), Valid: true}
 }
 
 func PgNumericToString(num pgtype.Numeric) string {
@@ -66,4 +104,11 @@ func StringToPgNumeric(s string) pgtype.Numeric {
 	num.Int = bigInt
 	num.Valid = true
 	return num
+}
+
+func StringPtrToString(s *string) string {
+	if s == nil {
+		return ""
+	}
+	return *s
 }

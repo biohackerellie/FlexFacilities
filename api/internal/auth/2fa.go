@@ -43,7 +43,7 @@ func (s *AuthService) Verify2FACode(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := s.db.GetUserByEmail(r.Context(), email)
+	user, err := s.db.GetByEmail(r.Context(), email)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -126,7 +126,7 @@ func (s *AuthService) Begin2FA(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *AuthService) verifyCredentials(ctx context.Context, email, password string) error {
-	user, err := s.db.GetUserByEmail(ctx, email)
+	user, err := s.db.GetByEmail(ctx, email)
 	if err != nil || user.Password == nil {
 		return err
 	}

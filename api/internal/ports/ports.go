@@ -6,14 +6,14 @@ import (
 	"net/http"
 )
 
-type DBService interface {
-	UserStore
-}
-
 type UserStore interface {
-	CreateUser(ctx context.Context, user *models.Users) error
-	GetUser(ctx context.Context, id string) (*models.Users, error)
-	GetUserByEmail(ctx context.Context, email string) (*models.Users, error)
+	Create(ctx context.Context, user *models.Users) (*models.Users, error)
+	Get(ctx context.Context, id string) (*models.Users, error)
+	GetByEmail(ctx context.Context, email string) (*models.Users, error)
+	Update(ctx context.Context, user *models.Users) (*models.Users, error)
+	UpdateByEmail(ctx context.Context, user *models.Users) (*models.Users, error)
+	Delete(ctx context.Context, id string) error
+	GetAll(ctx context.Context) ([]*models.Users, error)
 	UserExists(ctx context.Context, id string) (bool, error)
 	CreateSession(ctx context.Context, session *models.Session) error
 	GetSession(ctx context.Context, id string) (*models.Session, error)

@@ -10,7 +10,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file proto/auth/auth.proto.
  */
 export const file_proto_auth_auth: GenFile = /*@__PURE__*/
-  fileDesc("ChVwcm90by9hdXRoL2F1dGgucHJvdG8SCGFwaS5hdXRoIjcKB1Nlc3Npb24SCgoCaWQYASABKAkSDwoHdXNlcl9pZBgCIAEoCRIPCgdleHBpcmVzGAMgASgJIhMKEUdldFNlc3Npb25SZXF1ZXN0MkQKBEF1dGgSPAoKR2V0U2Vzc2lvbhIbLmFwaS5hdXRoLkdldFNlc3Npb25SZXF1ZXN0GhEuYXBpLmF1dGguU2Vzc2lvbkIlWiNhcGkvaW50ZXJuYWwvcHJvdG8vYXV0aDthdXRoc2VydmljZWIGcHJvdG8z");
+  fileDesc("ChVwcm90by9hdXRoL2F1dGgucHJvdG8SCGFwaS5hdXRoIncKB1Nlc3Npb24SCgoCaWQYASABKAkSDwoHdXNlcl9pZBgCIAEoCRIVCg1yZWZyZXNoX3Rva2VuGAMgASgJEhAKCHByb3ZpZGVyGAQgASgJEhIKCmNyZWF0ZWRfYXQYBSABKAkSEgoKZXhwaXJlc19hdBgGIAEoCSITChFHZXRTZXNzaW9uUmVxdWVzdCIvCgxMb2dpblJlcXVlc3QSDQoFZW1haWwYASABKAkSEAoIcGFzc3dvcmQYAiABKAkiDwoNTG9naW5SZXNwb25zZSJACg9SZWdpc3RlclJlcXVlc3QSDAoEbmFtZRgBIAEoCRINCgVlbWFpbBgCIAEoCRIQCghwYXNzd29yZBgDIAEoCTLDAQoEQXV0aBJBCgpHZXRTZXNzaW9uEhsuYXBpLmF1dGguR2V0U2Vzc2lvblJlcXVlc3QaES5hcGkuYXV0aC5TZXNzaW9uIgOQAgESOAoFTG9naW4SFi5hcGkuYXV0aC5Mb2dpblJlcXVlc3QaFy5hcGkuYXV0aC5Mb2dpblJlc3BvbnNlEj4KCFJlZ2lzdGVyEhkuYXBpLmF1dGguUmVnaXN0ZXJSZXF1ZXN0GhcuYXBpLmF1dGguTG9naW5SZXNwb25zZUIlWiNhcGkvaW50ZXJuYWwvcHJvdG8vYXV0aDthdXRoc2VydmljZWIGcHJvdG8z");
 
 /**
  * @generated from message api.auth.Session
@@ -27,9 +27,24 @@ export type Session = Message<"api.auth.Session"> & {
   userId: string;
 
   /**
-   * @generated from field: string expires = 3;
+   * @generated from field: string refresh_token = 3;
    */
-  expires: string;
+  refreshToken: string;
+
+  /**
+   * @generated from field: string provider = 4;
+   */
+  provider: string;
+
+  /**
+   * @generated from field: string created_at = 5;
+   */
+  createdAt: string;
+
+  /**
+   * @generated from field: string expires_at = 6;
+   */
+  expiresAt: string;
 };
 
 /**
@@ -53,6 +68,68 @@ export const GetSessionRequestSchema: GenMessage<GetSessionRequest> = /*@__PURE_
   messageDesc(file_proto_auth_auth, 1);
 
 /**
+ * @generated from message api.auth.LoginRequest
+ */
+export type LoginRequest = Message<"api.auth.LoginRequest"> & {
+  /**
+   * @generated from field: string email = 1;
+   */
+  email: string;
+
+  /**
+   * @generated from field: string password = 2;
+   */
+  password: string;
+};
+
+/**
+ * Describes the message api.auth.LoginRequest.
+ * Use `create(LoginRequestSchema)` to create a new message.
+ */
+export const LoginRequestSchema: GenMessage<LoginRequest> = /*@__PURE__*/
+  messageDesc(file_proto_auth_auth, 2);
+
+/**
+ * @generated from message api.auth.LoginResponse
+ */
+export type LoginResponse = Message<"api.auth.LoginResponse"> & {
+};
+
+/**
+ * Describes the message api.auth.LoginResponse.
+ * Use `create(LoginResponseSchema)` to create a new message.
+ */
+export const LoginResponseSchema: GenMessage<LoginResponse> = /*@__PURE__*/
+  messageDesc(file_proto_auth_auth, 3);
+
+/**
+ * @generated from message api.auth.RegisterRequest
+ */
+export type RegisterRequest = Message<"api.auth.RegisterRequest"> & {
+  /**
+   * @generated from field: string name = 1;
+   */
+  name: string;
+
+  /**
+   * @generated from field: string email = 2;
+   */
+  email: string;
+
+  /**
+   * @generated from field: string password = 3;
+   */
+  password: string;
+};
+
+/**
+ * Describes the message api.auth.RegisterRequest.
+ * Use `create(RegisterRequestSchema)` to create a new message.
+ */
+export const RegisterRequestSchema: GenMessage<RegisterRequest> = /*@__PURE__*/
+  messageDesc(file_proto_auth_auth, 4);
+
+/**
  * @generated from service api.auth.Auth
  */
 export const Auth: GenService<{
@@ -63,6 +140,22 @@ export const Auth: GenService<{
     methodKind: "unary";
     input: typeof GetSessionRequestSchema;
     output: typeof SessionSchema;
+  },
+  /**
+   * @generated from rpc api.auth.Auth.Login
+   */
+  login: {
+    methodKind: "unary";
+    input: typeof LoginRequestSchema;
+    output: typeof LoginResponseSchema;
+  },
+  /**
+   * @generated from rpc api.auth.Auth.Register
+   */
+  register: {
+    methodKind: "unary";
+    input: typeof RegisterRequestSchema;
+    output: typeof LoginResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_proto_auth_auth, 0);

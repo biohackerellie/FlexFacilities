@@ -21,7 +21,7 @@ import (
 )
 
 type AuthService struct {
-	db           ports.DBService
+	db           ports.UserStore
 	logger       *slog.Logger
 	key          []byte
 	providers    flexauth.ProviderRegistry
@@ -55,7 +55,7 @@ const (
 	TwoProviderName   = "email"
 )
 
-func NewAuthService(db ports.DBService, logger *slog.Logger) *AuthService {
+func NewAuthService(db ports.UserStore, logger *slog.Logger) *AuthService {
 	authKey := []byte(os.Getenv("AUTH_SECRET"))
 	salt := []byte(os.Getenv("AUTH_SALT"))
 	encKey := generateEncryptionKey(authKey, salt)
@@ -119,25 +119,13 @@ func (a *AuthService) AuthCallback(w http.ResponseWriter, r *http.Request) {
 	}
 	userInfo, err := provider.GetUserInfo(ctx, tokens.AccessToken)
 
-	userExists, err := a.db.UserExists(r.Context(), userInfo.ID)
-	if err != nil {
-		http.Error(w, "failed to get user info from auth provider", http.StatusBadRequest)
-	}
-	if !userExists {
-		err := a.db.CreateUser(r.Context(), &models.Users{
-			ID:       userInfo.ID,
-			Name:     userInfo.Name,
-			Email:    userInfo.Email,
-			Provider: &providerName,
-			Role:     models.UserRoleUSER,
-			Tos:      true,
-		})
-		if err != nil {
-			http.Error(w, "failed to get user info from auth provider", http.StatusBadRequest)
-			return
-		}
-	}
-	user, err := a.db.GetUser(r.Context(), userInfo.ID)
+	user, err := a.GetOrCreateAuthUser(r.Context(), &models.Users{
+		ID:       userInfo.ID,
+		Name:     userInfo.Name,
+		Email:    userInfo.Email,
+		Provider: &providerName,
+	})
+
 	if err != nil {
 		http.Error(w, "failed to get user info from auth provider", http.StatusBadRequest)
 		return
@@ -238,7 +226,7 @@ func (s *AuthService) RefreshToken(w http.ResponseWriter, r *http.Request) {
 		s.ClearJWTCookie(w)
 		return
 	}
-	user, err := s.db.GetUser(r.Context(), u.ID)
+	user, err := s.db.Get(r.Context(), u.ID)
 	if err != nil {
 		s.logger.Error("Error getting user", "error", err, "provider", providerName)
 		http.Error(w, "Unable to get user", http.StatusInternalServerError)
@@ -331,4 +319,56 @@ func (a *AuthService) verifyState(r *http.Request, providerName, receivedState s
 	}
 
 	return nil
+}
+
+func (s *AuthService) GetOrCreateAuthUser(ctx context.Context, authUser *models.Users) (*models.Users, error) {
+	var user *models.Users
+
+	user, err := s.db.Get(ctx, authUser.ID)
+	if err != nil {
+		return nil, err
+	}
+	if user == nil {
+		user, err = s.db.GetByEmail(ctx, authUser.Email)
+		if err != nil {
+			return nil, err
+		}
+		if user == nil {
+			authUser.Tos = true
+			authUser.Role = models.UserRoleUSER
+			return s.db.Create(ctx, authUser)
+		}
+		updatedID, updatedOther := userNeedsUpdate(user, authUser)
+		user.Name = authUser.Name
+		user.Email = authUser.Email
+		user.Provider = authUser.Provider
+		if updatedID {
+			user.ID = authUser.ID
+			return s.db.UpdateByEmail(ctx, user)
+		}
+		if updatedOther {
+			return s.db.Update(ctx, user)
+		}
+		return user, nil
+	}
+	_, updatedOther := userNeedsUpdate(user, authUser)
+	if updatedOther {
+		user.Name = authUser.Name
+		user.Email = authUser.Email
+		user.Provider = authUser.Provider
+		return s.db.Update(ctx, user)
+	}
+
+	return user, nil
+}
+
+func userNeedsUpdate(dbUser, authUser *models.Users) (updatedID, updatedOther bool) {
+	if dbUser.ID != authUser.ID {
+		return true, false
+	} else if dbUser.Name != authUser.Name ||
+		dbUser.Email != authUser.Email ||
+		dbUser.Provider != authUser.Provider {
+		return false, true
+	}
+	return false, false
 }
