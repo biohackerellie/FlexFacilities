@@ -54,15 +54,9 @@ const (
 	// FacilitiesServiceDeleteFacilityProcedure is the fully-qualified name of the FacilitiesService's
 	// DeleteFacility RPC.
 	FacilitiesServiceDeleteFacilityProcedure = "/api.facilities.FacilitiesService/DeleteFacility"
-	// FacilitiesServiceCreateFacilityCategoryProcedure is the fully-qualified name of the
-	// FacilitiesService's CreateFacilityCategory RPC.
-	FacilitiesServiceCreateFacilityCategoryProcedure = "/api.facilities.FacilitiesService/CreateFacilityCategory"
 	// FacilitiesServiceUpdateFacilityCategoryProcedure is the fully-qualified name of the
 	// FacilitiesService's UpdateFacilityCategory RPC.
 	FacilitiesServiceUpdateFacilityCategoryProcedure = "/api.facilities.FacilitiesService/UpdateFacilityCategory"
-	// FacilitiesServiceDeleteFacilityCategoryProcedure is the fully-qualified name of the
-	// FacilitiesService's DeleteFacilityCategory RPC.
-	FacilitiesServiceDeleteFacilityCategoryProcedure = "/api.facilities.FacilitiesService/DeleteFacilityCategory"
 )
 
 // These variables are the protoreflect.Descriptor objects for the RPCs defined in this package.
@@ -75,23 +69,19 @@ var (
 	facilitiesServiceCreateFacilityMethodDescriptor         = facilitiesServiceServiceDescriptor.Methods().ByName("CreateFacility")
 	facilitiesServiceUpdateFacilityMethodDescriptor         = facilitiesServiceServiceDescriptor.Methods().ByName("UpdateFacility")
 	facilitiesServiceDeleteFacilityMethodDescriptor         = facilitiesServiceServiceDescriptor.Methods().ByName("DeleteFacility")
-	facilitiesServiceCreateFacilityCategoryMethodDescriptor = facilitiesServiceServiceDescriptor.Methods().ByName("CreateFacilityCategory")
 	facilitiesServiceUpdateFacilityCategoryMethodDescriptor = facilitiesServiceServiceDescriptor.Methods().ByName("UpdateFacilityCategory")
-	facilitiesServiceDeleteFacilityCategoryMethodDescriptor = facilitiesServiceServiceDescriptor.Methods().ByName("DeleteFacilityCategory")
 )
 
 // FacilitiesServiceClient is a client for the api.facilities.FacilitiesService service.
 type FacilitiesServiceClient interface {
 	GetAllFacilities(context.Context, *connect.Request[facilities.GetAllFacilitiesRequest]) (*connect.Response[facilities.GetAllFacilitiesResponse], error)
-	GetFacility(context.Context, *connect.Request[facilities.GetFacilityRequest]) (*connect.Response[facilities.FacilityWithCategories], error)
+	GetFacility(context.Context, *connect.Request[facilities.GetFacilityRequest]) (*connect.Response[facilities.FullFacility], error)
 	GetFacilityCategories(context.Context, *connect.Request[facilities.GetFacilityCategoriesRequest]) (*connect.Response[facilities.GetFacilityCategoriesResponse], error)
 	GetBuildingFacilities(context.Context, *connect.Request[facilities.GetBuildingFacilitiesRequest]) (*connect.Response[facilities.GetBuildingFacilitiesResponse], error)
-	CreateFacility(context.Context, *connect.Request[facilities.CreateFacilityRequest]) (*connect.Response[facilities.FacilityWithCategories], error)
-	UpdateFacility(context.Context, *connect.Request[facilities.UpdateFacilityRequest]) (*connect.Response[facilities.FacilityWithCategories], error)
+	CreateFacility(context.Context, *connect.Request[facilities.CreateFacilityRequest]) (*connect.Response[facilities.CreateFacilityResponse], error)
+	UpdateFacility(context.Context, *connect.Request[facilities.UpdateFacilityRequest]) (*connect.Response[facilities.UpdateFacilityResponse], error)
 	DeleteFacility(context.Context, *connect.Request[facilities.DeleteFacilityRequest]) (*connect.Response[facilities.DeleteFacilityResponse], error)
-	CreateFacilityCategory(context.Context, *connect.Request[facilities.CreateFacilityCategoryRequest]) (*connect.Response[facilities.Category], error)
 	UpdateFacilityCategory(context.Context, *connect.Request[facilities.UpdateFacilityCategoryRequest]) (*connect.Response[facilities.Category], error)
-	DeleteFacilityCategory(context.Context, *connect.Request[facilities.DeleteFacilityCategoryRequest]) (*connect.Response[facilities.DeleteFacilityCategoryResponse], error)
 }
 
 // NewFacilitiesServiceClient constructs a client for the api.facilities.FacilitiesService service.
@@ -111,7 +101,7 @@ func NewFacilitiesServiceClient(httpClient connect.HTTPClient, baseURL string, o
 			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 			connect.WithClientOptions(opts...),
 		),
-		getFacility: connect.NewClient[facilities.GetFacilityRequest, facilities.FacilityWithCategories](
+		getFacility: connect.NewClient[facilities.GetFacilityRequest, facilities.FullFacility](
 			httpClient,
 			baseURL+FacilitiesServiceGetFacilityProcedure,
 			connect.WithSchema(facilitiesServiceGetFacilityMethodDescriptor),
@@ -132,13 +122,13 @@ func NewFacilitiesServiceClient(httpClient connect.HTTPClient, baseURL string, o
 			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 			connect.WithClientOptions(opts...),
 		),
-		createFacility: connect.NewClient[facilities.CreateFacilityRequest, facilities.FacilityWithCategories](
+		createFacility: connect.NewClient[facilities.CreateFacilityRequest, facilities.CreateFacilityResponse](
 			httpClient,
 			baseURL+FacilitiesServiceCreateFacilityProcedure,
 			connect.WithSchema(facilitiesServiceCreateFacilityMethodDescriptor),
 			connect.WithClientOptions(opts...),
 		),
-		updateFacility: connect.NewClient[facilities.UpdateFacilityRequest, facilities.FacilityWithCategories](
+		updateFacility: connect.NewClient[facilities.UpdateFacilityRequest, facilities.UpdateFacilityResponse](
 			httpClient,
 			baseURL+FacilitiesServiceUpdateFacilityProcedure,
 			connect.WithSchema(facilitiesServiceUpdateFacilityMethodDescriptor),
@@ -150,22 +140,10 @@ func NewFacilitiesServiceClient(httpClient connect.HTTPClient, baseURL string, o
 			connect.WithSchema(facilitiesServiceDeleteFacilityMethodDescriptor),
 			connect.WithClientOptions(opts...),
 		),
-		createFacilityCategory: connect.NewClient[facilities.CreateFacilityCategoryRequest, facilities.Category](
-			httpClient,
-			baseURL+FacilitiesServiceCreateFacilityCategoryProcedure,
-			connect.WithSchema(facilitiesServiceCreateFacilityCategoryMethodDescriptor),
-			connect.WithClientOptions(opts...),
-		),
 		updateFacilityCategory: connect.NewClient[facilities.UpdateFacilityCategoryRequest, facilities.Category](
 			httpClient,
 			baseURL+FacilitiesServiceUpdateFacilityCategoryProcedure,
 			connect.WithSchema(facilitiesServiceUpdateFacilityCategoryMethodDescriptor),
-			connect.WithClientOptions(opts...),
-		),
-		deleteFacilityCategory: connect.NewClient[facilities.DeleteFacilityCategoryRequest, facilities.DeleteFacilityCategoryResponse](
-			httpClient,
-			baseURL+FacilitiesServiceDeleteFacilityCategoryProcedure,
-			connect.WithSchema(facilitiesServiceDeleteFacilityCategoryMethodDescriptor),
 			connect.WithClientOptions(opts...),
 		),
 	}
@@ -174,15 +152,13 @@ func NewFacilitiesServiceClient(httpClient connect.HTTPClient, baseURL string, o
 // facilitiesServiceClient implements FacilitiesServiceClient.
 type facilitiesServiceClient struct {
 	getAllFacilities       *connect.Client[facilities.GetAllFacilitiesRequest, facilities.GetAllFacilitiesResponse]
-	getFacility            *connect.Client[facilities.GetFacilityRequest, facilities.FacilityWithCategories]
+	getFacility            *connect.Client[facilities.GetFacilityRequest, facilities.FullFacility]
 	getFacilityCategories  *connect.Client[facilities.GetFacilityCategoriesRequest, facilities.GetFacilityCategoriesResponse]
 	getBuildingFacilities  *connect.Client[facilities.GetBuildingFacilitiesRequest, facilities.GetBuildingFacilitiesResponse]
-	createFacility         *connect.Client[facilities.CreateFacilityRequest, facilities.FacilityWithCategories]
-	updateFacility         *connect.Client[facilities.UpdateFacilityRequest, facilities.FacilityWithCategories]
+	createFacility         *connect.Client[facilities.CreateFacilityRequest, facilities.CreateFacilityResponse]
+	updateFacility         *connect.Client[facilities.UpdateFacilityRequest, facilities.UpdateFacilityResponse]
 	deleteFacility         *connect.Client[facilities.DeleteFacilityRequest, facilities.DeleteFacilityResponse]
-	createFacilityCategory *connect.Client[facilities.CreateFacilityCategoryRequest, facilities.Category]
 	updateFacilityCategory *connect.Client[facilities.UpdateFacilityCategoryRequest, facilities.Category]
-	deleteFacilityCategory *connect.Client[facilities.DeleteFacilityCategoryRequest, facilities.DeleteFacilityCategoryResponse]
 }
 
 // GetAllFacilities calls api.facilities.FacilitiesService.GetAllFacilities.
@@ -191,7 +167,7 @@ func (c *facilitiesServiceClient) GetAllFacilities(ctx context.Context, req *con
 }
 
 // GetFacility calls api.facilities.FacilitiesService.GetFacility.
-func (c *facilitiesServiceClient) GetFacility(ctx context.Context, req *connect.Request[facilities.GetFacilityRequest]) (*connect.Response[facilities.FacilityWithCategories], error) {
+func (c *facilitiesServiceClient) GetFacility(ctx context.Context, req *connect.Request[facilities.GetFacilityRequest]) (*connect.Response[facilities.FullFacility], error) {
 	return c.getFacility.CallUnary(ctx, req)
 }
 
@@ -206,12 +182,12 @@ func (c *facilitiesServiceClient) GetBuildingFacilities(ctx context.Context, req
 }
 
 // CreateFacility calls api.facilities.FacilitiesService.CreateFacility.
-func (c *facilitiesServiceClient) CreateFacility(ctx context.Context, req *connect.Request[facilities.CreateFacilityRequest]) (*connect.Response[facilities.FacilityWithCategories], error) {
+func (c *facilitiesServiceClient) CreateFacility(ctx context.Context, req *connect.Request[facilities.CreateFacilityRequest]) (*connect.Response[facilities.CreateFacilityResponse], error) {
 	return c.createFacility.CallUnary(ctx, req)
 }
 
 // UpdateFacility calls api.facilities.FacilitiesService.UpdateFacility.
-func (c *facilitiesServiceClient) UpdateFacility(ctx context.Context, req *connect.Request[facilities.UpdateFacilityRequest]) (*connect.Response[facilities.FacilityWithCategories], error) {
+func (c *facilitiesServiceClient) UpdateFacility(ctx context.Context, req *connect.Request[facilities.UpdateFacilityRequest]) (*connect.Response[facilities.UpdateFacilityResponse], error) {
 	return c.updateFacility.CallUnary(ctx, req)
 }
 
@@ -220,33 +196,21 @@ func (c *facilitiesServiceClient) DeleteFacility(ctx context.Context, req *conne
 	return c.deleteFacility.CallUnary(ctx, req)
 }
 
-// CreateFacilityCategory calls api.facilities.FacilitiesService.CreateFacilityCategory.
-func (c *facilitiesServiceClient) CreateFacilityCategory(ctx context.Context, req *connect.Request[facilities.CreateFacilityCategoryRequest]) (*connect.Response[facilities.Category], error) {
-	return c.createFacilityCategory.CallUnary(ctx, req)
-}
-
 // UpdateFacilityCategory calls api.facilities.FacilitiesService.UpdateFacilityCategory.
 func (c *facilitiesServiceClient) UpdateFacilityCategory(ctx context.Context, req *connect.Request[facilities.UpdateFacilityCategoryRequest]) (*connect.Response[facilities.Category], error) {
 	return c.updateFacilityCategory.CallUnary(ctx, req)
 }
 
-// DeleteFacilityCategory calls api.facilities.FacilitiesService.DeleteFacilityCategory.
-func (c *facilitiesServiceClient) DeleteFacilityCategory(ctx context.Context, req *connect.Request[facilities.DeleteFacilityCategoryRequest]) (*connect.Response[facilities.DeleteFacilityCategoryResponse], error) {
-	return c.deleteFacilityCategory.CallUnary(ctx, req)
-}
-
 // FacilitiesServiceHandler is an implementation of the api.facilities.FacilitiesService service.
 type FacilitiesServiceHandler interface {
 	GetAllFacilities(context.Context, *connect.Request[facilities.GetAllFacilitiesRequest]) (*connect.Response[facilities.GetAllFacilitiesResponse], error)
-	GetFacility(context.Context, *connect.Request[facilities.GetFacilityRequest]) (*connect.Response[facilities.FacilityWithCategories], error)
+	GetFacility(context.Context, *connect.Request[facilities.GetFacilityRequest]) (*connect.Response[facilities.FullFacility], error)
 	GetFacilityCategories(context.Context, *connect.Request[facilities.GetFacilityCategoriesRequest]) (*connect.Response[facilities.GetFacilityCategoriesResponse], error)
 	GetBuildingFacilities(context.Context, *connect.Request[facilities.GetBuildingFacilitiesRequest]) (*connect.Response[facilities.GetBuildingFacilitiesResponse], error)
-	CreateFacility(context.Context, *connect.Request[facilities.CreateFacilityRequest]) (*connect.Response[facilities.FacilityWithCategories], error)
-	UpdateFacility(context.Context, *connect.Request[facilities.UpdateFacilityRequest]) (*connect.Response[facilities.FacilityWithCategories], error)
+	CreateFacility(context.Context, *connect.Request[facilities.CreateFacilityRequest]) (*connect.Response[facilities.CreateFacilityResponse], error)
+	UpdateFacility(context.Context, *connect.Request[facilities.UpdateFacilityRequest]) (*connect.Response[facilities.UpdateFacilityResponse], error)
 	DeleteFacility(context.Context, *connect.Request[facilities.DeleteFacilityRequest]) (*connect.Response[facilities.DeleteFacilityResponse], error)
-	CreateFacilityCategory(context.Context, *connect.Request[facilities.CreateFacilityCategoryRequest]) (*connect.Response[facilities.Category], error)
 	UpdateFacilityCategory(context.Context, *connect.Request[facilities.UpdateFacilityCategoryRequest]) (*connect.Response[facilities.Category], error)
-	DeleteFacilityCategory(context.Context, *connect.Request[facilities.DeleteFacilityCategoryRequest]) (*connect.Response[facilities.DeleteFacilityCategoryResponse], error)
 }
 
 // NewFacilitiesServiceHandler builds an HTTP handler from the service implementation. It returns
@@ -301,22 +265,10 @@ func NewFacilitiesServiceHandler(svc FacilitiesServiceHandler, opts ...connect.H
 		connect.WithSchema(facilitiesServiceDeleteFacilityMethodDescriptor),
 		connect.WithHandlerOptions(opts...),
 	)
-	facilitiesServiceCreateFacilityCategoryHandler := connect.NewUnaryHandler(
-		FacilitiesServiceCreateFacilityCategoryProcedure,
-		svc.CreateFacilityCategory,
-		connect.WithSchema(facilitiesServiceCreateFacilityCategoryMethodDescriptor),
-		connect.WithHandlerOptions(opts...),
-	)
 	facilitiesServiceUpdateFacilityCategoryHandler := connect.NewUnaryHandler(
 		FacilitiesServiceUpdateFacilityCategoryProcedure,
 		svc.UpdateFacilityCategory,
 		connect.WithSchema(facilitiesServiceUpdateFacilityCategoryMethodDescriptor),
-		connect.WithHandlerOptions(opts...),
-	)
-	facilitiesServiceDeleteFacilityCategoryHandler := connect.NewUnaryHandler(
-		FacilitiesServiceDeleteFacilityCategoryProcedure,
-		svc.DeleteFacilityCategory,
-		connect.WithSchema(facilitiesServiceDeleteFacilityCategoryMethodDescriptor),
 		connect.WithHandlerOptions(opts...),
 	)
 	return "/api.facilities.FacilitiesService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -335,12 +287,8 @@ func NewFacilitiesServiceHandler(svc FacilitiesServiceHandler, opts ...connect.H
 			facilitiesServiceUpdateFacilityHandler.ServeHTTP(w, r)
 		case FacilitiesServiceDeleteFacilityProcedure:
 			facilitiesServiceDeleteFacilityHandler.ServeHTTP(w, r)
-		case FacilitiesServiceCreateFacilityCategoryProcedure:
-			facilitiesServiceCreateFacilityCategoryHandler.ServeHTTP(w, r)
 		case FacilitiesServiceUpdateFacilityCategoryProcedure:
 			facilitiesServiceUpdateFacilityCategoryHandler.ServeHTTP(w, r)
-		case FacilitiesServiceDeleteFacilityCategoryProcedure:
-			facilitiesServiceDeleteFacilityCategoryHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -354,7 +302,7 @@ func (UnimplementedFacilitiesServiceHandler) GetAllFacilities(context.Context, *
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.facilities.FacilitiesService.GetAllFacilities is not implemented"))
 }
 
-func (UnimplementedFacilitiesServiceHandler) GetFacility(context.Context, *connect.Request[facilities.GetFacilityRequest]) (*connect.Response[facilities.FacilityWithCategories], error) {
+func (UnimplementedFacilitiesServiceHandler) GetFacility(context.Context, *connect.Request[facilities.GetFacilityRequest]) (*connect.Response[facilities.FullFacility], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.facilities.FacilitiesService.GetFacility is not implemented"))
 }
 
@@ -366,11 +314,11 @@ func (UnimplementedFacilitiesServiceHandler) GetBuildingFacilities(context.Conte
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.facilities.FacilitiesService.GetBuildingFacilities is not implemented"))
 }
 
-func (UnimplementedFacilitiesServiceHandler) CreateFacility(context.Context, *connect.Request[facilities.CreateFacilityRequest]) (*connect.Response[facilities.FacilityWithCategories], error) {
+func (UnimplementedFacilitiesServiceHandler) CreateFacility(context.Context, *connect.Request[facilities.CreateFacilityRequest]) (*connect.Response[facilities.CreateFacilityResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.facilities.FacilitiesService.CreateFacility is not implemented"))
 }
 
-func (UnimplementedFacilitiesServiceHandler) UpdateFacility(context.Context, *connect.Request[facilities.UpdateFacilityRequest]) (*connect.Response[facilities.FacilityWithCategories], error) {
+func (UnimplementedFacilitiesServiceHandler) UpdateFacility(context.Context, *connect.Request[facilities.UpdateFacilityRequest]) (*connect.Response[facilities.UpdateFacilityResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.facilities.FacilitiesService.UpdateFacility is not implemented"))
 }
 
@@ -378,14 +326,6 @@ func (UnimplementedFacilitiesServiceHandler) DeleteFacility(context.Context, *co
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.facilities.FacilitiesService.DeleteFacility is not implemented"))
 }
 
-func (UnimplementedFacilitiesServiceHandler) CreateFacilityCategory(context.Context, *connect.Request[facilities.CreateFacilityCategoryRequest]) (*connect.Response[facilities.Category], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.facilities.FacilitiesService.CreateFacilityCategory is not implemented"))
-}
-
 func (UnimplementedFacilitiesServiceHandler) UpdateFacilityCategory(context.Context, *connect.Request[facilities.UpdateFacilityCategoryRequest]) (*connect.Response[facilities.Category], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.facilities.FacilitiesService.UpdateFacilityCategory is not implemented"))
-}
-
-func (UnimplementedFacilitiesServiceHandler) DeleteFacilityCategory(context.Context, *connect.Request[facilities.DeleteFacilityCategoryRequest]) (*connect.Response[facilities.DeleteFacilityCategoryResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.facilities.FacilitiesService.DeleteFacilityCategory is not implemented"))
 }

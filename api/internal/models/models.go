@@ -190,6 +190,24 @@ type Category struct {
 	FacilityID  int64   `db:"facility_id" json:"facility_id"`
 }
 
+func ToCategory(category *pbFacilities.Category) Category {
+	return Category{
+		ID:          category.Id,
+		Name:        category.Name,
+		Description: category.Description,
+		Price:       category.Price,
+		FacilityID:  category.FacilityId,
+	}
+}
+
+func ToCategories(categories []*pbFacilities.Category) []Category {
+	var result []Category
+	for _, category := range categories {
+		result = append(result, ToCategory(category))
+	}
+	return result
+}
+
 func (c *Category) ToProto() *pbFacilities.Category {
 	return &pbFacilities.Category{
 		Id:          c.ID,
@@ -225,10 +243,58 @@ func (f *Facility) ToProto() *pbFacilities.Facility {
 		GoogleCalendarId: f.GoogleCalendarID,
 	}
 }
+func ToFacility(f *pbFacilities.Facility) *Facility {
+	return &Facility{
+		ID:               f.Id,
+		Name:             f.Name,
+		Building:         f.Building,
+		Address:          f.Address,
+		ImagePath:        f.ImagePath,
+		Capacity:         f.Capacity,
+		CreatedAt:        utils.StringToPgTimestamptz(f.CreatedAt),
+		UpdatedAt:        utils.StringToPgTimestamptz(f.UpdatedAt),
+		GoogleCalendarID: f.GoogleCalendarId,
+	}
+}
 
 type FacilityWithCategories struct {
-	Facility
-	Categories []Category `db:"categories" json:"categories"`
+	Facility   Facility
+	Categories []Category
+}
+
+func (f *FacilityWithCategories) ToProto() *pbFacilities.FacilityWithCategories {
+	protoCategories := make([]*pbFacilities.Category, len(f.Categories))
+	for i, category := range f.Categories {
+		protoCategories[i] = category.ToProto()
+	}
+	return &pbFacilities.FacilityWithCategories{
+		Facility:   f.Facility.ToProto(),
+		Categories: protoCategories,
+	}
+}
+func ToFacilityWithCategories(req *pbFacilities.FacilityWithCategories) *FacilityWithCategories {
+	return &FacilityWithCategories{
+		Facility:   *ToFacility(req.Facility),
+		Categories: ToCategories(req.Categories),
+	}
+}
+
+type FullFacility struct {
+	Facility       *Facility
+	Categories     []Category
+	ReservationIDs []int64
+}
+
+func (f *FullFacility) ToProto() *pbFacilities.FullFacility {
+	protoCategories := make([]*pbFacilities.Category, len(f.Categories))
+	for i, category := range f.Categories {
+		protoCategories[i] = category.ToProto()
+	}
+	return &pbFacilities.FullFacility{
+		Facility:      f.Facility.ToProto(),
+		Categories:    protoCategories,
+		ReservationId: f.ReservationIDs,
+	}
 }
 
 type InsuranceFile struct {
@@ -310,11 +376,43 @@ func (r *Reservation) ToProto() *pbReservation.Reservation {
 	}
 }
 
+func ToReservation(reservation *pbReservation.Reservation) *Reservation {
+	return &Reservation{
+		ID:             reservation.Id,
+		UserID:         reservation.UserId,
+		EventName:      reservation.EventName,
+		FacilityID:     reservation.FacilityId,
+		Approved:       ReservationApproved(reservation.Approved),
+		CreatedAt:      utils.StringToPgTimestamptz(reservation.CreatedAt),
+		UpdatedAt:      utils.StringToPgTimestamptz(reservation.UpdatedAt),
+		Details:        reservation.Details,
+		Fees:           utils.StringToPgNumeric(reservation.Fees),
+		Insurance:      reservation.Insurance,
+		PrimaryContact: reservation.PrimaryContact,
+		DoorAccess:     reservation.DoorAccess,
+		DoorsDetails:   reservation.DoorsDetails,
+		Name:           reservation.Name,
+		People:         reservation.People,
+		TechDetails:    reservation.TechDetails,
+		TechSupport:    reservation.TechSupport,
+		Phone:          reservation.Phone,
+		CategoryID:     reservation.CategoryId,
+		TotalHours:     reservation.TotalHours,
+		InPerson:       reservation.InPerson,
+		Paid:           reservation.Paid,
+		PaymentUrl:     reservation.PaymentUrl,
+		PaymentLinkID:  reservation.PaymentLinkId,
+		TicketMade:     reservation.TicketMade,
+		Conflicts:      reservation.Conflicts,
+		InsuranceLink:  reservation.InsuranceLink,
+		CostOverride:   utils.StringToPgNumeric(reservation.CostOverride),
+	}
+}
+
 type FullReservation struct {
 	Reservation *Reservation
 	Dates       []ReservationDate
 	Fees        []ReservationFee
-	Facility    *Facility
 }
 
 func (r *FullReservation) ToProto() *pbReservation.FullReservation {
@@ -332,7 +430,6 @@ func (r *FullReservation) ToProto() *pbReservation.FullReservation {
 		Reservation: r.Reservation.ToProto(),
 		Dates:       dates,
 		Fees:        fees,
-		Facility:    r.Facility.ToProto(),
 	}
 }
 
@@ -347,6 +444,26 @@ type ReservationDate struct {
 	GcalEventid   *string                 `db:"gcal_eventid" json:"gcal_eventid"`
 }
 
+func ToReservationDate(reservationDate *pbReservation.ReservationDate) *ReservationDate {
+	return &ReservationDate{
+		ID:            reservationDate.Id,
+		StartDate:     utils.StringToPgDate(reservationDate.StartDate),
+		EndDate:       utils.StringToPgDate(reservationDate.EndDate),
+		StartTime:     utils.StringToPgTime(reservationDate.StartTime),
+		EndTime:       utils.StringToPgTime(reservationDate.EndTime),
+		ReservationID: reservationDate.ReservationId,
+		Approved:      ReservationDateApproved(reservationDate.Approved),
+		GcalEventid:   reservationDate.GcalEventid,
+	}
+}
+
+func ToReservationDates(reservationDates []*pbReservation.ReservationDate) []ReservationDate {
+	dates := make([]ReservationDate, len(reservationDates))
+	for i, date := range reservationDates {
+		dates[i] = *ToReservationDate(date)
+	}
+	return dates
+}
 func (r *ReservationDate) ToProto() *pbReservation.ReservationDate {
 	return &pbReservation.ReservationDate{
 		Id:            r.ID,
@@ -365,6 +482,23 @@ type ReservationFee struct {
 	AdditionalFees pgtype.Numeric `db:"additional_fees" json:"additional_fees"`
 	FeesType       *string        `db:"fees_type" json:"fees_type"`
 	ReservationID  int64          `db:"reservation_id" json:"reservation_id"`
+}
+
+func ToReservationFee(reservationFee *pbReservation.ReservationFee) *ReservationFee {
+	return &ReservationFee{
+		ID:             reservationFee.Id,
+		AdditionalFees: utils.StringToPgNumeric(reservationFee.AdditionalFees),
+		FeesType:       reservationFee.FeesType,
+		ReservationID:  reservationFee.ReservationId,
+	}
+}
+
+func ToReservationFees(reservationFees []*pbReservation.ReservationFee) []ReservationFee {
+	fees := make([]ReservationFee, len(reservationFees))
+	for i, fee := range reservationFees {
+		fees[i] = *ToReservationFee(fee)
+	}
+	return fees
 }
 
 func (r *ReservationFee) ToProto() *pbReservation.ReservationFee {

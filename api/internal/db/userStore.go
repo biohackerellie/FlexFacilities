@@ -20,7 +20,7 @@ func NewUserStore(db *DB, log *slog.Logger) *UserStore {
 
 const getUserQuery = `SELECT id, name, email, provider, role FROM users WHERE id = $1 LIMIT 1`
 
-func (s *UserStore) Get(ctx context.Context, id int64) (*models.Users, error) {
+func (s *UserStore) Get(ctx context.Context, id string) (*models.Users, error) {
 	stmt, _ := s.db.PreparexContext(ctx, getUserQuery)
 	var user *models.Users
 

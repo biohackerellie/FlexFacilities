@@ -3,7 +3,6 @@ syntax = "proto3";
 package api.reservation;
 
 option go_package = "api/internal/proto/reservation;reservationservice";
-import "proto/facilities/facilities.proto";
 
 
 message Reservation {
@@ -61,7 +60,6 @@ message FullReservation {
   Reservation reservation = 1;
   repeated ReservationDate dates = 2;
   repeated ReservationFee fees = 3;
-  facilities.Facility facility = 4;
 }
 
 
@@ -76,12 +74,6 @@ service ReservationService {
     option idempotency_level = NO_SIDE_EFFECTS;
   };
   rpc GetRequestsThisWeek (GetRequestsThisWeekRequest) returns (RequestThisWeekResponse){
-    option idempotency_level = NO_SIDE_EFFECTS;
-  };
-  rpc GetAllApprovedReservations (GetAllApprovedReservationsRequest) returns (ApprovedReservationsResponse){
-    option idempotency_level = NO_SIDE_EFFECTS;
-  };
-  rpc GetAllPendingReservations (GetAllPendingReservationsRequest) returns (PendingReservationsResponse){
     option idempotency_level = NO_SIDE_EFFECTS;
   };
   rpc CreateReservation (CreateReservationRequest) returns (CreateReservationResponse);
@@ -132,8 +124,6 @@ message RequestCountResponse {
 }
 
 message GetRequestsThisWeekRequest {}
-message GetAllApprovedReservationsRequest {}
-message GetAllPendingReservationsRequest {}
 message CreateReservationRequest {
   FullReservation reservation = 1;
 }
@@ -168,7 +158,7 @@ message UpdateReservationFeeResponse {}
 message DeleteReservationFeeResponse {}
 
 message UpdateReservationDateRequest {
-  repeated ReservationDate date = 1; 
+   ReservationDate date = 1; 
 }
 
 message DeleteReservationDateRequest {
@@ -180,10 +170,11 @@ message CreateReservationFeeRequest {
 }
 
 message UpdateReservationFeeRequest {
-  repeated ReservationFee fee = 1; 
+  ReservationFee fee = 1; 
 }
 
 message DeleteReservationFeeRequest {
   int64 id = 1;
 }
+
 

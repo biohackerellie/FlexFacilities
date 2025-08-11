@@ -27,13 +27,15 @@ message Category {
 message FacilityWithCategories {
   Facility facility = 1;
   repeated Category categories = 2;
+
 }
+
 
 service FacilitiesService {
   rpc GetAllFacilities (GetAllFacilitiesRequest) returns (GetAllFacilitiesResponse){
     option idempotency_level = NO_SIDE_EFFECTS;
   };
-  rpc GetFacility (GetFacilityRequest) returns (FacilityWithCategories){
+  rpc GetFacility (GetFacilityRequest) returns (FullFacility){
     option idempotency_level = NO_SIDE_EFFECTS;
   };
   rpc GetFacilityCategories (GetFacilityCategoriesRequest) returns (GetFacilityCategoriesResponse){
@@ -42,12 +44,10 @@ service FacilitiesService {
   rpc GetBuildingFacilities (GetBuildingFacilitiesRequest) returns (GetBuildingFacilitiesResponse){
     option idempotency_level = NO_SIDE_EFFECTS;
   };
-  rpc CreateFacility (CreateFacilityRequest) returns (FacilityWithCategories);
-  rpc UpdateFacility (UpdateFacilityRequest) returns (FacilityWithCategories);
+  rpc CreateFacility (CreateFacilityRequest) returns (CreateFacilityResponse);
+  rpc UpdateFacility (UpdateFacilityRequest) returns (UpdateFacilityResponse);
   rpc DeleteFacility (DeleteFacilityRequest) returns (DeleteFacilityResponse);
-  rpc CreateFacilityCategory (CreateFacilityCategoryRequest) returns (Category);
   rpc UpdateFacilityCategory (UpdateFacilityCategoryRequest) returns (Category);
-  rpc DeleteFacilityCategory (DeleteFacilityCategoryRequest) returns (DeleteFacilityCategoryResponse);
 }
 
 message GetAllFacilitiesRequest {
@@ -90,16 +90,16 @@ message DeleteFacilityRequest {
   int64 id = 1;
 }
 
-message DeleteFacilityCategoryResponse {}
-message DeleteFacilityCategoryRequest {
-  int64 id = 1;
-}
 message DeleteFacilityResponse {}
-message CreateFacilityCategoryRequest {
-  Category category = 1;
-}
 message UpdateFacilityCategoryRequest {
   Category category = 1;
 }
+message CreateFacilityResponse {}
+message UpdateFacilityResponse {}
 
 
+message FullFacility {
+  Facility facility = 1;
+  repeated Category categories = 2;
+  repeated int64 reservation_id = 3;
+}

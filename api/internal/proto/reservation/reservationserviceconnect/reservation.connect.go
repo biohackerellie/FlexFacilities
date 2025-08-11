@@ -45,12 +45,6 @@ const (
 	// ReservationServiceGetRequestsThisWeekProcedure is the fully-qualified name of the
 	// ReservationService's GetRequestsThisWeek RPC.
 	ReservationServiceGetRequestsThisWeekProcedure = "/api.reservation.ReservationService/GetRequestsThisWeek"
-	// ReservationServiceGetAllApprovedReservationsProcedure is the fully-qualified name of the
-	// ReservationService's GetAllApprovedReservations RPC.
-	ReservationServiceGetAllApprovedReservationsProcedure = "/api.reservation.ReservationService/GetAllApprovedReservations"
-	// ReservationServiceGetAllPendingReservationsProcedure is the fully-qualified name of the
-	// ReservationService's GetAllPendingReservations RPC.
-	ReservationServiceGetAllPendingReservationsProcedure = "/api.reservation.ReservationService/GetAllPendingReservations"
 	// ReservationServiceCreateReservationProcedure is the fully-qualified name of the
 	// ReservationService's CreateReservation RPC.
 	ReservationServiceCreateReservationProcedure = "/api.reservation.ReservationService/CreateReservation"
@@ -85,23 +79,21 @@ const (
 
 // These variables are the protoreflect.Descriptor objects for the RPCs defined in this package.
 var (
-	reservationServiceServiceDescriptor                          = reservation.File_proto_reservation_reservation_proto.Services().ByName("ReservationService")
-	reservationServiceGetAllReservationsMethodDescriptor         = reservationServiceServiceDescriptor.Methods().ByName("GetAllReservations")
-	reservationServiceGetReservationMethodDescriptor             = reservationServiceServiceDescriptor.Methods().ByName("GetReservation")
-	reservationServiceRequestCountMethodDescriptor               = reservationServiceServiceDescriptor.Methods().ByName("RequestCount")
-	reservationServiceGetRequestsThisWeekMethodDescriptor        = reservationServiceServiceDescriptor.Methods().ByName("GetRequestsThisWeek")
-	reservationServiceGetAllApprovedReservationsMethodDescriptor = reservationServiceServiceDescriptor.Methods().ByName("GetAllApprovedReservations")
-	reservationServiceGetAllPendingReservationsMethodDescriptor  = reservationServiceServiceDescriptor.Methods().ByName("GetAllPendingReservations")
-	reservationServiceCreateReservationMethodDescriptor          = reservationServiceServiceDescriptor.Methods().ByName("CreateReservation")
-	reservationServiceUpdateReservationMethodDescriptor          = reservationServiceServiceDescriptor.Methods().ByName("UpdateReservation")
-	reservationServiceDeleteReservationMethodDescriptor          = reservationServiceServiceDescriptor.Methods().ByName("DeleteReservation")
-	reservationServiceUserReservationsMethodDescriptor           = reservationServiceServiceDescriptor.Methods().ByName("UserReservations")
-	reservationServiceCreateReservationDateMethodDescriptor      = reservationServiceServiceDescriptor.Methods().ByName("CreateReservationDate")
-	reservationServiceUpdateReservationDateMethodDescriptor      = reservationServiceServiceDescriptor.Methods().ByName("UpdateReservationDate")
-	reservationServiceDeleteReservationDateMethodDescriptor      = reservationServiceServiceDescriptor.Methods().ByName("DeleteReservationDate")
-	reservationServiceCreateReservationFeeMethodDescriptor       = reservationServiceServiceDescriptor.Methods().ByName("CreateReservationFee")
-	reservationServiceUpdateReservationFeeMethodDescriptor       = reservationServiceServiceDescriptor.Methods().ByName("UpdateReservationFee")
-	reservationServiceDeleteReservationFeeMethodDescriptor       = reservationServiceServiceDescriptor.Methods().ByName("DeleteReservationFee")
+	reservationServiceServiceDescriptor                     = reservation.File_proto_reservation_reservation_proto.Services().ByName("ReservationService")
+	reservationServiceGetAllReservationsMethodDescriptor    = reservationServiceServiceDescriptor.Methods().ByName("GetAllReservations")
+	reservationServiceGetReservationMethodDescriptor        = reservationServiceServiceDescriptor.Methods().ByName("GetReservation")
+	reservationServiceRequestCountMethodDescriptor          = reservationServiceServiceDescriptor.Methods().ByName("RequestCount")
+	reservationServiceGetRequestsThisWeekMethodDescriptor   = reservationServiceServiceDescriptor.Methods().ByName("GetRequestsThisWeek")
+	reservationServiceCreateReservationMethodDescriptor     = reservationServiceServiceDescriptor.Methods().ByName("CreateReservation")
+	reservationServiceUpdateReservationMethodDescriptor     = reservationServiceServiceDescriptor.Methods().ByName("UpdateReservation")
+	reservationServiceDeleteReservationMethodDescriptor     = reservationServiceServiceDescriptor.Methods().ByName("DeleteReservation")
+	reservationServiceUserReservationsMethodDescriptor      = reservationServiceServiceDescriptor.Methods().ByName("UserReservations")
+	reservationServiceCreateReservationDateMethodDescriptor = reservationServiceServiceDescriptor.Methods().ByName("CreateReservationDate")
+	reservationServiceUpdateReservationDateMethodDescriptor = reservationServiceServiceDescriptor.Methods().ByName("UpdateReservationDate")
+	reservationServiceDeleteReservationDateMethodDescriptor = reservationServiceServiceDescriptor.Methods().ByName("DeleteReservationDate")
+	reservationServiceCreateReservationFeeMethodDescriptor  = reservationServiceServiceDescriptor.Methods().ByName("CreateReservationFee")
+	reservationServiceUpdateReservationFeeMethodDescriptor  = reservationServiceServiceDescriptor.Methods().ByName("UpdateReservationFee")
+	reservationServiceDeleteReservationFeeMethodDescriptor  = reservationServiceServiceDescriptor.Methods().ByName("DeleteReservationFee")
 )
 
 // ReservationServiceClient is a client for the api.reservation.ReservationService service.
@@ -110,8 +102,6 @@ type ReservationServiceClient interface {
 	GetReservation(context.Context, *connect.Request[reservation.GetReservationRequest]) (*connect.Response[reservation.FullReservation], error)
 	RequestCount(context.Context, *connect.Request[reservation.RequestCountRequest]) (*connect.Response[reservation.RequestCountResponse], error)
 	GetRequestsThisWeek(context.Context, *connect.Request[reservation.GetRequestsThisWeekRequest]) (*connect.Response[reservation.RequestThisWeekResponse], error)
-	GetAllApprovedReservations(context.Context, *connect.Request[reservation.GetAllApprovedReservationsRequest]) (*connect.Response[reservation.ApprovedReservationsResponse], error)
-	GetAllPendingReservations(context.Context, *connect.Request[reservation.GetAllPendingReservationsRequest]) (*connect.Response[reservation.PendingReservationsResponse], error)
 	CreateReservation(context.Context, *connect.Request[reservation.CreateReservationRequest]) (*connect.Response[reservation.CreateReservationResponse], error)
 	UpdateReservation(context.Context, *connect.Request[reservation.UpdateReservationRequest]) (*connect.Response[reservation.UpdateReservationResponse], error)
 	DeleteReservation(context.Context, *connect.Request[reservation.DeleteReservationRequest]) (*connect.Response[reservation.DeleteReservationResponse], error)
@@ -159,20 +149,6 @@ func NewReservationServiceClient(httpClient connect.HTTPClient, baseURL string, 
 			httpClient,
 			baseURL+ReservationServiceGetRequestsThisWeekProcedure,
 			connect.WithSchema(reservationServiceGetRequestsThisWeekMethodDescriptor),
-			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
-			connect.WithClientOptions(opts...),
-		),
-		getAllApprovedReservations: connect.NewClient[reservation.GetAllApprovedReservationsRequest, reservation.ApprovedReservationsResponse](
-			httpClient,
-			baseURL+ReservationServiceGetAllApprovedReservationsProcedure,
-			connect.WithSchema(reservationServiceGetAllApprovedReservationsMethodDescriptor),
-			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
-			connect.WithClientOptions(opts...),
-		),
-		getAllPendingReservations: connect.NewClient[reservation.GetAllPendingReservationsRequest, reservation.PendingReservationsResponse](
-			httpClient,
-			baseURL+ReservationServiceGetAllPendingReservationsProcedure,
-			connect.WithSchema(reservationServiceGetAllPendingReservationsMethodDescriptor),
 			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 			connect.WithClientOptions(opts...),
 		),
@@ -242,22 +218,20 @@ func NewReservationServiceClient(httpClient connect.HTTPClient, baseURL string, 
 
 // reservationServiceClient implements ReservationServiceClient.
 type reservationServiceClient struct {
-	getAllReservations         *connect.Client[reservation.GetAllReservationsRequest, reservation.AllReservationsResponse]
-	getReservation             *connect.Client[reservation.GetReservationRequest, reservation.FullReservation]
-	requestCount               *connect.Client[reservation.RequestCountRequest, reservation.RequestCountResponse]
-	getRequestsThisWeek        *connect.Client[reservation.GetRequestsThisWeekRequest, reservation.RequestThisWeekResponse]
-	getAllApprovedReservations *connect.Client[reservation.GetAllApprovedReservationsRequest, reservation.ApprovedReservationsResponse]
-	getAllPendingReservations  *connect.Client[reservation.GetAllPendingReservationsRequest, reservation.PendingReservationsResponse]
-	createReservation          *connect.Client[reservation.CreateReservationRequest, reservation.CreateReservationResponse]
-	updateReservation          *connect.Client[reservation.UpdateReservationRequest, reservation.UpdateReservationResponse]
-	deleteReservation          *connect.Client[reservation.DeleteReservationRequest, reservation.DeleteReservationResponse]
-	userReservations           *connect.Client[reservation.UserReservationsRequest, reservation.UserReservationsResponse]
-	createReservationDate      *connect.Client[reservation.CreateReservationDateRequest, reservation.CreateReservationDateResponse]
-	updateReservationDate      *connect.Client[reservation.UpdateReservationDateRequest, reservation.UpdateReservationDateResponse]
-	deleteReservationDate      *connect.Client[reservation.DeleteReservationDateRequest, reservation.DeleteReservationDateResponse]
-	createReservationFee       *connect.Client[reservation.CreateReservationFeeRequest, reservation.CreateReservationFeeResponse]
-	updateReservationFee       *connect.Client[reservation.UpdateReservationFeeRequest, reservation.UpdateReservationFeeResponse]
-	deleteReservationFee       *connect.Client[reservation.DeleteReservationFeeRequest, reservation.DeleteReservationFeeResponse]
+	getAllReservations    *connect.Client[reservation.GetAllReservationsRequest, reservation.AllReservationsResponse]
+	getReservation        *connect.Client[reservation.GetReservationRequest, reservation.FullReservation]
+	requestCount          *connect.Client[reservation.RequestCountRequest, reservation.RequestCountResponse]
+	getRequestsThisWeek   *connect.Client[reservation.GetRequestsThisWeekRequest, reservation.RequestThisWeekResponse]
+	createReservation     *connect.Client[reservation.CreateReservationRequest, reservation.CreateReservationResponse]
+	updateReservation     *connect.Client[reservation.UpdateReservationRequest, reservation.UpdateReservationResponse]
+	deleteReservation     *connect.Client[reservation.DeleteReservationRequest, reservation.DeleteReservationResponse]
+	userReservations      *connect.Client[reservation.UserReservationsRequest, reservation.UserReservationsResponse]
+	createReservationDate *connect.Client[reservation.CreateReservationDateRequest, reservation.CreateReservationDateResponse]
+	updateReservationDate *connect.Client[reservation.UpdateReservationDateRequest, reservation.UpdateReservationDateResponse]
+	deleteReservationDate *connect.Client[reservation.DeleteReservationDateRequest, reservation.DeleteReservationDateResponse]
+	createReservationFee  *connect.Client[reservation.CreateReservationFeeRequest, reservation.CreateReservationFeeResponse]
+	updateReservationFee  *connect.Client[reservation.UpdateReservationFeeRequest, reservation.UpdateReservationFeeResponse]
+	deleteReservationFee  *connect.Client[reservation.DeleteReservationFeeRequest, reservation.DeleteReservationFeeResponse]
 }
 
 // GetAllReservations calls api.reservation.ReservationService.GetAllReservations.
@@ -278,16 +252,6 @@ func (c *reservationServiceClient) RequestCount(ctx context.Context, req *connec
 // GetRequestsThisWeek calls api.reservation.ReservationService.GetRequestsThisWeek.
 func (c *reservationServiceClient) GetRequestsThisWeek(ctx context.Context, req *connect.Request[reservation.GetRequestsThisWeekRequest]) (*connect.Response[reservation.RequestThisWeekResponse], error) {
 	return c.getRequestsThisWeek.CallUnary(ctx, req)
-}
-
-// GetAllApprovedReservations calls api.reservation.ReservationService.GetAllApprovedReservations.
-func (c *reservationServiceClient) GetAllApprovedReservations(ctx context.Context, req *connect.Request[reservation.GetAllApprovedReservationsRequest]) (*connect.Response[reservation.ApprovedReservationsResponse], error) {
-	return c.getAllApprovedReservations.CallUnary(ctx, req)
-}
-
-// GetAllPendingReservations calls api.reservation.ReservationService.GetAllPendingReservations.
-func (c *reservationServiceClient) GetAllPendingReservations(ctx context.Context, req *connect.Request[reservation.GetAllPendingReservationsRequest]) (*connect.Response[reservation.PendingReservationsResponse], error) {
-	return c.getAllPendingReservations.CallUnary(ctx, req)
 }
 
 // CreateReservation calls api.reservation.ReservationService.CreateReservation.
@@ -346,8 +310,6 @@ type ReservationServiceHandler interface {
 	GetReservation(context.Context, *connect.Request[reservation.GetReservationRequest]) (*connect.Response[reservation.FullReservation], error)
 	RequestCount(context.Context, *connect.Request[reservation.RequestCountRequest]) (*connect.Response[reservation.RequestCountResponse], error)
 	GetRequestsThisWeek(context.Context, *connect.Request[reservation.GetRequestsThisWeekRequest]) (*connect.Response[reservation.RequestThisWeekResponse], error)
-	GetAllApprovedReservations(context.Context, *connect.Request[reservation.GetAllApprovedReservationsRequest]) (*connect.Response[reservation.ApprovedReservationsResponse], error)
-	GetAllPendingReservations(context.Context, *connect.Request[reservation.GetAllPendingReservationsRequest]) (*connect.Response[reservation.PendingReservationsResponse], error)
 	CreateReservation(context.Context, *connect.Request[reservation.CreateReservationRequest]) (*connect.Response[reservation.CreateReservationResponse], error)
 	UpdateReservation(context.Context, *connect.Request[reservation.UpdateReservationRequest]) (*connect.Response[reservation.UpdateReservationResponse], error)
 	DeleteReservation(context.Context, *connect.Request[reservation.DeleteReservationRequest]) (*connect.Response[reservation.DeleteReservationResponse], error)
@@ -391,20 +353,6 @@ func NewReservationServiceHandler(svc ReservationServiceHandler, opts ...connect
 		ReservationServiceGetRequestsThisWeekProcedure,
 		svc.GetRequestsThisWeek,
 		connect.WithSchema(reservationServiceGetRequestsThisWeekMethodDescriptor),
-		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
-		connect.WithHandlerOptions(opts...),
-	)
-	reservationServiceGetAllApprovedReservationsHandler := connect.NewUnaryHandler(
-		ReservationServiceGetAllApprovedReservationsProcedure,
-		svc.GetAllApprovedReservations,
-		connect.WithSchema(reservationServiceGetAllApprovedReservationsMethodDescriptor),
-		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
-		connect.WithHandlerOptions(opts...),
-	)
-	reservationServiceGetAllPendingReservationsHandler := connect.NewUnaryHandler(
-		ReservationServiceGetAllPendingReservationsProcedure,
-		svc.GetAllPendingReservations,
-		connect.WithSchema(reservationServiceGetAllPendingReservationsMethodDescriptor),
 		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 		connect.WithHandlerOptions(opts...),
 	)
@@ -479,10 +427,6 @@ func NewReservationServiceHandler(svc ReservationServiceHandler, opts ...connect
 			reservationServiceRequestCountHandler.ServeHTTP(w, r)
 		case ReservationServiceGetRequestsThisWeekProcedure:
 			reservationServiceGetRequestsThisWeekHandler.ServeHTTP(w, r)
-		case ReservationServiceGetAllApprovedReservationsProcedure:
-			reservationServiceGetAllApprovedReservationsHandler.ServeHTTP(w, r)
-		case ReservationServiceGetAllPendingReservationsProcedure:
-			reservationServiceGetAllPendingReservationsHandler.ServeHTTP(w, r)
 		case ReservationServiceCreateReservationProcedure:
 			reservationServiceCreateReservationHandler.ServeHTTP(w, r)
 		case ReservationServiceUpdateReservationProcedure:
@@ -526,14 +470,6 @@ func (UnimplementedReservationServiceHandler) RequestCount(context.Context, *con
 
 func (UnimplementedReservationServiceHandler) GetRequestsThisWeek(context.Context, *connect.Request[reservation.GetRequestsThisWeekRequest]) (*connect.Response[reservation.RequestThisWeekResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.reservation.ReservationService.GetRequestsThisWeek is not implemented"))
-}
-
-func (UnimplementedReservationServiceHandler) GetAllApprovedReservations(context.Context, *connect.Request[reservation.GetAllApprovedReservationsRequest]) (*connect.Response[reservation.ApprovedReservationsResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.reservation.ReservationService.GetAllApprovedReservations is not implemented"))
-}
-
-func (UnimplementedReservationServiceHandler) GetAllPendingReservations(context.Context, *connect.Request[reservation.GetAllPendingReservationsRequest]) (*connect.Response[reservation.PendingReservationsResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.reservation.ReservationService.GetAllPendingReservations is not implemented"))
 }
 
 func (UnimplementedReservationServiceHandler) CreateReservation(context.Context, *connect.Request[reservation.CreateReservationRequest]) (*connect.Response[reservation.CreateReservationResponse], error) {

@@ -14,12 +14,40 @@ type UserStore interface {
 	UpdateByEmail(ctx context.Context, user *models.Users) (*models.Users, error)
 	Delete(ctx context.Context, id string) error
 	GetAll(ctx context.Context) ([]*models.Users, error)
-	UserExists(ctx context.Context, id string) (bool, error)
-	CreateSession(ctx context.Context, session *models.Session) error
+	CreateSession(ctx context.Context, session *models.Session) (*models.Session, error)
 	GetSession(ctx context.Context, id string) (*models.Session, error)
 	DeleteSession(ctx context.Context, id string) error
 	UpdateSession(ctx context.Context, session *models.Session) error
 	DeleteExpiredSessions(ctx context.Context) error
+}
+type FacilityStore interface {
+	Get(ctx context.Context, id int64) (*models.FullFacility, error)
+	GetAll(ctx context.Context) ([]*models.FacilityWithCategories, error)
+	GetByBuilding(ctx context.Context, building string) ([]*models.FacilityWithCategories, error)
+	GetCategories(ctx context.Context, ids []int64) ([]models.Category, error)
+	Create(ctx context.Context, input *models.FacilityWithCategories) error
+	Update(ctx context.Context, input *models.Facility) error
+	Delete(ctx context.Context, id int64) error
+	EditCategory(ctx context.Context, category *models.Category) error
+}
+
+type ReservationStore interface {
+	Get(ctx context.Context, id int64) (*models.FullReservation, error)
+	GetAll(ctx context.Context) ([]*models.FullReservation, error)
+	GetAllIn(ctx context.Context, ids []int64) ([]*models.FullReservation, error)
+	GetUserReservations(ctx context.Context, userID string) ([]*models.FullReservation, error)
+	Create(ctx context.Context, reservation *models.Reservation) (int64, error)
+	CreateDates(ctx context.Context, dates []models.ReservationDate) error
+	CreateFee(ctx context.Context, fee models.ReservationFee) error
+	Update(ctx context.Context, reservation *models.Reservation) error
+	Delete(ctx context.Context, id int64) error
+	DeleteDates(ctx context.Context, id int64) error
+	DeleteFees(ctx context.Context, id int64) error
+	UpdateCostOverride(ctx context.Context, id int64, cost string) error
+	UpdateDate(ctx context.Context, date *models.ReservationDate) error
+	GetDates(ctx context.Context, ids []int64) ([]models.ReservationDate, error)
+	GetFees(ctx context.Context, ids []int64) ([]models.ReservationFee, error)
+	GetFutureDates(ctx context.Context) ([]models.ReservationDate, error)
 }
 
 type AuthService interface {

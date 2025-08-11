@@ -144,7 +144,7 @@ func (a *AuthService) AuthCallback(w http.ResponseWriter, r *http.Request) {
 		CreatedAt:    utils.TimeToPgTimestamptz(time.Now()),
 		ExpiresAt:    utils.TimeToPgTimestamptz(time.Now().Add(absoluteExpiration)),
 	}
-	err = a.db.CreateSession(r.Context(), session)
+	_, err = a.db.CreateSession(r.Context(), session)
 	if err != nil {
 		http.Error(w, "failed to get user info from auth provider", http.StatusBadRequest)
 		return
