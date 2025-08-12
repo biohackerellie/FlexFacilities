@@ -35,9 +35,7 @@ export class RPC {
       createFacility: this.errorWrapper(this._FacilitiesService.createFacility),
       updateFacility: this.errorWrapper(this._FacilitiesService.updateFacility),
       deleteFacility: this.errorWrapper(this._FacilitiesService.deleteFacility),
-      createFacilityCategory: this.errorWrapper(this._FacilitiesService.createFacilityCategory),
       updateFacilityCategory: this.errorWrapper(this._FacilitiesService.updateFacilityCategory),
-      deleteFacilityCategory: this.errorWrapper(this._FacilitiesService.deleteFacilityCategory),
     }
   }
 
@@ -51,8 +49,6 @@ export class RPC {
       getReservation: this.errorWrapper(this._ReservationService.getReservation),
       requestCount: this.errorWrapper(this._ReservationService.requestCount),
       getRequestsThisWeek: this.errorWrapper(this._ReservationService.getRequestsThisWeek),
-      getAllApprovedReservations: this.errorWrapper(this._ReservationService.getAllApprovedReservations),
-      getAllPendingReservations: this.errorWrapper(this._ReservationService.getAllPendingReservations),
       createReservation: this.errorWrapper(this._ReservationService.createReservation),
       updateReservation: this.errorWrapper(this._ReservationService.updateReservation),
       deleteReservation: this.errorWrapper(this._ReservationService.deleteReservation),

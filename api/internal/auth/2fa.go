@@ -20,7 +20,7 @@ type TwoFACode struct {
 	ExpiresAt time.Time
 }
 
-func (s *AuthService) Verify2FACode(w http.ResponseWriter, r *http.Request) {
+func (s *Auth) Verify2FACode(w http.ResponseWriter, r *http.Request) {
 	type request struct {
 		Code  string `json:"code"`
 		Token string `json:"token"`
@@ -82,7 +82,7 @@ func (s *AuthService) Verify2FACode(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 }
 
-func (s *AuthService) Begin2FA(w http.ResponseWriter, r *http.Request) {
+func (s *Auth) Begin2FA(w http.ResponseWriter, r *http.Request) {
 	type twoFARequest struct {
 		Email    string `json:"email"`
 		Password string `json:"password"`
@@ -125,7 +125,7 @@ func (s *AuthService) Begin2FA(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
-func (s *AuthService) verifyCredentials(ctx context.Context, email, password string) error {
+func (s *Auth) verifyCredentials(ctx context.Context, email, password string) error {
 	user, err := s.db.GetByEmail(ctx, email)
 	if err != nil || user.Password == nil {
 		return err
@@ -136,13 +136,13 @@ func (s *AuthService) verifyCredentials(ctx context.Context, email, password str
 	}
 	return nil
 }
-func (s *AuthService) setTempToken(token, code, email string, d time.Duration) {
+func (s *Auth) setTempToken(token, code, email string, d time.Duration) {
 	s.storeMu.Lock()
 	defer s.storeMu.Unlock()
 	s.tokenStore[token] = TwoFACode{Code: code, Email: email, ExpiresAt: time.Now().Add(d)}
 }
 
-func (s *AuthService) getTempToken(token string) (string, string, bool) {
+func (s *Auth) getTempToken(token string) (string, string, bool) {
 	s.storeMu.Lock()
 	defer s.storeMu.Unlock()
 	v, ok := s.tokenStore[token]
@@ -154,7 +154,7 @@ func (s *AuthService) getTempToken(token string) (string, string, bool) {
 	return v.Code, v.Email, true
 }
 
-func (s *AuthService) CleanupExpiredTokens() {
+func (s *Auth) CleanupExpiredTokens() {
 	s.storeMu.Lock()
 	now := time.Now()
 	for k, v := range s.tokenStore {

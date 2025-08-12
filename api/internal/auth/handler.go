@@ -15,7 +15,7 @@ func VerifyToken[T jwt.Claims](token string, claims T, key []byte) (*jwt.Token, 
 	})
 }
 
-func (a *AuthService) SetJWTCookie(w http.ResponseWriter, token string) {
+func (a *Auth) SetJWTCookie(w http.ResponseWriter, token string) {
 	http.SetCookie(w, &http.Cookie{
 		Name:     fmt.Sprintf("%s%s", a.cookiePrefix, jwtCookieName),
 		Value:    token,
@@ -26,7 +26,7 @@ func (a *AuthService) SetJWTCookie(w http.ResponseWriter, token string) {
 	})
 }
 
-func (s *AuthService) SetSessionCookie(w http.ResponseWriter, id string) {
+func (s *Auth) SetSessionCookie(w http.ResponseWriter, id string) {
 	http.SetCookie(w, &http.Cookie{
 		Name:     fmt.Sprintf("%s%s", s.cookiePrefix, sessionCookieName),
 		Value:    id,
@@ -38,7 +38,7 @@ func (s *AuthService) SetSessionCookie(w http.ResponseWriter, id string) {
 	})
 }
 
-func (s *AuthService) ClearJWTCookie(w http.ResponseWriter) {
+func (s *Auth) ClearJWTCookie(w http.ResponseWriter) {
 	http.SetCookie(w, &http.Cookie{
 		Name:     fmt.Sprintf("%s%s", s.cookiePrefix, jwtCookieName),
 		Value:    "",
@@ -60,7 +60,7 @@ func (s *AuthService) ClearJWTCookie(w http.ResponseWriter) {
 	})
 }
 
-func (s *AuthService) SetCSRFCookie(w http.ResponseWriter) {
+func (s *Auth) SetCSRFCookie(w http.ResponseWriter) {
 	token := utils.GenerateRandomID()
 	cookie := &http.Cookie{
 		Name:     "csrf-token",
@@ -74,7 +74,7 @@ func (s *AuthService) SetCSRFCookie(w http.ResponseWriter) {
 	http.SetCookie(w, cookie)
 }
 
-func (s *AuthService) RegisterProvider(name string, provider flexauth.Provider) {
+func (s *Auth) RegisterProvider(name string, provider flexauth.Provider) {
 	s.providerMu.Lock()
 	defer s.providerMu.Unlock()
 	s.providers[name] = provider

@@ -14,13 +14,6 @@ import (
 )
 
 func NewServer(db *repository.DB, log *slog.Logger) *http.ServeMux {
-	facilityStore := repository.NewFacilityStore(db, log)
-	reservationStore := repository.NewReservationStore(db, log)
-	userStore := repository.NewUserStore(db, log)
-
-	ReservationService := reservation.NewAdapter(reservationStore, log)
-	FacilityService := facility.NewAdapter(facilityStore, log)
-	UserService := user.NewAdapter(userStore, log)
 
 	mux := http.NewServeMux()
 	mux.Handle(facilityMux.NewFacilitiesServiceHandler(FacilityService))

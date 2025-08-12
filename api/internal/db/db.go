@@ -21,27 +21,21 @@ CREATE TABLE IF NOT EXISTS schema_migrations (
 );
 `
 
-func NewDB(ctx context.Context, connectionString string) (*DB, error) {
-	sqlDB, err := sqlx.Open("pgx", connectionString)
-	if err != nil {
-		return nil, fmt.Errorf("failed to connect to postgres: %w", err)
-	}
+func NewDB(ctx context.Context, connectionString string) *DB {
+	sqlDB := sqlx.MustOpen("pgx", connectionString)
 
 	sqlDB.SetMaxOpenConns(25)
 	sqlDB.SetMaxIdleConns(5)
 	sqlDB.SetConnMaxLifetime(5 * time.Minute)
 
 	if err := sqlDB.PingContext(ctx); err != nil {
-		return nil, fmt.Errorf("failed to connect to postgres: %w", err)
+		return nil
 	}
 
-	if _, err := sqlDB.ExecContext(ctx, initSQL); err != nil {
-		return nil, err
-	}
-
+	_ = sqlDB.MustExecContext(ctx, initSQL)
 	db := &DB{sqlDB}
 	if err := db.runMigrations(ctx); err != nil {
-		return nil, err
+		panic(fmt.Errorf("failed to run migrations: %w", err))
 	}
-	return db, nil
+	return db
 }

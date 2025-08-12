@@ -20,7 +20,7 @@ import (
 	"golang.org/x/crypto/argon2"
 )
 
-type AuthService struct {
+type Auth struct {
 	db           ports.UserStore
 	logger       *slog.Logger
 	key          []byte
@@ -55,7 +55,7 @@ const (
 	TwoProviderName   = "email"
 )
 
-func NewAuthService(db ports.UserStore, logger *slog.Logger) *AuthService {
+func NewAuth(db ports.UserStore, logger *slog.Logger) *Auth {
 	authKey := []byte(os.Getenv("AUTH_SECRET"))
 	salt := []byte(os.Getenv("AUTH_SALT"))
 	encKey := generateEncryptionKey(authKey, salt)
@@ -66,7 +66,7 @@ func NewAuthService(db ports.UserStore, logger *slog.Logger) *AuthService {
 	} else {
 		cookiePrefix = "__"
 	}
-	return &AuthService{
+	return &Auth{
 		db:           db,
 		logger:       logger,
 		key:          encKey,
@@ -79,7 +79,7 @@ func NewAuthService(db ports.UserStore, logger *slog.Logger) *AuthService {
 	}
 }
 
-func (a *AuthService) AuthCallback(w http.ResponseWriter, r *http.Request) {
+func (a *Auth) AuthCallback(w http.ResponseWriter, r *http.Request) {
 	providerName := r.PathValue("provider")
 	if errorMsg := r.URL.Query().Get("error"); errorMsg != "" {
 		errorDesc := r.URL.Query().Get("error_description")
@@ -154,7 +154,7 @@ func (a *AuthService) AuthCallback(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 }
 
-func (a *AuthService) BeginOauth(w http.ResponseWriter, r *http.Request) {
+func (a *Auth) BeginOauth(w http.ResponseWriter, r *http.Request) {
 	providerName := r.PathValue("provider")
 	if providerName == "" {
 		http.Error(w, "failed to get user info from auth provider", http.StatusBadRequest)
@@ -186,7 +186,7 @@ func (a *AuthService) BeginOauth(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, authURL, http.StatusTemporaryRedirect)
 }
 
-func (s *AuthService) RefreshToken(w http.ResponseWriter, r *http.Request) {
+func (s *Auth) RefreshToken(w http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie("session")
 	if err != nil {
 		http.Error(w, "Invalid session cookie", http.StatusUnauthorized)
@@ -281,7 +281,7 @@ func createToken(userId, userName, userEmail, provider string, role models.UserR
 	return token.SignedString(key)
 }
 
-func (s *AuthService) createRefreshToken(userId, userName, userEmail, refreshToken, provider string, exp time.Duration) (string, error) {
+func (s *Auth) createRefreshToken(userId, userName, userEmail, refreshToken, provider string, exp time.Duration) (string, error) {
 	claims := RefreshClaims{
 		refreshToken,
 		provider,
@@ -308,7 +308,7 @@ func generateEncryptionKey(secret, salt []byte) []byte {
 	encKey := argon2.IDKey(secret, salt, time, memory, threads, keyLen)
 	return encKey
 }
-func (a *AuthService) verifyState(r *http.Request, providerName, receivedState string) error {
+func (a *Auth) verifyState(r *http.Request, providerName, receivedState string) error {
 	cookie, err := r.Cookie(fmt.Sprintf("oauth_state_%s", providerName))
 	if err != nil {
 		return fmt.Errorf("state cookie not found")
@@ -321,7 +321,7 @@ func (a *AuthService) verifyState(r *http.Request, providerName, receivedState s
 	return nil
 }
 
-func (s *AuthService) GetOrCreateAuthUser(ctx context.Context, authUser *models.Users) (*models.Users, error) {
+func (s *Auth) GetOrCreateAuthUser(ctx context.Context, authUser *models.Users) (*models.Users, error) {
 	var user *models.Users
 
 	user, err := s.db.Get(ctx, authUser.ID)

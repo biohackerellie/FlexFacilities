@@ -26,10 +26,7 @@ func main() {
 		}
 	}
 	ctx := context.Background()
-	db, err := pg.NewDB(ctx, os.Getenv("DATABASE_URL"))
-	if err != nil {
-		log.Fatal(err)
-	}
+	db := pg.NewDB(ctx, os.Getenv("DATABASE_URL"))
 	defer db.Close()
 	entries, err := sqlFiles.ReadDir("sql")
 	if err != nil {

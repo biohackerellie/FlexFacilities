@@ -544,6 +544,20 @@ type Users struct {
 	Tos           bool               `db:"tos" json:"tos"`
 }
 
+func ToUser(user *pbUsers.Users) *Users {
+	return &Users{
+		ID:            user.Id,
+		Name:          user.Name,
+		Image:         user.Image,
+		Email:         user.Email,
+		EmailVerified: utils.StringToPgTimestamptz(user.EmailVerified),
+		Role:          UserRole(user.Role),
+		Provider:      user.Provider,
+		ExternalUser:  user.ExternalUser,
+		Tos:           user.Tos,
+	}
+}
+
 func (u *Users) ToProto() *pbUsers.Users {
 	return &pbUsers.Users{
 		Id:            u.ID,
@@ -551,12 +565,34 @@ func (u *Users) ToProto() *pbUsers.Users {
 		Image:         u.Image,
 		Email:         u.Email,
 		EmailVerified: utils.PgTimestamptzToString(u.EmailVerified),
-		Password:      u.Password,
 		Role:          u.Role.String(),
 		Provider:      u.Provider,
 		ExternalUser:  u.ExternalUser,
 		Tos:           u.Tos,
 	}
+}
+
+func (u *Users) ToProtoWithPassword() *pbUsers.Users {
+	return &pbUsers.Users{
+		Id:            u.ID,
+		Name:          u.Name,
+		Image:         u.Image,
+		Email:         u.Email,
+		EmailVerified: utils.PgTimestamptzToString(u.EmailVerified),
+		Role:          u.Role.String(),
+		Provider:      u.Provider,
+		ExternalUser:  u.ExternalUser,
+		Tos:           u.Tos,
+		Password:      u.Password,
+	}
+}
+func UsersToProto(users []*Users) []*pbUsers.Users {
+	protoUsers := make([]*pbUsers.Users, len(users))
+	for i, user := range users {
+		protoUsers[i] = user.ToProto()
+	}
+	return protoUsers
+
 }
 
 type VerificationToken struct {

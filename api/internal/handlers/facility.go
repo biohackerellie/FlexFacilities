@@ -1,14 +1,26 @@
-package facility
+package handlers
 
 import (
 	"api/internal/models"
+	"api/internal/ports"
 	service "api/internal/proto/facilities"
-	"context"
-
 	"connectrpc.com/connect"
+	"context"
+	"log/slog"
 )
 
-func (a *Adapter) GetAllFacilities(ctx context.Context, req *connect.Request[service.GetAllFacilitiesRequest]) (*connect.Response[service.GetAllFacilitiesResponse], error) {
+type FacilityHandler struct {
+	log *slog.Logger
+
+	facilityStore ports.FacilityStore
+}
+
+func NewFacilityHandler(facilityStore ports.FacilityStore, log *slog.Logger) *FacilityHandler {
+	log.With(slog.Group("Core_Handler", slog.String("name", "facility")))
+	return &FacilityHandler{facilityStore: facilityStore, log: log}
+}
+
+func (a *FacilityHandler) GetAllFacilities(ctx context.Context, req *connect.Request[service.GetAllFacilitiesRequest]) (*connect.Response[service.GetAllFacilitiesResponse], error) {
 	facilities, err := a.facilityStore.GetAll(ctx)
 	if err != nil {
 		return nil, err
@@ -22,7 +34,7 @@ func (a *Adapter) GetAllFacilities(ctx context.Context, req *connect.Request[ser
 		Facilities: protoFacilities,
 	}), nil
 }
-func (a *Adapter) GetFacility(ctx context.Context, req *connect.Request[service.GetFacilityRequest]) (*connect.Response[service.FullFacility], error) {
+func (a *FacilityHandler) GetFacility(ctx context.Context, req *connect.Request[service.GetFacilityRequest]) (*connect.Response[service.FullFacility], error) {
 	res, err := a.facilityStore.Get(ctx, req.Msg.GetId())
 
 	if err != nil {
@@ -35,7 +47,7 @@ func (a *Adapter) GetFacility(ctx context.Context, req *connect.Request[service.
 		ReservationId: facility.ReservationId,
 	}), nil
 }
-func (a *Adapter) GetFacilityCategories(ctx context.Context, req *connect.Request[service.GetFacilityCategoriesRequest]) (*connect.Response[service.GetFacilityCategoriesResponse], error) {
+func (a *FacilityHandler) GetFacilityCategories(ctx context.Context, req *connect.Request[service.GetFacilityCategoriesRequest]) (*connect.Response[service.GetFacilityCategoriesResponse], error) {
 	ids := []int64{req.Msg.GetId()}
 	res, err := a.facilityStore.GetCategories(ctx, ids)
 
@@ -50,7 +62,7 @@ func (a *Adapter) GetFacilityCategories(ctx context.Context, req *connect.Reques
 		Categories: categories,
 	}), nil
 }
-func (a *Adapter) GetBuildingFacilities(ctx context.Context, req *connect.Request[service.GetBuildingFacilitiesRequest]) (*connect.Response[service.GetBuildingFacilitiesResponse], error) {
+func (a *FacilityHandler) GetBuildingFacilities(ctx context.Context, req *connect.Request[service.GetBuildingFacilitiesRequest]) (*connect.Response[service.GetBuildingFacilitiesResponse], error) {
 	res, err := a.facilityStore.GetByBuilding(ctx, req.Msg.GetBuilding())
 	if err != nil {
 		return nil, err
@@ -63,7 +75,7 @@ func (a *Adapter) GetBuildingFacilities(ctx context.Context, req *connect.Reques
 		Facilities: facilities,
 	}), nil
 }
-func (a *Adapter) CreateFacility(ctx context.Context, req *connect.Request[service.CreateFacilityRequest]) (*connect.Response[service.CreateFacilityResponse], error) {
+func (a *FacilityHandler) CreateFacility(ctx context.Context, req *connect.Request[service.CreateFacilityRequest]) (*connect.Response[service.CreateFacilityResponse], error) {
 	facility := models.ToFacility(req.Msg.GetFacility())
 	categories := models.ToCategories(req.Msg.GetCategories())
 
@@ -78,7 +90,7 @@ func (a *Adapter) CreateFacility(ctx context.Context, req *connect.Request[servi
 	return connect.NewResponse(&service.CreateFacilityResponse{}), nil
 
 }
-func (a *Adapter) UpdateFacility(ctx context.Context, req *connect.Request[service.UpdateFacilityRequest]) (*connect.Response[service.UpdateFacilityResponse], error) {
+func (a *FacilityHandler) UpdateFacility(ctx context.Context, req *connect.Request[service.UpdateFacilityRequest]) (*connect.Response[service.UpdateFacilityResponse], error) {
 	err := a.facilityStore.Update(ctx, models.ToFacility(req.Msg.GetFacility()))
 	if err != nil {
 		return nil, err
@@ -86,7 +98,7 @@ func (a *Adapter) UpdateFacility(ctx context.Context, req *connect.Request[servi
 	return connect.NewResponse(&service.UpdateFacilityResponse{}), nil
 
 }
-func (a *Adapter) DeleteFacility(ctx context.Context, req *connect.Request[service.DeleteFacilityRequest]) (*connect.Response[service.DeleteFacilityResponse], error) {
+func (a *FacilityHandler) DeleteFacility(ctx context.Context, req *connect.Request[service.DeleteFacilityRequest]) (*connect.Response[service.DeleteFacilityResponse], error) {
 	err := a.facilityStore.Delete(ctx, req.Msg.GetId())
 	if err != nil {
 		return nil, err
@@ -94,7 +106,7 @@ func (a *Adapter) DeleteFacility(ctx context.Context, req *connect.Request[servi
 	return connect.NewResponse(&service.DeleteFacilityResponse{}), nil
 }
 
-func (a *Adapter) UpdateFacilityCategory(ctx context.Context, req *connect.Request[service.UpdateFacilityCategoryRequest]) (*connect.Response[service.Category], error) {
+func (a *FacilityHandler) UpdateFacilityCategory(ctx context.Context, req *connect.Request[service.UpdateFacilityCategoryRequest]) (*connect.Response[service.Category], error) {
 	category := models.ToCategory(req.Msg.GetCategory())
 	err := a.facilityStore.EditCategory(ctx, &category)
 	if err != nil {
