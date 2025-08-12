@@ -18,7 +18,7 @@ type Handlers struct {
 	Auth               *auth.Auth
 }
 
-func New(db *repository.DB, log *slog.Logger, config *config.Config) {
+func New(db *repository.DB, log *slog.Logger, config *config.Config) *Handlers {
 
 	userStore := repository.NewUserStore(db, log)
 	facilityStore := repository.NewFacilityStore(db, log)
@@ -33,4 +33,14 @@ func New(db *repository.DB, log *slog.Logger, config *config.Config) {
 	authHandler := auth.NewAuth(userStore, log)
 	authHandler.RegisterProvider("entra", entraProvider)
 
+	userHandler := NewUserHandler(userStore, log)
+	facilityHandler := NewFacilityHandler(facilityStore, log)
+	reservationHandler := NewReservationHandler(reservationStore, log)
+
+	return &Handlers{
+		UserHandler:        userHandler,
+		FacilityHandler:    facilityHandler,
+		ReservationHandler: reservationHandler,
+		Auth:               authHandler,
+	}
 }

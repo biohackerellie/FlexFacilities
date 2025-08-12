@@ -51,16 +51,7 @@ func run(ctx context.Context, stdout io.Writer, getenv func(string) string) erro
 	db := repository.NewDB(ctx, config.DatabaseURL)
 	defer db.Close()
 
-	facilityStore := repository.NewFacilityStore(db, log)
-	reservationStore := repository.NewReservationStore(db, log)
-	userStore := repository.NewUserStore(db, log)
-
-	ReservationService := reservation.NewAdapter(reservationStore, log)
-	FacilityService := facility.NewAdapter(facilityStore, log)
-	UserService := user.NewAdapter(userStore, log)
-	AuthService := auth.NewAuthService(userStore, log)
-
-	s := server.NewServer(db, log)
+	s := server.NewServer(log)
 	handler := h2c.NewHandler(s, &http2.Server{})
 	srv := &http.Server{
 		Addr:              "0.0.0.0:3030",

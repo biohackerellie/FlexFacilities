@@ -1,24 +1,20 @@
 package server
 
 import (
+	"api/internal/handlers"
 	facilityMux "api/internal/proto/facilities/facilitiesserviceconnect"
 	reservationMux "api/internal/proto/reservation/reservationserviceconnect"
 	userMux "api/internal/proto/users/usersserviceconnect"
-	"net/http"
-
-	"api/internal/core/facility"
-	"api/internal/core/reservation"
-	"api/internal/core/user"
-	repository "api/internal/db"
 	"log/slog"
+	"net/http"
 )
 
-func NewServer(db *repository.DB, log *slog.Logger) *http.ServeMux {
+func NewServer(handlers *handlers.Handlers, log *slog.Logger) *http.ServeMux {
 
 	mux := http.NewServeMux()
-	mux.Handle(facilityMux.NewFacilitiesServiceHandler(FacilityService))
-	mux.Handle(reservationMux.NewReservationServiceHandler(ReservationService))
-	mux.Handle(userMux.NewUsersServiceHandler(UserService))
+	mux.Handle(facilityMux.NewFacilitiesServiceHandler(handlers.FacilityHandler))
+	mux.Handle(reservationMux.NewReservationServiceHandler(handlers.ReservationHandler))
+	mux.Handle(userMux.NewUsersServiceHandler(handlers.UserHandler))
 
 	return mux
 }
