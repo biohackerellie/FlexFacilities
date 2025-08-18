@@ -49,9 +49,6 @@ const (
 	// UsersServiceGetNotificationsProcedure is the fully-qualified name of the UsersService's
 	// GetNotifications RPC.
 	UsersServiceGetNotificationsProcedure = "/api.users.UsersService/GetNotifications"
-	// UsersServiceGetUserNotificationsProcedure is the fully-qualified name of the UsersService's
-	// GetUserNotifications RPC.
-	UsersServiceGetUserNotificationsProcedure = "/api.users.UsersService/GetUserNotifications"
 	// UsersServiceCreateNotificationProcedure is the fully-qualified name of the UsersService's
 	// CreateNotification RPC.
 	UsersServiceCreateNotificationProcedure = "/api.users.UsersService/CreateNotification"
@@ -65,18 +62,17 @@ const (
 
 // These variables are the protoreflect.Descriptor objects for the RPCs defined in this package.
 var (
-	usersServiceServiceDescriptor                    = users.File_proto_users_users_proto.Services().ByName("UsersService")
-	usersServiceGetUserByEmailMethodDescriptor       = usersServiceServiceDescriptor.Methods().ByName("GetUserByEmail")
-	usersServiceGetUserMethodDescriptor              = usersServiceServiceDescriptor.Methods().ByName("GetUser")
-	usersServiceGetUsersMethodDescriptor             = usersServiceServiceDescriptor.Methods().ByName("GetUsers")
-	usersServiceCreateUserMethodDescriptor           = usersServiceServiceDescriptor.Methods().ByName("CreateUser")
-	usersServiceUpdateUserMethodDescriptor           = usersServiceServiceDescriptor.Methods().ByName("UpdateUser")
-	usersServiceDeleteUserMethodDescriptor           = usersServiceServiceDescriptor.Methods().ByName("DeleteUser")
-	usersServiceGetNotificationsMethodDescriptor     = usersServiceServiceDescriptor.Methods().ByName("GetNotifications")
-	usersServiceGetUserNotificationsMethodDescriptor = usersServiceServiceDescriptor.Methods().ByName("GetUserNotifications")
-	usersServiceCreateNotificationMethodDescriptor   = usersServiceServiceDescriptor.Methods().ByName("CreateNotification")
-	usersServiceEditNotificationMethodDescriptor     = usersServiceServiceDescriptor.Methods().ByName("EditNotification")
-	usersServiceDeleteNotificationMethodDescriptor   = usersServiceServiceDescriptor.Methods().ByName("DeleteNotification")
+	usersServiceServiceDescriptor                  = users.File_proto_users_users_proto.Services().ByName("UsersService")
+	usersServiceGetUserByEmailMethodDescriptor     = usersServiceServiceDescriptor.Methods().ByName("GetUserByEmail")
+	usersServiceGetUserMethodDescriptor            = usersServiceServiceDescriptor.Methods().ByName("GetUser")
+	usersServiceGetUsersMethodDescriptor           = usersServiceServiceDescriptor.Methods().ByName("GetUsers")
+	usersServiceCreateUserMethodDescriptor         = usersServiceServiceDescriptor.Methods().ByName("CreateUser")
+	usersServiceUpdateUserMethodDescriptor         = usersServiceServiceDescriptor.Methods().ByName("UpdateUser")
+	usersServiceDeleteUserMethodDescriptor         = usersServiceServiceDescriptor.Methods().ByName("DeleteUser")
+	usersServiceGetNotificationsMethodDescriptor   = usersServiceServiceDescriptor.Methods().ByName("GetNotifications")
+	usersServiceCreateNotificationMethodDescriptor = usersServiceServiceDescriptor.Methods().ByName("CreateNotification")
+	usersServiceEditNotificationMethodDescriptor   = usersServiceServiceDescriptor.Methods().ByName("EditNotification")
+	usersServiceDeleteNotificationMethodDescriptor = usersServiceServiceDescriptor.Methods().ByName("DeleteNotification")
 )
 
 // UsersServiceClient is a client for the api.users.UsersService service.
@@ -88,7 +84,6 @@ type UsersServiceClient interface {
 	UpdateUser(context.Context, *connect.Request[users.UpdateUserRequest]) (*connect.Response[users.Users], error)
 	DeleteUser(context.Context, *connect.Request[users.DeleteUserRequest]) (*connect.Response[users.DeleteUserResponse], error)
 	GetNotifications(context.Context, *connect.Request[users.GetNotificationsRequest]) (*connect.Response[users.GetNotificationsResponse], error)
-	GetUserNotifications(context.Context, *connect.Request[users.GetUserNotificationsRequest]) (*connect.Response[users.GetUserNotificationsResponse], error)
 	CreateNotification(context.Context, *connect.Request[users.CreateNotificationRequest]) (*connect.Response[users.Notifications], error)
 	EditNotification(context.Context, *connect.Request[users.EditNotificationRequest]) (*connect.Response[users.Notifications], error)
 	DeleteNotification(context.Context, *connect.Request[users.DeleteNotificationRequest]) (*connect.Response[users.DeleteNotificationResponse], error)
@@ -148,13 +143,6 @@ func NewUsersServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 			connect.WithClientOptions(opts...),
 		),
-		getUserNotifications: connect.NewClient[users.GetUserNotificationsRequest, users.GetUserNotificationsResponse](
-			httpClient,
-			baseURL+UsersServiceGetUserNotificationsProcedure,
-			connect.WithSchema(usersServiceGetUserNotificationsMethodDescriptor),
-			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
-			connect.WithClientOptions(opts...),
-		),
 		createNotification: connect.NewClient[users.CreateNotificationRequest, users.Notifications](
 			httpClient,
 			baseURL+UsersServiceCreateNotificationProcedure,
@@ -178,17 +166,16 @@ func NewUsersServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 
 // usersServiceClient implements UsersServiceClient.
 type usersServiceClient struct {
-	getUserByEmail       *connect.Client[users.UserByEmailRequest, users.Users]
-	getUser              *connect.Client[users.GetUserRequest, users.Users]
-	getUsers             *connect.Client[users.GetUsersRequest, users.GetUsersResponse]
-	createUser           *connect.Client[users.CreateUserRequest, users.Users]
-	updateUser           *connect.Client[users.UpdateUserRequest, users.Users]
-	deleteUser           *connect.Client[users.DeleteUserRequest, users.DeleteUserResponse]
-	getNotifications     *connect.Client[users.GetNotificationsRequest, users.GetNotificationsResponse]
-	getUserNotifications *connect.Client[users.GetUserNotificationsRequest, users.GetUserNotificationsResponse]
-	createNotification   *connect.Client[users.CreateNotificationRequest, users.Notifications]
-	editNotification     *connect.Client[users.EditNotificationRequest, users.Notifications]
-	deleteNotification   *connect.Client[users.DeleteNotificationRequest, users.DeleteNotificationResponse]
+	getUserByEmail     *connect.Client[users.UserByEmailRequest, users.Users]
+	getUser            *connect.Client[users.GetUserRequest, users.Users]
+	getUsers           *connect.Client[users.GetUsersRequest, users.GetUsersResponse]
+	createUser         *connect.Client[users.CreateUserRequest, users.Users]
+	updateUser         *connect.Client[users.UpdateUserRequest, users.Users]
+	deleteUser         *connect.Client[users.DeleteUserRequest, users.DeleteUserResponse]
+	getNotifications   *connect.Client[users.GetNotificationsRequest, users.GetNotificationsResponse]
+	createNotification *connect.Client[users.CreateNotificationRequest, users.Notifications]
+	editNotification   *connect.Client[users.EditNotificationRequest, users.Notifications]
+	deleteNotification *connect.Client[users.DeleteNotificationRequest, users.DeleteNotificationResponse]
 }
 
 // GetUserByEmail calls api.users.UsersService.GetUserByEmail.
@@ -226,11 +213,6 @@ func (c *usersServiceClient) GetNotifications(ctx context.Context, req *connect.
 	return c.getNotifications.CallUnary(ctx, req)
 }
 
-// GetUserNotifications calls api.users.UsersService.GetUserNotifications.
-func (c *usersServiceClient) GetUserNotifications(ctx context.Context, req *connect.Request[users.GetUserNotificationsRequest]) (*connect.Response[users.GetUserNotificationsResponse], error) {
-	return c.getUserNotifications.CallUnary(ctx, req)
-}
-
 // CreateNotification calls api.users.UsersService.CreateNotification.
 func (c *usersServiceClient) CreateNotification(ctx context.Context, req *connect.Request[users.CreateNotificationRequest]) (*connect.Response[users.Notifications], error) {
 	return c.createNotification.CallUnary(ctx, req)
@@ -255,7 +237,6 @@ type UsersServiceHandler interface {
 	UpdateUser(context.Context, *connect.Request[users.UpdateUserRequest]) (*connect.Response[users.Users], error)
 	DeleteUser(context.Context, *connect.Request[users.DeleteUserRequest]) (*connect.Response[users.DeleteUserResponse], error)
 	GetNotifications(context.Context, *connect.Request[users.GetNotificationsRequest]) (*connect.Response[users.GetNotificationsResponse], error)
-	GetUserNotifications(context.Context, *connect.Request[users.GetUserNotificationsRequest]) (*connect.Response[users.GetUserNotificationsResponse], error)
 	CreateNotification(context.Context, *connect.Request[users.CreateNotificationRequest]) (*connect.Response[users.Notifications], error)
 	EditNotification(context.Context, *connect.Request[users.EditNotificationRequest]) (*connect.Response[users.Notifications], error)
 	DeleteNotification(context.Context, *connect.Request[users.DeleteNotificationRequest]) (*connect.Response[users.DeleteNotificationResponse], error)
@@ -311,13 +292,6 @@ func NewUsersServiceHandler(svc UsersServiceHandler, opts ...connect.HandlerOpti
 		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 		connect.WithHandlerOptions(opts...),
 	)
-	usersServiceGetUserNotificationsHandler := connect.NewUnaryHandler(
-		UsersServiceGetUserNotificationsProcedure,
-		svc.GetUserNotifications,
-		connect.WithSchema(usersServiceGetUserNotificationsMethodDescriptor),
-		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
-		connect.WithHandlerOptions(opts...),
-	)
 	usersServiceCreateNotificationHandler := connect.NewUnaryHandler(
 		UsersServiceCreateNotificationProcedure,
 		svc.CreateNotification,
@@ -352,8 +326,6 @@ func NewUsersServiceHandler(svc UsersServiceHandler, opts ...connect.HandlerOpti
 			usersServiceDeleteUserHandler.ServeHTTP(w, r)
 		case UsersServiceGetNotificationsProcedure:
 			usersServiceGetNotificationsHandler.ServeHTTP(w, r)
-		case UsersServiceGetUserNotificationsProcedure:
-			usersServiceGetUserNotificationsHandler.ServeHTTP(w, r)
 		case UsersServiceCreateNotificationProcedure:
 			usersServiceCreateNotificationHandler.ServeHTTP(w, r)
 		case UsersServiceEditNotificationProcedure:
@@ -395,10 +367,6 @@ func (UnimplementedUsersServiceHandler) DeleteUser(context.Context, *connect.Req
 
 func (UnimplementedUsersServiceHandler) GetNotifications(context.Context, *connect.Request[users.GetNotificationsRequest]) (*connect.Response[users.GetNotificationsResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.users.UsersService.GetNotifications is not implemented"))
-}
-
-func (UnimplementedUsersServiceHandler) GetUserNotifications(context.Context, *connect.Request[users.GetUserNotificationsRequest]) (*connect.Response[users.GetUserNotificationsResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.users.UsersService.GetUserNotifications is not implemented"))
 }
 
 func (UnimplementedUsersServiceHandler) CreateNotification(context.Context, *connect.Request[users.CreateNotificationRequest]) (*connect.Response[users.Notifications], error) {

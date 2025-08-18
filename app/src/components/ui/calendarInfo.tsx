@@ -16,11 +16,11 @@ const CalendarInfo = () => (
     <HoverCardContent>
       <div className="flex flex-col gap-[7px]">
         <div className="flex flex-col gap-[15px]">
-          <div className="m-0 text-[15px] leading-[1.5]">
+          <div className="m-0 text-[15px] leading-normal">
             Click the{" "}
             <Image
               src="/addToCal.png"
-              className="inline border drop-shadow-sm"
+              className="inline border drop-shadow-xs"
               width={100}
               height={20}
               alt="Add to Calendar"

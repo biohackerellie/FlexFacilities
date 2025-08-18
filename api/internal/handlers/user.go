@@ -44,7 +44,17 @@ func (a *UserHandler) GetUsers(ctx context.Context, req *connect.Request[service
 		Users: proto,
 	}), nil
 }
-func (a *UserHandler) CreateUser(ctx context.Context, req *connect.Request[service.CreateUserRequest]) (*connect.Response[service.Users], error)
+func (a *UserHandler) CreateUser(ctx context.Context, req *connect.Request[service.CreateUserRequest]) (*connect.Response[service.Users], error) {
+	user := models.ToUser(req.Msg.GetUser())
+	user, err := a.userStore.Create(ctx, user)
+	if err != nil {
+		a.log.Error("Error creating user", "error", err)
+		return nil, err
+	}
+
+	return connect.NewResponse(user.ToProto()), nil
+}
+
 func (a *UserHandler) UpdateUser(ctx context.Context, req *connect.Request[service.UpdateUserRequest]) (*connect.Response[service.Users], error) {
 	user := models.ToUser(req.Msg.GetUser())
 	user, err := a.userStore.Update(ctx, user)
@@ -62,9 +72,37 @@ func (a *UserHandler) DeleteUser(ctx context.Context, req *connect.Request[servi
 	return connect.NewResponse(&service.DeleteUserResponse{}), nil
 }
 
-func (a *UserHandler) GetNotifications(ctx context.Context, req *connect.Request[service.GetNotificationsRequest]) (*connect.Response[service.GetNotificationsResponse], error)
+func (a *UserHandler) GetNotifications(ctx context.Context, req *connect.Request[service.GetNotificationsRequest]) (*connect.Response[service.GetNotificationsResponse], error) {
+	notifications, err := a.userStore.GetNotifications(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return connect.NewResponse(&service.GetNotificationsResponse{
+		Notifications: models.NotificationsToProto(notifications),
+	}), nil
+}
 
-func (a *UserHandler) GetUserNotifications(ctx context.Context, req *connect.Request[service.GetUserNotificationsRequest]) (*connect.Response[service.GetUserNotificationsResponse], error)
-func (a *UserHandler) CreateNotification(ctx context.Context, req *connect.Request[service.CreateNotificationRequest]) (*connect.Response[service.Notifications], error)
-func (a *UserHandler) EditNotification(ctx context.Context, req *connect.Request[service.EditNotificationRequest]) (*connect.Response[service.Notifications], error)
-func (a *UserHandler) DeleteNotification(ctx context.Context, req *connect.Request[service.DeleteNotificationRequest]) (*connect.Response[service.DeleteNotificationResponse], error)
+func (a *UserHandler) CreateNotification(ctx context.Context, req *connect.Request[service.CreateNotificationRequest]) (*connect.Response[service.Notifications], error) {
+	notification := req.Msg.GetNotification()
+
+	err := a.userStore.CreateNotification(ctx, models.ToNotification(notification))
+	if err != nil {
+		return nil, err
+	}
+	return connect.NewResponse(&service.Notifications{}), nil
+}
+func (a *UserHandler) EditNotification(ctx context.Context, req *connect.Request[service.EditNotificationRequest]) (*connect.Response[service.Notifications], error) {
+	notification := req.Msg.GetNotification()
+	err := a.userStore.EditNotification(ctx, models.ToNotification(notification))
+	if err != nil {
+		return nil, err
+	}
+	return connect.NewResponse(&service.Notifications{}), nil
+}
+func (a *UserHandler) DeleteNotification(ctx context.Context, req *connect.Request[service.DeleteNotificationRequest]) (*connect.Response[service.DeleteNotificationResponse], error) {
+	err := a.userStore.DeleteNotification(ctx, req.Msg.GetId())
+	if err != nil {
+		return nil, err
+	}
+	return connect.NewResponse(&service.DeleteNotificationResponse{}), nil
+}

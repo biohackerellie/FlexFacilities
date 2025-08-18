@@ -82,7 +82,7 @@ export default async function accountPage({
       <h1 className="m-3 flex justify-center border-b p-3 text-4xl font-bold drop-shadow-lg">
         {name}
       </h1>
-      <h2 className="text-3xl font-bold text-primary shadow-secondary drop-shadow dark:text-secondary">
+      <h2 className="text-3xl font-bold text-primary shadow-secondary drop-shadow-sm dark:text-secondary">
         Reservations
       </h2>
       {data.length === 0 ? (

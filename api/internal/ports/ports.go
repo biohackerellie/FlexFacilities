@@ -19,6 +19,10 @@ type UserStore interface {
 	DeleteSession(ctx context.Context, id string) error
 	UpdateSession(ctx context.Context, session *models.Session) error
 	DeleteExpiredSessions(ctx context.Context) error
+	GetNotifications(context.Context) ([]*models.Notification, error)
+	CreateNotification(context.Context, *models.Notification) error
+	EditNotification(context.Context, *models.Notification) error
+	DeleteNotification(context.Context, int64) error
 }
 type FacilityStore interface {
 	Get(ctx context.Context, id int64) (*models.FullFacility, error)

@@ -229,3 +229,12 @@ export interface RevenueData {
   Revenue: number;
   Loss: number;
 }
+
+export type Session = {
+    id: string;
+    userId: string;
+    refreshToken: string;
+    provider: string;
+    createdAt: string;
+    expiresAt: string;
+}

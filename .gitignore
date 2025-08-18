@@ -1,7 +1,7 @@
 output.sql
 .secrets.baseline
 dump.sql
-
+data/
 MinIO/
 ./masters.js
 .vercel

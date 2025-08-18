@@ -37,7 +37,11 @@ tasks:
   dev:
     desc: start dev go and bun servers
     cmds:
-      - concurrently "cd api && air -c .air.toml -- -env ../.env" "cd app && bun --bun --env-file=../.env run dev"
+      - concurrently "cd api && air -c .air.toml" "cd app && bun --bun --env-file=../.env run dev"
+  dev:go:
+    desc: start dev go server
+    cmds:
+      - cd api && air -c .air.toml
   install:bun:
     desc: install dependencies
     cmds:

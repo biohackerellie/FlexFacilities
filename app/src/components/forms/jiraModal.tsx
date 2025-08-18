@@ -48,7 +48,7 @@ export default function JiraModal() {
       </Button>
 
       <ReactModal
-        className="relative inset-0 inset-y-20 z-50 flex animate-overlayShow flex-col items-center justify-center text-black transition-all duration-1000 ease-in-out dark:text-black"
+        className="relative inset-0 inset-y-20 z-50 flex animate-overlay-show flex-col items-center justify-center text-black transition-all duration-1000 ease-in-out dark:text-black"
         overlayClassName="fixed inset-0 bg-black bg-opacity-50 modal-overlay"
         isOpen={!!isVisible}
       >

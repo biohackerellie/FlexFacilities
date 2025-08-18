@@ -19,7 +19,7 @@ export default function TosModal() {
         Rules and Regulations
       </button>
       <ReactModal
-        className="relative top-0 z-50 flex max-h-fit animate-overlayShow flex-col items-center justify-center overflow-auto text-black transition-all duration-1000 ease-in-out dark:text-black lg:top-0"
+        className="relative top-0 z-50 flex max-h-fit animate-overlay-show flex-col items-center justify-center overflow-auto text-black transition-all duration-1000 ease-in-out dark:text-black lg:top-0"
         overlayClassName="fixed inset-0 bg-black bg-opacity-50 modal-overlay"
         isOpen={!!isVisible}
       >

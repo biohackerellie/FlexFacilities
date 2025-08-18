@@ -18,7 +18,7 @@ export default function ResetPassword() {
             id="email"
             required
             placeholder="Email address"
-            className="block rounded-md border-slate-300 py-2 pl-9 shadow-sm placeholder:italic placeholder:text-slate-400 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500"
+            className="block rounded-md border-slate-300 py-2 pl-9 shadow-xs placeholder:italic placeholder:text-slate-400 focus:border-sky-500 focus:outline-hidden focus:ring-1 focus:ring-sky-500"
           />
           <div>
             <p>

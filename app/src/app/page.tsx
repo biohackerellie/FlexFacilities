@@ -19,21 +19,21 @@ export default function Home() {
             </p>
           </div>
           <div className="my-10 flex flex-col items-center justify-center gap-y-4 sm:visible sm:flex-row sm:justify-between">
-            <div className="hidden h-20 w-60 animate-enterFromLeftOne items-center justify-center rounded-full border border-gray-200 bg-white bg-opacity-60 bg-clip-padding text-2xl font-bold shadow-lg shadow-primary backdrop-blur-md ease-in-out hover:scale-105 dark:bg-slate-700 dark:bg-opacity-20 sm:flex">
-              <Link href="/calendar" className="drop-shadow-sm">
+            <div className="hidden h-20 w-60 animate-enter-from-left-one items-center justify-center rounded-full border border-gray-200 bg-white bg-opacity-60 bg-clip-padding text-2xl font-bold shadow-lg shadow-primary backdrop-blur-md ease-in-out hover:scale-105 dark:bg-slate-700 dark:bg-opacity-20 sm:flex">
+              <Link href="/calendar" className="drop-shadow-xs">
                 {" "}
                 View the Calendar{" "}
               </Link>
             </div>
 
-            <div className="flex h-20 w-60 animate-enterFromLeftTwo items-center justify-center rounded-full border border-gray-200 bg-white bg-opacity-60 bg-clip-padding text-2xl font-bold shadow-lg shadow-primary backdrop-blur-md ease-in-out hover:scale-105 dark:bg-slate-700 dark:bg-opacity-20">
-              <Link href="/reservation" className="drop-shadow-sm">
+            <div className="flex h-20 w-60 animate-enter-from-left-two items-center justify-center rounded-full border border-gray-200 bg-white bg-opacity-60 bg-clip-padding text-2xl font-bold shadow-lg shadow-primary backdrop-blur-md ease-in-out hover:scale-105 dark:bg-slate-700 dark:bg-opacity-20">
+              <Link href="/reservation" className="drop-shadow-xs">
                 {" "}
                 Reserve now!{" "}
               </Link>
             </div>
-            <div className="flex h-20 w-60 animate-enterFromLeftThree items-center justify-center rounded-full border border-gray-200 bg-white bg-opacity-60 bg-clip-padding text-2xl font-bold shadow-lg shadow-primary backdrop-blur-md ease-in-out hover:scale-105 dark:bg-slate-700 dark:bg-opacity-20">
-              <Link href="/facilities" className="drop-shadow-sm">
+            <div className="flex h-20 w-60 animate-enter-from-left-three items-center justify-center rounded-full border border-gray-200 bg-white bg-opacity-60 bg-clip-padding text-2xl font-bold shadow-lg shadow-primary backdrop-blur-md ease-in-out hover:scale-105 dark:bg-slate-700 dark:bg-opacity-20">
+              <Link href="/facilities" className="drop-shadow-xs">
                 {" "}
                 View our Facilities{" "}
               </Link>

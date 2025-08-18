@@ -46,10 +46,10 @@ export default async function FacilityPage({
     <TooltipProvider>
       <div className="m-1 mb-10 mt-7 flex h-full w-auto flex-col justify-center gap-2 p-2 sm:m-5 sm:flex-row sm:p-5">
         <div className="flex flex-col">
-          <h1 className="text-center text-2xl font-bold drop-shadow sm:text-start sm:text-4xl">
+          <h1 className="text-center text-2xl font-bold drop-shadow-sm sm:text-start sm:text-4xl">
             {facility.name}
           </h1>
-          <h2 className="text-md text-center font-bold text-gray-600 drop-shadow dark:text-gray-300 sm:text-start sm:text-xl">
+          <h2 className="text-md text-center font-bold text-gray-600 drop-shadow-sm dark:text-gray-300 sm:text-start sm:text-xl">
             {facility.building} ⋅ Max Capacity: {facility.capacity}{" "}
           </h2>
           <Link

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type {
   FacilityType,
   ReservationDateType,
@@ -7,6 +8,9 @@ import type {
   UserType,
 } from "@local/db/schema";
 
+/** 
+* @deprecated
+*/
 export type ReservationClassType = ReservationType & {
   Facility?: FacilityType;
   Category?: SelectCategory;
@@ -16,11 +20,8 @@ export type ReservationClassType = ReservationType & {
 };
 
 /**
- * `ReservationClass` is a class that handles operations related to reservations.
- *
- * @class
- * @exports ReservationClass
- */
+  * @deprecated
+* */
 class ReservationClass {
   id: number | bigint;
   userId: string;
@@ -144,4 +145,3 @@ class ReservationClass {
   }
 }
 
-export { ReservationClass };

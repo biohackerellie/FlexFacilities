@@ -49,11 +49,6 @@ async function GEvents(id: number) {
   }
 }
 
-const cacheEvents = cache(GEvents);
-export async function GetEvents(id: number) {
-  return cacheEvents(id);
-}
-
 async function AllEvents() {
   const oauth2Client = getClient();
   const calendar = google.calendar({ version: "v3", auth: oauth2Client });
@@ -91,7 +86,3 @@ async function AllEvents() {
   }
 }
 
-const allCache = cache(AllEvents);
-export async function GetAllEvents() {
-  return allCache();
-}

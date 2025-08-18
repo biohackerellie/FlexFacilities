@@ -1,4 +1,4 @@
-import {createClient, encodeBinaryHeader, type Transport, type Client, ConnectError} from '@connectrpc/connect'
+import {createClient,  type Transport, type Client, ConnectError} from '@connectrpc/connect'
 import {Auth, FacilitiesService, GetUsersRequestSchema, ReservationService, UsersService} from './proto'
 
 export class RPC { 
@@ -75,7 +75,6 @@ export class RPC {
       updateUser: this.errorWrapper(this._UsersService.updateUser),
       deleteUser: this.errorWrapper(this._UsersService.deleteUser),
       getNotifications: this.errorWrapper(this._UsersService.getNotifications),
-      getUserNotifications: this.errorWrapper(this._UsersService.getUserNotifications),
       createNotification: this.errorWrapper(this._UsersService.createNotification),
       editNotification: this.errorWrapper(this._UsersService.editNotification),
       deleteNotification: this.errorWrapper(this._UsersService.deleteNotification),

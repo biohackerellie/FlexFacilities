@@ -218,6 +218,34 @@ func (c *Category) ToProto() *pbFacilities.Category {
 	}
 }
 
+type Building struct {
+	ID               int64   `db:"id" json:"id"`
+	Name             string  `db:"name" json:"name"`
+	Address          string  `db:"address" json:"address"`
+	ImagePath        *string `db:"image_path" json:"image_path"`
+	GoogleCalendarID *string `db:"google_calendar_id" json:"google_calendar_id"`
+}
+
+func (b *Building) ToProto() *pbFacilities.Building {
+	return &pbFacilities.Building{
+		Id:               b.ID,
+		Name:             b.Name,
+		Address:          b.Address,
+		ImagePath:        b.ImagePath,
+		GoogleCalendarId: b.GoogleCalendarID,
+	}
+}
+
+func ToBuilding(building *pbFacilities.Building) Building {
+	return Building{
+		ID:               building.Id,
+		Name:             building.Name,
+		Address:          building.Address,
+		ImagePath:        building.ImagePath,
+		GoogleCalendarID: building.GoogleCalendarId,
+	}
+}
+
 type Facility struct {
 	ID               int64              `db:"id" json:"id"`
 	Name             string             `db:"name" json:"name"`
@@ -228,6 +256,7 @@ type Facility struct {
 	CreatedAt        pgtype.Timestamptz `db:"created_at" json:"created_at"`
 	UpdatedAt        pgtype.Timestamptz `db:"updated_at" json:"updated_at"`
 	GoogleCalendarID string             `db:"google_calendar_id" json:"google_calendar_id"`
+	BuildingID       int64              `db:"building_id" json:"building_id"`
 }
 
 func (f *Facility) ToProto() *pbFacilities.Facility {
@@ -241,6 +270,7 @@ func (f *Facility) ToProto() *pbFacilities.Facility {
 		CreatedAt:        utils.PgTimestamptzToString(f.CreatedAt),
 		UpdatedAt:        utils.PgTimestamptzToString(f.UpdatedAt),
 		GoogleCalendarId: f.GoogleCalendarID,
+		BuildingId:       &f.BuildingID,
 	}
 }
 func ToFacility(f *pbFacilities.Facility) *Facility {
@@ -254,6 +284,7 @@ func ToFacility(f *pbFacilities.Facility) *Facility {
 		CreatedAt:        utils.StringToPgTimestamptz(f.CreatedAt),
 		UpdatedAt:        utils.StringToPgTimestamptz(f.UpdatedAt),
 		GoogleCalendarID: f.GoogleCalendarId,
+		BuildingID:       *f.BuildingId,
 	}
 }
 
@@ -307,9 +338,30 @@ type InsuranceFile struct {
 
 type Notification struct {
 	ID         int64  `db:"id" json:"id"`
-	FacilityID int64  `db:"facility_id" json:"facility_id"`
-	Building   string `db:"building" json:"building"`
+	BuildingID int64  `db:"building_id" json:"building_id"`
 	UserID     string `db:"user_id" json:"user_id"`
+}
+
+func (n *Notification) ToProto() *pbUsers.Notifications {
+	return &pbUsers.Notifications{
+		Id:         n.ID,
+		BuildingId: n.BuildingID,
+		UserId:     n.UserID,
+	}
+}
+func NotificationsToProto(n []*Notification) []*pbUsers.Notifications {
+	protoNotifications := make([]*pbUsers.Notifications, len(n))
+	for i, notification := range n {
+		protoNotifications[i] = notification.ToProto()
+	}
+	return protoNotifications
+}
+func ToNotification(n *pbUsers.Notifications) *Notification {
+	return &Notification{
+		ID:         n.Id,
+		BuildingID: n.BuildingId,
+		UserID:     n.UserId,
+	}
 }
 
 type Reservation struct {

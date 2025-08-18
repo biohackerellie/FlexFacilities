@@ -294,7 +294,7 @@ export default function ReservationForm(props: {
                 return (
                   <div
                     key={field.id}
-                    className="flex flex-shrink grid-rows-6 flex-row flex-wrap justify-start gap-2 gap-x-4 border-b-2 p-2 sm:flex-nowrap sm:justify-between"
+                    className="flex shrink grid-rows-6 flex-row flex-wrap justify-start gap-2 gap-x-4 border-b-2 p-2 sm:flex-nowrap sm:justify-between"
                   >
                     <FormField
                       control={form.control}

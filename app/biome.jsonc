@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.0.5/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.2.0/schema.json",
   "vcs": {
     "enabled": false,
     "clientKind": "git",
@@ -7,11 +7,7 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "includes": [
-      "packages/**/*",
-      "!node_modules",
-      "front-end/**/*"
-    ]
+    "includes": ["packages/**/*", "!node_modules", "front-end/**/*"]
   },
   "formatter": {
     "enabled": true,
@@ -122,10 +118,7 @@
         "noWith": "error"
       }
     },
-    "includes": [
-      "**",
-      "!**/*.config.js"
-    ]
+    "includes": ["**", "!**/*.config.js"]
   },
   "javascript": {
     "formatter": {

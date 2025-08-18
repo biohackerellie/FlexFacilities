@@ -1,17 +1,18 @@
 package main
 
 import (
-	"api/internal/auth"
 	"api/internal/config"
 	repository "api/internal/db"
+	"api/internal/handlers"
 	"api/internal/lib/logger"
 	"api/internal/lib/workers"
 	"api/internal/server"
-	"io"
-
 	"context"
+	"io"
 	"log/slog"
 	"net/http"
+	"os"
+	"os/signal"
 	"strings"
 	"syscall"
 	"time"
@@ -24,8 +25,10 @@ import (
 
 var log *slog.Logger
 
-func run(ctx context.Context, stdout io.Writer, getenv func(string) string) error {
+func Run(ctx context.Context, stdout io.Writer, getenv func(string) string) error {
 
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
 	config := config.New(getenv)
 	logLevel := config.LogLevel
 	if logLevel == "" {
@@ -33,7 +36,6 @@ func run(ctx context.Context, stdout io.Writer, getenv func(string) string) erro
 	}
 	verboseLogging := config.VerboseLogging == "true"
 	local := config.AppEnv != "production"
-
 	if local {
 		err := godotenv.Load("../.env")
 		if err != nil {
@@ -48,10 +50,12 @@ func run(ctx context.Context, stdout io.Writer, getenv func(string) string) erro
 		log = slog.New(slog.NewJSONHandler(stdout, logOptions))
 	}
 
+	log.Info("Starting server", "local", local, "log_level", logLevel, "verbose_logging", verboseLogging)
 	db := repository.NewDB(ctx, config.DatabaseURL)
 	defer db.Close()
 
-	s := server.NewServer(log)
+	h := handlers.New(db, log, config)
+	s := server.NewServer(h, log)
 	handler := h2c.NewHandler(s, &http2.Server{})
 	srv := &http.Server{
 		Addr:              "0.0.0.0:3030",
@@ -66,6 +70,7 @@ func run(ctx context.Context, stdout io.Writer, getenv func(string) string) erro
 		}
 	}()
 
+	log.Info("Server started", "addr", srv.Addr)
 	mgr := workers.NewManager()
 	janitor := workers.NewWorker(&workers.Janitor{
 		Auth:      nil,
@@ -76,10 +81,12 @@ func run(ctx context.Context, stdout io.Writer, getenv func(string) string) erro
 	mgr.Add(janitor)
 	mgr.Start(ctx)
 
+	log.Info("Workers started")
+	waitForShutdown(srv, ctx, cancel, log)
 	return nil
 }
 
-func waitForShutdown(srv *http.Server, ctx context.Context, cancel context.CancelFunc) {
+func waitForShutdown(srv *http.Server, ctx context.Context, cancel context.CancelFunc, log *slog.Logger) {
 	sig := make(chan os.Signal, 1)
 	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
 	<-sig

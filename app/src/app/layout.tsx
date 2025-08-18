@@ -1,6 +1,4 @@
 import React from "react";
-import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 
@@ -10,9 +8,8 @@ import Footer from "@/components/ui/footer";
 import Navbar from "@/components/ui/navbar/Navbar";
 import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
-import { TRPCReactProvider } from "@/trpc/react";
 
-import "./globals.css";
+import "./styles/globals.css";
 
 export { meta as metadata } from "./metadata";
 
@@ -33,16 +30,12 @@ export default function RootLayout({
       >
         <AuthProvider>
           <ThemeProviders attribute="class" defaultTheme="system" enableSystem>
-            <TRPCReactProvider>
               <Navbar />
 
               {children}
               <Footer />
-            </TRPCReactProvider>
             <Toaster />
           </ThemeProviders>
-          <SpeedInsights />
-          <Analytics />
         </AuthProvider>
       </body>
     </html>

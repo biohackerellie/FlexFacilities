@@ -29,7 +29,7 @@ export default async function reservationPage({
         </div>
         <div className="flex flex-row border-b-2 text-justify text-lg sm:justify-between">
           Requested Category:{" "}
-          <div className="text max-w-sm truncate overflow-ellipsis">
+          <div className="text max-w-sm truncate text-ellipsis">
             {Category.name}
           </div>
         </div>

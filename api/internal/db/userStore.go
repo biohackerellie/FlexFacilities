@@ -204,3 +204,42 @@ func (s *UserStore) DeleteExpiredSessions(ctx context.Context) error {
 	_, err := s.db.ExecContext(ctx, deleteExpiredSessionsQuery)
 	return err
 }
+
+const getNotificationsQuery = `SELECT * FROM notifications`
+
+func (s *UserStore) GetNotifications(ctx context.Context) ([]*models.Notification, error) {
+	var notifications []*models.Notification
+	if err := s.db.SelectContext(ctx, &notifications, getNotificationsQuery); err != nil {
+		return nil, err
+	}
+	return notifications, nil
+}
+
+const deleteNotificationQuery = `DELETE FROM notifications WHERE id = $1`
+
+func (s *UserStore) DeleteNotification(ctx context.Context, id int64) error {
+	_, err := s.db.ExecContext(ctx, deleteNotificationQuery, id)
+	return err
+}
+
+const createNotificationQuery = `INSERT INTO notifications (
+	id, 
+	facility_id,
+	building,
+	title,
+	body
+) 
+VALUES (:id, :user_id, :title, :body)
+`
+
+func (s *UserStore) CreateNotification(ctx context.Context, notification *models.Notification) error {
+	_, err := s.db.NamedExecContext(ctx, createNotificationQuery, notification)
+	return err
+}
+
+const editNotificationQuery = `UPDATE notifications SET title = :title, body = :body WHERE id = :id`
+
+func (s *UserStore) EditNotification(ctx context.Context, notification *models.Notification) error {
+	_, err := s.db.NamedExecContext(ctx, editNotificationQuery, notification)
+	return err
+}

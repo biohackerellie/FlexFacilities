@@ -9,7 +9,7 @@ export default function CustomInput({ name, rules, ...rest }: any) {
     <input
       {...register(name, rules)}
       {...rest}
-      className="border-3 form-input rounded-md border-primary bg-gray-300 text-black drop-shadow-sm dark:bg-slate-600 dark:text-white"
+      className="border-3 form-input rounded-md border-primary bg-gray-300 text-black drop-shadow-xs dark:bg-slate-600 dark:text-white"
     />
   );
 }

@@ -4,6 +4,8 @@ import (
 	"api/internal/auth"
 	"api/internal/config"
 	repository "api/internal/db"
+	"api/pkg/calendar"
+	"context"
 	"fmt"
 	"log/slog"
 
@@ -16,10 +18,16 @@ type Handlers struct {
 	FacilityHandler    *FacilityHandler
 	ReservationHandler *ReservationHandler
 	Auth               *auth.Auth
+	Calendar           *calendar.Calendar
 }
 
 func New(db *repository.DB, log *slog.Logger, config *config.Config) *Handlers {
 
+	cal, err := calendar.NewCalendar(context.Background())
+	if err != nil {
+		log.Error("Could not create calendar", "error", err)
+		panic(err)
+	}
 	userStore := repository.NewUserStore(db, log)
 	facilityStore := repository.NewFacilityStore(db, log)
 	reservationStore := repository.NewReservationStore(db, log)
@@ -42,5 +50,6 @@ func New(db *repository.DB, log *slog.Logger, config *config.Config) *Handlers {
 		FacilityHandler:    facilityHandler,
 		ReservationHandler: reservationHandler,
 		Auth:               authHandler,
+		Calendar:           cal,
 	}
 }
