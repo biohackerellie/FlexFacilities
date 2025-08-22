@@ -49,8 +49,17 @@ func (f *FacilityStore) Get(ctx context.Context, id int64) (*models.FullFacility
 	for i, res := range reservations {
 		reservationIds[i] = res.ID
 	}
+
+	var building models.Building
+	if err := f.db.GetContext(ctx, &building, "SELECT * FROM buildings WHERE id = $1", facility.BuildingID); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			building = models.Building{}
+		}
+		return nil, err
+	}
 	facilityWithCategories := &models.FullFacility{
 		Facility:       &facility,
+		Building:       &building,
 		Categories:     categories,
 		ReservationIDs: reservationIds,
 	}
@@ -59,17 +68,26 @@ func (f *FacilityStore) Get(ctx context.Context, id int64) (*models.FullFacility
 
 const allCategoriesInQuery = `SELECT * FROM categories WHERE facility_id IN (?)`
 const getAllFacilitiesQuery = `SELECT * FROM facilities`
+const getAllBuildingsQuery = `SELECT * FROM buildings`
 
-func (f *FacilityStore) GetAll(ctx context.Context) ([]*models.FacilityWithCategories, error) {
+func (f *FacilityStore) GetAll(ctx context.Context) ([]*models.BuildingWithFacilities, error) {
+
+	var buildings []models.Building
+	if err := f.db.SelectContext(ctx, &buildings, getAllBuildingsQuery); err != nil {
+		return nil, err
+	}
+	result := make([]*models.BuildingWithFacilities, len(buildings))
+
 	var facilities []*models.Facility
 	if err := f.db.SelectContext(ctx, &facilities, getAllFacilitiesQuery); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return nil, nil
+			facilities = []*models.Facility{}
 		}
 		return nil, err
 	}
+
 	if len(facilities) == 0 {
-		return []*models.FacilityWithCategories{}, nil
+		return result, nil
 	}
 	facilityIds := make([]int64, len(facilities))
 	for i, facility := range facilities {
@@ -80,18 +98,27 @@ func (f *FacilityStore) GetAll(ctx context.Context) ([]*models.FacilityWithCateg
 	if err != nil {
 		return nil, err
 	}
-	facilityWithCategories := make([]*models.FacilityWithCategories, len(facilities))
+
 	categoriesByFacility := make(map[int64][]models.Category)
+
 	for _, category := range categories {
 		categoriesByFacility[category.FacilityID] = append(categoriesByFacility[category.FacilityID], category)
 	}
+	facilityWithCategories := make([]*models.FacilityWithCategories, len(facilities))
 	for i, facility := range facilities {
 		facilityWithCategories[i] = &models.FacilityWithCategories{
 			Facility:   *facility,
 			Categories: categoriesByFacility[facility.ID],
 		}
 	}
-	return facilityWithCategories, nil
+
+	for i, building := range buildings {
+		result[i] = &models.BuildingWithFacilities{
+			Building:   building,
+			Facilities: facilityWithCategories,
+		}
+	}
+	return result, nil
 }
 
 func (f *FacilityStore) GetCategories(ctx context.Context, ids []int64) ([]models.Category, error) {
@@ -111,20 +138,50 @@ func (f *FacilityStore) GetCategories(ctx context.Context, ids []int64) ([]model
 	return categories, nil
 }
 
-const facilityByBuildingQuery = `SELECT * FROM facilities WHERE building = $1`
+const getBuildingQuery = `SELECT * FROM building WHERE id = $1`
 
-func (f *FacilityStore) GetByBuilding(ctx context.Context, building string) ([]*models.FacilityWithCategories, error) {
-	var facilities []*models.Facility
-	if err := f.db.SelectContext(ctx, &facilities, facilityByBuildingQuery, building); err != nil {
+func (f *FacilityStore) GetByBuilding(ctx context.Context, buildingID int64) (*models.BuildingWithFacilities, error) {
+	var building models.Building
+	if err := f.db.GetContext(ctx, &building, getBuildingQuery, buildingID); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return nil, nil
+			return &models.BuildingWithFacilities{}, nil
 		}
 		return nil, err
 	}
-	if len(facilities) == 0 {
-		return []*models.FacilityWithCategories{}, nil
+
+	var facilities []*models.Facility
+	if err := f.db.SelectContext(ctx, &facilities, "SELECT * FROM facilities WHERE building_id = $1", building.ID); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			facilities = []*models.Facility{}
+		}
+		return nil, err
 	}
-	return f.GetAll(ctx)
+	facilityIds := make([]int64, len(facilities))
+	for i, facility := range facilities {
+		facilityIds[i] = facility.ID
+	}
+	categories, err := f.GetCategories(ctx, facilityIds)
+	if err != nil {
+		return nil, err
+	}
+
+	categoriesByFacility := make(map[int64][]models.Category)
+
+	for _, category := range categories {
+		categoriesByFacility[category.FacilityID] = append(categoriesByFacility[category.FacilityID], category)
+	}
+	facilityWithCategories := make([]*models.FacilityWithCategories, len(facilities))
+	for i, facility := range facilities {
+		facilityWithCategories[i] = &models.FacilityWithCategories{
+			Facility:   *facility,
+			Categories: categoriesByFacility[facility.ID],
+		}
+	}
+	return &models.BuildingWithFacilities{
+		Building:   building,
+		Facilities: facilityWithCategories,
+	}, nil
+
 }
 
 const createFacilityQuery = `INSERT INTO facilities (

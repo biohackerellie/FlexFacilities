@@ -8,36 +8,9 @@
 
 import { NextRequest, NextResponse } from "next/server";
 
-const blockedCountries = [
-  "CN",
-  "RU",
-  "KP",
-  "IR",
-  "SY",
-  "CU",
-  "IQ",
-  "LY",
-  "SD",
-  "VN",
-  "RO",
-];
-
 // wrap default middleware with withAuth to provide NextAuth Token context to middleware
 export function middleware(req: NextRequest) {
   const response = NextResponse.next();
-
-  /**
-   * Geo IP Blocking for specific countries.
-   * As a school district, we are more vulnerable to cyber attacks from foreign countries.
-   * This is a simple way to block reqs from countries that we do not expect to receive reqs from.
-   * @param {string} country - The country code of the req.
-   * @param {string[]} blockedCountries - An array of country codes to block.
-   */
-  const country = req.geo?.country;
-  if (country && blockedCountries.includes(country)) {
-    return NextResponse.redirect(new URL("/404", req.url));
-  }
-
   /**
    * A path was changed during some refactoring, and this
    * redirect catches the old path and redirects to the new one.

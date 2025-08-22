@@ -218,6 +218,14 @@ func (c *Category) ToProto() *pbFacilities.Category {
 	}
 }
 
+func ToProtoCategories(categories []Category) []*pbFacilities.Category {
+	var result []*pbFacilities.Category
+	for _, category := range categories {
+		result = append(result, category.ToProto())
+	}
+	return result
+}
+
 type Building struct {
 	ID               int64   `db:"id" json:"id"`
 	Name             string  `db:"name" json:"name"`
@@ -243,6 +251,28 @@ func ToBuilding(building *pbFacilities.Building) Building {
 		Address:          building.Address,
 		ImagePath:        building.ImagePath,
 		GoogleCalendarID: building.GoogleCalendarId,
+	}
+}
+
+type BuildingWithFacilities struct {
+	Building
+	Facilities []*FacilityWithCategories `json:"facilities"`
+}
+
+func (b *BuildingWithFacilities) ToProto() *pbFacilities.BuildingWithFacilities {
+	return &pbFacilities.BuildingWithFacilities{
+		Building: b.Building.ToProto(),
+		Facilities: func() []*pbFacilities.FacilityWithCategories {
+			var result []*pbFacilities.FacilityWithCategories
+			for _, facility := range b.Facilities {
+				categories := ToProtoCategories(facility.Categories)
+				result = append(result, &pbFacilities.FacilityWithCategories{
+					Facility:   facility.Facility.ToProto(),
+					Categories: categories,
+				})
+			}
+			return result
+		}(),
 	}
 }
 
@@ -312,6 +342,7 @@ func ToFacilityWithCategories(req *pbFacilities.FacilityWithCategories) *Facilit
 
 type FullFacility struct {
 	Facility       *Facility
+	Building       *Building
 	Categories     []Category
 	ReservationIDs []int64
 }

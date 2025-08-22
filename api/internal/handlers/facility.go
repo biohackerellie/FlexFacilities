@@ -25,13 +25,13 @@ func (a *FacilityHandler) GetAllFacilities(ctx context.Context, req *connect.Req
 	if err != nil {
 		return nil, err
 	}
-	protoFacilities := make([]*service.FacilityWithCategories, len(facilities))
+	protoFacilities := make([]*service.BuildingWithFacilities, len(facilities))
 	for i, facility := range facilities {
 		protoFacilities[i] = facility.ToProto()
 	}
 
 	return connect.NewResponse(&service.GetAllFacilitiesResponse{
-		Facilities: protoFacilities,
+		Buildings: protoFacilities,
 	}), nil
 }
 func (a *FacilityHandler) GetFacility(ctx context.Context, req *connect.Request[service.GetFacilityRequest]) (*connect.Response[service.FullFacility], error) {
@@ -63,16 +63,13 @@ func (a *FacilityHandler) GetFacilityCategories(ctx context.Context, req *connec
 	}), nil
 }
 func (a *FacilityHandler) GetBuildingFacilities(ctx context.Context, req *connect.Request[service.GetBuildingFacilitiesRequest]) (*connect.Response[service.GetBuildingFacilitiesResponse], error) {
-	res, err := a.facilityStore.GetByBuilding(ctx, req.Msg.GetBuilding())
+	res, err := a.facilityStore.GetByBuilding(ctx, req.Msg.GetBuildingId())
 	if err != nil {
 		return nil, err
 	}
-	facilities := make([]*service.FacilityWithCategories, len(res))
-	for i, facility := range res {
-		facilities[i] = facility.ToProto()
-	}
+	building := res.ToProto()
 	return connect.NewResponse(&service.GetBuildingFacilitiesResponse{
-		Facilities: facilities,
+		Building: building,
 	}), nil
 }
 func (a *FacilityHandler) CreateFacility(ctx context.Context, req *connect.Request[service.CreateFacilityRequest]) (*connect.Response[service.CreateFacilityResponse], error) {

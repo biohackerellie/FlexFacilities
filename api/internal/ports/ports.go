@@ -26,8 +26,8 @@ type UserStore interface {
 }
 type FacilityStore interface {
 	Get(ctx context.Context, id int64) (*models.FullFacility, error)
-	GetAll(ctx context.Context) ([]*models.FacilityWithCategories, error)
-	GetByBuilding(ctx context.Context, building string) ([]*models.FacilityWithCategories, error)
+	GetAll(ctx context.Context) ([]*models.BuildingWithFacilities, error)
+	GetByBuilding(ctx context.Context, buildingID int64) (*models.BuildingWithFacilities, error)
 	GetCategories(ctx context.Context, ids []int64) ([]models.Category, error)
 	Create(ctx context.Context, input *models.FacilityWithCategories) error
 	Update(ctx context.Context, input *models.Facility) error

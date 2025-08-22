@@ -1,12 +1,16 @@
-import { isRedirectError } from "next/dist/client/components/redirect";
 import Link from "next/link";
-import { AuthError } from "next-auth";
-
-import { signIn } from "@local/auth";
-
-import { Button } from "@/components/ui/buttons";
-import { Card, CardContent, CardDescription } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import * as React from "react";
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 async function Login(formData: FormData) {
   "use server";
@@ -18,18 +22,19 @@ async function Login(formData: FormData) {
   });
 }
 
-export default function LoginForm() {
+export default function LoginForm({
+  className,
+  ...props
+}: React.ComponentProps<"div">) {
   return (
-    <Card className="flex w-full max-w-3xl flex-col items-center justify-center p-2 text-center align-middle">
+    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <Card>
+    <CardHeader className="text-center">
+   <CardTitle className="text-xl">Welcome Back</CardTitle> 
+   <CardDescription>Sign in to your account</CardDescription>
+    </CardHeader>
       <CardContent>
-        <form
-          action={async () => {
-            "use server";
-            await signIn("azure-ad", {
-              redirectTo: "/",
-            });
-          }}
-        >
+        <form>
           <Button type="submit" size="lg" variant="outline" className="w-full">
             Use District Staff Account
           </Button>
@@ -83,5 +88,7 @@ export default function LoginForm() {
         </form>
       </CardContent>
     </Card>
+</div>
+
   );
 }

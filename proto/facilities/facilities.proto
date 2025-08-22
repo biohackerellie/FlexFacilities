@@ -25,6 +25,11 @@ message Building {
   optional string google_calendar_id = 5;
 }
 
+message BuildingWithFacilities {
+  Building building = 1;
+  repeated FacilityWithCategories facilities = 2;
+}
+
 message Category {
   int64 id = 1;
   string name = 2;
@@ -36,7 +41,6 @@ message Category {
 message FacilityWithCategories {
   Facility facility = 1;
   repeated Category categories = 2;
-
 }
 
 
@@ -71,10 +75,10 @@ message GetFacilityCategoriesRequest {
 }
 
 message GetBuildingFacilitiesRequest {
-  string building = 1;
+  int64 building_id = 1;
 }
 message GetAllFacilitiesResponse {
-  repeated FacilityWithCategories facilities = 1;
+  repeated BuildingWithFacilities buildings = 1;
 }
 
 message GetFacilityCategoriesResponse {
@@ -82,7 +86,7 @@ message GetFacilityCategoriesResponse {
 }
 
 message GetBuildingFacilitiesResponse {
-  repeated FacilityWithCategories facilities = 1;
+  BuildingWithFacilities building = 1;
 }
 
 message CreateFacilityRequest {

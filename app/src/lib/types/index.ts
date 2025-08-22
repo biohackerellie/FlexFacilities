@@ -1,45 +1,31 @@
 import type { Schema$Event } from "@/functions/events/types";
-import type { $Enums, Category } from "@prisma/client";
-import type { User as NextAuthUser } from "next-auth";
 import type { Path, UseFormRegister } from "react-hook-form";
-import NextAuth from "next-auth";
-
 import type {
-  SelectCategory,
-  SelectEvents,
-  SelectFacility,
-  SelectReservationDate,
-  SelectReservationFees,
-} from "@local/db";
+  FullReservation as PBFullReservation,
+  FullFacility as PBFulFacility,
+  Building as PBBuilding,
+  BuildingWithFacilities as PBBuildingWithFacilities,
+Category as PBCategory,
+Facility as PBFacility,  
+Reservation as PBReservation,
+Users as PBUser,
+ReservationDate as PBReservationDate,
+ReservationFee as PBReservationFee
+} from "../rpc/proto";
 
-export interface Facility {
-  map(
-    arg0: (facility: Facility) => import("react").JSX.Element,
-  ): import("react").ReactNode;
-  id: number;
-  image_path: string;
-  name: string;
-  building: string;
-  address: string;
-  calendar_id: string;
-  capacity: number;
-  Category: [
-    {
-      name: string;
-      description: string;
-      price: string;
-    },
-  ];
-}
 
-export interface Role {
-  role: string;
-}
-
-export interface User extends NextAuthUser {
-  roles: Role;
-  email: string;
-}
+import type {Message} from '@bufbuild/protobuf'
+export type ProtoType<T> = Omit<T, keyof Message<any>>
+export type Category = ProtoType<PBCategory>
+export type Facility = ProtoType<PBFacility>
+export type Reservation = ProtoType<PBReservation>
+export type User = ProtoType<PBUser>
+export type ReservationDate = ProtoType<PBReservationDate>
+export type ReservationFee = ProtoType<PBReservationFee>
+export type FullFacility = ProtoType<PBFulFacility>
+export type FullReservation = ProtoType<PBFullReservation>
+export type Building = ProtoType<PBBuilding>
+export type BuildingWithFacilities = ProtoType<PBBuildingWithFacilities>
 
 export interface FormData {
   eventName: string;
@@ -89,70 +75,8 @@ export interface InputProps {
   defaultValue?: string;
 }
 
-export interface ReservationDate {
-  id: number;
-  startDate: string;
-  endDate: string;
-  startTime: string;
-  endTime: string;
-  reservationId: bigint;
-  approved: $Enums.ReservationDate_approved;
-  gcal_eventid: string | null;
-}
 
-export interface Reservation {
-  id: number;
-  name?: string;
-  userId: string;
-  eventName: string;
-  eventId?: string;
-  people?: string;
-  doorAccess?: boolean;
-  doorsDetails?: string;
-  techSupport?: boolean;
-  techDetails?: string;
 
-  primaryContact?: string;
-  insurance?: string;
-  phone?: string;
-  details?: string;
-  fees?: string;
-  facilityId: number;
-  recurrence?: string;
-  approved: "pending" | "approved" | "denied" | "canceled";
-  createdAt: Date;
-  updatedAt: Date;
-  additionalFees: [];
-  Event?: any[];
-  Category?: Category;
-  Facility: Facility;
-  User?: User;
-  ReservationDate: any[];
-}
-
-export interface IAlert {
-  title: string;
-  text: string;
-  icon: any;
-  showCancelButton?: boolean;
-  showDenyButton?: boolean;
-  confirmButtonText?: string;
-  denyButtonText?: string;
-  cancelButtonText?: string;
-  id: number;
-  onConfirm?: (id: number) => Promise<void>;
-  onDeny?: (id: number) => Promise<void>;
-  onConfirmText: {
-    title?: string;
-    text?: string;
-    icon?: any;
-  };
-  onDenyText: {
-    title?: string;
-    text?: string;
-    icon?: any;
-  };
-}
 
 export interface TableReservation {
   eventName: string;
@@ -206,18 +130,6 @@ export interface GoogleEvents {
   title: string | null | undefined;
   meta: Schema$Event;
 }
-
-export type SelectCategory = typeof Category.$inferSelect;
-export type SelectReservationFees = typeof ReservationFees.$inferSelect;
-export type SelectReservationDate = typeof ReservationDate.$inferSelect;
-
-export type ReservationWithAll = Reservation & {
-  ReservationDate?: SelectReservationDate[];
-  ReservationFees?: SelectReservationFees[];
-  Facility?: SelectFacility;
-  Category?: SelectCategory;
-};
-
 export interface ChartData {
   month?: string;
   totalReservations?: number;
