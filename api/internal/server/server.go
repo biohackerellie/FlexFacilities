@@ -14,5 +14,9 @@ func NewServer(handlers *handlers.Handlers, log *slog.Logger) *http.ServeMux {
 	mux.Handle(facilityMux.NewFacilitiesServiceHandler(handlers.FacilityHandler))
 	mux.Handle(reservationMux.NewReservationServiceHandler(handlers.ReservationHandler))
 	mux.Handle(userMux.NewUsersServiceHandler(handlers.UserHandler))
+	mux.HandleFunc("/api/auth/{provider}", handlers.Auth.BeginOauth)
+	mux.HandleFunc("/api/auth/login", handlers.Auth.Begin2FA)
+	mux.HandleFunc("/api/auth/{provider}/callback", handlers.Auth.AuthCallback)
+	mux.HandleFunc("/api/auth/{token}/verify", handlers.Auth.Verify2FACode)
 	return mux
 }
