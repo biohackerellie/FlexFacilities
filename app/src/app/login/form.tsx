@@ -1,7 +1,7 @@
 import Link from "next/link";
 import * as React from "react";
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -15,11 +15,10 @@ import { Label } from "@/components/ui/label"
 async function Login(formData: FormData) {
   "use server";
 
-  await signIn("credentials", {
-    email: formData.get("email") as string,
-    password: formData.get("password") as string,
-    redirectTo: "/",
-  });
+  await fetch("/api/auth/login", {
+    method: "POST",
+    body: formData
+  })
 }
 
 export default function LoginForm({
@@ -34,12 +33,10 @@ export default function LoginForm({
    <CardDescription>Sign in to your account</CardDescription>
     </CardHeader>
       <CardContent>
-        <form>
+        <form action={Login}>
           <Button type="submit" size="lg" variant="outline" className="w-full">
             Use District Staff Account
           </Button>
-        </form>
-        <form action={Login}>
           <div className="mb-6">
             <div className="my-4 flex items-center before:mt-0.5 before:flex-1 before:border-t before:border-gray-300 after:mt-0.5 after:flex-1 after:border-t after:border-gray-300">
               <p className="mx-4 mb-0 text-center font-semibold text-black drop-shadow-md dark:text-black">
