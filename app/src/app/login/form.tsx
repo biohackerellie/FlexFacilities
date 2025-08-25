@@ -11,15 +11,43 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import * as z from "zod"
 
-async function Login(formData: FormData) {
+async function Login(state: FormState, formData: FormData) {
   "use server";
+
+  const validated = loginSchema.safeParse({
+    email: formData.get("email"), 
+    password: formData.get("password")
+  })
+
+  if (!validated.success){
+    return {
+      errors: validated.error.flatten
+    }
+  }
 
   await fetch("/api/auth/login", {
     method: "POST",
     body: formData
   })
 }
+
+const loginSchema = z.object({
+  email: z.email('Email is required').trim(),
+  password: z.string().min(8, 'Password must be at least 8 characters').trim(),
+})
+
+
+type FormState = 
+  | {
+  errors?: {
+    email?: string
+    password?: string
+  }
+  message?: string
+}
+| undefined
 
 export default function LoginForm({
   className,
