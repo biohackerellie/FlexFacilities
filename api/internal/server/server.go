@@ -2,6 +2,7 @@ package server
 
 import (
 	"api/internal/handlers"
+	authMux "api/internal/proto/auth/authserviceconnect"
 	facilityMux "api/internal/proto/facilities/facilitiesserviceconnect"
 	reservationMux "api/internal/proto/reservation/reservationserviceconnect"
 	userMux "api/internal/proto/users/usersserviceconnect"
@@ -14,6 +15,7 @@ func NewServer(handlers *handlers.Handlers, log *slog.Logger) *http.ServeMux {
 	mux.Handle(facilityMux.NewFacilitiesServiceHandler(handlers.FacilityHandler))
 	mux.Handle(reservationMux.NewReservationServiceHandler(handlers.ReservationHandler))
 	mux.Handle(userMux.NewUsersServiceHandler(handlers.UserHandler))
+	mux.Handle(authMux.NewAuthHandler(handlers.Auth))
 	mux.HandleFunc("/api/auth/{provider}", handlers.Auth.BeginOauth)
 	mux.HandleFunc("/api/auth/login", handlers.Auth.Begin2FA)
 	mux.HandleFunc("/api/auth/{provider}/callback", handlers.Auth.AuthCallback)

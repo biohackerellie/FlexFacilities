@@ -1,4 +1,8 @@
 version: '3'
+env:
+  API_ROOT: ./api
+  NEXT_ROOT: ./app
+  WWW_ROOT: ./www
 
 dotenv: [.env]
 
@@ -42,6 +46,11 @@ tasks:
     desc: start dev go server
     cmds:
       - cd api && air -c .air.toml
+  dev:www:
+    desc: start dev www server
+    dir: "{{.WWW_ROOT}}" 
+    cmds:
+      - air -c .air.toml
   install:bun:
     desc: install dependencies
     cmds:

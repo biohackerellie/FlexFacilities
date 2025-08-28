@@ -7,7 +7,10 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "includes": ["packages/**/*", "!node_modules", "front-end/**/*"]
+    "includes": [
+      "src/**/*",
+      "!node_modules"
+    ]
   },
   "formatter": {
     "enabled": true,
@@ -118,7 +121,10 @@
         "noWith": "error"
       }
     },
-    "includes": ["**", "!**/*.config.js"]
+    "includes": [
+      "**",
+      "!**/*.config.js"
+    ]
   },
   "javascript": {
     "formatter": {

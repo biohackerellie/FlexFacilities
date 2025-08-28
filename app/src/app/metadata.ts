@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 
 export const meta: Metadata = {
-  metadataBase: new URL("https://facilities.laurel.k12.mt.us"),
-  title: "LPS Facilities",
-  description: "Laurel Public Schools in Laurel, Montana Facility Rentals 🏳️‍🌈",
+  title: "FlexFacilities",
+  description: "Laurel Public Schools in Laurel, Montana Facility Rentals 🏳",
   keywords: ["Laurel Public Schools, Facility Rentals, Laurel, Montana"],
   authors: [{ name: "Ellie Kerns", url: "https://epklabs.com" }],
   creator: "Ellie Kerns",
