@@ -12,6 +12,10 @@ import (
 	"net/http"
 	"net/url"
 	"time"
+
+	"connectrpc.com/connect"
+
+	service "api/internal/proto/auth"
 )
 
 type TwoFACode struct {
@@ -82,38 +86,34 @@ func (s *Auth) Verify2FACode(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 }
 
-func (s *Auth) Begin2FA(w http.ResponseWriter, r *http.Request) {
-	type twoFARequest struct {
-		Email    string `json:"email"`
-		Password string `json:"password"`
-	}
-
-	var req twoFARequest
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	err := s.verifyCredentials(r.Context(), req.Email, req.Password)
+func (s *Auth) Login(ctx context.Context, req *connect.Request[service.LoginRequest]) (*connect.Response[service.LoginResponse], error) {
+	email := req.Msg.GetEmail()
+	password := req.Msg.GetPassword()
+	err := s.verifyCredentials(ctx, email, password)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
-		return
+		return nil, connect.NewError(connect.CodeUnauthenticated, err)
 	}
+	s.send2FACode(email, s.config.Host)
+	return connect.NewResponse(&service.LoginResponse{}), nil
+}
+
+func (s *Auth) send2FACode(email, host string) error {
+
 	token := uuid.NewString()
 	code := utils.GenerateRandomSixDigitCode()
 
-	s.setTempToken(token, code, req.Email, time.Minute*5)
-	urlString := fmt.Sprintf("%s/login/2fa/verify", r.Host)
+	s.setTempToken(token, code, email, time.Minute*5)
+	urlString := fmt.Sprintf("%s/login/2fa/verify", host)
+	s.logger.Debug("Sending login code", "email", email, "code", code)
 	url, err := url.Parse(urlString)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		return err
 	}
 	q := url.Query()
 	q.Set("token", token)
 	url.RawQuery = q.Encode()
-	go emails.Send(&emails.EmailData{
-		To:       req.Email,
+	emails.Send(&emails.EmailData{
+		To:       email,
 		Subject:  "Facilities Login Code",
 		Template: "2fa.html",
 		Data: map[string]any{
@@ -121,8 +121,7 @@ func (s *Auth) Begin2FA(w http.ResponseWriter, r *http.Request) {
 			"URL":  url,
 		},
 	})
-
-	w.WriteHeader(http.StatusNoContent)
+	return nil
 }
 
 func (s *Auth) verifyCredentials(ctx context.Context, email, password string) error {
@@ -152,6 +151,29 @@ func (s *Auth) getTempToken(token string) (string, string, bool) {
 	}
 	delete(s.tokenStore, token)
 	return v.Code, v.Email, true
+}
+
+func (s *Auth) Register(ctx context.Context, req *connect.Request[service.RegisterRequest]) (*connect.Response[service.LoginResponse], error) {
+	email := req.Msg.GetEmail()
+	password := req.Msg.GetPassword()
+	name := req.Msg.GetName()
+	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInternal, err)
+	}
+	_, err = s.db.Create(ctx, &models.Users{
+		ID:       uuid.NewString(),
+		Name:     name,
+		Email:    email,
+		Password: &hash,
+		Role:     models.UserRoleUSER,
+	})
+	if err != nil {
+		return nil, connect.NewError(connect.CodeInternal, err)
+	}
+
+	s.send2FACode(email, s.config.Host)
+	return connect.NewResponse(&service.LoginResponse{}), nil
 }
 
 func (s *Auth) CleanupExpiredTokens() {

@@ -41,17 +41,9 @@ const (
 	AuthRegisterProcedure = "/api.auth.Auth/Register"
 )
 
-// These variables are the protoreflect.Descriptor objects for the RPCs defined in this package.
-var (
-	authServiceDescriptor          = auth.File_proto_auth_auth_proto.Services().ByName("Auth")
-	authGetSessionMethodDescriptor = authServiceDescriptor.Methods().ByName("GetSession")
-	authLoginMethodDescriptor      = authServiceDescriptor.Methods().ByName("Login")
-	authRegisterMethodDescriptor   = authServiceDescriptor.Methods().ByName("Register")
-)
-
 // AuthClient is a client for the api.auth.Auth service.
 type AuthClient interface {
-	GetSession(context.Context, *connect.Request[auth.GetSessionRequest]) (*connect.Response[auth.Session], error)
+	GetSession(context.Context, *connect.Request[auth.GetSessionRequest]) (*connect.Response[auth.GetSessionResponse], error)
 	Login(context.Context, *connect.Request[auth.LoginRequest]) (*connect.Response[auth.LoginResponse], error)
 	Register(context.Context, *connect.Request[auth.RegisterRequest]) (*connect.Response[auth.LoginResponse], error)
 }
@@ -65,24 +57,25 @@ type AuthClient interface {
 // http://api.acme.com or https://acme.com/grpc).
 func NewAuthClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) AuthClient {
 	baseURL = strings.TrimRight(baseURL, "/")
+	authMethods := auth.File_proto_auth_auth_proto.Services().ByName("Auth").Methods()
 	return &authClient{
-		getSession: connect.NewClient[auth.GetSessionRequest, auth.Session](
+		getSession: connect.NewClient[auth.GetSessionRequest, auth.GetSessionResponse](
 			httpClient,
 			baseURL+AuthGetSessionProcedure,
-			connect.WithSchema(authGetSessionMethodDescriptor),
+			connect.WithSchema(authMethods.ByName("GetSession")),
 			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 			connect.WithClientOptions(opts...),
 		),
 		login: connect.NewClient[auth.LoginRequest, auth.LoginResponse](
 			httpClient,
 			baseURL+AuthLoginProcedure,
-			connect.WithSchema(authLoginMethodDescriptor),
+			connect.WithSchema(authMethods.ByName("Login")),
 			connect.WithClientOptions(opts...),
 		),
 		register: connect.NewClient[auth.RegisterRequest, auth.LoginResponse](
 			httpClient,
 			baseURL+AuthRegisterProcedure,
-			connect.WithSchema(authRegisterMethodDescriptor),
+			connect.WithSchema(authMethods.ByName("Register")),
 			connect.WithClientOptions(opts...),
 		),
 	}
@@ -90,13 +83,13 @@ func NewAuthClient(httpClient connect.HTTPClient, baseURL string, opts ...connec
 
 // authClient implements AuthClient.
 type authClient struct {
-	getSession *connect.Client[auth.GetSessionRequest, auth.Session]
+	getSession *connect.Client[auth.GetSessionRequest, auth.GetSessionResponse]
 	login      *connect.Client[auth.LoginRequest, auth.LoginResponse]
 	register   *connect.Client[auth.RegisterRequest, auth.LoginResponse]
 }
 
 // GetSession calls api.auth.Auth.GetSession.
-func (c *authClient) GetSession(ctx context.Context, req *connect.Request[auth.GetSessionRequest]) (*connect.Response[auth.Session], error) {
+func (c *authClient) GetSession(ctx context.Context, req *connect.Request[auth.GetSessionRequest]) (*connect.Response[auth.GetSessionResponse], error) {
 	return c.getSession.CallUnary(ctx, req)
 }
 
@@ -112,7 +105,7 @@ func (c *authClient) Register(ctx context.Context, req *connect.Request[auth.Reg
 
 // AuthHandler is an implementation of the api.auth.Auth service.
 type AuthHandler interface {
-	GetSession(context.Context, *connect.Request[auth.GetSessionRequest]) (*connect.Response[auth.Session], error)
+	GetSession(context.Context, *connect.Request[auth.GetSessionRequest]) (*connect.Response[auth.GetSessionResponse], error)
 	Login(context.Context, *connect.Request[auth.LoginRequest]) (*connect.Response[auth.LoginResponse], error)
 	Register(context.Context, *connect.Request[auth.RegisterRequest]) (*connect.Response[auth.LoginResponse], error)
 }
@@ -123,23 +116,24 @@ type AuthHandler interface {
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
 func NewAuthHandler(svc AuthHandler, opts ...connect.HandlerOption) (string, http.Handler) {
+	authMethods := auth.File_proto_auth_auth_proto.Services().ByName("Auth").Methods()
 	authGetSessionHandler := connect.NewUnaryHandler(
 		AuthGetSessionProcedure,
 		svc.GetSession,
-		connect.WithSchema(authGetSessionMethodDescriptor),
+		connect.WithSchema(authMethods.ByName("GetSession")),
 		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 		connect.WithHandlerOptions(opts...),
 	)
 	authLoginHandler := connect.NewUnaryHandler(
 		AuthLoginProcedure,
 		svc.Login,
-		connect.WithSchema(authLoginMethodDescriptor),
+		connect.WithSchema(authMethods.ByName("Login")),
 		connect.WithHandlerOptions(opts...),
 	)
 	authRegisterHandler := connect.NewUnaryHandler(
 		AuthRegisterProcedure,
 		svc.Register,
-		connect.WithSchema(authRegisterMethodDescriptor),
+		connect.WithSchema(authMethods.ByName("Register")),
 		connect.WithHandlerOptions(opts...),
 	)
 	return "/api.auth.Auth/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -159,7 +153,7 @@ func NewAuthHandler(svc AuthHandler, opts ...connect.HandlerOption) (string, htt
 // UnimplementedAuthHandler returns CodeUnimplemented from all methods.
 type UnimplementedAuthHandler struct{}
 
-func (UnimplementedAuthHandler) GetSession(context.Context, *connect.Request[auth.GetSessionRequest]) (*connect.Response[auth.Session], error) {
+func (UnimplementedAuthHandler) GetSession(context.Context, *connect.Request[auth.GetSessionRequest]) (*connect.Response[auth.GetSessionResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.auth.Auth.GetSession is not implemented"))
 }
 

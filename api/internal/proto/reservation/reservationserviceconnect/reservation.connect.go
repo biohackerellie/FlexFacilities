@@ -77,25 +77,6 @@ const (
 	ReservationServiceDeleteReservationFeeProcedure = "/api.reservation.ReservationService/DeleteReservationFee"
 )
 
-// These variables are the protoreflect.Descriptor objects for the RPCs defined in this package.
-var (
-	reservationServiceServiceDescriptor                     = reservation.File_proto_reservation_reservation_proto.Services().ByName("ReservationService")
-	reservationServiceGetAllReservationsMethodDescriptor    = reservationServiceServiceDescriptor.Methods().ByName("GetAllReservations")
-	reservationServiceGetReservationMethodDescriptor        = reservationServiceServiceDescriptor.Methods().ByName("GetReservation")
-	reservationServiceRequestCountMethodDescriptor          = reservationServiceServiceDescriptor.Methods().ByName("RequestCount")
-	reservationServiceGetRequestsThisWeekMethodDescriptor   = reservationServiceServiceDescriptor.Methods().ByName("GetRequestsThisWeek")
-	reservationServiceCreateReservationMethodDescriptor     = reservationServiceServiceDescriptor.Methods().ByName("CreateReservation")
-	reservationServiceUpdateReservationMethodDescriptor     = reservationServiceServiceDescriptor.Methods().ByName("UpdateReservation")
-	reservationServiceDeleteReservationMethodDescriptor     = reservationServiceServiceDescriptor.Methods().ByName("DeleteReservation")
-	reservationServiceUserReservationsMethodDescriptor      = reservationServiceServiceDescriptor.Methods().ByName("UserReservations")
-	reservationServiceCreateReservationDateMethodDescriptor = reservationServiceServiceDescriptor.Methods().ByName("CreateReservationDate")
-	reservationServiceUpdateReservationDateMethodDescriptor = reservationServiceServiceDescriptor.Methods().ByName("UpdateReservationDate")
-	reservationServiceDeleteReservationDateMethodDescriptor = reservationServiceServiceDescriptor.Methods().ByName("DeleteReservationDate")
-	reservationServiceCreateReservationFeeMethodDescriptor  = reservationServiceServiceDescriptor.Methods().ByName("CreateReservationFee")
-	reservationServiceUpdateReservationFeeMethodDescriptor  = reservationServiceServiceDescriptor.Methods().ByName("UpdateReservationFee")
-	reservationServiceDeleteReservationFeeMethodDescriptor  = reservationServiceServiceDescriptor.Methods().ByName("DeleteReservationFee")
-)
-
 // ReservationServiceClient is a client for the api.reservation.ReservationService service.
 type ReservationServiceClient interface {
 	GetAllReservations(context.Context, *connect.Request[reservation.GetAllReservationsRequest]) (*connect.Response[reservation.AllReservationsResponse], error)
@@ -123,94 +104,95 @@ type ReservationServiceClient interface {
 // http://api.acme.com or https://acme.com/grpc).
 func NewReservationServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) ReservationServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
+	reservationServiceMethods := reservation.File_proto_reservation_reservation_proto.Services().ByName("ReservationService").Methods()
 	return &reservationServiceClient{
 		getAllReservations: connect.NewClient[reservation.GetAllReservationsRequest, reservation.AllReservationsResponse](
 			httpClient,
 			baseURL+ReservationServiceGetAllReservationsProcedure,
-			connect.WithSchema(reservationServiceGetAllReservationsMethodDescriptor),
+			connect.WithSchema(reservationServiceMethods.ByName("GetAllReservations")),
 			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 			connect.WithClientOptions(opts...),
 		),
 		getReservation: connect.NewClient[reservation.GetReservationRequest, reservation.FullReservation](
 			httpClient,
 			baseURL+ReservationServiceGetReservationProcedure,
-			connect.WithSchema(reservationServiceGetReservationMethodDescriptor),
+			connect.WithSchema(reservationServiceMethods.ByName("GetReservation")),
 			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 			connect.WithClientOptions(opts...),
 		),
 		requestCount: connect.NewClient[reservation.RequestCountRequest, reservation.RequestCountResponse](
 			httpClient,
 			baseURL+ReservationServiceRequestCountProcedure,
-			connect.WithSchema(reservationServiceRequestCountMethodDescriptor),
+			connect.WithSchema(reservationServiceMethods.ByName("RequestCount")),
 			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 			connect.WithClientOptions(opts...),
 		),
 		getRequestsThisWeek: connect.NewClient[reservation.GetRequestsThisWeekRequest, reservation.RequestThisWeekResponse](
 			httpClient,
 			baseURL+ReservationServiceGetRequestsThisWeekProcedure,
-			connect.WithSchema(reservationServiceGetRequestsThisWeekMethodDescriptor),
+			connect.WithSchema(reservationServiceMethods.ByName("GetRequestsThisWeek")),
 			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 			connect.WithClientOptions(opts...),
 		),
 		createReservation: connect.NewClient[reservation.CreateReservationRequest, reservation.CreateReservationResponse](
 			httpClient,
 			baseURL+ReservationServiceCreateReservationProcedure,
-			connect.WithSchema(reservationServiceCreateReservationMethodDescriptor),
+			connect.WithSchema(reservationServiceMethods.ByName("CreateReservation")),
 			connect.WithClientOptions(opts...),
 		),
 		updateReservation: connect.NewClient[reservation.UpdateReservationRequest, reservation.UpdateReservationResponse](
 			httpClient,
 			baseURL+ReservationServiceUpdateReservationProcedure,
-			connect.WithSchema(reservationServiceUpdateReservationMethodDescriptor),
+			connect.WithSchema(reservationServiceMethods.ByName("UpdateReservation")),
 			connect.WithClientOptions(opts...),
 		),
 		deleteReservation: connect.NewClient[reservation.DeleteReservationRequest, reservation.DeleteReservationResponse](
 			httpClient,
 			baseURL+ReservationServiceDeleteReservationProcedure,
-			connect.WithSchema(reservationServiceDeleteReservationMethodDescriptor),
+			connect.WithSchema(reservationServiceMethods.ByName("DeleteReservation")),
 			connect.WithClientOptions(opts...),
 		),
 		userReservations: connect.NewClient[reservation.UserReservationsRequest, reservation.UserReservationsResponse](
 			httpClient,
 			baseURL+ReservationServiceUserReservationsProcedure,
-			connect.WithSchema(reservationServiceUserReservationsMethodDescriptor),
+			connect.WithSchema(reservationServiceMethods.ByName("UserReservations")),
 			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 			connect.WithClientOptions(opts...),
 		),
 		createReservationDate: connect.NewClient[reservation.CreateReservationDateRequest, reservation.CreateReservationDateResponse](
 			httpClient,
 			baseURL+ReservationServiceCreateReservationDateProcedure,
-			connect.WithSchema(reservationServiceCreateReservationDateMethodDescriptor),
+			connect.WithSchema(reservationServiceMethods.ByName("CreateReservationDate")),
 			connect.WithClientOptions(opts...),
 		),
 		updateReservationDate: connect.NewClient[reservation.UpdateReservationDateRequest, reservation.UpdateReservationDateResponse](
 			httpClient,
 			baseURL+ReservationServiceUpdateReservationDateProcedure,
-			connect.WithSchema(reservationServiceUpdateReservationDateMethodDescriptor),
+			connect.WithSchema(reservationServiceMethods.ByName("UpdateReservationDate")),
 			connect.WithClientOptions(opts...),
 		),
 		deleteReservationDate: connect.NewClient[reservation.DeleteReservationDateRequest, reservation.DeleteReservationDateResponse](
 			httpClient,
 			baseURL+ReservationServiceDeleteReservationDateProcedure,
-			connect.WithSchema(reservationServiceDeleteReservationDateMethodDescriptor),
+			connect.WithSchema(reservationServiceMethods.ByName("DeleteReservationDate")),
 			connect.WithClientOptions(opts...),
 		),
 		createReservationFee: connect.NewClient[reservation.CreateReservationFeeRequest, reservation.CreateReservationFeeResponse](
 			httpClient,
 			baseURL+ReservationServiceCreateReservationFeeProcedure,
-			connect.WithSchema(reservationServiceCreateReservationFeeMethodDescriptor),
+			connect.WithSchema(reservationServiceMethods.ByName("CreateReservationFee")),
 			connect.WithClientOptions(opts...),
 		),
 		updateReservationFee: connect.NewClient[reservation.UpdateReservationFeeRequest, reservation.UpdateReservationFeeResponse](
 			httpClient,
 			baseURL+ReservationServiceUpdateReservationFeeProcedure,
-			connect.WithSchema(reservationServiceUpdateReservationFeeMethodDescriptor),
+			connect.WithSchema(reservationServiceMethods.ByName("UpdateReservationFee")),
 			connect.WithClientOptions(opts...),
 		),
 		deleteReservationFee: connect.NewClient[reservation.DeleteReservationFeeRequest, reservation.DeleteReservationFeeResponse](
 			httpClient,
 			baseURL+ReservationServiceDeleteReservationFeeProcedure,
-			connect.WithSchema(reservationServiceDeleteReservationFeeMethodDescriptor),
+			connect.WithSchema(reservationServiceMethods.ByName("DeleteReservationFee")),
 			connect.WithClientOptions(opts...),
 		),
 	}
@@ -328,93 +310,94 @@ type ReservationServiceHandler interface {
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
 func NewReservationServiceHandler(svc ReservationServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
+	reservationServiceMethods := reservation.File_proto_reservation_reservation_proto.Services().ByName("ReservationService").Methods()
 	reservationServiceGetAllReservationsHandler := connect.NewUnaryHandler(
 		ReservationServiceGetAllReservationsProcedure,
 		svc.GetAllReservations,
-		connect.WithSchema(reservationServiceGetAllReservationsMethodDescriptor),
+		connect.WithSchema(reservationServiceMethods.ByName("GetAllReservations")),
 		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 		connect.WithHandlerOptions(opts...),
 	)
 	reservationServiceGetReservationHandler := connect.NewUnaryHandler(
 		ReservationServiceGetReservationProcedure,
 		svc.GetReservation,
-		connect.WithSchema(reservationServiceGetReservationMethodDescriptor),
+		connect.WithSchema(reservationServiceMethods.ByName("GetReservation")),
 		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 		connect.WithHandlerOptions(opts...),
 	)
 	reservationServiceRequestCountHandler := connect.NewUnaryHandler(
 		ReservationServiceRequestCountProcedure,
 		svc.RequestCount,
-		connect.WithSchema(reservationServiceRequestCountMethodDescriptor),
+		connect.WithSchema(reservationServiceMethods.ByName("RequestCount")),
 		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 		connect.WithHandlerOptions(opts...),
 	)
 	reservationServiceGetRequestsThisWeekHandler := connect.NewUnaryHandler(
 		ReservationServiceGetRequestsThisWeekProcedure,
 		svc.GetRequestsThisWeek,
-		connect.WithSchema(reservationServiceGetRequestsThisWeekMethodDescriptor),
+		connect.WithSchema(reservationServiceMethods.ByName("GetRequestsThisWeek")),
 		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 		connect.WithHandlerOptions(opts...),
 	)
 	reservationServiceCreateReservationHandler := connect.NewUnaryHandler(
 		ReservationServiceCreateReservationProcedure,
 		svc.CreateReservation,
-		connect.WithSchema(reservationServiceCreateReservationMethodDescriptor),
+		connect.WithSchema(reservationServiceMethods.ByName("CreateReservation")),
 		connect.WithHandlerOptions(opts...),
 	)
 	reservationServiceUpdateReservationHandler := connect.NewUnaryHandler(
 		ReservationServiceUpdateReservationProcedure,
 		svc.UpdateReservation,
-		connect.WithSchema(reservationServiceUpdateReservationMethodDescriptor),
+		connect.WithSchema(reservationServiceMethods.ByName("UpdateReservation")),
 		connect.WithHandlerOptions(opts...),
 	)
 	reservationServiceDeleteReservationHandler := connect.NewUnaryHandler(
 		ReservationServiceDeleteReservationProcedure,
 		svc.DeleteReservation,
-		connect.WithSchema(reservationServiceDeleteReservationMethodDescriptor),
+		connect.WithSchema(reservationServiceMethods.ByName("DeleteReservation")),
 		connect.WithHandlerOptions(opts...),
 	)
 	reservationServiceUserReservationsHandler := connect.NewUnaryHandler(
 		ReservationServiceUserReservationsProcedure,
 		svc.UserReservations,
-		connect.WithSchema(reservationServiceUserReservationsMethodDescriptor),
+		connect.WithSchema(reservationServiceMethods.ByName("UserReservations")),
 		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 		connect.WithHandlerOptions(opts...),
 	)
 	reservationServiceCreateReservationDateHandler := connect.NewUnaryHandler(
 		ReservationServiceCreateReservationDateProcedure,
 		svc.CreateReservationDate,
-		connect.WithSchema(reservationServiceCreateReservationDateMethodDescriptor),
+		connect.WithSchema(reservationServiceMethods.ByName("CreateReservationDate")),
 		connect.WithHandlerOptions(opts...),
 	)
 	reservationServiceUpdateReservationDateHandler := connect.NewUnaryHandler(
 		ReservationServiceUpdateReservationDateProcedure,
 		svc.UpdateReservationDate,
-		connect.WithSchema(reservationServiceUpdateReservationDateMethodDescriptor),
+		connect.WithSchema(reservationServiceMethods.ByName("UpdateReservationDate")),
 		connect.WithHandlerOptions(opts...),
 	)
 	reservationServiceDeleteReservationDateHandler := connect.NewUnaryHandler(
 		ReservationServiceDeleteReservationDateProcedure,
 		svc.DeleteReservationDate,
-		connect.WithSchema(reservationServiceDeleteReservationDateMethodDescriptor),
+		connect.WithSchema(reservationServiceMethods.ByName("DeleteReservationDate")),
 		connect.WithHandlerOptions(opts...),
 	)
 	reservationServiceCreateReservationFeeHandler := connect.NewUnaryHandler(
 		ReservationServiceCreateReservationFeeProcedure,
 		svc.CreateReservationFee,
-		connect.WithSchema(reservationServiceCreateReservationFeeMethodDescriptor),
+		connect.WithSchema(reservationServiceMethods.ByName("CreateReservationFee")),
 		connect.WithHandlerOptions(opts...),
 	)
 	reservationServiceUpdateReservationFeeHandler := connect.NewUnaryHandler(
 		ReservationServiceUpdateReservationFeeProcedure,
 		svc.UpdateReservationFee,
-		connect.WithSchema(reservationServiceUpdateReservationFeeMethodDescriptor),
+		connect.WithSchema(reservationServiceMethods.ByName("UpdateReservationFee")),
 		connect.WithHandlerOptions(opts...),
 	)
 	reservationServiceDeleteReservationFeeHandler := connect.NewUnaryHandler(
 		ReservationServiceDeleteReservationFeeProcedure,
 		svc.DeleteReservationFee,
-		connect.WithSchema(reservationServiceDeleteReservationFeeMethodDescriptor),
+		connect.WithSchema(reservationServiceMethods.ByName("DeleteReservationFee")),
 		connect.WithHandlerOptions(opts...),
 	)
 	return "/api.reservation.ReservationService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

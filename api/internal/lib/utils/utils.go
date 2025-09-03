@@ -22,3 +22,5 @@ func GenerateRandomSixDigitCode() string {
 	}
 	return base64.URLEncoding.EncodeToString(b)
 }
+
+type CtxKey string

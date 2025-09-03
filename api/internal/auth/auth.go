@@ -4,8 +4,10 @@ import (
 	"api/internal/lib/utils"
 	"api/internal/models"
 	"api/internal/ports"
+	"errors"
+
+	"api/internal/config"
 	"context"
-	"encoding/json"
 
 	"fmt"
 	"log/slog"
@@ -22,6 +24,7 @@ import (
 
 type Auth struct {
 	db           ports.UserStore
+	config       *config.Config
 	logger       *slog.Logger
 	key          []byte
 	providers    flexauth.ProviderRegistry
@@ -55,7 +58,7 @@ const (
 	TwoProviderName   = "email"
 )
 
-func NewAuth(db ports.UserStore, logger *slog.Logger) *Auth {
+func NewAuth(db ports.UserStore, logger *slog.Logger, config *config.Config) *Auth {
 	authKey := []byte(os.Getenv("AUTH_SECRET"))
 	salt := []byte(os.Getenv("AUTH_SALT"))
 	encKey := generateEncryptionKey(authKey, salt)
@@ -68,6 +71,7 @@ func NewAuth(db ports.UserStore, logger *slog.Logger) *Auth {
 	}
 	return &Auth{
 		db:           db,
+		config:       config,
 		logger:       logger,
 		key:          encKey,
 		providers:    make(flexauth.ProviderRegistry),
@@ -186,83 +190,6 @@ func (a *Auth) BeginOauth(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, authURL, http.StatusTemporaryRedirect)
 }
 
-func (s *Auth) RefreshToken(w http.ResponseWriter, r *http.Request) {
-	cookie, err := r.Cookie("session")
-	if err != nil {
-		http.Error(w, "Invalid session cookie", http.StatusUnauthorized)
-		s.ClearJWTCookie(w)
-		return
-	}
-	sessionID := cookie.Value
-	session, err := s.db.GetSession(r.Context(), sessionID)
-	if err != nil {
-		http.Error(w, "Invalid session", http.StatusUnauthorized)
-		s.ClearJWTCookie(w)
-		return
-	}
-	providerName := session.Provider
-
-	s.providerMu.RLock()
-	p, exists := s.providers[providerName]
-	s.providerMu.RUnlock()
-	if !exists {
-		http.Error(w, "Invalid session", http.StatusUnauthorized)
-		s.ClearJWTCookie(w)
-		return
-	}
-	newAuthToken, err := p.RefreshToken(r.Context(), *session.RefreshToken)
-	if err != nil {
-		s.logger.Error("Error refreshing token", "error", err, "provider", providerName)
-		http.Error(w, "Unable to refresh token", http.StatusUnauthorized)
-		return
-	}
-	ctx, cancel := context.WithTimeout(r.Context(), 30*time.Second)
-	defer cancel()
-
-	u, err := p.GetUserInfo(ctx, newAuthToken.AccessToken)
-	if err != nil {
-		s.logger.Error("Error getting user info", "error", err, "provider", providerName)
-		http.Error(w, "Unable to get user info", http.StatusInternalServerError)
-		s.ClearJWTCookie(w)
-		return
-	}
-	user, err := s.db.Get(r.Context(), u.ID)
-	if err != nil {
-		s.logger.Error("Error getting user", "error", err, "provider", providerName)
-		http.Error(w, "Unable to get user", http.StatusInternalServerError)
-		s.ClearJWTCookie(w)
-		return
-	}
-	newToken, err := createToken(user.ID, user.Name, user.Email, providerName, user.Role, s.key)
-	if err != nil {
-		http.Error(w, "Unable to create new token", http.StatusInternalServerError)
-		s.ClearJWTCookie(w)
-		return
-	}
-	err = s.db.UpdateSession(r.Context(), &models.Session{
-		ID:           session.ID,
-		RefreshToken: &newAuthToken.RefreshToken,
-		ExpiresAt:    utils.TimeToPgTimestamptz(time.Now().Add(absoluteExpiration)),
-	})
-	if err != nil {
-		http.Error(w, "Unable to update session", http.StatusInternalServerError)
-		s.ClearJWTCookie(w)
-		return
-	}
-	s.SetJWTCookie(w, newToken)
-	s.SetSessionCookie(w, sessionID)
-	s.SetCSRFCookie(w)
-
-	// Return JSON response
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	response := map[string]string{
-		"status":  "success",
-		"message": "Token refreshed successfully",
-	}
-	_ = json.NewEncoder(w).Encode(response)
-}
-
 func createToken(userId, userName, userEmail, provider string, role models.UserRole, key []byte) (string, error) {
 	roleString := string(role)
 	claims := Claims{
@@ -371,4 +298,72 @@ func userNeedsUpdate(dbUser, authUser *models.Users) (updatedID, updatedOther bo
 		return false, true
 	}
 	return false, false
+}
+
+type RefreshTokenResponse struct {
+	NewToken string
+	Session  string
+	User     *models.Users
+}
+
+func (s *Auth) RefreshToken(ctx context.Context, session *models.Session) (*RefreshTokenResponse, error) {
+	token, err := VerifyToken(*session.RefreshToken, &RefreshClaims{}, s.key)
+	if err != nil {
+		return nil, err
+	}
+
+	claims, ok := token.Claims.(*RefreshClaims)
+	if !ok {
+		return nil, errors.New("Invalid Refresh Token")
+	}
+	providerName := claims.Provider
+	s.providerMu.Lock()
+	provider := s.providers[providerName]
+	s.providerMu.Unlock()
+	if provider == nil {
+		return nil, errors.New("Invalid Refresh Token")
+	}
+	newAuthToken, err := provider.RefreshToken(ctx, claims.RefreshToken)
+	if err != nil {
+		return nil, err
+	}
+	ctx, cancel := context.WithTimeout(ctx, 30*time.Second)
+	defer cancel()
+	u, err := provider.GetUserInfo(ctx, newAuthToken.AccessToken)
+	if err != nil {
+		return nil, err
+	}
+	authUser := &models.Users{
+		ID:       u.ID,
+		Name:     u.Name,
+		Email:    u.Email,
+		Provider: &providerName,
+	}
+	user, err := s.GetOrCreateAuthUser(ctx, authUser)
+	if err != nil {
+		return nil, err
+	}
+	newToken, err := createToken(user.ID, user.Name, user.Email, *user.Provider, user.Role, s.key)
+	if err != nil {
+		return nil, err
+	}
+	newRefreshToken, err := s.createRefreshToken(user.ID, user.Name, user.Email, newAuthToken.RefreshToken, *user.Provider, absoluteExpiration)
+	if err != nil {
+		return nil, err
+	}
+
+	err = s.db.UpdateSession(ctx, &models.Session{
+		ID:           session.ID,
+		RefreshToken: &newRefreshToken,
+		ExpiresAt:    utils.TimeToPgTimestamptz(time.Now().Add(absoluteExpiration)),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return &RefreshTokenResponse{
+		NewToken: newToken,
+		Session:  newRefreshToken,
+		User:     user,
+	}, nil
 }

@@ -1,24 +1,21 @@
-import { Suspense } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import { ExternalLink } from "lucide-react";
-import moment from "moment";
+import { Suspense } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import { ExternalLink } from 'lucide-react';
+import moment from 'moment';
 
-import type { FacilityType } from "@local/db/schema";
-
-import { Button } from "@/components/ui/buttons";
-import LoadingScreen from "@/components/ui/loadingScreen";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from '@/components/ui/buttons';
+import LoadingScreen from '@/components/ui/loadingScreen';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { env } from "@/env";
-import { GetEvents } from "@/functions/events/googleAPI";
-import { api } from "@/trpc/server";
+} from '@/components/ui/tooltip';
+import { GetEvents } from '@/functions/events/googleAPI';
+import { api } from '@/trpc/server';
 
 export async function getData(id: string) {
   const facilityPromise = api.facility.byId({ id: parseInt(id) });
@@ -50,14 +47,14 @@ export default async function FacilityPage({
             {facility.name}
           </h1>
           <h2 className="text-md text-center font-bold text-gray-600 drop-shadow-sm dark:text-gray-300 sm:text-start sm:text-xl">
-            {facility.building} ⋅ Max Capacity: {facility.capacity}{" "}
+            {facility.building} ⋅ Max Capacity: {facility.capacity}{' '}
           </h2>
           <Link
             href={map}
             target="_blank"
             className="text-center sm:text-start"
           >
-            {facility.address}{" "}
+            {facility.address}{' '}
             <ExternalLink className="inline-block scale-75" />
           </Link>
           <div className="hidden sm:flex">
@@ -103,14 +100,14 @@ export default async function FacilityPage({
           <Button asChild className="text-xl font-bold drop-shadow-lg">
             <Link
               href={{
-                pathname: "/reservation",
+                pathname: '/reservation',
                 query: {
                   id: facility.id,
                 },
               }}
             >
-              {" "}
-              Request a rental{" "}
+              {' '}
+              Request a rental{' '}
             </Link>
           </Button>
 
@@ -128,7 +125,7 @@ export default async function FacilityPage({
                     </p>
                   </TooltipContent>
                 </Tooltip>
-                {facility.name === "Laurel Stadium" ? (
+                {facility.name === 'Laurel Stadium' ? (
                   <p className="left-9 right-0 col-start-3 items-end justify-around justify-items-end self-end text-right align-bottom text-lg font-semibold">
                     ${category.price}
                   </p>
@@ -156,9 +153,9 @@ export default async function FacilityPage({
                         <h3 className="col-start-1">{event.title}</h3>
                         <p className="bg-transparent text-sm">
                           {moment(event.start).format(
-                            "ddd, MMM Do YYYY,  h:mm a",
-                          )}{" "}
-                          {" to "} {moment(event.end).format("h:mm a")}
+                            'ddd, MMM Do YYYY,  h:mm a',
+                          )}{' '}
+                          {' to '} {moment(event.end).format('h:mm a')}
                         </p>
                       </div>
                     </div>

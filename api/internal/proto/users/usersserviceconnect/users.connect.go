@@ -60,21 +60,6 @@ const (
 	UsersServiceDeleteNotificationProcedure = "/api.users.UsersService/DeleteNotification"
 )
 
-// These variables are the protoreflect.Descriptor objects for the RPCs defined in this package.
-var (
-	usersServiceServiceDescriptor                  = users.File_proto_users_users_proto.Services().ByName("UsersService")
-	usersServiceGetUserByEmailMethodDescriptor     = usersServiceServiceDescriptor.Methods().ByName("GetUserByEmail")
-	usersServiceGetUserMethodDescriptor            = usersServiceServiceDescriptor.Methods().ByName("GetUser")
-	usersServiceGetUsersMethodDescriptor           = usersServiceServiceDescriptor.Methods().ByName("GetUsers")
-	usersServiceCreateUserMethodDescriptor         = usersServiceServiceDescriptor.Methods().ByName("CreateUser")
-	usersServiceUpdateUserMethodDescriptor         = usersServiceServiceDescriptor.Methods().ByName("UpdateUser")
-	usersServiceDeleteUserMethodDescriptor         = usersServiceServiceDescriptor.Methods().ByName("DeleteUser")
-	usersServiceGetNotificationsMethodDescriptor   = usersServiceServiceDescriptor.Methods().ByName("GetNotifications")
-	usersServiceCreateNotificationMethodDescriptor = usersServiceServiceDescriptor.Methods().ByName("CreateNotification")
-	usersServiceEditNotificationMethodDescriptor   = usersServiceServiceDescriptor.Methods().ByName("EditNotification")
-	usersServiceDeleteNotificationMethodDescriptor = usersServiceServiceDescriptor.Methods().ByName("DeleteNotification")
-)
-
 // UsersServiceClient is a client for the api.users.UsersService service.
 type UsersServiceClient interface {
 	GetUserByEmail(context.Context, *connect.Request[users.UserByEmailRequest]) (*connect.Response[users.Users], error)
@@ -98,67 +83,68 @@ type UsersServiceClient interface {
 // http://api.acme.com or https://acme.com/grpc).
 func NewUsersServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) UsersServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
+	usersServiceMethods := users.File_proto_users_users_proto.Services().ByName("UsersService").Methods()
 	return &usersServiceClient{
 		getUserByEmail: connect.NewClient[users.UserByEmailRequest, users.Users](
 			httpClient,
 			baseURL+UsersServiceGetUserByEmailProcedure,
-			connect.WithSchema(usersServiceGetUserByEmailMethodDescriptor),
+			connect.WithSchema(usersServiceMethods.ByName("GetUserByEmail")),
 			connect.WithClientOptions(opts...),
 		),
 		getUser: connect.NewClient[users.GetUserRequest, users.Users](
 			httpClient,
 			baseURL+UsersServiceGetUserProcedure,
-			connect.WithSchema(usersServiceGetUserMethodDescriptor),
+			connect.WithSchema(usersServiceMethods.ByName("GetUser")),
 			connect.WithClientOptions(opts...),
 		),
 		getUsers: connect.NewClient[users.GetUsersRequest, users.GetUsersResponse](
 			httpClient,
 			baseURL+UsersServiceGetUsersProcedure,
-			connect.WithSchema(usersServiceGetUsersMethodDescriptor),
+			connect.WithSchema(usersServiceMethods.ByName("GetUsers")),
 			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 			connect.WithClientOptions(opts...),
 		),
 		createUser: connect.NewClient[users.CreateUserRequest, users.Users](
 			httpClient,
 			baseURL+UsersServiceCreateUserProcedure,
-			connect.WithSchema(usersServiceCreateUserMethodDescriptor),
+			connect.WithSchema(usersServiceMethods.ByName("CreateUser")),
 			connect.WithClientOptions(opts...),
 		),
 		updateUser: connect.NewClient[users.UpdateUserRequest, users.Users](
 			httpClient,
 			baseURL+UsersServiceUpdateUserProcedure,
-			connect.WithSchema(usersServiceUpdateUserMethodDescriptor),
+			connect.WithSchema(usersServiceMethods.ByName("UpdateUser")),
 			connect.WithClientOptions(opts...),
 		),
 		deleteUser: connect.NewClient[users.DeleteUserRequest, users.DeleteUserResponse](
 			httpClient,
 			baseURL+UsersServiceDeleteUserProcedure,
-			connect.WithSchema(usersServiceDeleteUserMethodDescriptor),
+			connect.WithSchema(usersServiceMethods.ByName("DeleteUser")),
 			connect.WithClientOptions(opts...),
 		),
 		getNotifications: connect.NewClient[users.GetNotificationsRequest, users.GetNotificationsResponse](
 			httpClient,
 			baseURL+UsersServiceGetNotificationsProcedure,
-			connect.WithSchema(usersServiceGetNotificationsMethodDescriptor),
+			connect.WithSchema(usersServiceMethods.ByName("GetNotifications")),
 			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 			connect.WithClientOptions(opts...),
 		),
 		createNotification: connect.NewClient[users.CreateNotificationRequest, users.Notifications](
 			httpClient,
 			baseURL+UsersServiceCreateNotificationProcedure,
-			connect.WithSchema(usersServiceCreateNotificationMethodDescriptor),
+			connect.WithSchema(usersServiceMethods.ByName("CreateNotification")),
 			connect.WithClientOptions(opts...),
 		),
 		editNotification: connect.NewClient[users.EditNotificationRequest, users.Notifications](
 			httpClient,
 			baseURL+UsersServiceEditNotificationProcedure,
-			connect.WithSchema(usersServiceEditNotificationMethodDescriptor),
+			connect.WithSchema(usersServiceMethods.ByName("EditNotification")),
 			connect.WithClientOptions(opts...),
 		),
 		deleteNotification: connect.NewClient[users.DeleteNotificationRequest, users.DeleteNotificationResponse](
 			httpClient,
 			baseURL+UsersServiceDeleteNotificationProcedure,
-			connect.WithSchema(usersServiceDeleteNotificationMethodDescriptor),
+			connect.WithSchema(usersServiceMethods.ByName("DeleteNotification")),
 			connect.WithClientOptions(opts...),
 		),
 	}
@@ -248,66 +234,67 @@ type UsersServiceHandler interface {
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
 func NewUsersServiceHandler(svc UsersServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
+	usersServiceMethods := users.File_proto_users_users_proto.Services().ByName("UsersService").Methods()
 	usersServiceGetUserByEmailHandler := connect.NewUnaryHandler(
 		UsersServiceGetUserByEmailProcedure,
 		svc.GetUserByEmail,
-		connect.WithSchema(usersServiceGetUserByEmailMethodDescriptor),
+		connect.WithSchema(usersServiceMethods.ByName("GetUserByEmail")),
 		connect.WithHandlerOptions(opts...),
 	)
 	usersServiceGetUserHandler := connect.NewUnaryHandler(
 		UsersServiceGetUserProcedure,
 		svc.GetUser,
-		connect.WithSchema(usersServiceGetUserMethodDescriptor),
+		connect.WithSchema(usersServiceMethods.ByName("GetUser")),
 		connect.WithHandlerOptions(opts...),
 	)
 	usersServiceGetUsersHandler := connect.NewUnaryHandler(
 		UsersServiceGetUsersProcedure,
 		svc.GetUsers,
-		connect.WithSchema(usersServiceGetUsersMethodDescriptor),
+		connect.WithSchema(usersServiceMethods.ByName("GetUsers")),
 		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 		connect.WithHandlerOptions(opts...),
 	)
 	usersServiceCreateUserHandler := connect.NewUnaryHandler(
 		UsersServiceCreateUserProcedure,
 		svc.CreateUser,
-		connect.WithSchema(usersServiceCreateUserMethodDescriptor),
+		connect.WithSchema(usersServiceMethods.ByName("CreateUser")),
 		connect.WithHandlerOptions(opts...),
 	)
 	usersServiceUpdateUserHandler := connect.NewUnaryHandler(
 		UsersServiceUpdateUserProcedure,
 		svc.UpdateUser,
-		connect.WithSchema(usersServiceUpdateUserMethodDescriptor),
+		connect.WithSchema(usersServiceMethods.ByName("UpdateUser")),
 		connect.WithHandlerOptions(opts...),
 	)
 	usersServiceDeleteUserHandler := connect.NewUnaryHandler(
 		UsersServiceDeleteUserProcedure,
 		svc.DeleteUser,
-		connect.WithSchema(usersServiceDeleteUserMethodDescriptor),
+		connect.WithSchema(usersServiceMethods.ByName("DeleteUser")),
 		connect.WithHandlerOptions(opts...),
 	)
 	usersServiceGetNotificationsHandler := connect.NewUnaryHandler(
 		UsersServiceGetNotificationsProcedure,
 		svc.GetNotifications,
-		connect.WithSchema(usersServiceGetNotificationsMethodDescriptor),
+		connect.WithSchema(usersServiceMethods.ByName("GetNotifications")),
 		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 		connect.WithHandlerOptions(opts...),
 	)
 	usersServiceCreateNotificationHandler := connect.NewUnaryHandler(
 		UsersServiceCreateNotificationProcedure,
 		svc.CreateNotification,
-		connect.WithSchema(usersServiceCreateNotificationMethodDescriptor),
+		connect.WithSchema(usersServiceMethods.ByName("CreateNotification")),
 		connect.WithHandlerOptions(opts...),
 	)
 	usersServiceEditNotificationHandler := connect.NewUnaryHandler(
 		UsersServiceEditNotificationProcedure,
 		svc.EditNotification,
-		connect.WithSchema(usersServiceEditNotificationMethodDescriptor),
+		connect.WithSchema(usersServiceMethods.ByName("EditNotification")),
 		connect.WithHandlerOptions(opts...),
 	)
 	usersServiceDeleteNotificationHandler := connect.NewUnaryHandler(
 		UsersServiceDeleteNotificationProcedure,
 		svc.DeleteNotification,
-		connect.WithSchema(usersServiceDeleteNotificationMethodDescriptor),
+		connect.WithSchema(usersServiceMethods.ByName("DeleteNotification")),
 		connect.WithHandlerOptions(opts...),
 	)
 	return "/api.users.UsersService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

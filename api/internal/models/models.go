@@ -619,7 +619,7 @@ type Users struct {
 	Image         *string            `db:"image" json:"image"`
 	Email         string             `db:"email" json:"email"`
 	EmailVerified pgtype.Timestamptz `db:"email_verified" json:"email_verified"`
-	Password      *string            `db:"password" json:"password,omitempty"`
+	Password      *[]byte            `db:"password" json:"password,omitempty"`
 	Provider      *string            `db:"provider" json:"provider"`
 	ExternalUser  bool               `db:"external_user" json:"external_user"`
 	Role          UserRole           `db:"role" json:"role"`
@@ -656,6 +656,11 @@ func (u *Users) ToProto() *pbUsers.Users {
 }
 
 func (u *Users) ToProtoWithPassword() *pbUsers.Users {
+	var pass *string
+	if u.Password != nil {
+		p := string(*u.Password)
+		pass = &p
+	}
 	return &pbUsers.Users{
 		Id:            u.ID,
 		Name:          u.Name,
@@ -666,7 +671,7 @@ func (u *Users) ToProtoWithPassword() *pbUsers.Users {
 		Provider:      u.Provider,
 		ExternalUser:  u.ExternalUser,
 		Tos:           u.Tos,
-		Password:      u.Password,
+		Password:      pass,
 	}
 }
 func UsersToProto(users []*Users) []*pbUsers.Users {

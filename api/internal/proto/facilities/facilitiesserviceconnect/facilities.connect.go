@@ -59,19 +59,6 @@ const (
 	FacilitiesServiceUpdateFacilityCategoryProcedure = "/api.facilities.FacilitiesService/UpdateFacilityCategory"
 )
 
-// These variables are the protoreflect.Descriptor objects for the RPCs defined in this package.
-var (
-	facilitiesServiceServiceDescriptor                      = facilities.File_proto_facilities_facilities_proto.Services().ByName("FacilitiesService")
-	facilitiesServiceGetAllFacilitiesMethodDescriptor       = facilitiesServiceServiceDescriptor.Methods().ByName("GetAllFacilities")
-	facilitiesServiceGetFacilityMethodDescriptor            = facilitiesServiceServiceDescriptor.Methods().ByName("GetFacility")
-	facilitiesServiceGetFacilityCategoriesMethodDescriptor  = facilitiesServiceServiceDescriptor.Methods().ByName("GetFacilityCategories")
-	facilitiesServiceGetBuildingFacilitiesMethodDescriptor  = facilitiesServiceServiceDescriptor.Methods().ByName("GetBuildingFacilities")
-	facilitiesServiceCreateFacilityMethodDescriptor         = facilitiesServiceServiceDescriptor.Methods().ByName("CreateFacility")
-	facilitiesServiceUpdateFacilityMethodDescriptor         = facilitiesServiceServiceDescriptor.Methods().ByName("UpdateFacility")
-	facilitiesServiceDeleteFacilityMethodDescriptor         = facilitiesServiceServiceDescriptor.Methods().ByName("DeleteFacility")
-	facilitiesServiceUpdateFacilityCategoryMethodDescriptor = facilitiesServiceServiceDescriptor.Methods().ByName("UpdateFacilityCategory")
-)
-
 // FacilitiesServiceClient is a client for the api.facilities.FacilitiesService service.
 type FacilitiesServiceClient interface {
 	GetAllFacilities(context.Context, *connect.Request[facilities.GetAllFacilitiesRequest]) (*connect.Response[facilities.GetAllFacilitiesResponse], error)
@@ -93,57 +80,58 @@ type FacilitiesServiceClient interface {
 // http://api.acme.com or https://acme.com/grpc).
 func NewFacilitiesServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) FacilitiesServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
+	facilitiesServiceMethods := facilities.File_proto_facilities_facilities_proto.Services().ByName("FacilitiesService").Methods()
 	return &facilitiesServiceClient{
 		getAllFacilities: connect.NewClient[facilities.GetAllFacilitiesRequest, facilities.GetAllFacilitiesResponse](
 			httpClient,
 			baseURL+FacilitiesServiceGetAllFacilitiesProcedure,
-			connect.WithSchema(facilitiesServiceGetAllFacilitiesMethodDescriptor),
+			connect.WithSchema(facilitiesServiceMethods.ByName("GetAllFacilities")),
 			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 			connect.WithClientOptions(opts...),
 		),
 		getFacility: connect.NewClient[facilities.GetFacilityRequest, facilities.FullFacility](
 			httpClient,
 			baseURL+FacilitiesServiceGetFacilityProcedure,
-			connect.WithSchema(facilitiesServiceGetFacilityMethodDescriptor),
+			connect.WithSchema(facilitiesServiceMethods.ByName("GetFacility")),
 			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 			connect.WithClientOptions(opts...),
 		),
 		getFacilityCategories: connect.NewClient[facilities.GetFacilityCategoriesRequest, facilities.GetFacilityCategoriesResponse](
 			httpClient,
 			baseURL+FacilitiesServiceGetFacilityCategoriesProcedure,
-			connect.WithSchema(facilitiesServiceGetFacilityCategoriesMethodDescriptor),
+			connect.WithSchema(facilitiesServiceMethods.ByName("GetFacilityCategories")),
 			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 			connect.WithClientOptions(opts...),
 		),
 		getBuildingFacilities: connect.NewClient[facilities.GetBuildingFacilitiesRequest, facilities.GetBuildingFacilitiesResponse](
 			httpClient,
 			baseURL+FacilitiesServiceGetBuildingFacilitiesProcedure,
-			connect.WithSchema(facilitiesServiceGetBuildingFacilitiesMethodDescriptor),
+			connect.WithSchema(facilitiesServiceMethods.ByName("GetBuildingFacilities")),
 			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 			connect.WithClientOptions(opts...),
 		),
 		createFacility: connect.NewClient[facilities.CreateFacilityRequest, facilities.CreateFacilityResponse](
 			httpClient,
 			baseURL+FacilitiesServiceCreateFacilityProcedure,
-			connect.WithSchema(facilitiesServiceCreateFacilityMethodDescriptor),
+			connect.WithSchema(facilitiesServiceMethods.ByName("CreateFacility")),
 			connect.WithClientOptions(opts...),
 		),
 		updateFacility: connect.NewClient[facilities.UpdateFacilityRequest, facilities.UpdateFacilityResponse](
 			httpClient,
 			baseURL+FacilitiesServiceUpdateFacilityProcedure,
-			connect.WithSchema(facilitiesServiceUpdateFacilityMethodDescriptor),
+			connect.WithSchema(facilitiesServiceMethods.ByName("UpdateFacility")),
 			connect.WithClientOptions(opts...),
 		),
 		deleteFacility: connect.NewClient[facilities.DeleteFacilityRequest, facilities.DeleteFacilityResponse](
 			httpClient,
 			baseURL+FacilitiesServiceDeleteFacilityProcedure,
-			connect.WithSchema(facilitiesServiceDeleteFacilityMethodDescriptor),
+			connect.WithSchema(facilitiesServiceMethods.ByName("DeleteFacility")),
 			connect.WithClientOptions(opts...),
 		),
 		updateFacilityCategory: connect.NewClient[facilities.UpdateFacilityCategoryRequest, facilities.Category](
 			httpClient,
 			baseURL+FacilitiesServiceUpdateFacilityCategoryProcedure,
-			connect.WithSchema(facilitiesServiceUpdateFacilityCategoryMethodDescriptor),
+			connect.WithSchema(facilitiesServiceMethods.ByName("UpdateFacilityCategory")),
 			connect.WithClientOptions(opts...),
 		),
 	}
@@ -219,56 +207,57 @@ type FacilitiesServiceHandler interface {
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
 func NewFacilitiesServiceHandler(svc FacilitiesServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
+	facilitiesServiceMethods := facilities.File_proto_facilities_facilities_proto.Services().ByName("FacilitiesService").Methods()
 	facilitiesServiceGetAllFacilitiesHandler := connect.NewUnaryHandler(
 		FacilitiesServiceGetAllFacilitiesProcedure,
 		svc.GetAllFacilities,
-		connect.WithSchema(facilitiesServiceGetAllFacilitiesMethodDescriptor),
+		connect.WithSchema(facilitiesServiceMethods.ByName("GetAllFacilities")),
 		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 		connect.WithHandlerOptions(opts...),
 	)
 	facilitiesServiceGetFacilityHandler := connect.NewUnaryHandler(
 		FacilitiesServiceGetFacilityProcedure,
 		svc.GetFacility,
-		connect.WithSchema(facilitiesServiceGetFacilityMethodDescriptor),
+		connect.WithSchema(facilitiesServiceMethods.ByName("GetFacility")),
 		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 		connect.WithHandlerOptions(opts...),
 	)
 	facilitiesServiceGetFacilityCategoriesHandler := connect.NewUnaryHandler(
 		FacilitiesServiceGetFacilityCategoriesProcedure,
 		svc.GetFacilityCategories,
-		connect.WithSchema(facilitiesServiceGetFacilityCategoriesMethodDescriptor),
+		connect.WithSchema(facilitiesServiceMethods.ByName("GetFacilityCategories")),
 		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 		connect.WithHandlerOptions(opts...),
 	)
 	facilitiesServiceGetBuildingFacilitiesHandler := connect.NewUnaryHandler(
 		FacilitiesServiceGetBuildingFacilitiesProcedure,
 		svc.GetBuildingFacilities,
-		connect.WithSchema(facilitiesServiceGetBuildingFacilitiesMethodDescriptor),
+		connect.WithSchema(facilitiesServiceMethods.ByName("GetBuildingFacilities")),
 		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 		connect.WithHandlerOptions(opts...),
 	)
 	facilitiesServiceCreateFacilityHandler := connect.NewUnaryHandler(
 		FacilitiesServiceCreateFacilityProcedure,
 		svc.CreateFacility,
-		connect.WithSchema(facilitiesServiceCreateFacilityMethodDescriptor),
+		connect.WithSchema(facilitiesServiceMethods.ByName("CreateFacility")),
 		connect.WithHandlerOptions(opts...),
 	)
 	facilitiesServiceUpdateFacilityHandler := connect.NewUnaryHandler(
 		FacilitiesServiceUpdateFacilityProcedure,
 		svc.UpdateFacility,
-		connect.WithSchema(facilitiesServiceUpdateFacilityMethodDescriptor),
+		connect.WithSchema(facilitiesServiceMethods.ByName("UpdateFacility")),
 		connect.WithHandlerOptions(opts...),
 	)
 	facilitiesServiceDeleteFacilityHandler := connect.NewUnaryHandler(
 		FacilitiesServiceDeleteFacilityProcedure,
 		svc.DeleteFacility,
-		connect.WithSchema(facilitiesServiceDeleteFacilityMethodDescriptor),
+		connect.WithSchema(facilitiesServiceMethods.ByName("DeleteFacility")),
 		connect.WithHandlerOptions(opts...),
 	)
 	facilitiesServiceUpdateFacilityCategoryHandler := connect.NewUnaryHandler(
 		FacilitiesServiceUpdateFacilityCategoryProcedure,
 		svc.UpdateFacilityCategory,
-		connect.WithSchema(facilitiesServiceUpdateFacilityCategoryMethodDescriptor),
+		connect.WithSchema(facilitiesServiceMethods.ByName("UpdateFacilityCategory")),
 		connect.WithHandlerOptions(opts...),
 	)
 	return "/api.facilities.FacilitiesService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

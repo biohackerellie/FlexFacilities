@@ -38,7 +38,7 @@ func New(db *repository.DB, log *slog.Logger, config *config.Config) *Handlers {
 		RedirectURL:  fmt.Sprintf("%s/api/auth/entra/callback", config.Host),
 	}
 	entraProvider := entra.NewEntraProvider(entraconfig, config.EntraTenant)
-	authHandler := auth.NewAuth(userStore, log)
+	authHandler := auth.NewAuth(userStore, log, config)
 	authHandler.RegisterProvider("entra", entraProvider)
 
 	userHandler := NewUserHandler(userStore, log)

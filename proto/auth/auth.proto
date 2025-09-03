@@ -14,7 +14,7 @@ message Session {
 }
 
 service Auth {
-  rpc GetSession (GetSessionRequest) returns (Session){
+  rpc GetSession (GetSessionRequest) returns (GetSessionResponse) {
     option idempotency_level = NO_SIDE_EFFECTS;
   }; 
   rpc Login (LoginRequest) returns (LoginResponse);
@@ -22,6 +22,14 @@ service Auth {
 }
 
 message GetSessionRequest {
+}
+
+message GetSessionResponse {
+  string session_id = 1;
+  string user_id = 2;
+  string user_name = 3;
+  string user_email = 4;
+  string user_role = 5;
 }
 
 message LoginRequest {
