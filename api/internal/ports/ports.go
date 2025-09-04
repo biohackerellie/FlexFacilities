@@ -55,6 +55,7 @@ type ReservationStore interface {
 }
 
 type AuthService interface {
+	AuthMiddleware(next http.Handler) http.Handler
 	AuthCallback(w http.ResponseWriter, r *http.Request)
 	BeginOauth(w http.ResponseWriter, r *http.Request)
 	CleanupExpiredTokens(ctx context.Context)

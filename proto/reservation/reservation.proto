@@ -88,6 +88,7 @@ service ReservationService {
   rpc CreateReservationFee (CreateReservationFeeRequest) returns (CreateReservationFeeResponse);
   rpc UpdateReservationFee (UpdateReservationFeeRequest) returns (UpdateReservationFeeResponse);
   rpc DeleteReservationFee (DeleteReservationFeeRequest) returns (DeleteReservationFeeResponse);
+  rpc CostReducer (CostReducerRequest) returns (CostReducerResponse);
 }
 
 message AllReservationsResponse {
@@ -178,3 +179,10 @@ message DeleteReservationFeeRequest {
 }
 
 
+message CostReducerRequest {
+  int64 id = 1;
+}
+
+message CostReducerResponse {
+  string cost = 1;
+}

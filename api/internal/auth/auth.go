@@ -16,6 +16,7 @@ import (
 	"sync"
 	"time"
 
+	"connectrpc.com/connect"
 	"github.com/biohackerellie/flexauth"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -33,6 +34,7 @@ type Auth struct {
 	cookiePrefix string
 	tokenStore   map[string]TwoFACode
 	storeMu      sync.RWMutex
+	ErrW         *connect.ErrorWriter
 }
 type RefreshClaims struct {
 	RefreshToken string `json:"refreshToken"`
@@ -53,8 +55,8 @@ const (
 	absoluteExpiration = 24 * 14 * time.Hour // 2 weeks
 	sessionLife        = 8 * time.Hour
 
-	jwtCookieName     = "%flexauth_token"
-	sessionCookieName = "%flexauth_session"
+	jwtCookieName     = "%sflexauth_token"
+	sessionCookieName = "%sflexauth_session"
 	TwoProviderName   = "email"
 )
 
@@ -80,6 +82,7 @@ func NewAuth(db ports.UserStore, logger *slog.Logger, config *config.Config) *Au
 		cookiePrefix: cookiePrefix,
 		tokenStore:   make(map[string]TwoFACode),
 		storeMu:      sync.RWMutex{},
+		ErrW:         connect.NewErrorWriter(),
 	}
 }
 

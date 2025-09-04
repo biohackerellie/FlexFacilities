@@ -75,6 +75,9 @@ const (
 	// ReservationServiceDeleteReservationFeeProcedure is the fully-qualified name of the
 	// ReservationService's DeleteReservationFee RPC.
 	ReservationServiceDeleteReservationFeeProcedure = "/api.reservation.ReservationService/DeleteReservationFee"
+	// ReservationServiceCostReducerProcedure is the fully-qualified name of the ReservationService's
+	// CostReducer RPC.
+	ReservationServiceCostReducerProcedure = "/api.reservation.ReservationService/CostReducer"
 )
 
 // ReservationServiceClient is a client for the api.reservation.ReservationService service.
@@ -93,6 +96,7 @@ type ReservationServiceClient interface {
 	CreateReservationFee(context.Context, *connect.Request[reservation.CreateReservationFeeRequest]) (*connect.Response[reservation.CreateReservationFeeResponse], error)
 	UpdateReservationFee(context.Context, *connect.Request[reservation.UpdateReservationFeeRequest]) (*connect.Response[reservation.UpdateReservationFeeResponse], error)
 	DeleteReservationFee(context.Context, *connect.Request[reservation.DeleteReservationFeeRequest]) (*connect.Response[reservation.DeleteReservationFeeResponse], error)
+	CostReducer(context.Context, *connect.Request[reservation.CostReducerRequest]) (*connect.Response[reservation.CostReducerResponse], error)
 }
 
 // NewReservationServiceClient constructs a client for the api.reservation.ReservationService
@@ -195,6 +199,12 @@ func NewReservationServiceClient(httpClient connect.HTTPClient, baseURL string, 
 			connect.WithSchema(reservationServiceMethods.ByName("DeleteReservationFee")),
 			connect.WithClientOptions(opts...),
 		),
+		costReducer: connect.NewClient[reservation.CostReducerRequest, reservation.CostReducerResponse](
+			httpClient,
+			baseURL+ReservationServiceCostReducerProcedure,
+			connect.WithSchema(reservationServiceMethods.ByName("CostReducer")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -214,6 +224,7 @@ type reservationServiceClient struct {
 	createReservationFee  *connect.Client[reservation.CreateReservationFeeRequest, reservation.CreateReservationFeeResponse]
 	updateReservationFee  *connect.Client[reservation.UpdateReservationFeeRequest, reservation.UpdateReservationFeeResponse]
 	deleteReservationFee  *connect.Client[reservation.DeleteReservationFeeRequest, reservation.DeleteReservationFeeResponse]
+	costReducer           *connect.Client[reservation.CostReducerRequest, reservation.CostReducerResponse]
 }
 
 // GetAllReservations calls api.reservation.ReservationService.GetAllReservations.
@@ -286,6 +297,11 @@ func (c *reservationServiceClient) DeleteReservationFee(ctx context.Context, req
 	return c.deleteReservationFee.CallUnary(ctx, req)
 }
 
+// CostReducer calls api.reservation.ReservationService.CostReducer.
+func (c *reservationServiceClient) CostReducer(ctx context.Context, req *connect.Request[reservation.CostReducerRequest]) (*connect.Response[reservation.CostReducerResponse], error) {
+	return c.costReducer.CallUnary(ctx, req)
+}
+
 // ReservationServiceHandler is an implementation of the api.reservation.ReservationService service.
 type ReservationServiceHandler interface {
 	GetAllReservations(context.Context, *connect.Request[reservation.GetAllReservationsRequest]) (*connect.Response[reservation.AllReservationsResponse], error)
@@ -302,6 +318,7 @@ type ReservationServiceHandler interface {
 	CreateReservationFee(context.Context, *connect.Request[reservation.CreateReservationFeeRequest]) (*connect.Response[reservation.CreateReservationFeeResponse], error)
 	UpdateReservationFee(context.Context, *connect.Request[reservation.UpdateReservationFeeRequest]) (*connect.Response[reservation.UpdateReservationFeeResponse], error)
 	DeleteReservationFee(context.Context, *connect.Request[reservation.DeleteReservationFeeRequest]) (*connect.Response[reservation.DeleteReservationFeeResponse], error)
+	CostReducer(context.Context, *connect.Request[reservation.CostReducerRequest]) (*connect.Response[reservation.CostReducerResponse], error)
 }
 
 // NewReservationServiceHandler builds an HTTP handler from the service implementation. It returns
@@ -400,6 +417,12 @@ func NewReservationServiceHandler(svc ReservationServiceHandler, opts ...connect
 		connect.WithSchema(reservationServiceMethods.ByName("DeleteReservationFee")),
 		connect.WithHandlerOptions(opts...),
 	)
+	reservationServiceCostReducerHandler := connect.NewUnaryHandler(
+		ReservationServiceCostReducerProcedure,
+		svc.CostReducer,
+		connect.WithSchema(reservationServiceMethods.ByName("CostReducer")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/api.reservation.ReservationService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case ReservationServiceGetAllReservationsProcedure:
@@ -430,6 +453,8 @@ func NewReservationServiceHandler(svc ReservationServiceHandler, opts ...connect
 			reservationServiceUpdateReservationFeeHandler.ServeHTTP(w, r)
 		case ReservationServiceDeleteReservationFeeProcedure:
 			reservationServiceDeleteReservationFeeHandler.ServeHTTP(w, r)
+		case ReservationServiceCostReducerProcedure:
+			reservationServiceCostReducerHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -493,4 +518,8 @@ func (UnimplementedReservationServiceHandler) UpdateReservationFee(context.Conte
 
 func (UnimplementedReservationServiceHandler) DeleteReservationFee(context.Context, *connect.Request[reservation.DeleteReservationFeeRequest]) (*connect.Response[reservation.DeleteReservationFeeResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.reservation.ReservationService.DeleteReservationFee is not implemented"))
+}
+
+func (UnimplementedReservationServiceHandler) CostReducer(context.Context, *connect.Request[reservation.CostReducerRequest]) (*connect.Response[reservation.CostReducerResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.reservation.ReservationService.CostReducer is not implemented"))
 }

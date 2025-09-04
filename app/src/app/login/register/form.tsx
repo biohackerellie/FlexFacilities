@@ -1,20 +1,16 @@
-import React from "react";
-
-//import { useActionState } from "react";
-
-import { TosModal } from "@/components/forms";
-import { Button } from "@/components/ui/buttons";
+import { TosModal } from '@/components/forms';
+import { Button } from '@/components/ui/buttons';
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import CreateUser from "@/functions/mutations/create-user";
+} from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import CreateUser from '@/functions/mutations/create-user';
 
 export default function CreateAccount() {
   return (
@@ -58,9 +54,9 @@ export default function CreateAccount() {
               defaultValue="false"
             />
             <label htmlFor="terms" className="m-2 inline">
-              I agree to the{" "}
+              I agree to the{' '}
               <strong className="">
-                {" "}
+                {' '}
                 <TosModal />
               </strong>
             </label>

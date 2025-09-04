@@ -103,109 +103,81 @@ func requiresAuth(procedure string) bool {
 	}
 }
 
-func (s *Auth) AuthInterceptor() connect.UnaryInterceptorFunc {
-	interceptor := func(next connect.UnaryFunc) connect.UnaryFunc {
-		return connect.UnaryFunc(func(
-			ctx context.Context,
-			req connect.AnyRequest,
-		) (connect.AnyResponse, error) {
-			if req.Spec().IsClient {
-				s.logger.Debug("skipping auth for client request")
-				return next(ctx, req)
-			}
+func (s *Auth) AuthMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		procedure, ok := InferProcedure(r.URL)
+		if !ok {
+			// Not a grpc request
+			next.ServeHTTP(w, r)
+			return
+		}
 
-			if !requiresAuth(req.Spec().Procedure) {
-				s.logger.Debug("skipping auth for public procedure", "procedure", req.Spec().Procedure)
-				return next(ctx, req)
-			}
-			user := new(models.Users)
-			encoded := req.Header().Get(fmt.Sprintf(AuthHeader, jwtCookieName))
-			tokenString, err := connect.DecodeBinaryHeader(encoded)
-			if err != nil {
-				return nil, connect.NewError(
-					connect.CodeUnauthenticated,
-					err,
-				)
-			}
-			encodedSession := req.Header().Get(fmt.Sprintf(AuthHeader, sessionCookieName))
-			sessionID, err := connect.DecodeBinaryHeader(encodedSession)
-			if err != nil {
-				return nil, connect.NewError(
-					connect.CodeUnauthenticated,
-					err,
-				)
-			}
-			session, err := s.db.GetSession(ctx, string(sessionID))
-			if err != nil {
-				return nil, connect.NewError(
-					connect.CodeUnauthenticated,
-					err,
-				)
-			}
+		if !requiresAuth(procedure) {
+			next.ServeHTTP(w, r)
+			return
+		}
+		user := new(models.Users)
+		jwtVal, jwtOk := s.readCookie(r, fmt.Sprintf("%s%s", s.cookiePrefix, jwtCookieName))
+		sessVal, sessOk := s.readCookie(r, fmt.Sprintf("%s%s", s.cookiePrefix, sessionCookieName))
+		if !jwtOk || !sessOk {
+			_ = s.ErrW.Write(w, r, connect.NewError(connect.CodeUnauthenticated, errors.New("unauthenticated")))
+			return
+		}
 
-			token, err := VerifyToken(string(tokenString), &Claims{}, s.key)
-			if err != nil {
-				s.logger.Debug("invalid token", "error", err)
-				if errors.Is(err, jwt.ErrTokenExpired) {
-					response, err := s.RefreshToken(ctx, session)
-					if err != nil {
-						return nil, connect.NewError(
-							connect.CodeUnauthenticated,
-							err,
-						)
-					}
-					jwtCookie := &http.Cookie{
-						Name:     fmt.Sprintf("%s%s", s.cookiePrefix, jwtCookieName),
-						Value:    response.NewToken,
-						Path:     "/",
-						HttpOnly: true,
-						Secure:   s.secure,
-						SameSite: http.SameSiteLaxMode,
-					}
-					sessionCookie := &http.Cookie{
-						Name:     fmt.Sprintf("%s%s", s.cookiePrefix, sessionCookieName),
-						Value:    response.Session,
-						Path:     "/",
-						HttpOnly: true,
-						Secure:   s.secure,
-						SameSite: http.SameSiteLaxMode,
-						MaxAge:   int(absoluteExpiration.Seconds()),
-					}
-					req.Header().Set("Set-Cookie", jwtCookie.String())
-					req.Header().Set("Set-Cookie", sessionCookie.String())
-					token, err = VerifyToken(response.NewToken, &Claims{}, s.key)
-					if err != nil {
-						return nil, connect.NewError(
-							connect.CodeUnauthenticated,
-							err,
-						)
-					}
-				} else {
-					return nil, connect.NewError(
-						connect.CodeUnauthenticated,
-						err,
-					)
+		session, err := s.db.GetSession(r.Context(), sessVal)
+		if err != nil {
+			_ = s.ErrW.Write(w, r, connect.NewError(connect.CodeUnauthenticated, errors.New("unauthenticated")))
+			return
+		}
+		token, err := VerifyToken(jwtVal, &Claims{}, s.key)
+		if err != nil {
+			if errors.Is(err, jwt.ErrTokenExpired) {
+				res, err := s.RefreshToken(r.Context(), session)
+				if err != nil {
+					_ = s.ErrW.Write(w, r, connect.NewError(connect.CodeUnauthenticated, errors.New("unauthenticated")))
+					return
 				}
-			}
-			claims, ok := token.Claims.(*Claims)
-			if !ok {
-				s.logger.Debug("invalid token")
-				return nil, connect.NewError(
-					connect.CodeUnauthenticated,
-					err,
-				)
-			}
+				issueCookie(w, fmt.Sprintf(jwtCookieName, s.cookiePrefix), res.NewToken, s.secure, 0)
+				issueCookie(w, fmt.Sprintf(sessionCookieName, s.cookiePrefix), res.Session, s.secure, 0)
+				token, err = VerifyToken(res.NewToken, &Claims{}, s.key)
+				if err != nil {
+					_ = s.ErrW.Write(w, r, connect.NewError(connect.CodeUnauthenticated, errors.New("unauthenticated")))
+					return
+				}
 
-			user.ID = claims.Subject
-			user.Name = claims.Name
-			user.Email = claims.Email
-			user.Role = models.UserRole(claims.Role)
-			ctx = context.WithValue(ctx, utils.CtxKey("user"), user)
+			} else {
+				_ = s.ErrW.Write(w, r, connect.NewError(connect.CodeUnauthenticated, errors.New("unauthenticated")))
+				return
+			}
+		}
+		user, err = userFromClaims(token)
+		if err != nil {
+			_ = s.ErrW.Write(w, r, connect.NewError(connect.CodeUnauthenticated, errors.New("unauthenticated")))
+			return
+		}
+		ctx := context.WithValue(r.Context(), utils.CtxKey("user"), user)
+		next.ServeHTTP(w, r.WithContext(ctx))
+	})
+}
 
-			return next(ctx, req)
-		})
+func (s *Auth) readCookie(r *http.Request, name string) (string, bool) {
+	c, err := r.Cookie(name)
+	if err != nil || c == nil || c.Value == "" {
+		return "", false
 	}
-	return connect.UnaryInterceptorFunc(interceptor)
+	return c.Value, true
+}
+
+func issueCookie(w http.ResponseWriter, name, val string, secure bool, maxAge int) {
+	http.SetCookie(w, &http.Cookie{
+		Name:     name,
+		Value:    val,
+		Path:     "/",
+		HttpOnly: true,
+		Secure:   secure,
+		SameSite: http.SameSiteLaxMode,
+		MaxAge:   maxAge, // 0 => session cookie
+	})
 }
 
 func (s *Auth) GetSession(ctx context.Context, req *connect.Request[service.GetSessionRequest]) (*connect.Response[service.GetSessionResponse], error) {
@@ -221,4 +193,18 @@ func (s *Auth) GetSession(ctx context.Context, req *connect.Request[service.GetS
 		UserName:  user.Name,
 		UserRole:  user.Role.String(),
 	}), nil
+}
+
+func userFromClaims(t *jwt.Token) (*models.Users, error) {
+	claims, ok := t.Claims.(*Claims)
+	if !ok {
+		return nil, errors.New("invalid token")
+	}
+	user := &models.Users{
+		ID:    claims.Subject,
+		Name:  claims.Name,
+		Email: claims.Email,
+		Role:  models.UserRole(claims.Role),
+	}
+	return user, nil
 }

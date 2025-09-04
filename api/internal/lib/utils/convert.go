@@ -80,6 +80,17 @@ func StringToPgTime(s string) pgtype.Time {
 	return pgtype.Time{Microseconds: t.UnixMicro(), Valid: true}
 }
 
+func PgTimeToTime(ti pgtype.Time) time.Time {
+	t, err := ti.Value()
+	if err != nil {
+		return time.Time{}
+	}
+	if t == nil {
+		return time.Time{}
+	}
+	return t.(time.Time)
+}
+
 func PgNumericToString(num pgtype.Numeric) string {
 	var s string
 	if num.Valid {
@@ -104,6 +115,13 @@ func StringToPgNumeric(s string) pgtype.Numeric {
 	num.Int = bigInt
 	num.Valid = true
 	return num
+}
+func PGNumericToFloat64(num pgtype.Numeric) float64 {
+	var f float64
+	if num.Valid {
+		f, _ = num.Int.Float64()
+	}
+	return f
 }
 
 func StringPtrToString(s *string) string {

@@ -1,17 +1,22 @@
 package handlers
 
 import (
+	"api/internal/lib/utils"
 	"api/internal/models"
 	"api/internal/ports"
 	service "api/internal/proto/reservation"
-	"connectrpc.com/connect"
 	"context"
 	"log/slog"
+	"math"
+	"strconv"
 	"time"
+
+	"connectrpc.com/connect"
 )
 
 type ReservationHandler struct {
 	reservationStore ports.ReservationStore
+	facilityStore    ports.FacilityStore
 	log              *slog.Logger
 }
 
@@ -183,4 +188,38 @@ func (a *ReservationHandler) DeleteReservationFee(ctx context.Context, req *conn
 		return nil, err
 	}
 	return connect.NewResponse(&service.DeleteReservationFeeResponse{}), nil
+}
+
+// Get the total cost of the reservation, rounded to 2 decimal places
+func (a *ReservationHandler) CostReducer(ctx context.Context, req *connect.Request[service.CostReducerRequest]) (*connect.Response[service.CostReducerResponse], error) {
+	reservation, err := a.reservationStore.Get(ctx, req.Msg.GetId())
+	if err != nil {
+		return nil, err
+	}
+	categories, err := a.facilityStore.GetCategories(ctx, reservation.Reservation.CategoryID)
+	if err != nil {
+		return nil, err
+	}
+	category := categories[0]
+	fees := 0.0
+	for _, fee := range reservation.Fees {
+		fees += utils.PGNumericToFloat64(fee.AdditionalFees)
+	}
+	totalHours := 0.0
+	for _, date := range reservation.Dates {
+		if date.Approved == models.ReservationDateApprovedApproved {
+			startTime := utils.PgTimeToTime(date.StartTime)
+			endTime := utils.PgTimeToTime(date.EndTime)
+			totalDuration := endTime.Sub(startTime)
+			totalHours += totalDuration.Hours()
+		}
+	}
+
+	totalCost := totalHours*category.Price + fees
+	totalCost = math.Abs(totalCost)
+	totalCost = math.Round(totalCost*100) / 100
+	stringCost := strconv.FormatFloat(totalCost, 'f', 2, 64)
+	return connect.NewResponse(&service.CostReducerResponse{
+		Cost: string(stringCost),
+	}), nil
 }

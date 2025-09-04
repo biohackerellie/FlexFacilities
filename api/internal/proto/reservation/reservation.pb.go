@@ -1697,6 +1697,94 @@ func (x *DeleteReservationFeeRequest) GetId() int64 {
 	return 0
 }
 
+type CostReducerRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CostReducerRequest) Reset() {
+	*x = CostReducerRequest{}
+	mi := &file_proto_reservation_reservation_proto_msgTypes[33]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CostReducerRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CostReducerRequest) ProtoMessage() {}
+
+func (x *CostReducerRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_reservation_reservation_proto_msgTypes[33]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CostReducerRequest.ProtoReflect.Descriptor instead.
+func (*CostReducerRequest) Descriptor() ([]byte, []int) {
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{33}
+}
+
+func (x *CostReducerRequest) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+type CostReducerResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Cost          string                 `protobuf:"bytes,1,opt,name=cost,proto3" json:"cost,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CostReducerResponse) Reset() {
+	*x = CostReducerResponse{}
+	mi := &file_proto_reservation_reservation_proto_msgTypes[34]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CostReducerResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CostReducerResponse) ProtoMessage() {}
+
+func (x *CostReducerResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_reservation_reservation_proto_msgTypes[34]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CostReducerResponse.ProtoReflect.Descriptor instead.
+func (*CostReducerResponse) Descriptor() ([]byte, []int) {
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{34}
+}
+
+func (x *CostReducerResponse) GetCost() string {
+	if x != nil {
+		return x.Cost
+	}
+	return ""
+}
+
 var File_proto_reservation_reservation_proto protoreflect.FileDescriptor
 
 const file_proto_reservation_reservation_proto_rawDesc = "" +
@@ -1825,7 +1913,11 @@ const file_proto_reservation_reservation_proto_rawDesc = "" +
 	"\x1bUpdateReservationFeeRequest\x121\n" +
 	"\x03fee\x18\x01 \x01(\v2\x1f.api.reservation.ReservationFeeR\x03fee\"-\n" +
 	"\x1bDeleteReservationFeeRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id2\xb4\f\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\"$\n" +
+	"\x12CostReducerRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\")\n" +
+	"\x13CostReducerResponse\x12\x12\n" +
+	"\x04cost\x18\x01 \x01(\tR\x04cost2\x8e\r\n" +
 	"\x12ReservationService\x12o\n" +
 	"\x12GetAllReservations\x12*.api.reservation.GetAllReservationsRequest\x1a(.api.reservation.AllReservationsResponse\"\x03\x90\x02\x01\x12_\n" +
 	"\x0eGetReservation\x12&.api.reservation.GetReservationRequest\x1a .api.reservation.FullReservation\"\x03\x90\x02\x01\x12`\n" +
@@ -1840,7 +1932,8 @@ const file_proto_reservation_reservation_proto_rawDesc = "" +
 	"\x15DeleteReservationDate\x12-.api.reservation.DeleteReservationDateRequest\x1a..api.reservation.DeleteReservationDateResponse\x12s\n" +
 	"\x14CreateReservationFee\x12,.api.reservation.CreateReservationFeeRequest\x1a-.api.reservation.CreateReservationFeeResponse\x12s\n" +
 	"\x14UpdateReservationFee\x12,.api.reservation.UpdateReservationFeeRequest\x1a-.api.reservation.UpdateReservationFeeResponse\x12s\n" +
-	"\x14DeleteReservationFee\x12,.api.reservation.DeleteReservationFeeRequest\x1a-.api.reservation.DeleteReservationFeeResponseB3Z1api/internal/proto/reservation;reservationserviceb\x06proto3"
+	"\x14DeleteReservationFee\x12,.api.reservation.DeleteReservationFeeRequest\x1a-.api.reservation.DeleteReservationFeeResponse\x12X\n" +
+	"\vCostReducer\x12#.api.reservation.CostReducerRequest\x1a$.api.reservation.CostReducerResponseB3Z1api/internal/proto/reservation;reservationserviceb\x06proto3"
 
 var (
 	file_proto_reservation_reservation_proto_rawDescOnce sync.Once
@@ -1854,7 +1947,7 @@ func file_proto_reservation_reservation_proto_rawDescGZIP() []byte {
 	return file_proto_reservation_reservation_proto_rawDescData
 }
 
-var file_proto_reservation_reservation_proto_msgTypes = make([]protoimpl.MessageInfo, 33)
+var file_proto_reservation_reservation_proto_msgTypes = make([]protoimpl.MessageInfo, 35)
 var file_proto_reservation_reservation_proto_goTypes = []any{
 	(*Reservation)(nil),                   // 0: api.reservation.Reservation
 	(*ReservationDate)(nil),               // 1: api.reservation.ReservationDate
@@ -1889,6 +1982,8 @@ var file_proto_reservation_reservation_proto_goTypes = []any{
 	(*CreateReservationFeeRequest)(nil),   // 30: api.reservation.CreateReservationFeeRequest
 	(*UpdateReservationFeeRequest)(nil),   // 31: api.reservation.UpdateReservationFeeRequest
 	(*DeleteReservationFeeRequest)(nil),   // 32: api.reservation.DeleteReservationFeeRequest
+	(*CostReducerRequest)(nil),            // 33: api.reservation.CostReducerRequest
+	(*CostReducerResponse)(nil),           // 34: api.reservation.CostReducerResponse
 }
 var file_proto_reservation_reservation_proto_depIdxs = []int32{
 	0,  // 0: api.reservation.FullReservation.reservation:type_name -> api.reservation.Reservation
@@ -1919,22 +2014,24 @@ var file_proto_reservation_reservation_proto_depIdxs = []int32{
 	30, // 25: api.reservation.ReservationService.CreateReservationFee:input_type -> api.reservation.CreateReservationFeeRequest
 	31, // 26: api.reservation.ReservationService.UpdateReservationFee:input_type -> api.reservation.UpdateReservationFeeRequest
 	32, // 27: api.reservation.ReservationService.DeleteReservationFee:input_type -> api.reservation.DeleteReservationFeeRequest
-	4,  // 28: api.reservation.ReservationService.GetAllReservations:output_type -> api.reservation.AllReservationsResponse
-	3,  // 29: api.reservation.ReservationService.GetReservation:output_type -> api.reservation.FullReservation
-	12, // 30: api.reservation.ReservationService.RequestCount:output_type -> api.reservation.RequestCountResponse
-	5,  // 31: api.reservation.ReservationService.GetRequestsThisWeek:output_type -> api.reservation.RequestThisWeekResponse
-	15, // 32: api.reservation.ReservationService.CreateReservation:output_type -> api.reservation.CreateReservationResponse
-	17, // 33: api.reservation.ReservationService.UpdateReservation:output_type -> api.reservation.UpdateReservationResponse
-	19, // 34: api.reservation.ReservationService.DeleteReservation:output_type -> api.reservation.DeleteReservationResponse
-	8,  // 35: api.reservation.ReservationService.UserReservations:output_type -> api.reservation.UserReservationsResponse
-	22, // 36: api.reservation.ReservationService.CreateReservationDate:output_type -> api.reservation.CreateReservationDateResponse
-	23, // 37: api.reservation.ReservationService.UpdateReservationDate:output_type -> api.reservation.UpdateReservationDateResponse
-	24, // 38: api.reservation.ReservationService.DeleteReservationDate:output_type -> api.reservation.DeleteReservationDateResponse
-	25, // 39: api.reservation.ReservationService.CreateReservationFee:output_type -> api.reservation.CreateReservationFeeResponse
-	26, // 40: api.reservation.ReservationService.UpdateReservationFee:output_type -> api.reservation.UpdateReservationFeeResponse
-	27, // 41: api.reservation.ReservationService.DeleteReservationFee:output_type -> api.reservation.DeleteReservationFeeResponse
-	28, // [28:42] is the sub-list for method output_type
-	14, // [14:28] is the sub-list for method input_type
+	33, // 28: api.reservation.ReservationService.CostReducer:input_type -> api.reservation.CostReducerRequest
+	4,  // 29: api.reservation.ReservationService.GetAllReservations:output_type -> api.reservation.AllReservationsResponse
+	3,  // 30: api.reservation.ReservationService.GetReservation:output_type -> api.reservation.FullReservation
+	12, // 31: api.reservation.ReservationService.RequestCount:output_type -> api.reservation.RequestCountResponse
+	5,  // 32: api.reservation.ReservationService.GetRequestsThisWeek:output_type -> api.reservation.RequestThisWeekResponse
+	15, // 33: api.reservation.ReservationService.CreateReservation:output_type -> api.reservation.CreateReservationResponse
+	17, // 34: api.reservation.ReservationService.UpdateReservation:output_type -> api.reservation.UpdateReservationResponse
+	19, // 35: api.reservation.ReservationService.DeleteReservation:output_type -> api.reservation.DeleteReservationResponse
+	8,  // 36: api.reservation.ReservationService.UserReservations:output_type -> api.reservation.UserReservationsResponse
+	22, // 37: api.reservation.ReservationService.CreateReservationDate:output_type -> api.reservation.CreateReservationDateResponse
+	23, // 38: api.reservation.ReservationService.UpdateReservationDate:output_type -> api.reservation.UpdateReservationDateResponse
+	24, // 39: api.reservation.ReservationService.DeleteReservationDate:output_type -> api.reservation.DeleteReservationDateResponse
+	25, // 40: api.reservation.ReservationService.CreateReservationFee:output_type -> api.reservation.CreateReservationFeeResponse
+	26, // 41: api.reservation.ReservationService.UpdateReservationFee:output_type -> api.reservation.UpdateReservationFeeResponse
+	27, // 42: api.reservation.ReservationService.DeleteReservationFee:output_type -> api.reservation.DeleteReservationFeeResponse
+	34, // 43: api.reservation.ReservationService.CostReducer:output_type -> api.reservation.CostReducerResponse
+	29, // [29:44] is the sub-list for method output_type
+	14, // [14:29] is the sub-list for method input_type
 	14, // [14:14] is the sub-list for extension type_name
 	14, // [14:14] is the sub-list for extension extendee
 	0,  // [0:14] is the sub-list for field type_name
@@ -1954,7 +2051,7 @@ func file_proto_reservation_reservation_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_reservation_reservation_proto_rawDesc), len(file_proto_reservation_reservation_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   33,
+			NumMessages:   35,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
