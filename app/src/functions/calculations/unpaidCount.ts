@@ -1,14 +1,18 @@
-"use server";
+'use server';
+//@ts-nocheck
 
-import type { ReservationClassType } from "@/lib/classes";
-import moment from "moment";
+import type { ReservationClassType } from '@/lib/classes';
+import moment from 'moment';
 
-import { ReservationClass } from "@/lib/classes";
-import { api } from "@/trpc/server";
-import { CostReducer } from "../other/helpers";
+import { ReservationClass } from '@/lib/classes';
+import { api } from '@/trpc/server';
+import { CostReducer } from '../other/helpers';
 
 type ChartData = Record<string, number | string | undefined>;
-
+/**
+ * @deprecated
+ *  TODO: rewrite this in golang
+ */
 export default async function WeeklyUnpaidCount() {
   const data = await api.reservation.all();
   let reservationCount = 0;
@@ -19,8 +23,8 @@ export default async function WeeklyUnpaidCount() {
       reservation.paid === false &&
       reservation.ReservationDate?.some(
         (date) =>
-          date.approved === "approved" &&
-          moment(date.startDate).isBetween(moment(), moment().add(7, "days")),
+          date.approved === 'approved' &&
+          moment(date.startDate).isBetween(moment(), moment().add(7, 'days')),
       ),
   );
 

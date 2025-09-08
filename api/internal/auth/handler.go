@@ -155,7 +155,7 @@ func (s *Auth) AuthMiddleware(next http.Handler) http.Handler {
 			_ = s.ErrW.Write(w, r, connect.NewError(connect.CodeUnauthenticated, errors.New("unauthenticated")))
 			return
 		}
-		ctx := context.WithValue(r.Context(), utils.CtxKey("user"), user)
+		ctx := WithAuthCTX(r.Context(), user, session.ID)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
@@ -181,11 +181,13 @@ func issueCookie(w http.ResponseWriter, name, val string, secure bool, maxAge in
 }
 
 func (s *Auth) GetSession(ctx context.Context, req *connect.Request[service.GetSessionRequest]) (*connect.Response[service.GetSessionResponse], error) {
-	sessionID := req.Header().Get(fmt.Sprintf(AuthHeader, sessionCookieName))
-	user, ok := ctx.Value(utils.CtxKey("user")).(*models.Users)
-	if !ok || user == nil {
+	authCTX, ok := ctx.Value(utils.CtxKey("user")).(*AuthCTX)
+	if !ok || authCTX == nil {
 		return nil, connect.NewError(connect.CodeUnauthenticated, errors.New("unauthenticated"))
 	}
+
+	user := authCTX.User
+	sessionID := authCTX.SessionID
 	return connect.NewResponse(&service.GetSessionResponse{
 		SessionId: sessionID,
 		UserId:    user.ID,
@@ -207,4 +209,20 @@ func userFromClaims(t *jwt.Token) (*models.Users, error) {
 		Role:  models.UserRole(claims.Role),
 	}
 	return user, nil
+}
+
+type AuthCTX struct {
+	User      *models.Users
+	SessionID string
+}
+
+func WithAuthCTX(ctx context.Context, user *models.Users, sessionID string) context.Context {
+	return context.WithValue(ctx, utils.CtxKey("user"), &AuthCTX{
+		User:      user,
+		SessionID: sessionID,
+	})
+}
+
+func FromAuthCTX(ctx context.Context) *AuthCTX {
+	return ctx.Value(utils.CtxKey("user")).(*AuthCTX)
 }

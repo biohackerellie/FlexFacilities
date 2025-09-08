@@ -1,11 +1,15 @@
-"use server";
+'use server';
 
-import { revalidateTag } from "next/cache";
-import { eq } from "drizzle-orm";
+import { revalidateTag } from 'next/cache';
+import { eq } from 'drizzle-orm';
 
-import { db } from "@local/db/client";
-import { ReservationDate } from "@local/db/schema";
+import { db } from '@local/db/client';
+import { ReservationDate } from '@local/db/schema';
 
+/**
+ * @deprecated
+ *  TODO: rewrite this in golang
+ */
 export default async function HandleDelete(id: number, reservationID: number) {
   try {
     const response = await db
@@ -14,5 +18,5 @@ export default async function HandleDelete(id: number, reservationID: number) {
   } catch (error) {
     throw new Error();
   }
-  return revalidateTag("reservations");
+  return revalidateTag('reservations');
 }

@@ -25,7 +25,7 @@ import (
 
 var log *slog.Logger
 
-func Run(ctx context.Context, stdout io.Writer, getenv func(string) string) error {
+func Run(ctx context.Context, stdout io.Writer, getenv func(string, string) string) error {
 
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
@@ -58,7 +58,7 @@ func Run(ctx context.Context, stdout io.Writer, getenv func(string) string) erro
 	s := server.NewServer(h, log)
 	handler := h2c.NewHandler(s, &http2.Server{})
 	srv := &http.Server{
-		Addr:              "0.0.0.0:3030",
+		Addr:              "0.0.0.0:8080",
 		Handler:           handler,
 		ReadHeaderTimeout: 5 * time.Second,
 	}

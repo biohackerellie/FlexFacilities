@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
+	"time"
 
 	"github.com/biohackerellie/flexauth"
 	"github.com/biohackerellie/flexauth/providers/entra"
@@ -41,9 +42,14 @@ func New(db *repository.DB, log *slog.Logger, config *config.Config) *Handlers {
 	authHandler := auth.NewAuth(userStore, log, config)
 	authHandler.RegisterProvider("entra", entraProvider)
 
+	timezone, err := time.LoadLocation(config.Timezone)
+	if err != nil {
+		log.Error("Could not load timezone", "error", err)
+		panic(err)
+	}
 	userHandler := NewUserHandler(userStore, log)
 	facilityHandler := NewFacilityHandler(facilityStore, log)
-	reservationHandler := NewReservationHandler(reservationStore, log)
+	reservationHandler := NewReservationHandler(reservationStore, log, timezone)
 
 	return &Handlers{
 		UserHandler:        userHandler,

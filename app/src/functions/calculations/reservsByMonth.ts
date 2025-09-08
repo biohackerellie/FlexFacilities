@@ -1,23 +1,13 @@
-"use server";
+// @ts-nocheck
 
-import type {
-  FacilityType,
-  ReservationDateType,
-  ReservationType,
-} from "@local/db/schema";
+'use server';
 
-import { api } from "@/trpc/server";
-
-interface ReservationWithAll extends ReservationType {
-  Facility: FacilityType;
-  ReservationDate: ReservationDateType[];
-}
+//TODO: rewrite this in golang
 
 type ChartData = Record<string, number | string | undefined>;
 
-export default async function aggregateChartData(): Promise<ChartData[]> {
+export default function aggregateChartData(): Promise<ChartData[]> {
   // calculate 6 months ago
-  const data = await api.reservation.all();
   const now = new Date();
   const sixMonthsAgo = new Date();
   sixMonthsAgo.setMonth(now.getMonth() - 6);
@@ -30,8 +20,8 @@ export default async function aggregateChartData(): Promise<ChartData[]> {
   // Aggregate Data
   const aggregateData: any = {};
   recentData.forEach((reservation: ReservationWithAll) => {
-    const month = new Date(reservation.createdAt!).toLocaleString("default", {
-      month: "long",
+    const month = new Date(reservation.createdAt!).toLocaleString('default', {
+      month: 'long',
     });
     const building = reservation.Facility.building;
 

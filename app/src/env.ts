@@ -1,5 +1,5 @@
-import { createEnv } from "@t3-oss/env-nextjs";
-import { z } from "zod";
+import { createEnv } from '@t3-oss/env-nextjs';
+import { z } from 'zod';
 
 export const env = createEnv({
   server: {
@@ -16,20 +16,16 @@ export const env = createEnv({
     BLOB_READ_WRITE_TOKEN: z.string(),
     GITHUB_TOKEN: z.string(),
   },
-  client: {
-    NEXT_PUBLIC_HOST: z.string(),
-  },
   shared: {
     NODE_ENV: z
-      .enum(["development", "production", "test"])
-      .default("development"),
+      .enum(['development', 'production', 'test'])
+      .default('development'),
   },
   experimental__runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
-    NEXT_PUBLIC_HOST: process.env.NEXT_PUBLIC_HOST,
   },
   skipValidation:
     !!process.env.CI ||
     !!process.env.SKIP_ENV_VALIDATION ||
-    process.env.npm_lifecycle_event === "lint"
+    process.env.npm_lifecycle_event === 'lint',
 });

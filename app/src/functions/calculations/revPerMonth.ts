@@ -1,9 +1,10 @@
-"use server";
-
+'use server';
+// @ts-nocheck
+// TODO: rewrite this in golang
 /**
  * This function is used to calculate the monthly revenue for the last 6 months
  */
-import type { RevenueData } from "@/lib/types";
+import type { RevenueData } from '@/lib/types';
 import {
   compareAsc,
   format,
@@ -12,17 +13,9 @@ import {
   lastDayOfMonth,
   parse,
   sub,
-} from "date-fns";
+} from 'date-fns';
 
-import type {
-  CategoryType,
-  ReservationDateType,
-  ReservationFeesType,
-  ReservationType,
-} from "@local/db/schema";
-
-import { api } from "@/trpc/server";
-import { CostReducer } from "../other/helpers";
+import { CostReducer } from '../other/helpers';
 
 interface ReservationClassType extends ReservationType {
   ReservationDate: ReservationDateType[];
@@ -48,7 +41,7 @@ export default async function MonthlyRevenue(): Promise<{
   const reducedData = data.filter(
     (reservation) =>
       reservation.ReservationDate?.some(
-        (date) => date.approved === "approved",
+        (date) => date.approved === 'approved',
       ) &&
       isAfter(
         new Date(
@@ -74,8 +67,8 @@ export default async function MonthlyRevenue(): Promise<{
 
   reducedData.forEach((reservation: ReservationClassType) => {
     const month = reservation.ReservationDate
-      ? format(new Date(reservation.ReservationDate[0]?.startDate!), "MMMM")
-      : "";
+      ? format(new Date(reservation.ReservationDate[0]?.startDate!), 'MMMM')
+      : '';
 
     const cost = CostReducer({
       ReservationFees: reservation.ReservationFees,
@@ -109,8 +102,8 @@ export default async function MonthlyRevenue(): Promise<{
   });
 
   const sortedChartData = chartData.sort((a, b) => {
-    const monthA = parse(a.month!, "MMMM", new Date());
-    const monthB = parse(b.month!, "MMMM", new Date());
+    const monthA = parse(a.month!, 'MMMM', new Date());
+    const monthB = parse(b.month!, 'MMMM', new Date());
     return compareAsc(monthA, monthB);
   });
   console.log(sortedChartData);

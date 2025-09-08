@@ -1,15 +1,19 @@
-"use server";
+'use server';
 
-import { NextResponse } from "next/server";
-import { OAuth2Client } from "google-auth-library";
-import { google } from "googleapis";
-import moment from "moment-timezone";
+import { NextResponse } from 'next/server';
+import { OAuth2Client } from 'google-auth-library';
+import { google } from 'googleapis';
+import moment from 'moment-timezone';
 
-import { api } from "@/trpc/server";
-import generateId from "../calculations/generate-id";
+import { api } from '@/trpc/server';
+import generateId from '../calculations/generate-id';
 
+/**
+ * @deprecated
+ *  TODO: rewrite this in golang
+ */
 export default async function CreateGoogleEvents(id: number) {
-  const scopes = ["https://www.googleapis.com/auth/calendar"];
+  const scopes = ['https://www.googleapis.com/auth/calendar'];
   const oauth2Client = new OAuth2Client({
     clientId: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
@@ -22,20 +26,20 @@ export default async function CreateGoogleEvents(id: number) {
 
   const approvedReservation = await api.reservation.byId({ id: id });
 
-  const calendar = google.calendar({ version: "v3", auth: oauth2Client });
+  const calendar = google.calendar({ version: 'v3', auth: oauth2Client });
   //@ts-expect-error - googleCalendarId is not undefined
   for (const reservationDate of approvedReservation.ReservationDate) {
     const startDateTime = moment
       .tz(
         `${reservationDate.startDate} ${reservationDate.startTime}`,
-        "America/Denver",
+        'America/Denver',
       )
       .toISOString();
 
     const endDateTime = moment
       .tz(
         `${reservationDate.endDate} ${reservationDate.endTime}`,
-        "America/Denver",
+        'America/Denver',
       )
       .toISOString();
 
@@ -45,11 +49,11 @@ export default async function CreateGoogleEvents(id: number) {
       description: approvedReservation?.details,
       start: {
         dateTime: startDateTime,
-        timeZone: "America/Denver",
+        timeZone: 'America/Denver',
       },
       end: {
         dateTime: endDateTime,
-        timeZone: "America/Denver",
+        timeZone: 'America/Denver',
       },
     };
     try {
@@ -58,13 +62,13 @@ export default async function CreateGoogleEvents(id: number) {
         requestBody: event,
       });
     } catch (error) {
-      console.error("Failed to create event: ", error);
+      console.error('Failed to create event: ', error);
 
       return NextResponse.json({ response: 500, message: error });
     }
   }
   return NextResponse.json({
     response: 200,
-    message: "google cal event created",
+    message: 'google cal event created',
   });
 }

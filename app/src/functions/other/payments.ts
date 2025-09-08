@@ -1,15 +1,15 @@
-"use server";
+'use server';
 
-import { revalidateTag } from "next/cache";
-import { NextResponse } from "next/server";
-import { eq } from "drizzle-orm";
-import { Client, Environment } from "square";
+import { revalidateTag } from 'next/cache';
+import { NextResponse } from 'next/server';
+import { eq } from 'drizzle-orm';
+import { Client, Environment } from 'square';
 
-import { db } from "@local/db/client";
-import { Reservation } from "@local/db/schema";
+import { db } from '@local/db/client';
+import { Reservation } from '@local/db/schema';
 
-import { env } from "@/env";
-import generateId from "@/functions/calculations/generate-id";
+import { env } from '@/env';
+import generateId from '@/functions/calculations/generate-id';
 
 const { checkoutApi } = new Client({
   accessToken: env.SQUARE_TOKEN,
@@ -23,6 +23,10 @@ type PaymentProps = {
   email: string;
 };
 
+/**
+ * @deprecated
+ *  TODO: rewrite this in golang
+ */
 export async function GeneratePaymentLink(
   id: number,
   fees: number,
@@ -33,12 +37,12 @@ export async function GeneratePaymentLink(
   try {
     const res = await checkoutApi.createPaymentLink({
       idempotencyKey: uuid,
-      description: "Facility Rental",
+      description: 'Facility Rental',
       quickPay: {
         name: description,
         priceMoney: {
           amount: BigInt(Math.round(fees * 100)),
-          currency: "USD",
+          currency: 'USD',
         },
         locationId: env.SQUARE_LOCATION_ID,
       },
@@ -65,26 +69,26 @@ export async function GeneratePaymentLink(
 
     try {
       await fetch(`${env.NEXT_PUBLIC_EMAIL_API}`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
-          "x-api-key": process.env.EMAIL_API_KEY!,
+          'Content-Type': 'application/json',
+          'x-api-key': process.env.EMAIL_API_KEY!,
         },
         body: JSON.stringify({
           to: email,
-          from: "Facility Rental",
-          subject: "Facility Rental Payment Link",
+          from: 'Facility Rental',
+          subject: 'Facility Rental Payment Link',
           html:
-            "Click the link below to pay for your reservation: \n \n " +
+            'Click the link below to pay for your reservation: \n \n ' +
             paymentUrl +
-            "\n \n If you have any questions, please contact the Activities Director at lpsactivites@laurel.k12.mt.us",
+            '\n \n If you have any questions, please contact the Activities Director at lpsactivites@laurel.k12.mt.us',
         }),
       });
     } catch (error) {
-      throw new Error("Email failed to send");
+      throw new Error('Email failed to send');
     }
   } catch (error) {
-    throw new Error("Payment Link Failed to Create");
+    throw new Error('Payment Link Failed to Create');
   }
-  revalidateTag("reservations");
+  revalidateTag('reservations');
 }

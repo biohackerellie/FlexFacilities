@@ -1,20 +1,24 @@
-"use server";
+'use server';
 
-import { revalidateTag } from "next/cache";
-import { eq } from "drizzle-orm";
+import { revalidateTag } from 'next/cache';
+import { eq } from 'drizzle-orm';
 
-import { db } from "@local/db/client";
-import { Reservation, ReservationDate } from "@local/db/schema";
+import { db } from '@local/db/client';
+import { Reservation, ReservationDate } from '@local/db/schema';
 
-import { api } from "@/trpc/server";
-import { CreateGoogleEvent } from "../google/singleDate";
+import { api } from '@/trpc/server';
+import { CreateGoogleEvent } from '../google/singleDate';
 
 interface props {
   id: number;
-  status: "approved" | "denied" | "pending";
+  status: 'approved' | 'denied' | 'pending';
   reservationID?: number;
 }
 
+/**
+ * @deprecated
+ *  TODO: rewrite this in golang
+ */
 export default async function UpdateStatus({
   id,
   status,
@@ -26,7 +30,7 @@ export default async function UpdateStatus({
         id: reservationID,
       });
 
-      if (reservation?.approved === "pending" && status === "approved") {
+      if (reservation?.approved === 'pending' && status === 'approved') {
         await db
           .update(Reservation)
           .set({
@@ -45,12 +49,12 @@ export default async function UpdateStatus({
   } catch (error) {
     return error;
   }
-  if (status === "approved") {
+  if (status === 'approved') {
     try {
       await CreateGoogleEvent(id);
     } catch (error) {
-      return { message: "failed to update event" };
+      return { message: 'failed to update event' };
     }
   }
-  return revalidateTag("reservations");
+  return revalidateTag('reservations');
 }

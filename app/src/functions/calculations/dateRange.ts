@@ -1,15 +1,12 @@
-import type { ReservationDateType } from "@local/db/schema";
-
-export default function range(ReservationDate: ReservationDateType[]): string {
-  let dateRange = "";
-  if (ReservationDate.length > 1) {
-    dateRange = `${ReservationDate[0]?.startDate} - ${
-      ReservationDate[ReservationDate.length - 1]?.endDate
-    }`;
-  } else if (ReservationDate.length === 1) {
-    dateRange = `${ReservationDate[0]?.startDate}`;
+import type { ReservationDate } from '@/lib/types';
+export default function range(date: ReservationDate[]): string {
+  let dateRange = '';
+  if (date.length > 1) {
+    dateRange = `${date[0]?.startDate} - ${date[date.length - 1]?.endDate}`;
+  } else if (date.length === 1) {
+    dateRange = `${date[0]?.startDate}`;
   } else {
-    dateRange = "No Upcoming Dates";
+    dateRange = 'No Upcoming Dates';
   }
 
   return dateRange;

@@ -6,11 +6,11 @@ import type {
   ReservationType,
   CategoryType as SelectCategory,
   UserType,
-} from "@local/db/schema";
+} from '@local/db/schema';
 
-/** 
-* @deprecated
-*/
+/**
+ * @deprecated
+ */
 export type ReservationClassType = ReservationType & {
   Facility?: FacilityType;
   Category?: SelectCategory;
@@ -20,8 +20,8 @@ export type ReservationClassType = ReservationType & {
 };
 
 /**
-  * @deprecated
-* */
+ * @deprecated
+ */
 class ReservationClass {
   id: number | bigint;
   userId: string;
@@ -31,7 +31,7 @@ class ReservationClass {
   categoryId: number | bigint;
   facilityId: number | bigint;
   details?: string | null;
-  approved: "pending" | "approved" | "denied" | "canceled";
+  approved: 'pending' | 'approved' | 'denied' | 'canceled';
   inPerson: boolean;
   ReservationDate?: ReservationDateType[];
   ReservationFees?: ReservationFeesType[];
@@ -79,7 +79,7 @@ class ReservationClass {
    */
   range(): string {
     const ReservationDate = this.ReservationDate || [];
-    let dateRange = "";
+    let dateRange = '';
     if (ReservationDate.length > 1) {
       dateRange = `${ReservationDate[0]?.startDate} - ${
         ReservationDate[ReservationDate.length - 1]?.endDate
@@ -87,7 +87,7 @@ class ReservationClass {
     } else if (ReservationDate.length === 1) {
       dateRange = `${ReservationDate[0]?.startDate}`;
     } else {
-      dateRange = "No Upcoming Dates";
+      dateRange = 'No Upcoming Dates';
     }
 
     return dateRange;
@@ -120,7 +120,7 @@ class ReservationClass {
     }
     const approvedReservationDates = ReservationDate.filter(
       (reservationDate: any) => {
-        return reservationDate.approved === "approved";
+        return reservationDate.approved === 'approved';
       },
     );
     if (categoryId === 105 || categoryId === 106 || categoryId === 107) {
@@ -144,4 +144,3 @@ class ReservationClass {
     return Number(totalCost.toFixed(2));
   }
 }
-

@@ -14,22 +14,24 @@ type Config struct {
 	EmailPassword     string `mapstructure:"EMAIL_PASSWORD"`
 	EmailUser         string `mapstructure:"EMAIL_USER"`
 	Host              string `mapstructure:"HOST"`
+	Timezone          string `mapstructure:"TIMEZONE"`
 }
 
-func New(getenv func(string) string) *Config {
+func New(getenv func(string, string) string) *Config {
 	return &Config{
-		LogLevel:          getenv("LOG_LEVEL"),
-		VerboseLogging:    getenv("VERBOSE_LOGGING"),
-		AppEnv:            getenv("APP_ENV"),
-		EntraClientID:     getenv("ENTRA_CLIENT_ID"),
-		EntraClientSecret: getenv("ENTRA_CLIENT_SECRET"),
-		EntraTenant:       getenv("ENTRA_TENANT"),
-		DatabaseURL:       getenv("DATABASE_URL"),
-		AuthSecret:        getenv("AUTH_SECRET"),
-		AuthSalt:          getenv("AUTH_SALT"),
-		EmailHost:         getenv("EMAIL_HOST"),
-		EmailPassword:     getenv("EMAIL_PASSWORD"),
-		EmailUser:         getenv("EMAIL_USER"),
-		Host:              getenv("HOST"),
+		LogLevel:          getenv("LOG_LEVEL", "info"),
+		VerboseLogging:    getenv("VERBOSE_LOGGING", "true"),
+		AppEnv:            getenv("APP_ENV", "development"),
+		EntraClientID:     getenv("ENTRA_CLIENT_ID", ""),
+		EntraClientSecret: getenv("ENTRA_CLIENT_SECRET", ""),
+		EntraTenant:       getenv("ENTRA_TENANT", ""),
+		DatabaseURL:       getenv("DATABASE_URL", "postgres://postgres@localhost:5432/postgres?sslmode=disable"),
+		AuthSecret:        getenv("AUTH_SECRET", ""),
+		AuthSalt:          getenv("AUTH_SALT", ""),
+		EmailHost:         getenv("EMAIL_HOST", "smtp.gmail.com"),
+		EmailPassword:     getenv("EMAIL_PASSWORD", ""),
+		EmailUser:         getenv("EMAIL_USER", ""),
+		Host:              getenv("HOST", "http://localhost:3000"),
+		Timezone:          getenv("TIMEZONE", "America/Denver"),
 	}
 }

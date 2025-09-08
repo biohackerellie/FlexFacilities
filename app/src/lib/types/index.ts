@@ -1,31 +1,32 @@
-import type { Schema$Event } from "@/functions/events/types";
-import type { Path, UseFormRegister } from "react-hook-form";
+import type { Schema$Event } from '@/functions/events/types';
+import type { Path, UseFormRegister } from 'react-hook-form';
 import type {
   FullReservation as PBFullReservation,
   FullFacility as PBFulFacility,
   Building as PBBuilding,
   BuildingWithFacilities as PBBuildingWithFacilities,
-Category as PBCategory,
-Facility as PBFacility,  
-Reservation as PBReservation,
-Users as PBUser,
-ReservationDate as PBReservationDate,
-ReservationFee as PBReservationFee
-} from "../rpc/proto";
+  Category as PBCategory,
+  Facility as PBFacility,
+  Reservation as PBReservation,
+  Users as PBUser,
+  ReservationDate as PBReservationDate,
+  ReservationFee as PBReservationFee,
+} from '../rpc/proto';
 
+import type { Message } from '@bufbuild/protobuf';
+export type ProtoType<T> = Omit<T, keyof Message<any>>;
+export type Category = ProtoType<PBCategory>;
+export type Facility = ProtoType<PBFacility>;
+export type Reservation = ProtoType<PBReservation>;
+export type User = ProtoType<PBUser>;
+export type ReservationDate = ProtoType<PBReservationDate>;
+export type ReservationFee = ProtoType<PBReservationFee>;
+export type FullFacility = ProtoType<PBFulFacility>;
+export type FullReservation = ProtoType<PBFullReservation>;
+export type Building = ProtoType<PBBuilding>;
+export type BuildingWithFacilities = ProtoType<PBBuildingWithFacilities>;
 
-import type {Message} from '@bufbuild/protobuf'
-export type ProtoType<T> = Omit<T, keyof Message<any>>
-export type Category = ProtoType<PBCategory>
-export type Facility = ProtoType<PBFacility>
-export type Reservation = ProtoType<PBReservation>
-export type User = ProtoType<PBUser>
-export type ReservationDate = ProtoType<PBReservationDate>
-export type ReservationFee = ProtoType<PBReservationFee>
-export type FullFacility = ProtoType<PBFulFacility>
-export type FullReservation = ProtoType<PBFullReservation>
-export type Building = ProtoType<PBBuilding>
-export type BuildingWithFacilities = ProtoType<PBBuildingWithFacilities>
+export type UserRole = 'USER' | 'ADMIN' | 'STAFF' | 'GUEST';
 
 export interface FormData {
   eventName: string;
@@ -75,14 +76,11 @@ export interface InputProps {
   defaultValue?: string;
 }
 
-
-
-
 export interface TableReservation {
   eventName: string;
   Facility: string;
   ReservationDate: any[];
-  approved: "pending" | "approved" | "denied" | "canceled";
+  approved: 'pending' | 'approved' | 'denied' | 'canceled';
   User?: string;
   Details: number;
 }
@@ -104,7 +102,7 @@ export interface DateType {
   endDate: string;
   startTime: string;
   endTime: string;
-  approved: "pending" | "approved" | "denied" | "canceled";
+  approved: 'pending' | 'approved' | 'denied' | 'canceled';
   ReservationID: any;
 }
 
@@ -143,11 +141,10 @@ export interface RevenueData {
 }
 
 export type Session = {
-    id: string;
-    userId: string;
-    refreshToken: string;
-    provider: string;
-    createdAt: string;
-    expiresAt: string;
-}
-
+  id: string;
+  userId: string;
+  refreshToken: string;
+  provider: string;
+  createdAt: string;
+  expiresAt: string;
+};

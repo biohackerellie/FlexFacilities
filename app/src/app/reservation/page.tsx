@@ -1,10 +1,10 @@
-import { Suspense } from "react";
-import { redirect } from "next/navigation";
+import { Suspense } from 'react';
+import { redirect } from 'next/navigation';
 
-import { auth } from "@local/auth";
+import { auth } from '@/lib/auth';
 
-import ReservationForm from "@/components/forms/reservationForm2";
-import { Skeleton } from "@/components/ui/skeleton";
+import ReservationForm from '@/components/forms/reservationForm2';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const Loading = () => {
   return (
@@ -19,12 +19,12 @@ const Loading = () => {
 export default async function ReservationPage() {
   const session = await auth();
   if (!session) {
-    redirect("/login");
+    redirect('/login');
   }
   return (
     <section className="my-4 flex flex-col justify-center sm:flex-row">
       <Suspense fallback={<Loading />}>
-        <ReservationForm email={session.user.email!} userId={session.user.id} />
+        <ReservationForm email={session.userEmail} userId={session.userId} />
       </Suspense>
     </section>
   );

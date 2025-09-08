@@ -1,13 +1,16 @@
-"use server";
+'use server';
 
-import { revalidateTag } from "next/cache";
-import { eq } from "drizzle-orm";
+import { revalidateTag } from 'next/cache';
+import { eq } from 'drizzle-orm';
 
-import { db } from "@local/db/client";
-import { Reservation } from "@local/db/schema";
-
+import { db } from '@local/db/client';
+import { Reservation } from '@local/db/schema';
+/**
+ * @deprecated
+ *  TODO: rewrite this in golang
+ */
 export default async function Paid(formdata: FormData) {
-  const id = formdata.get("id") as unknown as number;
+  const id = formdata.get('id') as unknown as number;
   try {
     await db
       .update(Reservation)
@@ -15,7 +18,7 @@ export default async function Paid(formdata: FormData) {
         paid: true,
       })
       .where(eq(Reservation.id, id));
-    return revalidateTag("reservations");
+    return revalidateTag('reservations');
   } catch (error) {
     throw new Error();
   }

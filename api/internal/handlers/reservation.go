@@ -6,9 +6,9 @@ import (
 	"api/internal/ports"
 	service "api/internal/proto/reservation"
 	"context"
+	"fmt"
 	"log/slog"
 	"math"
-	"strconv"
 	"time"
 
 	"connectrpc.com/connect"
@@ -18,11 +18,12 @@ type ReservationHandler struct {
 	reservationStore ports.ReservationStore
 	facilityStore    ports.FacilityStore
 	log              *slog.Logger
+	timezone         *time.Location
 }
 
-func NewReservationHandler(reservationStore ports.ReservationStore, log *slog.Logger) *ReservationHandler {
+func NewReservationHandler(reservationStore ports.ReservationStore, log *slog.Logger, timezone *time.Location) *ReservationHandler {
 	log.With(slog.Group("Core_ReservationHandler", slog.String("name", "reservation")))
-	return &ReservationHandler{reservationStore: reservationStore, log: log}
+	return &ReservationHandler{reservationStore: reservationStore, log: log, timezone: timezone}
 }
 func (a *ReservationHandler) GetAllReservations(ctx context.Context, req *connect.Request[service.GetAllReservationsRequest]) (*connect.Response[service.AllReservationsResponse], error) {
 	res, err := a.reservationStore.GetAll(ctx)
@@ -196,29 +197,47 @@ func (a *ReservationHandler) CostReducer(ctx context.Context, req *connect.Reque
 	if err != nil {
 		return nil, err
 	}
-	categories, err := a.facilityStore.GetCategories(ctx, reservation.Reservation.CategoryID)
+	ids := []int64{reservation.Reservation.CategoryID}
+	categories, err := a.facilityStore.GetCategories(ctx, ids)
 	if err != nil {
 		return nil, err
 	}
 	category := categories[0]
+	loc := a.timezone
+	var total time.Duration
+	for _, date := range reservation.Dates {
+		if date.Approved != models.ReservationDateApprovedApproved {
+			continue
+		}
+		startDate := date.StartDate
+		endDate := date.EndDate
+		if !endDate.Valid {
+			endDate = startDate
+		}
+		start, err := utils.CombineDateAndTime(loc, startDate, date.StartTime)
+		if err != nil {
+			return nil, fmt.Errorf("invalid start date: %w", err)
+		}
+		end, err := utils.CombineDateAndTime(loc, endDate, date.EndTime)
+		if err != nil {
+			return nil, fmt.Errorf("invalid end date: %w", err)
+		}
+		if end.Before(start) {
+			return nil, fmt.Errorf("end before start for date id %d", date.ID)
+		}
+		total += end.Sub(start)
+	}
+	totalMinutes := int64(total / time.Minute)
 	fees := 0.0
 	for _, fee := range reservation.Fees {
 		fees += utils.PGNumericToFloat64(fee.AdditionalFees)
 	}
-	totalHours := 0.0
-	for _, date := range reservation.Dates {
-		if date.Approved == models.ReservationDateApprovedApproved {
-			startTime := utils.PgTimeToTime(date.StartTime)
-			endTime := utils.PgTimeToTime(date.EndTime)
-			totalDuration := endTime.Sub(startTime)
-			totalHours += totalDuration.Hours()
-		}
-	}
 
-	totalCost := totalHours*category.Price + fees
-	totalCost = math.Abs(totalCost)
-	totalCost = math.Round(totalCost*100) / 100
-	stringCost := strconv.FormatFloat(totalCost, 'f', 2, 64)
+	pricePerHourCents := int64(category.Price * 100)
+	feeCents := int64(math.Round(fees * 100))
+	costCents := int64(math.Round(float64(pricePerHourCents) * float64(totalMinutes) / 60.0))
+	totalCents := max(costCents+feeCents, 0)
+	stringCost := fmt.Sprintf("%.2f", float64(totalCents)/100.0)
 	return connect.NewResponse(&service.CostReducerResponse{
 		Cost: string(stringCost),
 	}), nil
