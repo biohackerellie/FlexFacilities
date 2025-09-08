@@ -66,9 +66,34 @@ func (f *FacilityStore) Get(ctx context.Context, id int64) (*models.FullFacility
 	return facilityWithCategories, nil
 }
 
+const getAllBuildingsQuery = `SELECT * FROM buildings`
+
+func (f *FacilityStore) GetAllBuildings(ctx context.Context) ([]*models.Building, error) {
+	var buildings []*models.Building
+	if err := f.db.SelectContext(ctx, &buildings, getAllBuildingsQuery); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			buildings = []*models.Building{}
+		}
+		return nil, err
+	}
+	return buildings, nil
+}
+
+const getBuilding = `SELECT * FROM building WHERE id = $1 LIMIT 1`
+
+func (f *FacilityStore) GetBuilding(ctx context.Context, id int64) (*models.Building, error) {
+	var building models.Building
+	if err := f.db.GetContext(ctx, &building, getBuilding, id); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return &building, nil
+}
+
 const allCategoriesInQuery = `SELECT * FROM categories WHERE facility_id IN (?)`
 const getAllFacilitiesQuery = `SELECT * FROM facilities`
-const getAllBuildingsQuery = `SELECT * FROM buildings`
 
 func (f *FacilityStore) GetAll(ctx context.Context) ([]*models.BuildingWithFacilities, error) {
 

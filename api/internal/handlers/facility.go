@@ -2,22 +2,26 @@ package handlers
 
 import (
 	"api/internal/models"
+	"errors"
+
 	"api/internal/ports"
 	service "api/internal/proto/facilities"
-	"connectrpc.com/connect"
+	"api/pkg/calendar"
 	"context"
 	"log/slog"
+
+	"connectrpc.com/connect"
 )
 
 type FacilityHandler struct {
-	log *slog.Logger
-
+	log           *slog.Logger
+	calendar      *calendar.Calendar
 	facilityStore ports.FacilityStore
 }
 
-func NewFacilityHandler(facilityStore ports.FacilityStore, log *slog.Logger) *FacilityHandler {
+func NewFacilityHandler(facilityStore ports.FacilityStore, log *slog.Logger, calendar *calendar.Calendar) *FacilityHandler {
 	log.With(slog.Group("Core_Handler", slog.String("name", "facility")))
-	return &FacilityHandler{facilityStore: facilityStore, log: log}
+	return &FacilityHandler{facilityStore: facilityStore, log: log, calendar: calendar}
 }
 
 func (a *FacilityHandler) GetAllFacilities(ctx context.Context, req *connect.Request[service.GetAllFacilitiesRequest]) (*connect.Response[service.GetAllFacilitiesResponse], error) {
@@ -34,6 +38,22 @@ func (a *FacilityHandler) GetAllFacilities(ctx context.Context, req *connect.Req
 		Buildings: protoFacilities,
 	}), nil
 }
+
+func (a *FacilityHandler) GetAllBuildings(ctx context.Context, req *connect.Request[service.GetAllBuildingsRequest]) (*connect.Response[service.GetAllBuildingsResponse], error) {
+	buildings, err := a.facilityStore.GetAllBuildings(ctx)
+	if err != nil {
+		return nil, err
+	}
+	protoBuildings := make([]*service.Building, len(buildings))
+	for i, building := range buildings {
+		protoBuildings[i] = building.ToProto()
+	}
+
+	return connect.NewResponse(&service.GetAllBuildingsResponse{
+		Buildings: protoBuildings,
+	}), nil
+}
+
 func (a *FacilityHandler) GetFacility(ctx context.Context, req *connect.Request[service.GetFacilityRequest]) (*connect.Response[service.FullFacility], error) {
 	res, err := a.facilityStore.Get(ctx, req.Msg.GetId())
 
@@ -110,4 +130,80 @@ func (a *FacilityHandler) UpdateFacilityCategory(ctx context.Context, req *conne
 		return nil, err
 	}
 	return connect.NewResponse(&service.Category{}), nil
+}
+
+func (a *FacilityHandler) GetAllEvents(ctx context.Context, req *connect.Request[service.GetAllEventsRequest]) (*connect.Response[service.GetAllEventsResponse], error) {
+	res, err := a.calendar.ListEvents(req.Msg.GetCalendarId())
+	if err != nil {
+		return nil, err
+	}
+	events := make([]*service.Event, len(res.Items))
+	for i, event := range res.Items {
+		events[i] = &service.Event{
+			Summary:     event.Summary,
+			Start:       event.Start.DateTime,
+			End:         event.End.DateTime,
+			Location:    event.Location,
+			Description: event.Description,
+			Title:       event.Summary,
+		}
+	}
+	return connect.NewResponse(&service.GetAllEventsResponse{
+		Events: events,
+	}), nil
+}
+
+func (a *FacilityHandler) GetEventsByFacility(ctx context.Context, req *connect.Request[service.GetEventsByFacilityRequest]) (*connect.Response[service.GetEventsByFacilityResponse], error) {
+	fac, err := a.facilityStore.Get(ctx, req.Msg.GetId())
+	if err != nil {
+		return nil, err
+	}
+
+	res, err := a.calendar.ListEvents(fac.Facility.GoogleCalendarID)
+	if err != nil {
+		return nil, err
+	}
+	events := make([]*service.Event, len(res.Items))
+	for i, event := range res.Items {
+		events[i] = &service.Event{
+			Summary:     event.Summary,
+			Start:       event.Start.DateTime,
+			End:         event.End.DateTime,
+			Location:    event.Location,
+			Description: event.Description,
+			Title:       event.Summary,
+		}
+	}
+	return connect.NewResponse(&service.GetEventsByFacilityResponse{
+		Events: events,
+	}), nil
+}
+
+func (a *FacilityHandler) GetEventsByBuilding(ctx context.Context, req *connect.Request[service.GetEventsByBuildingRequest]) (*connect.Response[service.GetEventsByBuildingResponse], error) {
+	building, err := a.facilityStore.GetBuilding(ctx, req.Msg.GetId())
+	if err != nil {
+		return nil, err
+	}
+	calendarID := building.GoogleCalendarID
+	if calendarID == nil {
+		return nil, errors.New("building has no calendar")
+	}
+	res, err := a.calendar.ListEvents(*calendarID)
+	if err != nil {
+		return nil, err
+	}
+	events := make([]*service.Event, len(res.Items))
+	for i, event := range res.Items {
+		events[i] = &service.Event{
+			Summary:     event.Summary,
+			Start:       event.Start.DateTime,
+			End:         event.End.DateTime,
+			Location:    event.Location,
+			Description: event.Description,
+			Title:       event.Summary,
+		}
+	}
+	return connect.NewResponse(&service.GetEventsByBuildingResponse{
+		Events: events,
+	}), nil
 }

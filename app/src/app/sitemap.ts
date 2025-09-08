@@ -1,7 +1,6 @@
-import type { MetadataRoute } from "next";
+import type { MetadataRoute } from 'next';
 
-const baseURL =
-  process.env.NEXT_PUBLIC_HOST || "https://facilities.laurel.k12.mt.us";
+const baseURL = process.env.NEXT_PUBLIC_HOST;
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [

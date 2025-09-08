@@ -1,25 +1,15 @@
-import React, { Suspense } from "react";
-import Image from "next/image";
-import Link from "next/link";
+import React, { Suspense } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
 
-import type { CategoryType, FacilityType } from "@local/db/schema";
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
+import { FacilityWithCategories } from '@/lib/types';
 
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-
-interface FacilityWithCategory extends FacilityType {
-  Category: CategoryType[];
-}
-type PartialFacility = Partial<FacilityWithCategory>;
-
-export default function FacilityCard({
-  name,
-  address,
-  building,
-  imagePath,
-  id,
-}: PartialFacility) {
-  const idString = id?.toString()!;
+export default function FacilityCard(facility: FacilityWithCategories) {
+  const idString = facility.facility?.id?.toString()!;
+  if (!facility.facility) return null;
+  const { name, building, address, imagePath } = facility.facility;
   return (
     <Card className="relative h-[280px] w-[300px] border-gray-100 bg-zinc-100 shadow-xs drop-shadow-md backdrop-blur-md hover:cursor-pointer hover:border-black dark:bg-zinc-800 dark:text-white dark:shadow-gold sm:h-[380px] sm:w-[400px]">
       <Link href={`/facilities/${idString}`}>

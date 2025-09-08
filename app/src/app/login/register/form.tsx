@@ -1,5 +1,5 @@
 import { TosModal } from '@/components/forms';
-import { Button } from '@/components/ui/buttons';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,

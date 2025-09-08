@@ -1,8 +1,8 @@
-import type { Schema$Event } from '@/functions/events/types';
 import type { Path, UseFormRegister } from 'react-hook-form';
 import type {
   FullReservation as PBFullReservation,
   FullFacility as PBFulFacility,
+  FacilityWithCategories as PBFacilityWithCategories,
   Building as PBBuilding,
   BuildingWithFacilities as PBBuildingWithFacilities,
   Category as PBCategory,
@@ -25,6 +25,7 @@ export type FullFacility = ProtoType<PBFulFacility>;
 export type FullReservation = ProtoType<PBFullReservation>;
 export type Building = ProtoType<PBBuilding>;
 export type BuildingWithFacilities = ProtoType<PBBuildingWithFacilities>;
+export type FacilityWithCategories = ProtoType<PBFacilityWithCategories>;
 
 export type UserRole = 'USER' | 'ADMIN' | 'STAFF' | 'GUEST';
 

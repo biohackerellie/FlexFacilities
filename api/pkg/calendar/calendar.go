@@ -2,7 +2,6 @@ package calendar
 
 import (
 	"context"
-	"fmt"
 	"os"
 
 	"golang.org/x/oauth2"
@@ -30,15 +29,12 @@ func NewCalendar(ctx context.Context) (*Calendar, error) {
 	if err != nil {
 		return nil, err
 	}
-	str := service.CalendarList.List()
-	fmt.Println(str.Fields("items"))
 
 	return &Calendar{c: service}, nil
-
 }
 
 func (c *Calendar) ListEvents(calendarID string) (*calendar.Events, error) {
-	return c.c.Events.List(calendarID).SingleEvents(true).MaxResults(1000).Do()
+	return c.c.Events.List(calendarID).SingleEvents(true).MaxResults(1000).OrderBy("startTime").Do()
 }
 
 func (c *Calendar) InsertEvent(calendarID string, event *calendar.Event) (*calendar.Event, error) {

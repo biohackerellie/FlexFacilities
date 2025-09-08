@@ -39,8 +39,12 @@ export class RPC {
       this._FacilitiesService = createClient(FacilitiesService, this.transport);
     }
     return {
+      ...this._FacilitiesService,
       getAllFacilities: this.errorWrapper(
         this._FacilitiesService.getAllFacilities,
+      ),
+      getAllBuildings: this.errorWrapper(
+        this._FacilitiesService.getAllBuildings,
       ),
       getFacility: this.errorWrapper(this._FacilitiesService.getFacility),
       getFacilityCategories: this.errorWrapper(
@@ -48,6 +52,12 @@ export class RPC {
       ),
       getBuildingFacilities: this.errorWrapper(
         this._FacilitiesService.getBuildingFacilities,
+      ),
+      getEventsByFacility: this.errorWrapper(
+        this._FacilitiesService.getEventsByFacility,
+      ),
+      getEventsByBuilding: this.errorWrapper(
+        this._FacilitiesService.getEventsByBuilding,
       ),
       createFacility: this.errorWrapper(this._FacilitiesService.createFacility),
       updateFacility: this.errorWrapper(this._FacilitiesService.updateFacility),

@@ -36,9 +36,21 @@ const (
 	// FacilitiesServiceGetAllFacilitiesProcedure is the fully-qualified name of the FacilitiesService's
 	// GetAllFacilities RPC.
 	FacilitiesServiceGetAllFacilitiesProcedure = "/api.facilities.FacilitiesService/GetAllFacilities"
+	// FacilitiesServiceGetAllBuildingsProcedure is the fully-qualified name of the FacilitiesService's
+	// GetAllBuildings RPC.
+	FacilitiesServiceGetAllBuildingsProcedure = "/api.facilities.FacilitiesService/GetAllBuildings"
 	// FacilitiesServiceGetFacilityProcedure is the fully-qualified name of the FacilitiesService's
 	// GetFacility RPC.
 	FacilitiesServiceGetFacilityProcedure = "/api.facilities.FacilitiesService/GetFacility"
+	// FacilitiesServiceGetEventsByFacilityProcedure is the fully-qualified name of the
+	// FacilitiesService's GetEventsByFacility RPC.
+	FacilitiesServiceGetEventsByFacilityProcedure = "/api.facilities.FacilitiesService/GetEventsByFacility"
+	// FacilitiesServiceGetEventsByBuildingProcedure is the fully-qualified name of the
+	// FacilitiesService's GetEventsByBuilding RPC.
+	FacilitiesServiceGetEventsByBuildingProcedure = "/api.facilities.FacilitiesService/GetEventsByBuilding"
+	// FacilitiesServiceGetAllEventsProcedure is the fully-qualified name of the FacilitiesService's
+	// GetAllEvents RPC.
+	FacilitiesServiceGetAllEventsProcedure = "/api.facilities.FacilitiesService/GetAllEvents"
 	// FacilitiesServiceGetFacilityCategoriesProcedure is the fully-qualified name of the
 	// FacilitiesService's GetFacilityCategories RPC.
 	FacilitiesServiceGetFacilityCategoriesProcedure = "/api.facilities.FacilitiesService/GetFacilityCategories"
@@ -62,7 +74,11 @@ const (
 // FacilitiesServiceClient is a client for the api.facilities.FacilitiesService service.
 type FacilitiesServiceClient interface {
 	GetAllFacilities(context.Context, *connect.Request[facilities.GetAllFacilitiesRequest]) (*connect.Response[facilities.GetAllFacilitiesResponse], error)
+	GetAllBuildings(context.Context, *connect.Request[facilities.GetAllBuildingsRequest]) (*connect.Response[facilities.GetAllBuildingsResponse], error)
 	GetFacility(context.Context, *connect.Request[facilities.GetFacilityRequest]) (*connect.Response[facilities.FullFacility], error)
+	GetEventsByFacility(context.Context, *connect.Request[facilities.GetEventsByFacilityRequest]) (*connect.Response[facilities.GetEventsByFacilityResponse], error)
+	GetEventsByBuilding(context.Context, *connect.Request[facilities.GetEventsByBuildingRequest]) (*connect.Response[facilities.GetEventsByBuildingResponse], error)
+	GetAllEvents(context.Context, *connect.Request[facilities.GetAllEventsRequest]) (*connect.Response[facilities.GetAllEventsResponse], error)
 	GetFacilityCategories(context.Context, *connect.Request[facilities.GetFacilityCategoriesRequest]) (*connect.Response[facilities.GetFacilityCategoriesResponse], error)
 	GetBuildingFacilities(context.Context, *connect.Request[facilities.GetBuildingFacilitiesRequest]) (*connect.Response[facilities.GetBuildingFacilitiesResponse], error)
 	CreateFacility(context.Context, *connect.Request[facilities.CreateFacilityRequest]) (*connect.Response[facilities.CreateFacilityResponse], error)
@@ -89,10 +105,38 @@ func NewFacilitiesServiceClient(httpClient connect.HTTPClient, baseURL string, o
 			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 			connect.WithClientOptions(opts...),
 		),
+		getAllBuildings: connect.NewClient[facilities.GetAllBuildingsRequest, facilities.GetAllBuildingsResponse](
+			httpClient,
+			baseURL+FacilitiesServiceGetAllBuildingsProcedure,
+			connect.WithSchema(facilitiesServiceMethods.ByName("GetAllBuildings")),
+			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
+			connect.WithClientOptions(opts...),
+		),
 		getFacility: connect.NewClient[facilities.GetFacilityRequest, facilities.FullFacility](
 			httpClient,
 			baseURL+FacilitiesServiceGetFacilityProcedure,
 			connect.WithSchema(facilitiesServiceMethods.ByName("GetFacility")),
+			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
+			connect.WithClientOptions(opts...),
+		),
+		getEventsByFacility: connect.NewClient[facilities.GetEventsByFacilityRequest, facilities.GetEventsByFacilityResponse](
+			httpClient,
+			baseURL+FacilitiesServiceGetEventsByFacilityProcedure,
+			connect.WithSchema(facilitiesServiceMethods.ByName("GetEventsByFacility")),
+			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
+			connect.WithClientOptions(opts...),
+		),
+		getEventsByBuilding: connect.NewClient[facilities.GetEventsByBuildingRequest, facilities.GetEventsByBuildingResponse](
+			httpClient,
+			baseURL+FacilitiesServiceGetEventsByBuildingProcedure,
+			connect.WithSchema(facilitiesServiceMethods.ByName("GetEventsByBuilding")),
+			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
+			connect.WithClientOptions(opts...),
+		),
+		getAllEvents: connect.NewClient[facilities.GetAllEventsRequest, facilities.GetAllEventsResponse](
+			httpClient,
+			baseURL+FacilitiesServiceGetAllEventsProcedure,
+			connect.WithSchema(facilitiesServiceMethods.ByName("GetAllEvents")),
 			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 			connect.WithClientOptions(opts...),
 		),
@@ -140,7 +184,11 @@ func NewFacilitiesServiceClient(httpClient connect.HTTPClient, baseURL string, o
 // facilitiesServiceClient implements FacilitiesServiceClient.
 type facilitiesServiceClient struct {
 	getAllFacilities       *connect.Client[facilities.GetAllFacilitiesRequest, facilities.GetAllFacilitiesResponse]
+	getAllBuildings        *connect.Client[facilities.GetAllBuildingsRequest, facilities.GetAllBuildingsResponse]
 	getFacility            *connect.Client[facilities.GetFacilityRequest, facilities.FullFacility]
+	getEventsByFacility    *connect.Client[facilities.GetEventsByFacilityRequest, facilities.GetEventsByFacilityResponse]
+	getEventsByBuilding    *connect.Client[facilities.GetEventsByBuildingRequest, facilities.GetEventsByBuildingResponse]
+	getAllEvents           *connect.Client[facilities.GetAllEventsRequest, facilities.GetAllEventsResponse]
 	getFacilityCategories  *connect.Client[facilities.GetFacilityCategoriesRequest, facilities.GetFacilityCategoriesResponse]
 	getBuildingFacilities  *connect.Client[facilities.GetBuildingFacilitiesRequest, facilities.GetBuildingFacilitiesResponse]
 	createFacility         *connect.Client[facilities.CreateFacilityRequest, facilities.CreateFacilityResponse]
@@ -154,9 +202,29 @@ func (c *facilitiesServiceClient) GetAllFacilities(ctx context.Context, req *con
 	return c.getAllFacilities.CallUnary(ctx, req)
 }
 
+// GetAllBuildings calls api.facilities.FacilitiesService.GetAllBuildings.
+func (c *facilitiesServiceClient) GetAllBuildings(ctx context.Context, req *connect.Request[facilities.GetAllBuildingsRequest]) (*connect.Response[facilities.GetAllBuildingsResponse], error) {
+	return c.getAllBuildings.CallUnary(ctx, req)
+}
+
 // GetFacility calls api.facilities.FacilitiesService.GetFacility.
 func (c *facilitiesServiceClient) GetFacility(ctx context.Context, req *connect.Request[facilities.GetFacilityRequest]) (*connect.Response[facilities.FullFacility], error) {
 	return c.getFacility.CallUnary(ctx, req)
+}
+
+// GetEventsByFacility calls api.facilities.FacilitiesService.GetEventsByFacility.
+func (c *facilitiesServiceClient) GetEventsByFacility(ctx context.Context, req *connect.Request[facilities.GetEventsByFacilityRequest]) (*connect.Response[facilities.GetEventsByFacilityResponse], error) {
+	return c.getEventsByFacility.CallUnary(ctx, req)
+}
+
+// GetEventsByBuilding calls api.facilities.FacilitiesService.GetEventsByBuilding.
+func (c *facilitiesServiceClient) GetEventsByBuilding(ctx context.Context, req *connect.Request[facilities.GetEventsByBuildingRequest]) (*connect.Response[facilities.GetEventsByBuildingResponse], error) {
+	return c.getEventsByBuilding.CallUnary(ctx, req)
+}
+
+// GetAllEvents calls api.facilities.FacilitiesService.GetAllEvents.
+func (c *facilitiesServiceClient) GetAllEvents(ctx context.Context, req *connect.Request[facilities.GetAllEventsRequest]) (*connect.Response[facilities.GetAllEventsResponse], error) {
+	return c.getAllEvents.CallUnary(ctx, req)
 }
 
 // GetFacilityCategories calls api.facilities.FacilitiesService.GetFacilityCategories.
@@ -192,7 +260,11 @@ func (c *facilitiesServiceClient) UpdateFacilityCategory(ctx context.Context, re
 // FacilitiesServiceHandler is an implementation of the api.facilities.FacilitiesService service.
 type FacilitiesServiceHandler interface {
 	GetAllFacilities(context.Context, *connect.Request[facilities.GetAllFacilitiesRequest]) (*connect.Response[facilities.GetAllFacilitiesResponse], error)
+	GetAllBuildings(context.Context, *connect.Request[facilities.GetAllBuildingsRequest]) (*connect.Response[facilities.GetAllBuildingsResponse], error)
 	GetFacility(context.Context, *connect.Request[facilities.GetFacilityRequest]) (*connect.Response[facilities.FullFacility], error)
+	GetEventsByFacility(context.Context, *connect.Request[facilities.GetEventsByFacilityRequest]) (*connect.Response[facilities.GetEventsByFacilityResponse], error)
+	GetEventsByBuilding(context.Context, *connect.Request[facilities.GetEventsByBuildingRequest]) (*connect.Response[facilities.GetEventsByBuildingResponse], error)
+	GetAllEvents(context.Context, *connect.Request[facilities.GetAllEventsRequest]) (*connect.Response[facilities.GetAllEventsResponse], error)
 	GetFacilityCategories(context.Context, *connect.Request[facilities.GetFacilityCategoriesRequest]) (*connect.Response[facilities.GetFacilityCategoriesResponse], error)
 	GetBuildingFacilities(context.Context, *connect.Request[facilities.GetBuildingFacilitiesRequest]) (*connect.Response[facilities.GetBuildingFacilitiesResponse], error)
 	CreateFacility(context.Context, *connect.Request[facilities.CreateFacilityRequest]) (*connect.Response[facilities.CreateFacilityResponse], error)
@@ -215,10 +287,38 @@ func NewFacilitiesServiceHandler(svc FacilitiesServiceHandler, opts ...connect.H
 		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 		connect.WithHandlerOptions(opts...),
 	)
+	facilitiesServiceGetAllBuildingsHandler := connect.NewUnaryHandler(
+		FacilitiesServiceGetAllBuildingsProcedure,
+		svc.GetAllBuildings,
+		connect.WithSchema(facilitiesServiceMethods.ByName("GetAllBuildings")),
+		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
+		connect.WithHandlerOptions(opts...),
+	)
 	facilitiesServiceGetFacilityHandler := connect.NewUnaryHandler(
 		FacilitiesServiceGetFacilityProcedure,
 		svc.GetFacility,
 		connect.WithSchema(facilitiesServiceMethods.ByName("GetFacility")),
+		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
+		connect.WithHandlerOptions(opts...),
+	)
+	facilitiesServiceGetEventsByFacilityHandler := connect.NewUnaryHandler(
+		FacilitiesServiceGetEventsByFacilityProcedure,
+		svc.GetEventsByFacility,
+		connect.WithSchema(facilitiesServiceMethods.ByName("GetEventsByFacility")),
+		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
+		connect.WithHandlerOptions(opts...),
+	)
+	facilitiesServiceGetEventsByBuildingHandler := connect.NewUnaryHandler(
+		FacilitiesServiceGetEventsByBuildingProcedure,
+		svc.GetEventsByBuilding,
+		connect.WithSchema(facilitiesServiceMethods.ByName("GetEventsByBuilding")),
+		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
+		connect.WithHandlerOptions(opts...),
+	)
+	facilitiesServiceGetAllEventsHandler := connect.NewUnaryHandler(
+		FacilitiesServiceGetAllEventsProcedure,
+		svc.GetAllEvents,
+		connect.WithSchema(facilitiesServiceMethods.ByName("GetAllEvents")),
 		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 		connect.WithHandlerOptions(opts...),
 	)
@@ -264,8 +364,16 @@ func NewFacilitiesServiceHandler(svc FacilitiesServiceHandler, opts ...connect.H
 		switch r.URL.Path {
 		case FacilitiesServiceGetAllFacilitiesProcedure:
 			facilitiesServiceGetAllFacilitiesHandler.ServeHTTP(w, r)
+		case FacilitiesServiceGetAllBuildingsProcedure:
+			facilitiesServiceGetAllBuildingsHandler.ServeHTTP(w, r)
 		case FacilitiesServiceGetFacilityProcedure:
 			facilitiesServiceGetFacilityHandler.ServeHTTP(w, r)
+		case FacilitiesServiceGetEventsByFacilityProcedure:
+			facilitiesServiceGetEventsByFacilityHandler.ServeHTTP(w, r)
+		case FacilitiesServiceGetEventsByBuildingProcedure:
+			facilitiesServiceGetEventsByBuildingHandler.ServeHTTP(w, r)
+		case FacilitiesServiceGetAllEventsProcedure:
+			facilitiesServiceGetAllEventsHandler.ServeHTTP(w, r)
 		case FacilitiesServiceGetFacilityCategoriesProcedure:
 			facilitiesServiceGetFacilityCategoriesHandler.ServeHTTP(w, r)
 		case FacilitiesServiceGetBuildingFacilitiesProcedure:
@@ -291,8 +399,24 @@ func (UnimplementedFacilitiesServiceHandler) GetAllFacilities(context.Context, *
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.facilities.FacilitiesService.GetAllFacilities is not implemented"))
 }
 
+func (UnimplementedFacilitiesServiceHandler) GetAllBuildings(context.Context, *connect.Request[facilities.GetAllBuildingsRequest]) (*connect.Response[facilities.GetAllBuildingsResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.facilities.FacilitiesService.GetAllBuildings is not implemented"))
+}
+
 func (UnimplementedFacilitiesServiceHandler) GetFacility(context.Context, *connect.Request[facilities.GetFacilityRequest]) (*connect.Response[facilities.FullFacility], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.facilities.FacilitiesService.GetFacility is not implemented"))
+}
+
+func (UnimplementedFacilitiesServiceHandler) GetEventsByFacility(context.Context, *connect.Request[facilities.GetEventsByFacilityRequest]) (*connect.Response[facilities.GetEventsByFacilityResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.facilities.FacilitiesService.GetEventsByFacility is not implemented"))
+}
+
+func (UnimplementedFacilitiesServiceHandler) GetEventsByBuilding(context.Context, *connect.Request[facilities.GetEventsByBuildingRequest]) (*connect.Response[facilities.GetEventsByBuildingResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.facilities.FacilitiesService.GetEventsByBuilding is not implemented"))
+}
+
+func (UnimplementedFacilitiesServiceHandler) GetAllEvents(context.Context, *connect.Request[facilities.GetAllEventsRequest]) (*connect.Response[facilities.GetAllEventsResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.facilities.FacilitiesService.GetAllEvents is not implemented"))
 }
 
 func (UnimplementedFacilitiesServiceHandler) GetFacilityCategories(context.Context, *connect.Request[facilities.GetFacilityCategoriesRequest]) (*connect.Response[facilities.GetFacilityCategoriesResponse], error) {

@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 import { ExternalLink } from 'lucide-react';
 import moment from 'moment';
 
-import { Button } from '@/components/ui/buttons';
+import { Button } from '@/components/ui/button';
 import LoadingScreen from '@/components/ui/loadingScreen';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import {
@@ -14,17 +14,28 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { GetEvents } from '@/functions/events/googleAPI';
-import { api } from '@/trpc/server';
+import { client } from '@/lib/rpc';
 
-export async function getData(id: string) {
-  const facilityPromise = api.facility.byId({ id: parseInt(id) });
-  const eventsPromise = GetEvents(parseInt(id));
-  const [facility, events] = await Promise.all([
-    facilityPromise,
-    eventsPromise,
-  ]);
-  return { facility, events };
+async function getFacility(id: string) {
+  'use cache';
+  const { data: facility, error } = await client
+    .facilities()
+    .getFacility({ id: BigInt(id) });
+
+  if (error || !facility) {
+    return null;
+  }
+  return facility;
+}
+async function getEvents(id: string) {
+  'use cache';
+  const { data: events, error } = await client
+    .facilities()
+    .getEventsByFacility({ id: BigInt(id) });
+  if (error || !events) {
+    return null;
+  }
+  return events;
 }
 
 export default async function FacilityPage({
@@ -34,9 +45,11 @@ export default async function FacilityPage({
     id: string;
   };
 }) {
-  const { facility, events } = await getData(params.id);
-  if (!facility) return notFound();
+  const fac = await getFacility(params.id);
+  const events = await getEvents(params.id);
 
+  if (!fac) return notFound();
+  const facility = fac.facility!;
   const map = `https://www.google.com/maps/search/?api=1&query=${facility.address}`;
 
   return (
@@ -113,7 +126,7 @@ export default async function FacilityPage({
 
           <div className="my-3 mr-4 max-w-sm items-end justify-center border-4 p-4 sm:max-w-md sm:justify-between">
             <h1 className="border-b-2 text-2xl font-bold">Pricing</h1>
-            {facility.Category?.map((category) => (
+            {fac.categories.map((category) => (
               <div key={category.id} className="grid grid-cols-3 p-4">
                 <Tooltip>
                   <TooltipTrigger className="col-span-2 col-start-1 truncate text-left text-lg font-semibold">
@@ -141,7 +154,7 @@ export default async function FacilityPage({
             <ScrollArea className="h-[400px] w-[340px] rounded-md border p-4 sm:h-[400px] sm:w-[480px]">
               <h1 className="border-b-2 text-2xl font-bold">Upcoming Events</h1>
               {events &&
-                [...events]
+                [...events.events]
                   .sort(
                     (a, b) =>
                       new Date(a.start!).getTime() -

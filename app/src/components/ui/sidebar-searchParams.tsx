@@ -1,16 +1,14 @@
-"use client";
+'use client';
 
-import React, { useCallback } from "react";
-import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import React, { useCallback } from 'react';
+import Link from 'next/link';
+import { usePathname, useSearchParams } from 'next/navigation';
 
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
-  items: {
-    title: string;
-  }[];
+  items: string[];
 }
 
 export function SidebarSearchParamsNav({
@@ -20,9 +18,9 @@ export function SidebarSearchParamsNav({
 }: SidebarNavProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  let selectedBuilding: string | null = "All";
-  if (searchParams && searchParams.has("building")) {
-    selectedBuilding = searchParams.get("building");
+  let selectedBuilding: string | null = 'All';
+  if (searchParams && searchParams.has('building')) {
+    selectedBuilding = searchParams.get('building');
   }
 
   const handleSetSelectedBuilding = useCallback(
@@ -38,27 +36,25 @@ export function SidebarSearchParamsNav({
   return (
     <nav
       className={cn(
-        "flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1",
+        'flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1',
         className,
       )}
       {...props}
     >
-      {items.map((item) => (
+      {items.map((item, index) => (
         <Link
-          key={item.title}
+          key={index}
           prefetch={false}
-          href={
-            pathname + "?" + handleSetSelectedBuilding("building", item.title)
-          }
+          href={`${pathname}?${handleSetSelectedBuilding('building', item)}`}
           className={cn(
-            buttonVariants({ variant: "ghost" }),
-            selectedBuilding === item.title
-              ? "bg-muted hover:bg-muted"
-              : "hover:bg-transparent hover:underline",
-            "justify-start",
+            buttonVariants({ variant: 'ghost' }),
+            selectedBuilding === item
+              ? 'bg-muted hover:bg-muted'
+              : 'hover:bg-transparent hover:underline',
+            'justify-start',
           )}
         >
-          {item.title}
+          {item}
         </Link>
       ))}
     </nav>

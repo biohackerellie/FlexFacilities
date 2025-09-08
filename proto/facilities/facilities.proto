@@ -43,12 +43,33 @@ message FacilityWithCategories {
   repeated Category categories = 2;
 }
 
+message Event {
+  string summary = 1;
+  string location = 2;
+  string description = 3;
+  string start = 4; 
+  string end = 5;
+  string html_link = 7;
+  string title = 8;
+}
 
 service FacilitiesService {
   rpc GetAllFacilities (GetAllFacilitiesRequest) returns (GetAllFacilitiesResponse){
     option idempotency_level = NO_SIDE_EFFECTS;
   };
+  rpc GetAllBuildings (GetAllBuildingsRequest) returns (GetAllBuildingsResponse){
+    option idempotency_level = NO_SIDE_EFFECTS;
+  };
   rpc GetFacility (GetFacilityRequest) returns (FullFacility){
+    option idempotency_level = NO_SIDE_EFFECTS;
+  };
+  rpc GetEventsByFacility (GetEventsByFacilityRequest) returns (GetEventsByFacilityResponse){
+    option idempotency_level = NO_SIDE_EFFECTS;
+  };
+  rpc GetEventsByBuilding (GetEventsByBuildingRequest) returns (GetEventsByBuildingResponse){
+    option idempotency_level = NO_SIDE_EFFECTS;
+  };
+  rpc GetAllEvents (GetAllEventsRequest) returns (GetAllEventsResponse){
     option idempotency_level = NO_SIDE_EFFECTS;
   };
   rpc GetFacilityCategories (GetFacilityCategoriesRequest) returns (GetFacilityCategoriesResponse){
@@ -61,6 +82,35 @@ service FacilitiesService {
   rpc UpdateFacility (UpdateFacilityRequest) returns (UpdateFacilityResponse);
   rpc DeleteFacility (DeleteFacilityRequest) returns (DeleteFacilityResponse);
   rpc UpdateFacilityCategory (UpdateFacilityCategoryRequest) returns (Category);
+}
+
+message GetEventsByFacilityRequest {
+  int64 id = 1;
+}
+
+message GetEventsByFacilityResponse {
+  repeated Event events = 1;
+}
+
+message GetEventsByBuildingRequest {
+  int64 id = 1;
+}
+
+message GetEventsByBuildingResponse {
+  repeated Event events = 1;
+}
+
+message GetAllEventsRequest {
+  string calendar_id = 1;
+}
+
+message GetAllEventsResponse {
+  repeated Event events = 1;
+}
+message GetAllBuildingsRequest {}
+
+message GetAllBuildingsResponse {
+  repeated Building buildings = 1;
 }
 
 message GetAllFacilitiesRequest {

@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import React from "react";
-import { redirect } from "next/navigation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { SubmitHandler, useForm } from "react-hook-form";
-import * as z from "zod";
+import React from 'react';
+import { redirect } from 'next/navigation';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import * as z from 'zod';
 
-import { Button } from "@/components/ui/buttons";
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -15,31 +15,31 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import Reset from "@/functions/mutations/reset";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import Reset from '@/functions/mutations/reset';
 
 export default function ResetForm(id: any) {
   const formSchema = z
     .object({
       password: z.string().min(8, {
-        message: "Password must be at least 8 characters",
+        message: 'Password must be at least 8 characters',
       }),
       confirmPassword: z.string().min(8, {
-        message: "Password must be at least 8 characters",
+        message: 'Password must be at least 8 characters',
       }),
     })
     .refine((data) => data.password === data.confirmPassword, {
-      message: "Passwords do not match",
-      path: ["confirmPassword"],
+      message: 'Passwords do not match',
+      path: ['confirmPassword'],
     });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
 
     defaultValues: {
-      password: "",
-      confirmPassword: "",
+      password: '',
+      confirmPassword: '',
     },
   });
 
@@ -47,11 +47,11 @@ export default function ResetForm(id: any) {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       await Reset(userId, values.password);
-      alert("Password reset successfully");
+      alert('Password reset successfully');
     } catch (error) {
-      alert("something went wrong");
+      alert('something went wrong');
     } finally {
-      location.href = "/login";
+      location.href = '/login';
     }
   }
 

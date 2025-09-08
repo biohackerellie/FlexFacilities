@@ -19,7 +19,6 @@ type Handlers struct {
 	FacilityHandler    *FacilityHandler
 	ReservationHandler *ReservationHandler
 	Auth               *auth.Auth
-	Calendar           *calendar.Calendar
 }
 
 func New(db *repository.DB, log *slog.Logger, config *config.Config) *Handlers {
@@ -48,7 +47,7 @@ func New(db *repository.DB, log *slog.Logger, config *config.Config) *Handlers {
 		panic(err)
 	}
 	userHandler := NewUserHandler(userStore, log)
-	facilityHandler := NewFacilityHandler(facilityStore, log)
+	facilityHandler := NewFacilityHandler(facilityStore, log, cal)
 	reservationHandler := NewReservationHandler(reservationStore, log, timezone)
 
 	return &Handlers{
@@ -56,6 +55,5 @@ func New(db *repository.DB, log *slog.Logger, config *config.Config) *Handlers {
 		FacilityHandler:    facilityHandler,
 		ReservationHandler: reservationHandler,
 		Auth:               authHandler,
-		Calendar:           cal,
 	}
 }
