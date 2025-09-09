@@ -1,52 +1,56 @@
-import React, { Suspense } from "react";
-import { notFound } from "next/navigation";
+import { Suspense } from 'react';
+import { notFound } from 'next/navigation';
 
-import { ShowPayment } from "@/components/forms";
-import EditPricing from "@/components/forms/paymentModal";
-import { Button } from "@/components/ui/buttons";
-import { Skeleton } from "@/components/ui/skeleton";
-import { DataTable } from "@/components/ui/tables/reservations/data-table";
-import { Paid } from "@/functions/mutations";
-import { CostReducer, IsAdmin } from "@/functions/other/helpers";
-import { ReservationClass } from "@/lib/classes";
-import { api } from "@/trpc/server";
-import { adminColumns } from "./adminColumns";
-import { columns } from "./columns";
-import Options from "./options";
+import { ShowPayment } from '@/components/forms';
+import EditPricing from '@/components/forms/paymentModal';
+import { Skeleton } from '@/components/ui/skeleton';
+import { DataTable } from '@/components/ui/tables/reservations/data-table';
+import Paid from '../_components/paid';
+import { adminColumns } from './adminColumns';
+import { columns } from './columns';
+import Options from '../_components/options';
+import { auth } from '@/lib/auth';
+import {
+  costReducer,
+  getReservation,
+  getReservationCategory,
+} from '@/lib/actions/reservations';
+import { getFacilities, getFacility } from '@/lib/actions/facilities';
+import { getUser } from '@/lib/actions/users';
+import { Spinner } from '@/components/spinner';
 
 export default async function paymentPage({
   params,
 }: {
   params: { id: string };
 }) {
-  const id = parseInt(params.id);
+  const session = await auth();
+  if (!session) {
+    return notFound();
+  }
+  const isAdmin = session.userRole === 'ADMIN';
 
-  const reservation = await api.reservation.byId({ id: id });
-  if (!reservation) return notFound();
+  const data = await getReservation(params.id);
+  if (!data) return notFound();
+  const reservation = data.reservation!;
+  const category = await getReservationCategory(String(reservation.categoryId));
 
-  const description = `${reservation.eventName} at ${reservation.Facility?.building} ${reservation.Facility?.name} by ${reservation.User?.name}`;
-  const email = reservation.User?.email || "";
-
-  const CategoryPrice = reservation.Category?.price;
-  const mappedFees = reservation.ReservationFees
-    ? reservation.ReservationFees.map((fee) => {
+  const CategoryPrice = category?.price;
+  const mappedFees = data.fees
+    ? data.fees.map((fee) => {
         return {
-          additionalFees: fee.additionalFees ?? 0,
-          feesType: fee.feesType ?? "",
+          additionalFees: parseFloat(fee.additionalFees) ?? 0.0,
+          feesType: fee.feesType ?? '',
           options: fee.id,
         };
       })
     : [];
 
-  const totalCost = CostReducer({
-    ReservationFees: reservation.ReservationFees,
-    ReservationDate: reservation.ReservationDate,
-    categoryId: reservation.categoryId,
-    Category: reservation.Category,
-    CategoryPrice: CategoryPrice,
-  });
-
-  const isAdmin = await IsAdmin();
+  let totalCost = 0.0;
+  const tcData = await costReducer(params.id);
+  if (tcData) {
+    totalCost = parseFloat(tcData.cost);
+  }
 
   return (
     <div className="my-3 mb-2 flex h-full w-auto flex-col justify-center gap-y-4 pb-3 sm:flex-row lg:w-[1000px]">
@@ -65,10 +69,10 @@ export default async function paymentPage({
               <>
                 <div className="mb-2 border-b py-2">
                   <DataTable columns={adminColumns} data={mappedFees} />
-                  <EditPricing id={id} />
+                  <EditPricing id={BigInt(params.id)} />
                 </div>
                 <div className="flex justify-center border-b-2">
-                  <Options id={id} facilityID={reservation.facilityId} />
+                  <Options facilitiesPromise={getFacilities()} />
                 </div>
               </>
             ) : (
@@ -79,49 +83,47 @@ export default async function paymentPage({
           </Suspense>
           <div className="my-2 flex justify-end border-b p-2 text-justify text-xl">
             <div>
-              {!reservation.paid && !reservation.costOverride && (
-                <>
-                  <div className="text-sm font-thin text-muted-foreground">
-                    Cost Per Hour: ${CategoryPrice} * Total Hours + any
-                    additional fees = <br />
-                  </div>
-                  <div className="float-right">Total: ${totalCost}</div>
-                </>
-              )}{" "}
-              {!reservation.paid && reservation.costOverride && (
-                <>Total: ${reservation.costOverride}</>
-              )}
-              {reservation.paid && <>Total: reservation.Paid!</>}
+              <Suspense fallback={<Spinner />}>
+                {!reservation.paid && !reservation.costOverride && (
+                  <>
+                    <div className="text-sm font-thin text-muted-foreground">
+                      Cost Per Hour: ${CategoryPrice} * Total Hours + any
+                      additional fees = <br />
+                    </div>
+                    <div className="float-right">Total: ${totalCost}</div>
+                  </>
+                )}{' '}
+              </Suspense>
+              <Suspense fallback={<Spinner />}>
+                {!reservation.paid && reservation.costOverride && (
+                  <>Total: ${reservation.costOverride}</>
+                )}
+                {reservation.paid && <>Total: reservation.Paid!</>}
+              </Suspense>
             </div>
           </div>
 
           <div className="flex justify-end text-justify text-xl">
-            {!reservation.paid &&
-              (totalCost > 0 ||
-                (reservation.costOverride && reservation.costOverride > 0)) && (
-                <>
-                  {isAdmin ? (
-                    <div className="my-2 flex justify-end border-b-2 border-b-gray-700 p-2 text-justify text-xl dark:border-b-white">
-                      <span className="text-red-500">Not Paid</span>
-                      <form action={Paid}>
-                        <input type="hidden" name="id" value={id} />
-                        <Button>Mark as Paid</Button>
-                      </form>
-                    </div>
-                  ) : (
-                    <ShowPayment
-                      id={id}
-                      fees={
-                        reservation.costOverride
-                          ? reservation.costOverride
-                          : totalCost
-                      }
-                      description={description}
-                      email={email}
-                    />
-                  )}
-                </>
-              )}
+            <Suspense fallback={<Spinner />}>
+              {!reservation.paid &&
+                (totalCost > 0 ||
+                  (reservation.costOverride &&
+                    parseFloat(reservation.costOverride) > 0)) && (
+                  <>
+                    {isAdmin ? (
+                      <Paid reservation={reservation} />
+                    ) : (
+                      <ShowPayment
+                        fees={
+                          reservation.costOverride
+                            ? parseFloat(reservation.costOverride)
+                            : totalCost
+                        }
+                      />
+                    )}
+                  </>
+                )}
+            </Suspense>
           </div>
         </div>
       </div>

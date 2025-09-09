@@ -28,7 +28,7 @@ type PaymentProps = {
  *  TODO: rewrite this in golang
  */
 export async function GeneratePaymentLink(
-  id: number,
+  id: bigint,
   fees: number,
   description: string,
   email: string,

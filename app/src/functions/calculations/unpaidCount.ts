@@ -6,7 +6,6 @@ import moment from 'moment';
 
 import { ReservationClass } from '@/lib/classes';
 import { api } from '@/trpc/server';
-import { CostReducer } from '../other/helpers';
 
 type ChartData = Record<string, number | string | undefined>;
 /**

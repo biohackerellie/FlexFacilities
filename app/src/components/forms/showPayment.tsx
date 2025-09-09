@@ -1,52 +1,47 @@
-"use client";
+'use client';
 
-import { error } from "console";
-import * as React from "react";
-import { Loader2 } from "lucide-react";
-import { toast } from "sonner";
+import * as React from 'react';
+import { toast } from 'sonner';
 
-import PiP from "@/functions/mutations/pip";
-import { GeneratePaymentLink } from "@/functions/other/payments";
-import { Button } from "../ui/buttons";
+import { updateReservation } from '@/lib/actions/reservations';
+import { GeneratePaymentLink } from '@/functions/other/payments';
+import { Button } from '../ui/button';
+import { logger } from '@/lib/logger';
+import { ReservationContext } from '@/app/reservation/[id]/_components/context';
 
 interface feeProps {
-  id: number;
   fees: number;
-  description: string;
-  email: string;
 }
 
-export default function ShowPayment({
-  id,
-  fees,
-  description,
-  email,
-}: feeProps) {
+export default function ShowPayment({ fees }: feeProps) {
   const [isLoading, startTransition] = React.useTransition();
-  function PayOnline(
-    id: number,
-    fees: number,
-    description: string,
-    email: string,
-  ) {
+  const data = React.use(ReservationContext);
+  const facility = data?.facility!;
+  const user = data?.user!;
+  const reservation = data?.reservation!;
+  const email = user?.email || '';
+
+  const description = `${reservation.eventName} at ${facility?.building} ${facility.name} by ${user?.name}`;
+  function PayOnline(id: bigint, fees: number, email: string) {
     startTransition(() => {
       toast.promise(GeneratePaymentLink(id, fees, description, email), {
-        loading: "Creating payment link...",
+        loading: 'Creating payment link...',
         success: () => {
-          return "success!";
+          return 'success!';
         },
         error: (error) => {
-          return "something went wrong";
+          logger.error('Error creating payment link', { 'error ': error });
+          return 'something went wrong';
         },
       });
     });
   }
-  function PayinPerson(id: number) {
+  function PayinPerson() {
     startTransition(() => {
-      toast.promise(PiP(id), {
-        loading: "loading...",
+      toast.promise(updateReservation({ ...reservation, paid: true }), {
+        loading: 'loading...',
         success: () => {
-          return "success!";
+          return 'success!';
         },
         error: (error) => {
           return error.message;
@@ -60,7 +55,7 @@ export default function ShowPayment({
         <Button
           disabled={isLoading}
           variant="outline"
-          onClick={() => PayinPerson(id)}
+          onClick={() => PayinPerson()}
         >
           Pay in Person
         </Button>
@@ -68,7 +63,7 @@ export default function ShowPayment({
         <Button
           disabled={isLoading}
           variant="outline"
-          onClick={() => PayOnline(id, fees, description, email)}
+          onClick={() => PayOnline(reservation.id, fees, email)}
         >
           Pay Online
         </Button>

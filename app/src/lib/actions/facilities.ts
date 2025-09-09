@@ -1,6 +1,7 @@
 'use server';
 import { client } from '@/lib/rpc';
 import { unstable_cacheTag as cacheTag } from 'next/cache';
+import { logger } from '../logger';
 
 export async function getFacility(id: string) {
   'use cache';
@@ -10,7 +11,8 @@ export async function getFacility(id: string) {
 
   cacheTag('facilities', id);
 
-  if (error || !facility) {
+  if (error) {
+    logger.error('Error fetching facilities', { 'error ': error });
     return null;
   }
   return facility;
@@ -21,9 +23,22 @@ export async function getEventsByFacility(id: string) {
   const { data: events, error } = await client
     .facilities()
     .getEventsByFacility({ id: BigInt(id) });
-  if (error || !events) {
+  if (error) {
+    logger.error('Error fetching facilities', { 'error ': error });
     return null;
   }
   cacheTag('events', id);
   return events;
+}
+
+export async function getFacilities() {
+  'use cache';
+  const { data, error } = await client.facilities().getAllFacilities({});
+
+  if (error) {
+    logger.error('Error fetching facilities', { 'error ': error });
+    return null;
+  }
+
+  return data;
 }

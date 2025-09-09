@@ -12,6 +12,8 @@ import { auth } from '@/lib/auth';
 import { Spinner } from '@/components/spinner';
 import { getReservation } from '@/lib/actions/reservations';
 import { getFacility } from '@/lib/actions/facilities';
+import { ReservationProvider } from './_components/context';
+import { getUser } from '@/lib/actions/users';
 
 export default async function reservationLayout({
   children,
@@ -28,11 +30,13 @@ export default async function reservationLayout({
   const data = await getReservation(params.id);
   if (!data) return notFound();
   const reservation = data.reservation;
-
   if (!reservation) return notFound();
   const { id, eventName } = reservation;
   const fac = await getFacility(String(reservation.facilityId));
   const Facility = fac?.facility!;
+
+  const user = await getUser(reservation.userId);
+  const authorized = session.userId === reservation.userId || isAdmin;
   const reservationItems: SideBarType = [
     {
       title: 'Summary',
@@ -55,9 +59,23 @@ export default async function reservationLayout({
       href: `/reservation/${id}/Calendar`,
     },
   ];
-
+  if (!authorized) {
+    return (
+      <div className="flex flex-col flex-wrap justify-center text-center align-middle">
+        <h1 className="text-2xl font-bold">
+          You must be logged in to view this page
+        </h1>
+      </div>
+    );
+  }
+  const context = {
+    reservation: reservation,
+    user: user!,
+    facility: Facility,
+    dates: data.dates,
+  };
   return (
-    <IsUserReserv reservation={reservation} session={session}>
+    <ReservationProvider reservation={context}>
       <div className="container relative">
         <div className="sm:hidden">{children}</div>
         <div className="hidden space-y-6 p-10 pb-16 sm:block">
@@ -70,7 +88,7 @@ export default async function reservationLayout({
             <React.Suspense fallback={<Spinner />}>
               {isAdmin && (
                 <div className="relative float-right self-start p-4 sm:right-0 sm:self-end sm:p-0">
-                  <AdminPanel id={id} facility={Facility} />
+                  <AdminPanel />
                 </div>
               )}
             </React.Suspense>
@@ -86,6 +104,6 @@ export default async function reservationLayout({
           </div>
         </div>
       </div>
-    </IsUserReserv>
+    </ReservationProvider>
   );
 }

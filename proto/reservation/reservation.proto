@@ -133,7 +133,7 @@ message CreateReservationResponse {
 }
 
 message UpdateReservationRequest {
-  FullReservation reservation = 1;
+  Reservation reservation = 1;
 }
 message UpdateReservationResponse {}
 

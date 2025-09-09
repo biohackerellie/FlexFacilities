@@ -1015,7 +1015,7 @@ func (x *CreateReservationResponse) GetId() int64 {
 
 type UpdateReservationRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Reservation   *FullReservation       `protobuf:"bytes,1,opt,name=reservation,proto3" json:"reservation,omitempty"`
+	Reservation   *Reservation           `protobuf:"bytes,1,opt,name=reservation,proto3" json:"reservation,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1050,7 +1050,7 @@ func (*UpdateReservationRequest) Descriptor() ([]byte, []int) {
 	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{16}
 }
 
-func (x *UpdateReservationRequest) GetReservation() *FullReservation {
+func (x *UpdateReservationRequest) GetReservation() *Reservation {
 	if x != nil {
 		return x.Reservation
 	}
@@ -1887,9 +1887,9 @@ const file_proto_reservation_reservation_proto_rawDesc = "" +
 	"\x18CreateReservationRequest\x12B\n" +
 	"\vreservation\x18\x01 \x01(\v2 .api.reservation.FullReservationR\vreservation\"+\n" +
 	"\x19CreateReservationResponse\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\"^\n" +
-	"\x18UpdateReservationRequest\x12B\n" +
-	"\vreservation\x18\x01 \x01(\v2 .api.reservation.FullReservationR\vreservation\"\x1b\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\"Z\n" +
+	"\x18UpdateReservationRequest\x12>\n" +
+	"\vreservation\x18\x01 \x01(\v2\x1c.api.reservation.ReservationR\vreservation\"\x1b\n" +
 	"\x19UpdateReservationResponse\"*\n" +
 	"\x18DeleteReservationRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\"\x1b\n" +
@@ -1995,7 +1995,7 @@ var file_proto_reservation_reservation_proto_depIdxs = []int32{
 	3,  // 6: api.reservation.PendingReservationsResponse.reservations:type_name -> api.reservation.FullReservation
 	3,  // 7: api.reservation.UserReservationsResponse.reservations:type_name -> api.reservation.FullReservation
 	3,  // 8: api.reservation.CreateReservationRequest.reservation:type_name -> api.reservation.FullReservation
-	3,  // 9: api.reservation.UpdateReservationRequest.reservation:type_name -> api.reservation.FullReservation
+	0,  // 9: api.reservation.UpdateReservationRequest.reservation:type_name -> api.reservation.Reservation
 	1,  // 10: api.reservation.CreateReservationDateRequest.date:type_name -> api.reservation.ReservationDate
 	1,  // 11: api.reservation.UpdateReservationDateRequest.date:type_name -> api.reservation.ReservationDate
 	2,  // 12: api.reservation.CreateReservationFeeRequest.fee:type_name -> api.reservation.ReservationFee

@@ -1,16 +1,15 @@
-"use client";
+'use client';
 
-import type { ColumnDef } from "@tanstack/react-table";
-import React from "react";
+import type { ColumnDef } from '@tanstack/react-table';
 
-import { Button } from "@/components/ui/buttons";
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { removeFee } from "@/functions/mutations";
+} from '@/components/ui/dropdown-menu';
+import { removeFee } from '@/functions/mutations';
 
 interface TableFees {
   additionalFees: number;
@@ -22,34 +21,34 @@ const HandleDelete = async (id: number) => {
   try {
     await removeFee(id);
   } catch (error) {
-    alert("Error deleting fee");
+    alert('Error deleting fee');
   }
 };
 
 export const adminColumns: ColumnDef<TableFees>[] = [
   {
-    accessorKey: "additionalFees",
+    accessorKey: 'additionalFees',
 
-    header: "Cost",
+    header: 'Cost',
     cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("additionalFees"));
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
+      const amount = parseFloat(row.getValue('additionalFees'));
+      const formatted = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
       }).format(amount);
       return <div className="text-left font-medium">{formatted}</div>;
     },
   },
   {
-    accessorKey: "feesType",
-    header: "Fee Type",
+    accessorKey: 'feesType',
+    header: 'Fee Type',
   },
   {
-    accessorKey: "options",
-    header: "options",
+    accessorKey: 'options',
+    header: 'options',
     cell: ({ row }) => {
       //eslint-disable-next-line
-      const feeID = row.getValue("options") as number;
+      const feeID = row.getValue('options') as number;
 
       return (
         <>

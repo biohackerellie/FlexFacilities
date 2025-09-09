@@ -113,7 +113,7 @@ func (a *ReservationHandler) CreateReservation(ctx context.Context, req *connect
 }
 
 func (a *ReservationHandler) UpdateReservation(ctx context.Context, req *connect.Request[service.UpdateReservationRequest]) (*connect.Response[service.UpdateReservationResponse], error) {
-	reservation := req.Msg.Reservation.GetReservation()
+	reservation := req.Msg.GetReservation()
 	err := a.reservationStore.Update(ctx, models.ToReservation(reservation))
 	if err != nil {
 		return nil, err

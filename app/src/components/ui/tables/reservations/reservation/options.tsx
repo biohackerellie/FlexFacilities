@@ -1,11 +1,9 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Loader2 } from "lucide-react";
-import { toast } from "sonner";
-
-import type { FacilityType as Facility } from "@local/db/schema";
+import * as React from 'react';
+import { useRouter } from 'next/navigation';
+import { Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 import {
   AlertDialog,
@@ -17,38 +15,41 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/buttons";
+} from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { updateEmail } from "@/functions/emails";
+} from '@/components/ui/dropdown-menu';
+import { updateEmail } from '@/functions/emails';
 import {
   approveReservation,
   denyReservation,
   HandleDelete,
-} from "@/functions/reservations";
+} from '@/functions/reservations';
 
-interface ResNavProps {
-  id: number | bigint;
-  facility: Facility | undefined;
-}
+import { ReservationContext } from '@/app/reservation/[id]/_components/context';
 
-export default function ReservationOptions({ id, facility }: ResNavProps) {
+export default function ReservationOptions() {
+  const data = React.use(ReservationContext);
+
+  if (!data) return null;
+
+  const { id } = data.reservation!;
+  const { facilityId } = data.reservation!;
   const router = useRouter();
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   const sendEmail = async () => {
     try {
-      await updateEmail(id as number);
-      alert("Email sent");
+      await updateEmail(Number(id));
+      alert('Email sent');
     } catch (error) {
-      alert("Email failed to send");
+      alert('Email failed to send');
     }
   };
 
@@ -56,9 +57,9 @@ export default function ReservationOptions({ id, facility }: ResNavProps) {
     setIsSubmitting(true);
     try {
       await approveReservation(id as number);
-      toast("Reservation Approved");
+      toast('Reservation Approved');
     } catch (error) {
-      toast("Something went wrong");
+      toast('Something went wrong');
     } finally {
       setIsSubmitting(false);
       router.refresh();
@@ -69,9 +70,9 @@ export default function ReservationOptions({ id, facility }: ResNavProps) {
     setIsSubmitting(true);
     try {
       await denyReservation(id as number);
-      toast("Reservation Denied");
+      toast('Reservation Denied');
     } catch (error) {
-      toast("Something went wrong");
+      toast('Something went wrong');
     } finally {
       setIsSubmitting(false);
       router.refresh();
@@ -108,8 +109,8 @@ export default function ReservationOptions({ id, facility }: ResNavProps) {
           <DropdownMenuSeparator />
           <DropdownMenuItem
             onClick={() => {
-              HandleDelete(id as number);
-              router.push("/admin/reservations");
+              HandleDelete(Number(id));
+              router.push('/admin/reservations');
             }}
           >
             Delete Reservation

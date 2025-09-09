@@ -1,21 +1,12 @@
-'use client';
-
-import type { Facility } from '@/lib/types';
-
 import { Separator } from '@/components/ui/separator';
 import ReservationOptions from '@/components/ui/tables/reservations/reservation/options';
 
-interface AdminPanelProps {
-  id: number | bigint;
-  facility: Facility | undefined;
-}
-
-export default function AdminPanel({ id, facility }: AdminPanelProps) {
+export default function AdminPanel() {
   return (
     <div className="text-md flex h-5 items-center space-x-4">
       <Separator orientation="vertical" />
       <div>
-        <ReservationOptions id={id} facility={facility} />
+        <ReservationOptions />
       </div>
     </div>
   );
