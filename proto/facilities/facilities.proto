@@ -82,8 +82,14 @@ service FacilitiesService {
   rpc UpdateFacility (UpdateFacilityRequest) returns (UpdateFacilityResponse);
   rpc DeleteFacility (DeleteFacilityRequest) returns (DeleteFacilityResponse);
   rpc UpdateFacilityCategory (UpdateFacilityCategoryRequest) returns (Category);
+  rpc GetCategory (GetCategoryRequest) returns (Category){
+    option idempotency_level = NO_SIDE_EFFECTS;
+  };
 }
 
+message GetCategoryRequest {
+  int64 id = 1;
+}
 message GetEventsByFacilityRequest {
   int64 id = 1;
 }

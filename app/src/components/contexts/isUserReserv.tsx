@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import { auth } from "@local/auth";
+import { Session } from '@/lib/types';
 
 interface Reservation {
   userId: string;
@@ -9,31 +9,23 @@ interface Reservation {
 interface Props {
   children: React.ReactNode;
   reservation: Reservation;
+  session: Session;
 }
 
-export default async function IsUserReserv({ children, reservation }: Props) {
-  const session = await auth();
-  const user = session?.user;
-  if (session?.user) {
-    if (
-      user?.id === reservation.userId ||
-      session.user.role.includes("ADMIN")
-    ) {
-      return <>{children}</>;
-    } else {
-      return (
-        <div className="flex flex-col flex-wrap justify-center text-center align-middle">
-          <h1 className="text-2xl font-bold">
-            You must be logged in to view this page
-          </h1>
-        </div>
-      );
-    }
+export default function IsUserReserv({
+  children,
+  reservation,
+  session,
+}: Props) {
+  if (session.userId === reservation.userId || session.userRole === 'ADMIN') {
+    return <>{children}</>;
   } else {
     return (
-      <React.Fragment>
-        <div>you must be logged in</div>
-      </React.Fragment>
+      <div className="flex flex-col flex-wrap justify-center text-center align-middle">
+        <h1 className="text-2xl font-bold">
+          You must be logged in to view this page
+        </h1>
+      </div>
     );
   }
 }

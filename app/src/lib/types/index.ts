@@ -11,6 +11,7 @@ import type {
   Users as PBUser,
   ReservationDate as PBReservationDate,
   ReservationFee as PBReservationFee,
+  GetSessionResponse as PBSession,
 } from '../rpc/proto';
 
 import type { Message } from '@bufbuild/protobuf';
@@ -26,6 +27,10 @@ export type FullReservation = ProtoType<PBFullReservation>;
 export type Building = ProtoType<PBBuilding>;
 export type BuildingWithFacilities = ProtoType<PBBuildingWithFacilities>;
 export type FacilityWithCategories = ProtoType<PBFacilityWithCategories>;
+type SessionType = ProtoType<PBSession>;
+export interface Session extends Omit<SessionType, 'userRole'> {
+  userRole: UserRole;
+}
 
 export type UserRole = 'USER' | 'ADMIN' | 'STAFF' | 'GUEST';
 
@@ -127,7 +132,6 @@ export interface GoogleEvents {
   start: string | null | undefined;
   end: string | null | undefined;
   title: string | null | undefined;
-  meta: Schema$Event;
 }
 export interface ChartData {
   month?: string;
@@ -140,12 +144,3 @@ export interface RevenueData {
   Revenue: number;
   Loss: number;
 }
-
-export type Session = {
-  id: string;
-  userId: string;
-  refreshToken: string;
-  provider: string;
-  createdAt: string;
-  expiresAt: string;
-};

@@ -14,29 +14,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { client } from '@/lib/rpc';
-
-async function getFacility(id: string) {
-  'use cache';
-  const { data: facility, error } = await client
-    .facilities()
-    .getFacility({ id: BigInt(id) });
-
-  if (error || !facility) {
-    return null;
-  }
-  return facility;
-}
-async function getEvents(id: string) {
-  'use cache';
-  const { data: events, error } = await client
-    .facilities()
-    .getEventsByFacility({ id: BigInt(id) });
-  if (error || !events) {
-    return null;
-  }
-  return events;
-}
+import { getFacility, getEventsByFacility } from '@/lib/actions/facilities';
 
 export default async function FacilityPage({
   params,
@@ -46,7 +24,7 @@ export default async function FacilityPage({
   };
 }) {
   const fac = await getFacility(params.id);
-  const events = await getEvents(params.id);
+  const events = await getEventsByFacility(params.id);
 
   if (!fac) return notFound();
   const facility = fac.facility!;

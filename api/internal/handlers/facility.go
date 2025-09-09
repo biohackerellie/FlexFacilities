@@ -207,3 +207,11 @@ func (a *FacilityHandler) GetEventsByBuilding(ctx context.Context, req *connect.
 		Events: events,
 	}), nil
 }
+
+func (a *FacilityHandler) GetCategory(ctx context.Context, req *connect.Request[service.GetCategoryRequest]) (*connect.Response[service.Category], error) {
+	category, err := a.facilityStore.GetCategory(ctx, req.Msg.GetId())
+	if err != nil {
+		return nil, err
+	}
+	return connect.NewResponse(category.ToProto()), nil
+}

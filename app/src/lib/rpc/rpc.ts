@@ -7,174 +7,92 @@ import {
 import {
   Auth,
   FacilitiesService,
-  GetUsersRequestSchema,
   ReservationService,
   UsersService,
 } from './proto';
+import type { DescService } from '@bufbuild/protobuf';
 
 export class RPC {
-  private transport: Transport;
-  private _Auth?: Client<typeof Auth>;
-  private _FacilitiesService?: Client<typeof FacilitiesService>;
-  private _ReservationService?: Client<typeof ReservationService>;
-  private _UsersService?: Client<typeof UsersService>;
+  constructor(private transport: Transport) {}
+  private cache = new WeakMap<DescService, any>();
 
-  constructor(transport: Transport) {
-    this.transport = transport;
+  private getWrapped<T extends DescService>(
+    service: T,
+  ): WrappedClient<Client<T>> {
+    const cached = this.cache.get(service) as
+      | WrappedClient<Client<T>>
+      | undefined;
+    if (cached) return cached;
+    const client = createClient(service, this.transport);
+    const wrapped = wrapClient(client) as WrappedClient<Client<T>>;
+    this.cache.set(service, wrapped);
+    return wrapped;
   }
 
   auth() {
-    if (!this._Auth) {
-      this._Auth = createClient(Auth, this.transport);
-    }
-    return {
-      getSession: this.errorWrapper(this._Auth.getSession),
-      login: this.errorWrapper(this._Auth.login),
-      register: this.errorWrapper(this._Auth.register),
-    };
+    return this.getWrapped(Auth);
   }
 
   facilities() {
-    if (!this._FacilitiesService) {
-      this._FacilitiesService = createClient(FacilitiesService, this.transport);
-    }
-    return {
-      ...this._FacilitiesService,
-      getAllFacilities: this.errorWrapper(
-        this._FacilitiesService.getAllFacilities,
-      ),
-      getAllBuildings: this.errorWrapper(
-        this._FacilitiesService.getAllBuildings,
-      ),
-      getFacility: this.errorWrapper(this._FacilitiesService.getFacility),
-      getFacilityCategories: this.errorWrapper(
-        this._FacilitiesService.getFacilityCategories,
-      ),
-      getBuildingFacilities: this.errorWrapper(
-        this._FacilitiesService.getBuildingFacilities,
-      ),
-      getEventsByFacility: this.errorWrapper(
-        this._FacilitiesService.getEventsByFacility,
-      ),
-      getEventsByBuilding: this.errorWrapper(
-        this._FacilitiesService.getEventsByBuilding,
-      ),
-      createFacility: this.errorWrapper(this._FacilitiesService.createFacility),
-      updateFacility: this.errorWrapper(this._FacilitiesService.updateFacility),
-      deleteFacility: this.errorWrapper(this._FacilitiesService.deleteFacility),
-      updateFacilityCategory: this.errorWrapper(
-        this._FacilitiesService.updateFacilityCategory,
-      ),
-    };
-  }
-
-  reservation() {
-    if (!this._ReservationService) {
-      this._ReservationService = createClient(
-        ReservationService,
-        this.transport,
-      );
-    }
-    return {
-      ...this._ReservationService,
-      getAllReservations: this.errorWrapper(
-        this._ReservationService.getAllReservations,
-      ),
-      getReservation: this.errorWrapper(
-        this._ReservationService.getReservation,
-      ),
-      requestCount: this.errorWrapper(this._ReservationService.requestCount),
-      getRequestsThisWeek: this.errorWrapper(
-        this._ReservationService.getRequestsThisWeek,
-      ),
-      createReservation: this.errorWrapper(
-        this._ReservationService.createReservation,
-      ),
-      updateReservation: this.errorWrapper(
-        this._ReservationService.updateReservation,
-      ),
-      deleteReservation: this.errorWrapper(
-        this._ReservationService.deleteReservation,
-      ),
-      userReservations: this.errorWrapper(
-        this._ReservationService.userReservations,
-      ),
-      createReservationDate: this.errorWrapper(
-        this._ReservationService.createReservationDate,
-      ),
-      updateReservationDate: this.errorWrapper(
-        this._ReservationService.updateReservationDate,
-      ),
-      deleteReservationDate: this.errorWrapper(
-        this._ReservationService.deleteReservationDate,
-      ),
-      createReservationFee: this.errorWrapper(
-        this._ReservationService.createReservationFee,
-      ),
-      updateReservationFee: this.errorWrapper(
-        this._ReservationService.updateReservationFee,
-      ),
-      deleteReservationFee: this.errorWrapper(
-        this._ReservationService.deleteReservationFee,
-      ),
-    };
+    return this.getWrapped(FacilitiesService);
   }
 
   users() {
-    if (!this._UsersService) {
-      this._UsersService = createClient(UsersService, this.transport);
-    }
-    return {
-      ...this._UsersService,
-      getUserByEmail: this.errorWrapper(this._UsersService.getUserByEmail),
-      getUser: this.errorWrapper(this._UsersService.getUser),
-      getUsers: this.errorWrapper(this._UsersService.getUsers),
-      createUser: this.errorWrapper(this._UsersService.createUser),
-      updateUser: this.errorWrapper(this._UsersService.updateUser),
-      deleteUser: this.errorWrapper(this._UsersService.deleteUser),
-      getNotifications: this.errorWrapper(this._UsersService.getNotifications),
-      createNotification: this.errorWrapper(
-        this._UsersService.createNotification,
-      ),
-      editNotification: this.errorWrapper(this._UsersService.editNotification),
-      deleteNotification: this.errorWrapper(
-        this._UsersService.deleteNotification,
-      ),
-    };
+    return this.getWrapped(UsersService);
   }
 
-  private errorWrapper<Req, Res>(
-    method: (req: Req) => Promise<Res>,
-  ): (req: Req) => Promise<RPCResponse<Awaited<Res>>> {
-    return async (req: Req) => {
-      try {
-        const data = await method(req);
-        return new RPCResponse(data, null);
-      } catch (error) {
-        if (error instanceof ConnectError) {
-          return new RPCResponse<Awaited<Res>>(null, error);
-        }
-        const newError = ConnectError.from(error);
-        return new RPCResponse<Awaited<Res>>(null, newError);
-      }
-    };
+  reservations() {
+    return this.getWrapped(ReservationService);
   }
 }
 
 export class RPCResponse<T> {
-  data: T | null;
-  error: ConnectError | null;
-
-  constructor(data: T | null, error: ConnectError | null) {
-    this.data = data;
-    this.error = error;
-  }
-
+  constructor(
+    public data: T | null,
+    public error: ConnectError | null,
+  ) {}
   isSuccess(): boolean {
     return this.error === null;
   }
-
   isError(): boolean {
     return this.error !== null;
   }
+}
+
+type PromiseLikeR<T> = {
+  then: (onFulfilled: (v: T) => any, onRejected?: (e: any) => any) => any;
+};
+const isPromiseLike = (v: unknown): v is PromiseLikeR<unknown> =>
+  !!v && typeof (v as any).then === 'function';
+
+function normalizeConnectError(e: unknown): ConnectError {
+  return e instanceof ConnectError ? e : ConnectError.from(e);
+}
+
+type WrapMethod<M> = M extends (...a: infer A) => Promise<infer R>
+  ? (...a: A) => Promise<RPCResponse<R>>
+  : M;
+
+export type WrappedClient<C> = { [K in keyof C]: WrapMethod<C[K]> };
+
+function wrapClient<C extends object>(client: C): WrappedClient<C> {
+  const out: any = Object.create(Object.getPrototypeOf(client));
+  for (const key of Object.keys(client) as (keyof C)[]) {
+    const value = (client as any)[key];
+    if (typeof value !== 'function') {
+      out[key] = value;
+      continue;
+    }
+    const fn = value.bind(client);
+    out[key] = (...args: any[]) => {
+      const result = fn(...args);
+      if (isPromiseLike(result)) {
+        return (result as Promise<any>)
+          .then((data) => new RPCResponse(data, null))
+          .catch((e) => new RPCResponse(null, normalizeConnectError(e)));
+      }
+      return result;
+    };
+  }
+  return out;
 }

@@ -368,3 +368,11 @@ func (f *FacilityStore) EditCategory(ctx context.Context, category *models.Categ
 	_, err = stmt.ExecContext(ctx, params)
 	return err
 }
+
+const getCategoryQuery = `SELECT * FROM categories WHERE id = $1 LIMIT 1`
+
+func (f *FacilityStore) GetCategory(ctx context.Context, id int64) (*models.Category, error) {
+	var category models.Category
+	err := f.db.GetContext(ctx, &category, getCategoryQuery, id)
+	return &category, err
+}

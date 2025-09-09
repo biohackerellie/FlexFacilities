@@ -1,13 +1,30 @@
 {
-  "linter": {
-    "enabled": true,
-    "rules": {
-      "recommended": true
-    }
-  },
-  "formatter": {
-    "lineWidth": 120,
-    "indentStyle": "space",
-    "indentWidth": 6
-  }
+      "files": {
+            "ignoreUnknown": false,
+            "includes": ["app/src/**/*", "!node_modules", "**/*.json", "**/.jsonc"]
+      },
+      "linter": {
+            "enabled": true,
+            "rules": {
+                  "recommended": true
+            }
+      },
+      "formatter": {
+            "enabled": true,
+            "useEditorconfig": true,
+            "formatWithErrors": false,
+            "indentStyle": "space",
+            "indentWidth": 2,
+            "lineEnding": "lf",
+            "lineWidth": 80,
+            "attributePosition": "auto",
+            "bracketSpacing": true
+      },
+      "assist": {
+            "actions": {
+                  "source": {
+                        "organizeImports": "on"
+                  }
+            }
+      }
 }

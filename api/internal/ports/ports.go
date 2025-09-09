@@ -35,6 +35,7 @@ type FacilityStore interface {
 	Update(ctx context.Context, input *models.Facility) error
 	Delete(ctx context.Context, id int64) error
 	EditCategory(ctx context.Context, category *models.Category) error
+	GetCategory(ctx context.Context, id int64) (*models.Category, error)
 }
 
 type ReservationStore interface {
