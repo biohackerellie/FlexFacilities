@@ -51,21 +51,27 @@ const (
 	// ReservationServiceUpdateReservationProcedure is the fully-qualified name of the
 	// ReservationService's UpdateReservation RPC.
 	ReservationServiceUpdateReservationProcedure = "/api.reservation.ReservationService/UpdateReservation"
+	// ReservationServiceUpdateReservationStatusProcedure is the fully-qualified name of the
+	// ReservationService's UpdateReservationStatus RPC.
+	ReservationServiceUpdateReservationStatusProcedure = "/api.reservation.ReservationService/UpdateReservationStatus"
 	// ReservationServiceDeleteReservationProcedure is the fully-qualified name of the
 	// ReservationService's DeleteReservation RPC.
 	ReservationServiceDeleteReservationProcedure = "/api.reservation.ReservationService/DeleteReservation"
 	// ReservationServiceUserReservationsProcedure is the fully-qualified name of the
 	// ReservationService's UserReservations RPC.
 	ReservationServiceUserReservationsProcedure = "/api.reservation.ReservationService/UserReservations"
-	// ReservationServiceCreateReservationDateProcedure is the fully-qualified name of the
-	// ReservationService's CreateReservationDate RPC.
-	ReservationServiceCreateReservationDateProcedure = "/api.reservation.ReservationService/CreateReservationDate"
-	// ReservationServiceUpdateReservationDateProcedure is the fully-qualified name of the
-	// ReservationService's UpdateReservationDate RPC.
-	ReservationServiceUpdateReservationDateProcedure = "/api.reservation.ReservationService/UpdateReservationDate"
-	// ReservationServiceDeleteReservationDateProcedure is the fully-qualified name of the
-	// ReservationService's DeleteReservationDate RPC.
-	ReservationServiceDeleteReservationDateProcedure = "/api.reservation.ReservationService/DeleteReservationDate"
+	// ReservationServiceCreateReservationDatesProcedure is the fully-qualified name of the
+	// ReservationService's CreateReservationDates RPC.
+	ReservationServiceCreateReservationDatesProcedure = "/api.reservation.ReservationService/CreateReservationDates"
+	// ReservationServiceUpdateReservationDatesProcedure is the fully-qualified name of the
+	// ReservationService's UpdateReservationDates RPC.
+	ReservationServiceUpdateReservationDatesProcedure = "/api.reservation.ReservationService/UpdateReservationDates"
+	// ReservationServiceUpdateReservationDatesStatusProcedure is the fully-qualified name of the
+	// ReservationService's UpdateReservationDatesStatus RPC.
+	ReservationServiceUpdateReservationDatesStatusProcedure = "/api.reservation.ReservationService/UpdateReservationDatesStatus"
+	// ReservationServiceDeleteReservationDatesProcedure is the fully-qualified name of the
+	// ReservationService's DeleteReservationDates RPC.
+	ReservationServiceDeleteReservationDatesProcedure = "/api.reservation.ReservationService/DeleteReservationDates"
 	// ReservationServiceCreateReservationFeeProcedure is the fully-qualified name of the
 	// ReservationService's CreateReservationFee RPC.
 	ReservationServiceCreateReservationFeeProcedure = "/api.reservation.ReservationService/CreateReservationFee"
@@ -88,11 +94,13 @@ type ReservationServiceClient interface {
 	GetRequestsThisWeek(context.Context, *connect.Request[reservation.GetRequestsThisWeekRequest]) (*connect.Response[reservation.RequestThisWeekResponse], error)
 	CreateReservation(context.Context, *connect.Request[reservation.CreateReservationRequest]) (*connect.Response[reservation.CreateReservationResponse], error)
 	UpdateReservation(context.Context, *connect.Request[reservation.UpdateReservationRequest]) (*connect.Response[reservation.UpdateReservationResponse], error)
+	UpdateReservationStatus(context.Context, *connect.Request[reservation.UpdateReservationRequest]) (*connect.Response[reservation.UpdateReservationResponse], error)
 	DeleteReservation(context.Context, *connect.Request[reservation.DeleteReservationRequest]) (*connect.Response[reservation.DeleteReservationResponse], error)
 	UserReservations(context.Context, *connect.Request[reservation.UserReservationsRequest]) (*connect.Response[reservation.UserReservationsResponse], error)
-	CreateReservationDate(context.Context, *connect.Request[reservation.CreateReservationDateRequest]) (*connect.Response[reservation.CreateReservationDateResponse], error)
-	UpdateReservationDate(context.Context, *connect.Request[reservation.UpdateReservationDateRequest]) (*connect.Response[reservation.UpdateReservationDateResponse], error)
-	DeleteReservationDate(context.Context, *connect.Request[reservation.DeleteReservationDateRequest]) (*connect.Response[reservation.DeleteReservationDateResponse], error)
+	CreateReservationDates(context.Context, *connect.Request[reservation.CreateReservationDatesRequest]) (*connect.Response[reservation.CreateReservationDatesResponse], error)
+	UpdateReservationDates(context.Context, *connect.Request[reservation.UpdateReservationDatesRequest]) (*connect.Response[reservation.UpdateReservationDatesResponse], error)
+	UpdateReservationDatesStatus(context.Context, *connect.Request[reservation.UpdateReservationDatesStatusRequest]) (*connect.Response[reservation.UpdateReservationDatesStatusResponse], error)
+	DeleteReservationDates(context.Context, *connect.Request[reservation.DeleteReservationDatesRequest]) (*connect.Response[reservation.DeleteReservationDatesResponse], error)
 	CreateReservationFee(context.Context, *connect.Request[reservation.CreateReservationFeeRequest]) (*connect.Response[reservation.CreateReservationFeeResponse], error)
 	UpdateReservationFee(context.Context, *connect.Request[reservation.UpdateReservationFeeRequest]) (*connect.Response[reservation.UpdateReservationFeeResponse], error)
 	DeleteReservationFee(context.Context, *connect.Request[reservation.DeleteReservationFeeRequest]) (*connect.Response[reservation.DeleteReservationFeeResponse], error)
@@ -150,6 +158,12 @@ func NewReservationServiceClient(httpClient connect.HTTPClient, baseURL string, 
 			connect.WithSchema(reservationServiceMethods.ByName("UpdateReservation")),
 			connect.WithClientOptions(opts...),
 		),
+		updateReservationStatus: connect.NewClient[reservation.UpdateReservationRequest, reservation.UpdateReservationResponse](
+			httpClient,
+			baseURL+ReservationServiceUpdateReservationStatusProcedure,
+			connect.WithSchema(reservationServiceMethods.ByName("UpdateReservationStatus")),
+			connect.WithClientOptions(opts...),
+		),
 		deleteReservation: connect.NewClient[reservation.DeleteReservationRequest, reservation.DeleteReservationResponse](
 			httpClient,
 			baseURL+ReservationServiceDeleteReservationProcedure,
@@ -163,22 +177,28 @@ func NewReservationServiceClient(httpClient connect.HTTPClient, baseURL string, 
 			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 			connect.WithClientOptions(opts...),
 		),
-		createReservationDate: connect.NewClient[reservation.CreateReservationDateRequest, reservation.CreateReservationDateResponse](
+		createReservationDates: connect.NewClient[reservation.CreateReservationDatesRequest, reservation.CreateReservationDatesResponse](
 			httpClient,
-			baseURL+ReservationServiceCreateReservationDateProcedure,
-			connect.WithSchema(reservationServiceMethods.ByName("CreateReservationDate")),
+			baseURL+ReservationServiceCreateReservationDatesProcedure,
+			connect.WithSchema(reservationServiceMethods.ByName("CreateReservationDates")),
 			connect.WithClientOptions(opts...),
 		),
-		updateReservationDate: connect.NewClient[reservation.UpdateReservationDateRequest, reservation.UpdateReservationDateResponse](
+		updateReservationDates: connect.NewClient[reservation.UpdateReservationDatesRequest, reservation.UpdateReservationDatesResponse](
 			httpClient,
-			baseURL+ReservationServiceUpdateReservationDateProcedure,
-			connect.WithSchema(reservationServiceMethods.ByName("UpdateReservationDate")),
+			baseURL+ReservationServiceUpdateReservationDatesProcedure,
+			connect.WithSchema(reservationServiceMethods.ByName("UpdateReservationDates")),
 			connect.WithClientOptions(opts...),
 		),
-		deleteReservationDate: connect.NewClient[reservation.DeleteReservationDateRequest, reservation.DeleteReservationDateResponse](
+		updateReservationDatesStatus: connect.NewClient[reservation.UpdateReservationDatesStatusRequest, reservation.UpdateReservationDatesStatusResponse](
 			httpClient,
-			baseURL+ReservationServiceDeleteReservationDateProcedure,
-			connect.WithSchema(reservationServiceMethods.ByName("DeleteReservationDate")),
+			baseURL+ReservationServiceUpdateReservationDatesStatusProcedure,
+			connect.WithSchema(reservationServiceMethods.ByName("UpdateReservationDatesStatus")),
+			connect.WithClientOptions(opts...),
+		),
+		deleteReservationDates: connect.NewClient[reservation.DeleteReservationDatesRequest, reservation.DeleteReservationDatesResponse](
+			httpClient,
+			baseURL+ReservationServiceDeleteReservationDatesProcedure,
+			connect.WithSchema(reservationServiceMethods.ByName("DeleteReservationDates")),
 			connect.WithClientOptions(opts...),
 		),
 		createReservationFee: connect.NewClient[reservation.CreateReservationFeeRequest, reservation.CreateReservationFeeResponse](
@@ -210,21 +230,23 @@ func NewReservationServiceClient(httpClient connect.HTTPClient, baseURL string, 
 
 // reservationServiceClient implements ReservationServiceClient.
 type reservationServiceClient struct {
-	getAllReservations    *connect.Client[reservation.GetAllReservationsRequest, reservation.AllReservationsResponse]
-	getReservation        *connect.Client[reservation.GetReservationRequest, reservation.FullReservation]
-	requestCount          *connect.Client[reservation.RequestCountRequest, reservation.RequestCountResponse]
-	getRequestsThisWeek   *connect.Client[reservation.GetRequestsThisWeekRequest, reservation.RequestThisWeekResponse]
-	createReservation     *connect.Client[reservation.CreateReservationRequest, reservation.CreateReservationResponse]
-	updateReservation     *connect.Client[reservation.UpdateReservationRequest, reservation.UpdateReservationResponse]
-	deleteReservation     *connect.Client[reservation.DeleteReservationRequest, reservation.DeleteReservationResponse]
-	userReservations      *connect.Client[reservation.UserReservationsRequest, reservation.UserReservationsResponse]
-	createReservationDate *connect.Client[reservation.CreateReservationDateRequest, reservation.CreateReservationDateResponse]
-	updateReservationDate *connect.Client[reservation.UpdateReservationDateRequest, reservation.UpdateReservationDateResponse]
-	deleteReservationDate *connect.Client[reservation.DeleteReservationDateRequest, reservation.DeleteReservationDateResponse]
-	createReservationFee  *connect.Client[reservation.CreateReservationFeeRequest, reservation.CreateReservationFeeResponse]
-	updateReservationFee  *connect.Client[reservation.UpdateReservationFeeRequest, reservation.UpdateReservationFeeResponse]
-	deleteReservationFee  *connect.Client[reservation.DeleteReservationFeeRequest, reservation.DeleteReservationFeeResponse]
-	costReducer           *connect.Client[reservation.CostReducerRequest, reservation.CostReducerResponse]
+	getAllReservations           *connect.Client[reservation.GetAllReservationsRequest, reservation.AllReservationsResponse]
+	getReservation               *connect.Client[reservation.GetReservationRequest, reservation.FullReservation]
+	requestCount                 *connect.Client[reservation.RequestCountRequest, reservation.RequestCountResponse]
+	getRequestsThisWeek          *connect.Client[reservation.GetRequestsThisWeekRequest, reservation.RequestThisWeekResponse]
+	createReservation            *connect.Client[reservation.CreateReservationRequest, reservation.CreateReservationResponse]
+	updateReservation            *connect.Client[reservation.UpdateReservationRequest, reservation.UpdateReservationResponse]
+	updateReservationStatus      *connect.Client[reservation.UpdateReservationRequest, reservation.UpdateReservationResponse]
+	deleteReservation            *connect.Client[reservation.DeleteReservationRequest, reservation.DeleteReservationResponse]
+	userReservations             *connect.Client[reservation.UserReservationsRequest, reservation.UserReservationsResponse]
+	createReservationDates       *connect.Client[reservation.CreateReservationDatesRequest, reservation.CreateReservationDatesResponse]
+	updateReservationDates       *connect.Client[reservation.UpdateReservationDatesRequest, reservation.UpdateReservationDatesResponse]
+	updateReservationDatesStatus *connect.Client[reservation.UpdateReservationDatesStatusRequest, reservation.UpdateReservationDatesStatusResponse]
+	deleteReservationDates       *connect.Client[reservation.DeleteReservationDatesRequest, reservation.DeleteReservationDatesResponse]
+	createReservationFee         *connect.Client[reservation.CreateReservationFeeRequest, reservation.CreateReservationFeeResponse]
+	updateReservationFee         *connect.Client[reservation.UpdateReservationFeeRequest, reservation.UpdateReservationFeeResponse]
+	deleteReservationFee         *connect.Client[reservation.DeleteReservationFeeRequest, reservation.DeleteReservationFeeResponse]
+	costReducer                  *connect.Client[reservation.CostReducerRequest, reservation.CostReducerResponse]
 }
 
 // GetAllReservations calls api.reservation.ReservationService.GetAllReservations.
@@ -257,6 +279,11 @@ func (c *reservationServiceClient) UpdateReservation(ctx context.Context, req *c
 	return c.updateReservation.CallUnary(ctx, req)
 }
 
+// UpdateReservationStatus calls api.reservation.ReservationService.UpdateReservationStatus.
+func (c *reservationServiceClient) UpdateReservationStatus(ctx context.Context, req *connect.Request[reservation.UpdateReservationRequest]) (*connect.Response[reservation.UpdateReservationResponse], error) {
+	return c.updateReservationStatus.CallUnary(ctx, req)
+}
+
 // DeleteReservation calls api.reservation.ReservationService.DeleteReservation.
 func (c *reservationServiceClient) DeleteReservation(ctx context.Context, req *connect.Request[reservation.DeleteReservationRequest]) (*connect.Response[reservation.DeleteReservationResponse], error) {
 	return c.deleteReservation.CallUnary(ctx, req)
@@ -267,19 +294,25 @@ func (c *reservationServiceClient) UserReservations(ctx context.Context, req *co
 	return c.userReservations.CallUnary(ctx, req)
 }
 
-// CreateReservationDate calls api.reservation.ReservationService.CreateReservationDate.
-func (c *reservationServiceClient) CreateReservationDate(ctx context.Context, req *connect.Request[reservation.CreateReservationDateRequest]) (*connect.Response[reservation.CreateReservationDateResponse], error) {
-	return c.createReservationDate.CallUnary(ctx, req)
+// CreateReservationDates calls api.reservation.ReservationService.CreateReservationDates.
+func (c *reservationServiceClient) CreateReservationDates(ctx context.Context, req *connect.Request[reservation.CreateReservationDatesRequest]) (*connect.Response[reservation.CreateReservationDatesResponse], error) {
+	return c.createReservationDates.CallUnary(ctx, req)
 }
 
-// UpdateReservationDate calls api.reservation.ReservationService.UpdateReservationDate.
-func (c *reservationServiceClient) UpdateReservationDate(ctx context.Context, req *connect.Request[reservation.UpdateReservationDateRequest]) (*connect.Response[reservation.UpdateReservationDateResponse], error) {
-	return c.updateReservationDate.CallUnary(ctx, req)
+// UpdateReservationDates calls api.reservation.ReservationService.UpdateReservationDates.
+func (c *reservationServiceClient) UpdateReservationDates(ctx context.Context, req *connect.Request[reservation.UpdateReservationDatesRequest]) (*connect.Response[reservation.UpdateReservationDatesResponse], error) {
+	return c.updateReservationDates.CallUnary(ctx, req)
 }
 
-// DeleteReservationDate calls api.reservation.ReservationService.DeleteReservationDate.
-func (c *reservationServiceClient) DeleteReservationDate(ctx context.Context, req *connect.Request[reservation.DeleteReservationDateRequest]) (*connect.Response[reservation.DeleteReservationDateResponse], error) {
-	return c.deleteReservationDate.CallUnary(ctx, req)
+// UpdateReservationDatesStatus calls
+// api.reservation.ReservationService.UpdateReservationDatesStatus.
+func (c *reservationServiceClient) UpdateReservationDatesStatus(ctx context.Context, req *connect.Request[reservation.UpdateReservationDatesStatusRequest]) (*connect.Response[reservation.UpdateReservationDatesStatusResponse], error) {
+	return c.updateReservationDatesStatus.CallUnary(ctx, req)
+}
+
+// DeleteReservationDates calls api.reservation.ReservationService.DeleteReservationDates.
+func (c *reservationServiceClient) DeleteReservationDates(ctx context.Context, req *connect.Request[reservation.DeleteReservationDatesRequest]) (*connect.Response[reservation.DeleteReservationDatesResponse], error) {
+	return c.deleteReservationDates.CallUnary(ctx, req)
 }
 
 // CreateReservationFee calls api.reservation.ReservationService.CreateReservationFee.
@@ -310,11 +343,13 @@ type ReservationServiceHandler interface {
 	GetRequestsThisWeek(context.Context, *connect.Request[reservation.GetRequestsThisWeekRequest]) (*connect.Response[reservation.RequestThisWeekResponse], error)
 	CreateReservation(context.Context, *connect.Request[reservation.CreateReservationRequest]) (*connect.Response[reservation.CreateReservationResponse], error)
 	UpdateReservation(context.Context, *connect.Request[reservation.UpdateReservationRequest]) (*connect.Response[reservation.UpdateReservationResponse], error)
+	UpdateReservationStatus(context.Context, *connect.Request[reservation.UpdateReservationRequest]) (*connect.Response[reservation.UpdateReservationResponse], error)
 	DeleteReservation(context.Context, *connect.Request[reservation.DeleteReservationRequest]) (*connect.Response[reservation.DeleteReservationResponse], error)
 	UserReservations(context.Context, *connect.Request[reservation.UserReservationsRequest]) (*connect.Response[reservation.UserReservationsResponse], error)
-	CreateReservationDate(context.Context, *connect.Request[reservation.CreateReservationDateRequest]) (*connect.Response[reservation.CreateReservationDateResponse], error)
-	UpdateReservationDate(context.Context, *connect.Request[reservation.UpdateReservationDateRequest]) (*connect.Response[reservation.UpdateReservationDateResponse], error)
-	DeleteReservationDate(context.Context, *connect.Request[reservation.DeleteReservationDateRequest]) (*connect.Response[reservation.DeleteReservationDateResponse], error)
+	CreateReservationDates(context.Context, *connect.Request[reservation.CreateReservationDatesRequest]) (*connect.Response[reservation.CreateReservationDatesResponse], error)
+	UpdateReservationDates(context.Context, *connect.Request[reservation.UpdateReservationDatesRequest]) (*connect.Response[reservation.UpdateReservationDatesResponse], error)
+	UpdateReservationDatesStatus(context.Context, *connect.Request[reservation.UpdateReservationDatesStatusRequest]) (*connect.Response[reservation.UpdateReservationDatesStatusResponse], error)
+	DeleteReservationDates(context.Context, *connect.Request[reservation.DeleteReservationDatesRequest]) (*connect.Response[reservation.DeleteReservationDatesResponse], error)
 	CreateReservationFee(context.Context, *connect.Request[reservation.CreateReservationFeeRequest]) (*connect.Response[reservation.CreateReservationFeeResponse], error)
 	UpdateReservationFee(context.Context, *connect.Request[reservation.UpdateReservationFeeRequest]) (*connect.Response[reservation.UpdateReservationFeeResponse], error)
 	DeleteReservationFee(context.Context, *connect.Request[reservation.DeleteReservationFeeRequest]) (*connect.Response[reservation.DeleteReservationFeeResponse], error)
@@ -368,6 +403,12 @@ func NewReservationServiceHandler(svc ReservationServiceHandler, opts ...connect
 		connect.WithSchema(reservationServiceMethods.ByName("UpdateReservation")),
 		connect.WithHandlerOptions(opts...),
 	)
+	reservationServiceUpdateReservationStatusHandler := connect.NewUnaryHandler(
+		ReservationServiceUpdateReservationStatusProcedure,
+		svc.UpdateReservationStatus,
+		connect.WithSchema(reservationServiceMethods.ByName("UpdateReservationStatus")),
+		connect.WithHandlerOptions(opts...),
+	)
 	reservationServiceDeleteReservationHandler := connect.NewUnaryHandler(
 		ReservationServiceDeleteReservationProcedure,
 		svc.DeleteReservation,
@@ -381,22 +422,28 @@ func NewReservationServiceHandler(svc ReservationServiceHandler, opts ...connect
 		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 		connect.WithHandlerOptions(opts...),
 	)
-	reservationServiceCreateReservationDateHandler := connect.NewUnaryHandler(
-		ReservationServiceCreateReservationDateProcedure,
-		svc.CreateReservationDate,
-		connect.WithSchema(reservationServiceMethods.ByName("CreateReservationDate")),
+	reservationServiceCreateReservationDatesHandler := connect.NewUnaryHandler(
+		ReservationServiceCreateReservationDatesProcedure,
+		svc.CreateReservationDates,
+		connect.WithSchema(reservationServiceMethods.ByName("CreateReservationDates")),
 		connect.WithHandlerOptions(opts...),
 	)
-	reservationServiceUpdateReservationDateHandler := connect.NewUnaryHandler(
-		ReservationServiceUpdateReservationDateProcedure,
-		svc.UpdateReservationDate,
-		connect.WithSchema(reservationServiceMethods.ByName("UpdateReservationDate")),
+	reservationServiceUpdateReservationDatesHandler := connect.NewUnaryHandler(
+		ReservationServiceUpdateReservationDatesProcedure,
+		svc.UpdateReservationDates,
+		connect.WithSchema(reservationServiceMethods.ByName("UpdateReservationDates")),
 		connect.WithHandlerOptions(opts...),
 	)
-	reservationServiceDeleteReservationDateHandler := connect.NewUnaryHandler(
-		ReservationServiceDeleteReservationDateProcedure,
-		svc.DeleteReservationDate,
-		connect.WithSchema(reservationServiceMethods.ByName("DeleteReservationDate")),
+	reservationServiceUpdateReservationDatesStatusHandler := connect.NewUnaryHandler(
+		ReservationServiceUpdateReservationDatesStatusProcedure,
+		svc.UpdateReservationDatesStatus,
+		connect.WithSchema(reservationServiceMethods.ByName("UpdateReservationDatesStatus")),
+		connect.WithHandlerOptions(opts...),
+	)
+	reservationServiceDeleteReservationDatesHandler := connect.NewUnaryHandler(
+		ReservationServiceDeleteReservationDatesProcedure,
+		svc.DeleteReservationDates,
+		connect.WithSchema(reservationServiceMethods.ByName("DeleteReservationDates")),
 		connect.WithHandlerOptions(opts...),
 	)
 	reservationServiceCreateReservationFeeHandler := connect.NewUnaryHandler(
@@ -437,16 +484,20 @@ func NewReservationServiceHandler(svc ReservationServiceHandler, opts ...connect
 			reservationServiceCreateReservationHandler.ServeHTTP(w, r)
 		case ReservationServiceUpdateReservationProcedure:
 			reservationServiceUpdateReservationHandler.ServeHTTP(w, r)
+		case ReservationServiceUpdateReservationStatusProcedure:
+			reservationServiceUpdateReservationStatusHandler.ServeHTTP(w, r)
 		case ReservationServiceDeleteReservationProcedure:
 			reservationServiceDeleteReservationHandler.ServeHTTP(w, r)
 		case ReservationServiceUserReservationsProcedure:
 			reservationServiceUserReservationsHandler.ServeHTTP(w, r)
-		case ReservationServiceCreateReservationDateProcedure:
-			reservationServiceCreateReservationDateHandler.ServeHTTP(w, r)
-		case ReservationServiceUpdateReservationDateProcedure:
-			reservationServiceUpdateReservationDateHandler.ServeHTTP(w, r)
-		case ReservationServiceDeleteReservationDateProcedure:
-			reservationServiceDeleteReservationDateHandler.ServeHTTP(w, r)
+		case ReservationServiceCreateReservationDatesProcedure:
+			reservationServiceCreateReservationDatesHandler.ServeHTTP(w, r)
+		case ReservationServiceUpdateReservationDatesProcedure:
+			reservationServiceUpdateReservationDatesHandler.ServeHTTP(w, r)
+		case ReservationServiceUpdateReservationDatesStatusProcedure:
+			reservationServiceUpdateReservationDatesStatusHandler.ServeHTTP(w, r)
+		case ReservationServiceDeleteReservationDatesProcedure:
+			reservationServiceDeleteReservationDatesHandler.ServeHTTP(w, r)
 		case ReservationServiceCreateReservationFeeProcedure:
 			reservationServiceCreateReservationFeeHandler.ServeHTTP(w, r)
 		case ReservationServiceUpdateReservationFeeProcedure:
@@ -488,6 +539,10 @@ func (UnimplementedReservationServiceHandler) UpdateReservation(context.Context,
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.reservation.ReservationService.UpdateReservation is not implemented"))
 }
 
+func (UnimplementedReservationServiceHandler) UpdateReservationStatus(context.Context, *connect.Request[reservation.UpdateReservationRequest]) (*connect.Response[reservation.UpdateReservationResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.reservation.ReservationService.UpdateReservationStatus is not implemented"))
+}
+
 func (UnimplementedReservationServiceHandler) DeleteReservation(context.Context, *connect.Request[reservation.DeleteReservationRequest]) (*connect.Response[reservation.DeleteReservationResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.reservation.ReservationService.DeleteReservation is not implemented"))
 }
@@ -496,16 +551,20 @@ func (UnimplementedReservationServiceHandler) UserReservations(context.Context, 
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.reservation.ReservationService.UserReservations is not implemented"))
 }
 
-func (UnimplementedReservationServiceHandler) CreateReservationDate(context.Context, *connect.Request[reservation.CreateReservationDateRequest]) (*connect.Response[reservation.CreateReservationDateResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.reservation.ReservationService.CreateReservationDate is not implemented"))
+func (UnimplementedReservationServiceHandler) CreateReservationDates(context.Context, *connect.Request[reservation.CreateReservationDatesRequest]) (*connect.Response[reservation.CreateReservationDatesResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.reservation.ReservationService.CreateReservationDates is not implemented"))
 }
 
-func (UnimplementedReservationServiceHandler) UpdateReservationDate(context.Context, *connect.Request[reservation.UpdateReservationDateRequest]) (*connect.Response[reservation.UpdateReservationDateResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.reservation.ReservationService.UpdateReservationDate is not implemented"))
+func (UnimplementedReservationServiceHandler) UpdateReservationDates(context.Context, *connect.Request[reservation.UpdateReservationDatesRequest]) (*connect.Response[reservation.UpdateReservationDatesResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.reservation.ReservationService.UpdateReservationDates is not implemented"))
 }
 
-func (UnimplementedReservationServiceHandler) DeleteReservationDate(context.Context, *connect.Request[reservation.DeleteReservationDateRequest]) (*connect.Response[reservation.DeleteReservationDateResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.reservation.ReservationService.DeleteReservationDate is not implemented"))
+func (UnimplementedReservationServiceHandler) UpdateReservationDatesStatus(context.Context, *connect.Request[reservation.UpdateReservationDatesStatusRequest]) (*connect.Response[reservation.UpdateReservationDatesStatusResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.reservation.ReservationService.UpdateReservationDatesStatus is not implemented"))
+}
+
+func (UnimplementedReservationServiceHandler) DeleteReservationDates(context.Context, *connect.Request[reservation.DeleteReservationDatesRequest]) (*connect.Response[reservation.DeleteReservationDatesResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.reservation.ReservationService.DeleteReservationDates is not implemented"))
 }
 
 func (UnimplementedReservationServiceHandler) CreateReservationFee(context.Context, *connect.Request[reservation.CreateReservationFeeRequest]) (*connect.Response[reservation.CreateReservationFeeResponse], error) {

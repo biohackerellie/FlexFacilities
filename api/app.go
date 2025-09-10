@@ -29,7 +29,10 @@ func Run(ctx context.Context, stdout io.Writer, getenv func(string, string) stri
 
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
-	config := config.New(getenv)
+	config, err := config.New(getenv)
+	if err != nil {
+		return err
+	}
 	logLevel := config.LogLevel
 	if logLevel == "" {
 		logLevel = "info"

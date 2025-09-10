@@ -52,6 +52,23 @@ func StringToPgTimestamptz(s string) pgtype.Timestamptz {
 	}
 	return pgtype.Timestamptz{Time: t, Valid: true}
 }
+func StringToPgTimestamp(s string) pgtype.Timestamp {
+	t, err := time.Parse(time.RFC3339, s)
+	if err != nil {
+		return pgtype.Timestamp{}
+	}
+	return pgtype.Timestamp{Time: t, Valid: true}
+}
+func PgTimestampToString(ts pgtype.Timestamp) string {
+	t, err := ts.Value()
+	if err != nil {
+		return ""
+	}
+	if t == nil {
+		return ""
+	}
+	return t.(time.Time).Format(time.RFC3339)
+}
 
 func StringToPgDate(s string) pgtype.Date {
 	t, err := time.Parse("2006-01-02", s)
@@ -59,6 +76,22 @@ func StringToPgDate(s string) pgtype.Date {
 		return pgtype.Date{}
 	}
 	return pgtype.Date{Time: t, Valid: true}
+}
+
+func DatesArrayToString(dates []time.Time) []string {
+	strDates := make([]string, len(dates))
+	for i, date := range dates {
+		strDates[i] = date.String()
+	}
+	return strDates
+}
+
+func StringArrayToDates(strDates []string) []time.Time {
+	dates := make([]time.Time, len(strDates))
+	for i, strDate := range strDates {
+		dates[i], _ = time.Parse(time.RFC3339, strDate)
+	}
+	return dates
 }
 
 func PgTimeToString(ti pgtype.Time) string {

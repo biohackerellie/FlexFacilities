@@ -16,38 +16,44 @@ message Reservation {
   optional string details = 8;
   string fees = 9;                // pgtype.Numeric as string
   bool insurance = 10;
-  optional string primary_contact = 11;
-  optional bool door_access = 12;
-  optional string doors_details = 13;
-  optional string name = 14;
-  optional string people = 15;
-  optional string tech_details = 16;
-  optional bool tech_support = 17;
-  optional string phone = 18;
-  int64 category_id = 19;
-  optional double total_hours = 20;
-  bool in_person = 21;
-  bool paid = 22;
-  optional string payment_url = 23;
-  optional string payment_link_id = 24;
-  bool ticket_made = 25;
-  bool conflicts = 26;
-  optional string insurance_link = 27;
-  string cost_override = 28;      // pgtype.Numeric as string
+  optional bool door_access = 11;
+  optional string doors_details = 12;
+  optional string name = 13;
+  optional string tech_details = 14;
+  optional bool tech_support = 15;
+  optional string phone = 16;
+  int64 category_id = 17;
+  optional double total_hours = 18;
+  bool in_person = 19;
+  bool paid = 20;
+  optional string payment_url = 21;
+  optional string payment_link_id = 22;
+  optional string insurance_link = 23;
+  string cost_override = 24;      // pgtype.Numeric as string
+  optional string rrule = 25;
+  repeated string rdates = 26;
+  repeated string exdates = 27;
+  optional string gcal_eventid = 28;
 }
 
 
 
 message ReservationDate {
   int64 id = 1;
-  string start_date = 2;                  // "YYYY-MM-DD"
-  string end_date = 3;                    // "YYYY-MM-DD"
-  string start_time = 4;                  // "HH:MM"
-  string end_time = 5;                    // "HH:MM"
-  int64 reservation_id = 6;
-  string approved = 7;
-  optional string gcal_eventid = 8;
+  int64 reservation_id = 2;
+  string approved = 3;
+  optional string gcal_eventid = 4;
+  string local_start = 5;
+  string local_end = 6;
 }
+
+message RecurrencePattern {
+  string freq = 1;
+  repeated string by_weekday = 2;
+  string until = 3;
+  int32 count = 4;
+}
+
 
 message ReservationFee {
   int64 id = 1;
@@ -78,19 +84,31 @@ service ReservationService {
   };
   rpc CreateReservation (CreateReservationRequest) returns (CreateReservationResponse);
   rpc UpdateReservation (UpdateReservationRequest) returns (UpdateReservationResponse);
+  rpc UpdateReservationStatus (UpdateReservationRequest) returns (UpdateReservationResponse);
   rpc DeleteReservation (DeleteReservationRequest) returns (DeleteReservationResponse);
   rpc UserReservations (UserReservationsRequest) returns (UserReservationsResponse){
     option idempotency_level = NO_SIDE_EFFECTS;
   };
-  rpc CreateReservationDate (CreateReservationDateRequest) returns (CreateReservationDateResponse);
-  rpc UpdateReservationDate (UpdateReservationDateRequest) returns (UpdateReservationDateResponse);
-  rpc DeleteReservationDate (DeleteReservationDateRequest) returns (DeleteReservationDateResponse);
+  rpc CreateReservationDates (CreateReservationDatesRequest) returns (CreateReservationDatesResponse);
+  rpc UpdateReservationDates (UpdateReservationDatesRequest) returns (UpdateReservationDatesResponse);
+  rpc UpdateReservationDatesStatus (UpdateReservationDatesStatusRequest) returns (UpdateReservationDatesStatusResponse);
+  rpc DeleteReservationDates (DeleteReservationDatesRequest) returns (DeleteReservationDatesResponse);
   rpc CreateReservationFee (CreateReservationFeeRequest) returns (CreateReservationFeeResponse);
   rpc UpdateReservationFee (UpdateReservationFeeRequest) returns (UpdateReservationFeeResponse);
   rpc DeleteReservationFee (DeleteReservationFeeRequest) returns (DeleteReservationFeeResponse);
   rpc CostReducer (CostReducerRequest) returns (CostReducerResponse);
 }
 
+
+message UpdateReservationStatusRequest {
+  int64 id = 1;
+  string status = 2;
+}
+message UpdateReservationDatesStatusRequest {
+  repeated int64 ids = 1;
+  string status = 2;
+}
+message UpdateReservationDatesStatusResponse {}
 message AllReservationsResponse {
   repeated FullReservation reservations = 1;
 }
@@ -126,7 +144,22 @@ message RequestCountResponse {
 
 message GetRequestsThisWeekRequest {}
 message CreateReservationRequest {
-  FullReservation reservation = 1;
+  string user_id = 1;
+  string event_name = 2;
+  int64 facility_id = 3;
+  string details = 4;
+  int64 category_id = 5;
+  string name = 6;
+  string phone = 7;
+  bool tech_support = 8;
+  optional string tech_details = 9;
+  bool door_access = 10;
+  optional string doors_details = 11;
+  string start_date = 12;
+  string end_date = 13;
+  optional RecurrencePattern pattern = 14;
+  repeated string rdates = 15;
+  repeated string exdates = 16;
 }
 message CreateReservationResponse {
   int64 id = 1;
@@ -146,24 +179,24 @@ message UserReservationsRequest {
   string user_id = 1;
 }
 
-message CreateReservationDateRequest {
+message CreateReservationDatesRequest {
   repeated ReservationDate date = 1; 
 }
 
-message CreateReservationDateResponse {}
+message CreateReservationDatesResponse {}
 
-message UpdateReservationDateResponse {}
-message DeleteReservationDateResponse {}
+message UpdateReservationDatesResponse {}
+message DeleteReservationDatesResponse {}
 message CreateReservationFeeResponse {}
 message UpdateReservationFeeResponse {}
 message DeleteReservationFeeResponse {}
 
-message UpdateReservationDateRequest {
-   ReservationDate date = 1; 
+message UpdateReservationDatesRequest {
+   repeated ReservationDate date = 1; 
 }
 
-message DeleteReservationDateRequest {
-  int64 id = 1;
+message DeleteReservationDatesRequest {
+  repeated int64 id = 1;
 }
 
 message CreateReservationFeeRequest {

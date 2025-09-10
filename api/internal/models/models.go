@@ -8,6 +8,8 @@ import (
 	pbUsers "api/internal/proto/users"
 	"database/sql/driver"
 	"fmt"
+	"time"
+
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
@@ -396,99 +398,101 @@ func ToNotification(n *pbUsers.Notifications) *Notification {
 }
 
 type Reservation struct {
-	ID             int64               `db:"id" json:"id"`
-	UserID         string              `db:"user_id" json:"user_id"`
-	EventName      string              `db:"event_name" json:"event_name"`
-	FacilityID     int64               `db:"facility_id" json:"facility_id"`
-	Approved       ReservationApproved `db:"approved" json:"approved"`
-	CreatedAt      pgtype.Timestamptz  `db:"created_at" json:"created_at"`
-	UpdatedAt      pgtype.Timestamptz  `db:"updated_at" json:"updated_at"`
-	Details        *string             `db:"details" json:"details"`
-	Fees           pgtype.Numeric      `db:"fees" json:"fees"`
-	Insurance      bool                `db:"insurance" json:"insurance"`
-	PrimaryContact *string             `db:"primary_contact" json:"primary_contact"`
-	DoorAccess     *bool               `db:"door_access" json:"door_access"`
-	DoorsDetails   *string             `db:"doors_details" json:"doors_details"`
-	Name           *string             `db:"name" json:"name"`
-	People         *string             `db:"people" json:"people"`
-	TechDetails    *string             `db:"tech_details" json:"tech_details"`
-	TechSupport    *bool               `db:"tech_support" json:"tech_support"`
-	Phone          *string             `db:"phone" json:"phone"`
-	CategoryID     int64               `db:"category_id" json:"category_id"`
-	TotalHours     *float64            `db:"total_hours" json:"total_hours"`
-	InPerson       bool                `db:"in_person" json:"in_person"`
-	Paid           bool                `db:"paid" json:"paid"`
-	PaymentUrl     *string             `db:"payment_url" json:"payment_url"`
-	PaymentLinkID  *string             `db:"payment_link_id" json:"payment_link_id"`
-	TicketMade     bool                `db:"ticket_made" json:"ticket_made"`
-	Conflicts      bool                `db:"conflicts" json:"conflicts"`
-	InsuranceLink  *string             `db:"insurance_link" json:"insurance_link"`
-	CostOverride   pgtype.Numeric      `db:"cost_override" json:"cost_override"`
+	ID            int64               `db:"id" json:"id"`
+	UserID        string              `db:"user_id" json:"user_id"`
+	EventName     string              `db:"event_name" json:"event_name"`
+	FacilityID    int64               `db:"facility_id" json:"facility_id"`
+	Approved      ReservationApproved `db:"approved" json:"approved"`
+	CreatedAt     pgtype.Timestamptz  `db:"created_at" json:"created_at"`
+	UpdatedAt     pgtype.Timestamptz  `db:"updated_at" json:"updated_at"`
+	Details       *string             `db:"details" json:"details"`
+	Fees          pgtype.Numeric      `db:"fees" json:"fees"`
+	Insurance     bool                `db:"insurance" json:"insurance"`
+	DoorAccess    *bool               `db:"door_access" json:"door_access"`
+	DoorsDetails  *string             `db:"doors_details" json:"doors_details"`
+	Name          *string             `db:"name" json:"name"`
+	TechDetails   *string             `db:"tech_details" json:"tech_details"`
+	TechSupport   *bool               `db:"tech_support" json:"tech_support"`
+	Phone         *string             `db:"phone" json:"phone"`
+	CategoryID    int64               `db:"category_id" json:"category_id"`
+	TotalHours    *float64            `db:"total_hours" json:"total_hours"`
+	InPerson      bool                `db:"in_person" json:"in_person"`
+	Paid          bool                `db:"paid" json:"paid"`
+	PaymentUrl    *string             `db:"payment_url" json:"payment_url"`
+	PaymentLinkID *string             `db:"payment_link_id" json:"payment_link_id"`
+	InsuranceLink *string             `db:"insurance_link" json:"insurance_link"`
+	CostOverride  pgtype.Numeric      `db:"cost_override" json:"cost_override"`
+	RRule         *string             `db:"rrule" json:"rrule"`
+	RDates        []time.Time         `db:"rdates" json:"rdates"`
+	EXDates       []time.Time         `db:"exdates" json:"exdates"`
+	GCalEventID   *string             `db:"gcal_eventid" json:"gcal_eventid"`
 }
 
 func (r *Reservation) ToProto() *pbReservation.Reservation {
 	return &pbReservation.Reservation{
-		Id:             r.ID,
-		UserId:         r.UserID,
-		EventName:      r.EventName,
-		FacilityId:     r.FacilityID,
-		Approved:       r.Approved.String(),
-		CreatedAt:      utils.PgTimestamptzToString(r.CreatedAt),
-		UpdatedAt:      utils.PgTimestamptzToString(r.UpdatedAt),
-		Details:        r.Details,
-		Fees:           utils.PgNumericToString(r.Fees),
-		Insurance:      r.Insurance,
-		PrimaryContact: r.PrimaryContact,
-		DoorAccess:     r.DoorAccess,
-		DoorsDetails:   r.DoorsDetails,
-		Name:           r.Name,
-		People:         r.People,
-		TechDetails:    r.TechDetails,
-		TechSupport:    r.TechSupport,
-		Phone:          r.Phone,
-		CategoryId:     r.CategoryID,
-		TotalHours:     r.TotalHours,
-		InPerson:       r.InPerson,
-		Paid:           r.Paid,
-		PaymentUrl:     r.PaymentUrl,
-		PaymentLinkId:  r.PaymentLinkID,
-		TicketMade:     r.TicketMade,
-		Conflicts:      r.Conflicts,
-		InsuranceLink:  r.InsuranceLink,
-		CostOverride:   utils.PgNumericToString(r.CostOverride),
+		Id:            r.ID,
+		UserId:        r.UserID,
+		EventName:     r.EventName,
+		FacilityId:    r.FacilityID,
+		Approved:      r.Approved.String(),
+		CreatedAt:     utils.PgTimestamptzToString(r.CreatedAt),
+		UpdatedAt:     utils.PgTimestamptzToString(r.UpdatedAt),
+		Details:       r.Details,
+		Fees:          utils.PgNumericToString(r.Fees),
+		Insurance:     r.Insurance,
+		DoorAccess:    r.DoorAccess,
+		DoorsDetails:  r.DoorsDetails,
+		Name:          r.Name,
+		TechDetails:   r.TechDetails,
+		TechSupport:   r.TechSupport,
+		Phone:         r.Phone,
+		CategoryId:    r.CategoryID,
+		TotalHours:    r.TotalHours,
+		InPerson:      r.InPerson,
+		Paid:          r.Paid,
+		PaymentUrl:    r.PaymentUrl,
+		PaymentLinkId: r.PaymentLinkID,
+		InsuranceLink: r.InsuranceLink,
+		CostOverride:  utils.PgNumericToString(r.CostOverride),
+		Rrule:         r.RRule,
+		Rdates:        utils.DatesArrayToString(r.RDates),
+		Exdates:       utils.DatesArrayToString(r.EXDates),
+		GcalEventid:   r.GCalEventID,
 	}
 }
 
+const RFC5545 = "20060102T150405Z"
+
 func ToReservation(reservation *pbReservation.Reservation) *Reservation {
 	return &Reservation{
-		ID:             reservation.Id,
-		UserID:         reservation.UserId,
-		EventName:      reservation.EventName,
-		FacilityID:     reservation.FacilityId,
-		Approved:       ReservationApproved(reservation.Approved),
-		CreatedAt:      utils.StringToPgTimestamptz(reservation.CreatedAt),
-		UpdatedAt:      utils.StringToPgTimestamptz(reservation.UpdatedAt),
-		Details:        reservation.Details,
-		Fees:           utils.StringToPgNumeric(reservation.Fees),
-		Insurance:      reservation.Insurance,
-		PrimaryContact: reservation.PrimaryContact,
-		DoorAccess:     reservation.DoorAccess,
-		DoorsDetails:   reservation.DoorsDetails,
-		Name:           reservation.Name,
-		People:         reservation.People,
-		TechDetails:    reservation.TechDetails,
-		TechSupport:    reservation.TechSupport,
-		Phone:          reservation.Phone,
-		CategoryID:     reservation.CategoryId,
-		TotalHours:     reservation.TotalHours,
-		InPerson:       reservation.InPerson,
-		Paid:           reservation.Paid,
-		PaymentUrl:     reservation.PaymentUrl,
-		PaymentLinkID:  reservation.PaymentLinkId,
-		TicketMade:     reservation.TicketMade,
-		Conflicts:      reservation.Conflicts,
-		InsuranceLink:  reservation.InsuranceLink,
-		CostOverride:   utils.StringToPgNumeric(reservation.CostOverride),
+		ID:            reservation.Id,
+		UserID:        reservation.UserId,
+		EventName:     reservation.EventName,
+		FacilityID:    reservation.FacilityId,
+		Approved:      ReservationApproved(reservation.Approved),
+		CreatedAt:     utils.StringToPgTimestamptz(reservation.CreatedAt),
+		UpdatedAt:     utils.StringToPgTimestamptz(reservation.UpdatedAt),
+		Details:       reservation.Details,
+		Fees:          utils.StringToPgNumeric(reservation.Fees),
+		Insurance:     reservation.Insurance,
+		DoorAccess:    reservation.DoorAccess,
+		DoorsDetails:  reservation.DoorsDetails,
+		Name:          reservation.Name,
+		TechDetails:   reservation.TechDetails,
+		TechSupport:   reservation.TechSupport,
+		Phone:         reservation.Phone,
+		CategoryID:    reservation.CategoryId,
+		TotalHours:    reservation.TotalHours,
+		InPerson:      reservation.InPerson,
+		Paid:          reservation.Paid,
+		PaymentUrl:    reservation.PaymentUrl,
+		PaymentLinkID: reservation.PaymentLinkId,
+		InsuranceLink: reservation.InsuranceLink,
+		CostOverride:  utils.StringToPgNumeric(reservation.CostOverride),
+		RRule:         reservation.Rrule,
+		RDates:        utils.StringArrayToDates(reservation.Rdates),
+		EXDates:       utils.StringArrayToDates(reservation.Exdates),
+		GCalEventID:   reservation.GcalEventid,
 	}
 }
 
@@ -518,25 +522,21 @@ func (r *FullReservation) ToProto() *pbReservation.FullReservation {
 
 type ReservationDate struct {
 	ID            int64                   `db:"id" json:"id"`
-	StartDate     pgtype.Date             `db:"start_date" json:"start_date"`
-	EndDate       pgtype.Date             `db:"end_date" json:"end_date"`
-	StartTime     pgtype.Time             `db:"start_time" json:"start_time"`
-	EndTime       pgtype.Time             `db:"end_time" json:"end_time"`
 	ReservationID int64                   `db:"reservation_id" json:"reservation_id"`
 	Approved      ReservationDateApproved `db:"approved" json:"approved"`
 	GcalEventid   *string                 `db:"gcal_eventid" json:"gcal_eventid"`
+	LocalStart    pgtype.Timestamp        `db:"local_start" json:"local_start"`
+	LocalEnd      pgtype.Timestamp        `db:"local_end" json:"local_end"`
 }
 
 func ToReservationDate(reservationDate *pbReservation.ReservationDate) *ReservationDate {
 	return &ReservationDate{
 		ID:            reservationDate.Id,
-		StartDate:     utils.StringToPgDate(reservationDate.StartDate),
-		EndDate:       utils.StringToPgDate(reservationDate.EndDate),
-		StartTime:     utils.StringToPgTime(reservationDate.StartTime),
-		EndTime:       utils.StringToPgTime(reservationDate.EndTime),
 		ReservationID: reservationDate.ReservationId,
 		Approved:      ReservationDateApproved(reservationDate.Approved),
 		GcalEventid:   reservationDate.GcalEventid,
+		LocalStart:    utils.StringToPgTimestamp(reservationDate.LocalStart),
+		LocalEnd:      utils.StringToPgTimestamp(reservationDate.LocalEnd),
 	}
 }
 
@@ -550,13 +550,11 @@ func ToReservationDates(reservationDates []*pbReservation.ReservationDate) []Res
 func (r *ReservationDate) ToProto() *pbReservation.ReservationDate {
 	return &pbReservation.ReservationDate{
 		Id:            r.ID,
-		StartDate:     utils.PgDateToString(r.StartDate),
-		EndDate:       utils.PgDateToString(r.EndDate),
-		StartTime:     utils.PgTimeToString(r.StartTime),
-		EndTime:       utils.PgTimeToString(r.EndTime),
 		ReservationId: r.ReservationID,
 		Approved:      r.Approved.String(),
 		GcalEventid:   r.GcalEventid,
+		LocalStart:    utils.PgTimestampToString(r.LocalStart),
+		LocalEnd:      utils.PgTimestampToString(r.LocalEnd),
 	}
 }
 

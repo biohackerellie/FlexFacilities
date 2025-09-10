@@ -1,21 +1,19 @@
-"use server";
+'use server';
 
 /**
  * Serverless function for creating a new reservation from form data
  */
-import type { z } from "zod";
-import { revalidateTag } from "next/cache";
+import type { z } from 'zod';
+import { revalidateTag } from 'next/cache';
 
-import { db } from "@local/db/client";
-import { CreateReservationSchema } from "@local/db/schema";
-import { formSchema } from "@local/validators";
+import { formSchema } from '@/lib/validators';
+import type { Reservation } from '@/lib/types';
 
-import { api } from "@/trpc/server";
-import { newReservationEmail } from "../emails/reservationEmail";
+import { newReservationEmail } from '../emails/reservationEmail';
 
 // Validate form data values against the form schema
 type formValues = z.infer<typeof formSchema>;
-type NewReservation = z.infer<typeof CreateReservationSchema>;
+type NewReservation = Reservation;
 export default async function submitReservation(data: formValues) {
   try {
     // Helper database function to find a category by facility and category name
@@ -69,7 +67,7 @@ export default async function submitReservation(data: formValues) {
     // Insert the events and reservation dates into the database
     await api.reservation.createReservationDates(reservationDatesToInsert);
     // Send an email to building admins, prevents action while testing
-    if (process.env.NODE_ENV === "production") {
+    if (process.env.NODE_ENV === 'production') {
       newReservationEmail({
         building: Building,
         name: data.name,
@@ -79,9 +77,9 @@ export default async function submitReservation(data: formValues) {
     }
 
     // Revalidate the admin page to update the cache
-    revalidateTag("reservations");
-    return "Success";
+    revalidateTag('reservations');
+    return 'Success';
   } catch (error) {
-    throw new Error("Error creating reservation");
+    throw new Error('Error creating reservation');
   }
 }

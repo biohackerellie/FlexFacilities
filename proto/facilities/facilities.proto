@@ -63,6 +63,7 @@ service FacilitiesService {
   rpc GetFacility (GetFacilityRequest) returns (FullFacility){
     option idempotency_level = NO_SIDE_EFFECTS;
   };
+
   rpc GetEventsByFacility (GetEventsByFacilityRequest) returns (GetEventsByFacilityResponse){
     option idempotency_level = NO_SIDE_EFFECTS;
   };
@@ -85,6 +86,7 @@ service FacilitiesService {
   rpc GetCategory (GetCategoryRequest) returns (Category){
     option idempotency_level = NO_SIDE_EFFECTS;
   };
+  
 }
 
 message GetCategoryRequest {

@@ -180,25 +180,23 @@ const createReservationQuery = `INSERT INTO reservation (
 
 func (s *ReservationStore) Create(ctx context.Context, reservation *models.Reservation) (int64, error) {
 	params := map[string]any{
-		"userId":         reservation.UserID,
-		"eventName":      reservation.EventName,
-		"facilityId":     reservation.FacilityID,
-		"approved":       reservation.Approved,
-		"createdAt":      reservation.CreatedAt,
-		"updatedAt":      reservation.UpdatedAt,
-		"details":        reservation.Details,
-		"fees":           reservation.Fees,
-		"insurance":      reservation.Insurance,
-		"primaryContact": reservation.PrimaryContact,
-		"doorAccess":     reservation.DoorAccess,
-		"doorsDetails":   reservation.DoorsDetails,
-		"name":           reservation.Name,
-		"people":         reservation.People,
-		"techDetails":    reservation.TechDetails,
-		"techSupport":    reservation.TechSupport,
-		"phone":          reservation.Phone,
-		"categoryId":     reservation.CategoryID,
-		"totalHours":     reservation.TotalHours,
+		"userId":       reservation.UserID,
+		"eventName":    reservation.EventName,
+		"facilityId":   reservation.FacilityID,
+		"approved":     reservation.Approved,
+		"createdAt":    reservation.CreatedAt,
+		"updatedAt":    reservation.UpdatedAt,
+		"details":      reservation.Details,
+		"fees":         reservation.Fees,
+		"insurance":    reservation.Insurance,
+		"doorAccess":   reservation.DoorAccess,
+		"doorsDetails": reservation.DoorsDetails,
+		"name":         reservation.Name,
+		"techDetails":  reservation.TechDetails,
+		"techSupport":  reservation.TechSupport,
+		"phone":        reservation.Phone,
+		"categoryId":   reservation.CategoryID,
+		"totalHours":   reservation.TotalHours,
 	}
 
 	var id int64
@@ -300,21 +298,26 @@ func (s *ReservationStore) Update(ctx context.Context, reservation *models.Reser
 	return nil
 }
 
-const deleteReservationQuery = `DELETE FROM reservation WHERE id = ?`
+const deleteReservationQuery = `DELETE FROM reservation WHERE id = $1`
 
 func (s *ReservationStore) Delete(ctx context.Context, id int64) error {
 	_, err := s.db.ExecContext(ctx, deleteReservationQuery, id)
 	return err
 }
 
-const deleteReservationDatesQuery = `DELETE FROM reservation_date WHERE id = ?`
+const deleteReservationDatesQuery = `DELETE FROM reservation_date WHERE id IN (?)`
 
-func (s *ReservationStore) DeleteDates(ctx context.Context, id int64) error {
-	_, err := s.db.ExecContext(ctx, deleteReservationDatesQuery, id)
+func (s *ReservationStore) DeleteDates(ctx context.Context, id []int64) error {
+	query, args, err := sqlx.In(deleteReservationDatesQuery, id)
+	if err != nil {
+		return err
+	}
+	query = s.db.Rebind(query)
+	_, err = s.db.ExecContext(ctx, query, args...)
 	return err
 }
 
-const deleteReservationFeesQuery = `DELETE FROM reservation_fees WHERE id = ?`
+const deleteReservationFeesQuery = `DELETE FROM reservation_fees WHERE id = $1`
 
 func (s *ReservationStore) DeleteFees(ctx context.Context, id int64) error {
 	_, err := s.db.ExecContext(ctx, deleteReservationFeesQuery, id)

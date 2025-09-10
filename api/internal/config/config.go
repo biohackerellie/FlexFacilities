@@ -1,24 +1,30 @@
 package config
 
+import (
+	"fmt"
+	"time"
+)
+
 type Config struct {
-	LogLevel          string `mapstructure:"LOG_LEVEL"`
-	VerboseLogging    string `mapstructure:"VERBOSE_LOGGING"`
-	AppEnv            string `mapstructure:"APP_ENV"`
-	EntraClientID     string `mapstructure:"ENTRA_CLIENT_ID"`
-	EntraClientSecret string `mapstructure:"ENTRA_CLIENT_SECRET"`
-	EntraTenant       string `mapstructure:"ENTRA_TENANT"`
-	DatabaseURL       string `mapstructure:"DATABASE_URL"`
-	AuthSecret        string `mapstructure:"AUTH_SECRET"`
-	AuthSalt          string `mapstructure:"AUTH_SALT"`
-	EmailHost         string `mapstructure:"EMAIL_HOST"`
-	EmailPassword     string `mapstructure:"EMAIL_PASSWORD"`
-	EmailUser         string `mapstructure:"EMAIL_USER"`
-	Host              string `mapstructure:"HOST"`
-	Timezone          string `mapstructure:"TIMEZONE"`
+	LogLevel          string         `mapstructure:"LOG_LEVEL"`
+	VerboseLogging    string         `mapstructure:"VERBOSE_LOGGING"`
+	AppEnv            string         `mapstructure:"APP_ENV"`
+	EntraClientID     string         `mapstructure:"ENTRA_CLIENT_ID"`
+	EntraClientSecret string         `mapstructure:"ENTRA_CLIENT_SECRET"`
+	EntraTenant       string         `mapstructure:"ENTRA_TENANT"`
+	DatabaseURL       string         `mapstructure:"DATABASE_URL"`
+	AuthSecret        string         `mapstructure:"AUTH_SECRET"`
+	AuthSalt          string         `mapstructure:"AUTH_SALT"`
+	EmailHost         string         `mapstructure:"EMAIL_HOST"`
+	EmailPassword     string         `mapstructure:"EMAIL_PASSWORD"`
+	EmailUser         string         `mapstructure:"EMAIL_USER"`
+	Host              string         `mapstructure:"HOST"`
+	Timezone          string         `mapstructure:"TIMEZONE"`
+	Location          *time.Location `mapstructure:"-"`
 }
 
-func New(getenv func(string, string) string) *Config {
-	return &Config{
+func New(getenv func(string, string) string) (*Config, error) {
+	cfg := &Config{
 		LogLevel:          getenv("LOG_LEVEL", "info"),
 		VerboseLogging:    getenv("VERBOSE_LOGGING", "true"),
 		AppEnv:            getenv("APP_ENV", "development"),
@@ -34,4 +40,10 @@ func New(getenv func(string, string) string) *Config {
 		Host:              getenv("HOST", "http://localhost:3000"),
 		Timezone:          getenv("TIMEZONE", "America/Denver"),
 	}
+	loc, err := time.LoadLocation(cfg.Timezone)
+	if err != nil {
+		return nil, fmt.Errorf("invalid TIMEZONE %q: %w", cfg.Timezone, err)
+	}
+	cfg.Location = loc
+	return cfg, nil
 }

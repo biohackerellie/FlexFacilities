@@ -66,5 +66,11 @@ tasks:
       - task install:go
   bun:
     desc: run bun commands
+    dir: "{{.NEXT_ROOT}}"
     cmds:
-      - cd app && bun {{.CLI_ARGS}}
+      - bun {{.CLI_ARGS}}
+  go: 
+    desc: run go commands
+    dir: "{{.API_ROOT}}"
+    cmds:
+      - go {{.CLI_ARGS}}

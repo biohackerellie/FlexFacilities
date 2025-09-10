@@ -143,23 +143,26 @@ func (a *ReservationHandler) UserReservations(ctx context.Context, req *connect.
 	}), nil
 }
 
-func (a *ReservationHandler) CreateReservationDate(ctx context.Context, req *connect.Request[service.CreateReservationDateRequest]) (*connect.Response[service.CreateReservationDateResponse], error) {
+func (a *ReservationHandler) CreateReservationDate(ctx context.Context, req *connect.Request[service.CreateReservationDatesRequest]) (*connect.Response[service.CreateReservationDateResponse], error) {
 	dates := models.ToReservationDates(req.Msg.GetDate())
 	err := a.reservationStore.CreateDates(ctx, dates)
 	if err != nil {
 		return nil, err
 	}
-	return connect.NewResponse(&service.CreateReservationDateResponse{}), nil
+	return connect.NewResponse(&service.CreateReservationDatesResponse{}), nil
 }
 
-func (a *ReservationHandler) UpdateReservationDate(ctx context.Context, req *connect.Request[service.UpdateReservationDateRequest]) (*connect.Response[service.UpdateReservationDateResponse], error) {
-	err := a.reservationStore.UpdateDate(ctx, models.ToReservationDate(req.Msg.GetDate()))
-	if err != nil {
-		return nil, err
+func (a *ReservationHandler) UpdateReservationDates(ctx context.Context, req *connect.Request[service.UpdateReservationDatesRequest]) (*connect.Response[service.UpdateReservationDateResponse], error) {
+	dates := models.ToReservationDates(req.Msg.GetDate())
+	for _, d := range dates {
+		err := a.reservationStore.UpdateDate(ctx, &d)
+		if err != nil {
+			return nil, err
+		}
 	}
-	return connect.NewResponse(&service.UpdateReservationDateResponse{}), nil
+	return connect.NewResponse(&service.UpdateReservationDatesResponse{}), nil
 }
-func (a *ReservationHandler) DeleteReservationDate(ctx context.Context, req *connect.Request[service.DeleteReservationDateRequest]) (*connect.Response[service.DeleteReservationDateResponse], error) {
+func (a *ReservationHandler) DeleteReservationDates(ctx context.Context, req *connect.Request[service.DeleteReservationDatesRequest]) (*connect.Response[service.DeleteReservationDateResponse], error) {
 	err := a.reservationStore.DeleteDates(ctx, req.Msg.GetId())
 	if err != nil {
 		return nil, err
