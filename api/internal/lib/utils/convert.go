@@ -33,6 +33,9 @@ func PgTimestamptzToTime(tz pgtype.Timestamptz) time.Time {
 func TimeToPgTimestamptz(t time.Time) pgtype.Timestamptz {
 	return pgtype.Timestamptz{Time: t, Valid: true}
 }
+func TimeToPgTimestamp(t time.Time) pgtype.Timestamp {
+	return pgtype.Timestamp{Time: t, Valid: true}
+}
 
 func PgDateToString(date pgtype.Date) string {
 	t, err := date.Value()

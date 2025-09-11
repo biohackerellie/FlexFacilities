@@ -165,22 +165,88 @@ type Occ struct {
 	Start, End time.Time
 }
 
-func ExpandOccurrences(loc *time.Location, rule *rrule.RRule, dtstart time.Time, duration time.Duration, p Payload) []Occ {
-	// Limit expansion to [StartDate, EndDate] if provided
-	var windowEnd time.Time
-	if p.EndDate != "" {
-		e, _ := time.ParseInLocation("2006-01-02", p.EndDate, loc)
-		windowEnd = e.Add(23*time.Hour + 59*time.Minute)
-	} else if !rule.OrigOptions.Until.IsZero() {
-		windowEnd = rule.OrigOptions.Until
-	} else {
-		windowEnd = dtstart.AddDate(1, 0, 0) // safety cap
-	}
+// func ExpandOccurrences(loc *time.Location, rule *rrule.RRule, dtstart time.Time, duration time.Duration, p Payload) []Occ {
+// 	// Limit expansion to [StartDate, EndDate] if provided
+// 	var windowEnd time.Time
+// 	if p.EndDate != "" {
+// 		e, _ := time.ParseInLocation("2006-01-02", p.EndDate, loc)
+// 		windowEnd = e.Add(23*time.Hour + 59*time.Minute)
+// 	} else if !rule.OrigOptions.Until.IsZero() {
+// 		windowEnd = rule.OrigOptions.Until
+// 	} else {
+// 		windowEnd = dtstart.AddDate(1, 0, 0) // safety cap
+// 	}
 
-	starts := rule.Between(dtstart.Add(-time.Second), windowEnd, true)
+// 	starts := rule.Between(dtstart.Add(-time.Second), windowEnd, true)
+// 	occ := make([]Occ, 0, len(starts))
+// 	for _, s := range starts {
+// 		occ = append(occ, Occ{Start: s.In(loc), End: s.In(loc).Add(duration)})
+// 	}
+// 	return occ
+// }
+
+func BuildSet(loc *time.Location, rule *rrule.RRule, rdates, exdates []string) (*rrule.Set, error) {
+	var set rrule.Set
+	if rule != nil {
+		set.RRule(rule)
+	}
+	for _, s := range rdates {
+		t, err := ParseLocal(s, loc)
+		if err != nil {
+			return nil, fmt.Errorf("parse RDATE %q: %w", s, err)
+		}
+		set.RDate(t)
+	}
+	for _, s := range exdates {
+		t, err := ParseLocal(s, loc)
+		if err != nil {
+			return nil, fmt.Errorf("parse EXDATE %q: %w", s, err)
+		}
+		set.ExDate(t)
+	}
+	return &set, nil
+}
+
+func PickWindowEnd(loc *time.Location, dtstart time.Time, p Payload, rule *rrule.RRule) (time.Time, error) {
+	if p.Pattern.Until != "" {
+		u, err := time.ParseInLocation("2006-01-02", p.Pattern.Until, loc)
+		if err != nil {
+			return time.Time{}, fmt.Errorf("parse Pattern.Until: %w", err)
+		}
+		return u.Add(23*time.Hour + 59*time.Minute + 59*time.Second), nil
+	}
+	if p.EndDate != "" {
+		e, err := time.ParseInLocation("2006-01-02", p.EndDate, loc)
+		if err != nil {
+			return time.Time{}, fmt.Errorf("parse EndDate: %w", err)
+		}
+		return e.Add(23*time.Hour + 59*time.Minute + 59*time.Second), nil
+	}
+	if rule != nil && !rule.OrigOptions.Until.IsZero() {
+		return rule.OrigOptions.Until, nil
+	}
+	return dtstart.AddDate(1, 0, 0), nil
+}
+
+func ExpandFromSet(loc *time.Location, set *rrule.Set, rule *rrule.RRule, dtstart time.Time, duration time.Duration, windowEnd time.Time) []Occ {
+	if set == nil || (rule == nil && len((*set).All()) == 0) {
+		return []Occ{{Start: dtstart, End: dtstart.Add(duration)}}
+	}
+	starts := set.Between(dtstart.Add(-time.Second), windowEnd, true)
 	occ := make([]Occ, 0, len(starts))
 	for _, s := range starts {
-		occ = append(occ, Occ{Start: s.In(loc), End: s.In(loc).Add(duration)})
+		sLocal := s.In(loc)
+		occ = append(occ, Occ{Start: sLocal, End: sLocal.Add(duration)})
 	}
 	return occ
+}
+func ParseLocal(s string, loc *time.Location) (time.Time, error) {
+	return time.ParseInLocation("2006-01-02T15:04", s, loc)
+}
+func ParseLocalArray(s []string, loc *time.Location) ([]time.Time, error) {
+	t := make([]time.Time, len(s))
+	for i, s := range s {
+		t[i], _ = ParseLocal(s, loc)
+	}
+	return t, nil
 }

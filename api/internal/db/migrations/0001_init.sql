@@ -109,13 +109,11 @@ CREATE TABLE IF NOT EXISTS insurance_files (
 
 CREATE TABLE IF NOT EXISTS reservation_date (
     id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    start_date DATE NOT NULL,
-    end_date DATE NOT NULL,
-    start_time TIME NOT NULL,
-    end_time TIME NOT NULL,
     reservation_id BIGINT NOT NULL,
     approved reservation_date_approved DEFAULT 'pending'::reservation_date_approved NOT NULL,
     gcal_eventid TEXT,
+    local_start timestamp without time zone,
+    local_end timestamp without time zone,
     CONSTRAINT fk_reservation_id FOREIGN KEY (reservation_id) REFERENCES reservation (id) ON UPDATE CASCADE ON DELETE CASCADE
   );
 

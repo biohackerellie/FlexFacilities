@@ -433,6 +433,58 @@ func (x *RecurrencePattern) GetCount() int32 {
 	return 0
 }
 
+type Occurrence struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Start         string                 `protobuf:"bytes,1,opt,name=start,proto3" json:"start,omitempty"` // "YYYY-MM-DDTHH:mm"
+	End           string                 `protobuf:"bytes,2,opt,name=end,proto3" json:"end,omitempty"`     // "YYYY-MM-DDTHH:mm"
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Occurrence) Reset() {
+	*x = Occurrence{}
+	mi := &file_proto_reservation_reservation_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Occurrence) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Occurrence) ProtoMessage() {}
+
+func (x *Occurrence) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_reservation_reservation_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Occurrence.ProtoReflect.Descriptor instead.
+func (*Occurrence) Descriptor() ([]byte, []int) {
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *Occurrence) GetStart() string {
+	if x != nil {
+		return x.Start
+	}
+	return ""
+}
+
+func (x *Occurrence) GetEnd() string {
+	if x != nil {
+		return x.End
+	}
+	return ""
+}
+
 type ReservationFee struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
 	Id             int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -445,7 +497,7 @@ type ReservationFee struct {
 
 func (x *ReservationFee) Reset() {
 	*x = ReservationFee{}
-	mi := &file_proto_reservation_reservation_proto_msgTypes[3]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -457,7 +509,7 @@ func (x *ReservationFee) String() string {
 func (*ReservationFee) ProtoMessage() {}
 
 func (x *ReservationFee) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_reservation_reservation_proto_msgTypes[3]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -470,7 +522,7 @@ func (x *ReservationFee) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReservationFee.ProtoReflect.Descriptor instead.
 func (*ReservationFee) Descriptor() ([]byte, []int) {
-	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{3}
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *ReservationFee) GetId() int64 {
@@ -512,7 +564,7 @@ type FullReservation struct {
 
 func (x *FullReservation) Reset() {
 	*x = FullReservation{}
-	mi := &file_proto_reservation_reservation_proto_msgTypes[4]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -524,7 +576,7 @@ func (x *FullReservation) String() string {
 func (*FullReservation) ProtoMessage() {}
 
 func (x *FullReservation) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_reservation_reservation_proto_msgTypes[4]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -537,7 +589,7 @@ func (x *FullReservation) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FullReservation.ProtoReflect.Descriptor instead.
 func (*FullReservation) Descriptor() ([]byte, []int) {
-	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{4}
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *FullReservation) GetReservation() *Reservation {
@@ -571,7 +623,7 @@ type UpdateReservationStatusRequest struct {
 
 func (x *UpdateReservationStatusRequest) Reset() {
 	*x = UpdateReservationStatusRequest{}
-	mi := &file_proto_reservation_reservation_proto_msgTypes[5]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -583,7 +635,7 @@ func (x *UpdateReservationStatusRequest) String() string {
 func (*UpdateReservationStatusRequest) ProtoMessage() {}
 
 func (x *UpdateReservationStatusRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_reservation_reservation_proto_msgTypes[5]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -596,7 +648,7 @@ func (x *UpdateReservationStatusRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateReservationStatusRequest.ProtoReflect.Descriptor instead.
 func (*UpdateReservationStatusRequest) Descriptor() ([]byte, []int) {
-	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{5}
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *UpdateReservationStatusRequest) GetId() int64 {
@@ -623,7 +675,7 @@ type UpdateReservationDatesStatusRequest struct {
 
 func (x *UpdateReservationDatesStatusRequest) Reset() {
 	*x = UpdateReservationDatesStatusRequest{}
-	mi := &file_proto_reservation_reservation_proto_msgTypes[6]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -635,7 +687,7 @@ func (x *UpdateReservationDatesStatusRequest) String() string {
 func (*UpdateReservationDatesStatusRequest) ProtoMessage() {}
 
 func (x *UpdateReservationDatesStatusRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_reservation_reservation_proto_msgTypes[6]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -648,7 +700,7 @@ func (x *UpdateReservationDatesStatusRequest) ProtoReflect() protoreflect.Messag
 
 // Deprecated: Use UpdateReservationDatesStatusRequest.ProtoReflect.Descriptor instead.
 func (*UpdateReservationDatesStatusRequest) Descriptor() ([]byte, []int) {
-	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{6}
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *UpdateReservationDatesStatusRequest) GetIds() []int64 {
@@ -673,7 +725,7 @@ type UpdateReservationDatesStatusResponse struct {
 
 func (x *UpdateReservationDatesStatusResponse) Reset() {
 	*x = UpdateReservationDatesStatusResponse{}
-	mi := &file_proto_reservation_reservation_proto_msgTypes[7]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -685,7 +737,7 @@ func (x *UpdateReservationDatesStatusResponse) String() string {
 func (*UpdateReservationDatesStatusResponse) ProtoMessage() {}
 
 func (x *UpdateReservationDatesStatusResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_reservation_reservation_proto_msgTypes[7]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -698,7 +750,7 @@ func (x *UpdateReservationDatesStatusResponse) ProtoReflect() protoreflect.Messa
 
 // Deprecated: Use UpdateReservationDatesStatusResponse.ProtoReflect.Descriptor instead.
 func (*UpdateReservationDatesStatusResponse) Descriptor() ([]byte, []int) {
-	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{7}
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{8}
 }
 
 type AllReservationsResponse struct {
@@ -710,7 +762,7 @@ type AllReservationsResponse struct {
 
 func (x *AllReservationsResponse) Reset() {
 	*x = AllReservationsResponse{}
-	mi := &file_proto_reservation_reservation_proto_msgTypes[8]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -722,7 +774,7 @@ func (x *AllReservationsResponse) String() string {
 func (*AllReservationsResponse) ProtoMessage() {}
 
 func (x *AllReservationsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_reservation_reservation_proto_msgTypes[8]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -735,7 +787,7 @@ func (x *AllReservationsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AllReservationsResponse.ProtoReflect.Descriptor instead.
 func (*AllReservationsResponse) Descriptor() ([]byte, []int) {
-	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{8}
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *AllReservationsResponse) GetReservations() []*FullReservation {
@@ -754,7 +806,7 @@ type RequestThisWeekResponse struct {
 
 func (x *RequestThisWeekResponse) Reset() {
 	*x = RequestThisWeekResponse{}
-	mi := &file_proto_reservation_reservation_proto_msgTypes[9]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -766,7 +818,7 @@ func (x *RequestThisWeekResponse) String() string {
 func (*RequestThisWeekResponse) ProtoMessage() {}
 
 func (x *RequestThisWeekResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_reservation_reservation_proto_msgTypes[9]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -779,7 +831,7 @@ func (x *RequestThisWeekResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RequestThisWeekResponse.ProtoReflect.Descriptor instead.
 func (*RequestThisWeekResponse) Descriptor() ([]byte, []int) {
-	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{9}
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *RequestThisWeekResponse) GetReservations() []*FullReservation {
@@ -798,7 +850,7 @@ type ApprovedReservationsResponse struct {
 
 func (x *ApprovedReservationsResponse) Reset() {
 	*x = ApprovedReservationsResponse{}
-	mi := &file_proto_reservation_reservation_proto_msgTypes[10]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -810,7 +862,7 @@ func (x *ApprovedReservationsResponse) String() string {
 func (*ApprovedReservationsResponse) ProtoMessage() {}
 
 func (x *ApprovedReservationsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_reservation_reservation_proto_msgTypes[10]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -823,7 +875,7 @@ func (x *ApprovedReservationsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ApprovedReservationsResponse.ProtoReflect.Descriptor instead.
 func (*ApprovedReservationsResponse) Descriptor() ([]byte, []int) {
-	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{10}
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *ApprovedReservationsResponse) GetReservations() []*FullReservation {
@@ -842,7 +894,7 @@ type PendingReservationsResponse struct {
 
 func (x *PendingReservationsResponse) Reset() {
 	*x = PendingReservationsResponse{}
-	mi := &file_proto_reservation_reservation_proto_msgTypes[11]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -854,7 +906,7 @@ func (x *PendingReservationsResponse) String() string {
 func (*PendingReservationsResponse) ProtoMessage() {}
 
 func (x *PendingReservationsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_reservation_reservation_proto_msgTypes[11]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -867,7 +919,7 @@ func (x *PendingReservationsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PendingReservationsResponse.ProtoReflect.Descriptor instead.
 func (*PendingReservationsResponse) Descriptor() ([]byte, []int) {
-	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{11}
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *PendingReservationsResponse) GetReservations() []*FullReservation {
@@ -886,7 +938,7 @@ type UserReservationsResponse struct {
 
 func (x *UserReservationsResponse) Reset() {
 	*x = UserReservationsResponse{}
-	mi := &file_proto_reservation_reservation_proto_msgTypes[12]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -898,7 +950,7 @@ func (x *UserReservationsResponse) String() string {
 func (*UserReservationsResponse) ProtoMessage() {}
 
 func (x *UserReservationsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_reservation_reservation_proto_msgTypes[12]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -911,7 +963,7 @@ func (x *UserReservationsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UserReservationsResponse.ProtoReflect.Descriptor instead.
 func (*UserReservationsResponse) Descriptor() ([]byte, []int) {
-	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{12}
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *UserReservationsResponse) GetReservations() []*FullReservation {
@@ -929,7 +981,7 @@ type GetAllReservationsRequest struct {
 
 func (x *GetAllReservationsRequest) Reset() {
 	*x = GetAllReservationsRequest{}
-	mi := &file_proto_reservation_reservation_proto_msgTypes[13]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -941,7 +993,7 @@ func (x *GetAllReservationsRequest) String() string {
 func (*GetAllReservationsRequest) ProtoMessage() {}
 
 func (x *GetAllReservationsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_reservation_reservation_proto_msgTypes[13]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -954,7 +1006,7 @@ func (x *GetAllReservationsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetAllReservationsRequest.ProtoReflect.Descriptor instead.
 func (*GetAllReservationsRequest) Descriptor() ([]byte, []int) {
-	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{13}
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{14}
 }
 
 type GetReservationRequest struct {
@@ -966,7 +1018,7 @@ type GetReservationRequest struct {
 
 func (x *GetReservationRequest) Reset() {
 	*x = GetReservationRequest{}
-	mi := &file_proto_reservation_reservation_proto_msgTypes[14]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -978,7 +1030,7 @@ func (x *GetReservationRequest) String() string {
 func (*GetReservationRequest) ProtoMessage() {}
 
 func (x *GetReservationRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_reservation_reservation_proto_msgTypes[14]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -991,7 +1043,7 @@ func (x *GetReservationRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetReservationRequest.ProtoReflect.Descriptor instead.
 func (*GetReservationRequest) Descriptor() ([]byte, []int) {
-	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{14}
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *GetReservationRequest) GetId() int64 {
@@ -1009,7 +1061,7 @@ type RequestCountRequest struct {
 
 func (x *RequestCountRequest) Reset() {
 	*x = RequestCountRequest{}
-	mi := &file_proto_reservation_reservation_proto_msgTypes[15]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1021,7 +1073,7 @@ func (x *RequestCountRequest) String() string {
 func (*RequestCountRequest) ProtoMessage() {}
 
 func (x *RequestCountRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_reservation_reservation_proto_msgTypes[15]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1034,7 +1086,7 @@ func (x *RequestCountRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RequestCountRequest.ProtoReflect.Descriptor instead.
 func (*RequestCountRequest) Descriptor() ([]byte, []int) {
-	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{15}
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{16}
 }
 
 type RequestCountResponse struct {
@@ -1046,7 +1098,7 @@ type RequestCountResponse struct {
 
 func (x *RequestCountResponse) Reset() {
 	*x = RequestCountResponse{}
-	mi := &file_proto_reservation_reservation_proto_msgTypes[16]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1058,7 +1110,7 @@ func (x *RequestCountResponse) String() string {
 func (*RequestCountResponse) ProtoMessage() {}
 
 func (x *RequestCountResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_reservation_reservation_proto_msgTypes[16]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1071,7 +1123,7 @@ func (x *RequestCountResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RequestCountResponse.ProtoReflect.Descriptor instead.
 func (*RequestCountResponse) Descriptor() ([]byte, []int) {
-	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{16}
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *RequestCountResponse) GetCount() int64 {
@@ -1089,7 +1141,7 @@ type GetRequestsThisWeekRequest struct {
 
 func (x *GetRequestsThisWeekRequest) Reset() {
 	*x = GetRequestsThisWeekRequest{}
-	mi := &file_proto_reservation_reservation_proto_msgTypes[17]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1101,7 +1153,7 @@ func (x *GetRequestsThisWeekRequest) String() string {
 func (*GetRequestsThisWeekRequest) ProtoMessage() {}
 
 func (x *GetRequestsThisWeekRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_reservation_reservation_proto_msgTypes[17]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1114,7 +1166,7 @@ func (x *GetRequestsThisWeekRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetRequestsThisWeekRequest.ProtoReflect.Descriptor instead.
 func (*GetRequestsThisWeekRequest) Descriptor() ([]byte, []int) {
-	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{17}
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{18}
 }
 
 type CreateReservationRequest struct {
@@ -1130,18 +1182,21 @@ type CreateReservationRequest struct {
 	TechDetails   *string                `protobuf:"bytes,9,opt,name=tech_details,json=techDetails,proto3,oneof" json:"tech_details,omitempty"`
 	DoorAccess    bool                   `protobuf:"varint,10,opt,name=door_access,json=doorAccess,proto3" json:"door_access,omitempty"`
 	DoorsDetails  *string                `protobuf:"bytes,11,opt,name=doors_details,json=doorsDetails,proto3,oneof" json:"doors_details,omitempty"`
-	StartDate     string                 `protobuf:"bytes,12,opt,name=start_date,json=startDate,proto3" json:"start_date,omitempty"`
-	EndDate       string                 `protobuf:"bytes,13,opt,name=end_date,json=endDate,proto3" json:"end_date,omitempty"`
-	Pattern       *RecurrencePattern     `protobuf:"bytes,14,opt,name=pattern,proto3,oneof" json:"pattern,omitempty"`
-	Rdates        []string               `protobuf:"bytes,15,rep,name=rdates,proto3" json:"rdates,omitempty"`
-	Exdates       []string               `protobuf:"bytes,16,rep,name=exdates,proto3" json:"exdates,omitempty"`
+	Occurrences   []*Occurrence          `protobuf:"bytes,12,rep,name=occurrences,proto3" json:"occurrences,omitempty"`
+	StartDate     string                 `protobuf:"bytes,13,opt,name=start_date,json=startDate,proto3" json:"start_date,omitempty"`
+	StartTime     string                 `protobuf:"bytes,14,opt,name=start_time,json=startTime,proto3" json:"start_time,omitempty"`
+	EndDate       string                 `protobuf:"bytes,15,opt,name=end_date,json=endDate,proto3" json:"end_date,omitempty"`
+	EndTime       string                 `protobuf:"bytes,16,opt,name=end_time,json=endTime,proto3" json:"end_time,omitempty"`
+	Pattern       *RecurrencePattern     `protobuf:"bytes,17,opt,name=pattern,proto3,oneof" json:"pattern,omitempty"`
+	Rdates        []string               `protobuf:"bytes,18,rep,name=rdates,proto3" json:"rdates,omitempty"`
+	Exdates       []string               `protobuf:"bytes,19,rep,name=exdates,proto3" json:"exdates,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *CreateReservationRequest) Reset() {
 	*x = CreateReservationRequest{}
-	mi := &file_proto_reservation_reservation_proto_msgTypes[18]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1153,7 +1208,7 @@ func (x *CreateReservationRequest) String() string {
 func (*CreateReservationRequest) ProtoMessage() {}
 
 func (x *CreateReservationRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_reservation_reservation_proto_msgTypes[18]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1166,7 +1221,7 @@ func (x *CreateReservationRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateReservationRequest.ProtoReflect.Descriptor instead.
 func (*CreateReservationRequest) Descriptor() ([]byte, []int) {
-	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{18}
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *CreateReservationRequest) GetUserId() string {
@@ -1246,6 +1301,13 @@ func (x *CreateReservationRequest) GetDoorsDetails() string {
 	return ""
 }
 
+func (x *CreateReservationRequest) GetOccurrences() []*Occurrence {
+	if x != nil {
+		return x.Occurrences
+	}
+	return nil
+}
+
 func (x *CreateReservationRequest) GetStartDate() string {
 	if x != nil {
 		return x.StartDate
@@ -1253,9 +1315,23 @@ func (x *CreateReservationRequest) GetStartDate() string {
 	return ""
 }
 
+func (x *CreateReservationRequest) GetStartTime() string {
+	if x != nil {
+		return x.StartTime
+	}
+	return ""
+}
+
 func (x *CreateReservationRequest) GetEndDate() string {
 	if x != nil {
 		return x.EndDate
+	}
+	return ""
+}
+
+func (x *CreateReservationRequest) GetEndTime() string {
+	if x != nil {
+		return x.EndTime
 	}
 	return ""
 }
@@ -1290,7 +1366,7 @@ type CreateReservationResponse struct {
 
 func (x *CreateReservationResponse) Reset() {
 	*x = CreateReservationResponse{}
-	mi := &file_proto_reservation_reservation_proto_msgTypes[19]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1302,7 +1378,7 @@ func (x *CreateReservationResponse) String() string {
 func (*CreateReservationResponse) ProtoMessage() {}
 
 func (x *CreateReservationResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_reservation_reservation_proto_msgTypes[19]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1315,7 +1391,7 @@ func (x *CreateReservationResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateReservationResponse.ProtoReflect.Descriptor instead.
 func (*CreateReservationResponse) Descriptor() ([]byte, []int) {
-	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{19}
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *CreateReservationResponse) GetId() int64 {
@@ -1334,7 +1410,7 @@ type UpdateReservationRequest struct {
 
 func (x *UpdateReservationRequest) Reset() {
 	*x = UpdateReservationRequest{}
-	mi := &file_proto_reservation_reservation_proto_msgTypes[20]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1346,7 +1422,7 @@ func (x *UpdateReservationRequest) String() string {
 func (*UpdateReservationRequest) ProtoMessage() {}
 
 func (x *UpdateReservationRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_reservation_reservation_proto_msgTypes[20]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1359,7 +1435,7 @@ func (x *UpdateReservationRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateReservationRequest.ProtoReflect.Descriptor instead.
 func (*UpdateReservationRequest) Descriptor() ([]byte, []int) {
-	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{20}
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *UpdateReservationRequest) GetReservation() *Reservation {
@@ -1377,7 +1453,7 @@ type UpdateReservationResponse struct {
 
 func (x *UpdateReservationResponse) Reset() {
 	*x = UpdateReservationResponse{}
-	mi := &file_proto_reservation_reservation_proto_msgTypes[21]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1389,7 +1465,7 @@ func (x *UpdateReservationResponse) String() string {
 func (*UpdateReservationResponse) ProtoMessage() {}
 
 func (x *UpdateReservationResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_reservation_reservation_proto_msgTypes[21]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1402,7 +1478,7 @@ func (x *UpdateReservationResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateReservationResponse.ProtoReflect.Descriptor instead.
 func (*UpdateReservationResponse) Descriptor() ([]byte, []int) {
-	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{21}
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{22}
 }
 
 type DeleteReservationRequest struct {
@@ -1414,7 +1490,7 @@ type DeleteReservationRequest struct {
 
 func (x *DeleteReservationRequest) Reset() {
 	*x = DeleteReservationRequest{}
-	mi := &file_proto_reservation_reservation_proto_msgTypes[22]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1426,7 +1502,7 @@ func (x *DeleteReservationRequest) String() string {
 func (*DeleteReservationRequest) ProtoMessage() {}
 
 func (x *DeleteReservationRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_reservation_reservation_proto_msgTypes[22]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1439,7 +1515,7 @@ func (x *DeleteReservationRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteReservationRequest.ProtoReflect.Descriptor instead.
 func (*DeleteReservationRequest) Descriptor() ([]byte, []int) {
-	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{22}
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *DeleteReservationRequest) GetId() int64 {
@@ -1457,7 +1533,7 @@ type DeleteReservationResponse struct {
 
 func (x *DeleteReservationResponse) Reset() {
 	*x = DeleteReservationResponse{}
-	mi := &file_proto_reservation_reservation_proto_msgTypes[23]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1469,7 +1545,7 @@ func (x *DeleteReservationResponse) String() string {
 func (*DeleteReservationResponse) ProtoMessage() {}
 
 func (x *DeleteReservationResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_reservation_reservation_proto_msgTypes[23]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1482,7 +1558,7 @@ func (x *DeleteReservationResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteReservationResponse.ProtoReflect.Descriptor instead.
 func (*DeleteReservationResponse) Descriptor() ([]byte, []int) {
-	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{23}
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{24}
 }
 
 type UserReservationsRequest struct {
@@ -1494,7 +1570,7 @@ type UserReservationsRequest struct {
 
 func (x *UserReservationsRequest) Reset() {
 	*x = UserReservationsRequest{}
-	mi := &file_proto_reservation_reservation_proto_msgTypes[24]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1506,7 +1582,7 @@ func (x *UserReservationsRequest) String() string {
 func (*UserReservationsRequest) ProtoMessage() {}
 
 func (x *UserReservationsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_reservation_reservation_proto_msgTypes[24]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1519,7 +1595,7 @@ func (x *UserReservationsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UserReservationsRequest.ProtoReflect.Descriptor instead.
 func (*UserReservationsRequest) Descriptor() ([]byte, []int) {
-	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{24}
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *UserReservationsRequest) GetUserId() string {
@@ -1538,7 +1614,7 @@ type CreateReservationDatesRequest struct {
 
 func (x *CreateReservationDatesRequest) Reset() {
 	*x = CreateReservationDatesRequest{}
-	mi := &file_proto_reservation_reservation_proto_msgTypes[25]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1550,7 +1626,7 @@ func (x *CreateReservationDatesRequest) String() string {
 func (*CreateReservationDatesRequest) ProtoMessage() {}
 
 func (x *CreateReservationDatesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_reservation_reservation_proto_msgTypes[25]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1563,7 +1639,7 @@ func (x *CreateReservationDatesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateReservationDatesRequest.ProtoReflect.Descriptor instead.
 func (*CreateReservationDatesRequest) Descriptor() ([]byte, []int) {
-	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{25}
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *CreateReservationDatesRequest) GetDate() []*ReservationDate {
@@ -1581,7 +1657,7 @@ type CreateReservationDatesResponse struct {
 
 func (x *CreateReservationDatesResponse) Reset() {
 	*x = CreateReservationDatesResponse{}
-	mi := &file_proto_reservation_reservation_proto_msgTypes[26]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1593,7 +1669,7 @@ func (x *CreateReservationDatesResponse) String() string {
 func (*CreateReservationDatesResponse) ProtoMessage() {}
 
 func (x *CreateReservationDatesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_reservation_reservation_proto_msgTypes[26]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1606,7 +1682,7 @@ func (x *CreateReservationDatesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateReservationDatesResponse.ProtoReflect.Descriptor instead.
 func (*CreateReservationDatesResponse) Descriptor() ([]byte, []int) {
-	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{26}
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{27}
 }
 
 type UpdateReservationDatesResponse struct {
@@ -1617,7 +1693,7 @@ type UpdateReservationDatesResponse struct {
 
 func (x *UpdateReservationDatesResponse) Reset() {
 	*x = UpdateReservationDatesResponse{}
-	mi := &file_proto_reservation_reservation_proto_msgTypes[27]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1629,7 +1705,7 @@ func (x *UpdateReservationDatesResponse) String() string {
 func (*UpdateReservationDatesResponse) ProtoMessage() {}
 
 func (x *UpdateReservationDatesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_reservation_reservation_proto_msgTypes[27]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1642,7 +1718,7 @@ func (x *UpdateReservationDatesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateReservationDatesResponse.ProtoReflect.Descriptor instead.
 func (*UpdateReservationDatesResponse) Descriptor() ([]byte, []int) {
-	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{27}
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{28}
 }
 
 type DeleteReservationDatesResponse struct {
@@ -1653,7 +1729,7 @@ type DeleteReservationDatesResponse struct {
 
 func (x *DeleteReservationDatesResponse) Reset() {
 	*x = DeleteReservationDatesResponse{}
-	mi := &file_proto_reservation_reservation_proto_msgTypes[28]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[29]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1665,7 +1741,7 @@ func (x *DeleteReservationDatesResponse) String() string {
 func (*DeleteReservationDatesResponse) ProtoMessage() {}
 
 func (x *DeleteReservationDatesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_reservation_reservation_proto_msgTypes[28]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[29]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1678,7 +1754,7 @@ func (x *DeleteReservationDatesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteReservationDatesResponse.ProtoReflect.Descriptor instead.
 func (*DeleteReservationDatesResponse) Descriptor() ([]byte, []int) {
-	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{28}
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{29}
 }
 
 type CreateReservationFeeResponse struct {
@@ -1689,7 +1765,7 @@ type CreateReservationFeeResponse struct {
 
 func (x *CreateReservationFeeResponse) Reset() {
 	*x = CreateReservationFeeResponse{}
-	mi := &file_proto_reservation_reservation_proto_msgTypes[29]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[30]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1701,7 +1777,7 @@ func (x *CreateReservationFeeResponse) String() string {
 func (*CreateReservationFeeResponse) ProtoMessage() {}
 
 func (x *CreateReservationFeeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_reservation_reservation_proto_msgTypes[29]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[30]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1714,7 +1790,7 @@ func (x *CreateReservationFeeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateReservationFeeResponse.ProtoReflect.Descriptor instead.
 func (*CreateReservationFeeResponse) Descriptor() ([]byte, []int) {
-	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{29}
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{30}
 }
 
 type UpdateReservationFeeResponse struct {
@@ -1725,7 +1801,7 @@ type UpdateReservationFeeResponse struct {
 
 func (x *UpdateReservationFeeResponse) Reset() {
 	*x = UpdateReservationFeeResponse{}
-	mi := &file_proto_reservation_reservation_proto_msgTypes[30]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[31]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1737,7 +1813,7 @@ func (x *UpdateReservationFeeResponse) String() string {
 func (*UpdateReservationFeeResponse) ProtoMessage() {}
 
 func (x *UpdateReservationFeeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_reservation_reservation_proto_msgTypes[30]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[31]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1750,7 +1826,7 @@ func (x *UpdateReservationFeeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateReservationFeeResponse.ProtoReflect.Descriptor instead.
 func (*UpdateReservationFeeResponse) Descriptor() ([]byte, []int) {
-	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{30}
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{31}
 }
 
 type DeleteReservationFeeResponse struct {
@@ -1761,7 +1837,7 @@ type DeleteReservationFeeResponse struct {
 
 func (x *DeleteReservationFeeResponse) Reset() {
 	*x = DeleteReservationFeeResponse{}
-	mi := &file_proto_reservation_reservation_proto_msgTypes[31]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[32]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1773,7 +1849,7 @@ func (x *DeleteReservationFeeResponse) String() string {
 func (*DeleteReservationFeeResponse) ProtoMessage() {}
 
 func (x *DeleteReservationFeeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_reservation_reservation_proto_msgTypes[31]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[32]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1786,7 +1862,7 @@ func (x *DeleteReservationFeeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteReservationFeeResponse.ProtoReflect.Descriptor instead.
 func (*DeleteReservationFeeResponse) Descriptor() ([]byte, []int) {
-	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{31}
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{32}
 }
 
 type UpdateReservationDatesRequest struct {
@@ -1798,7 +1874,7 @@ type UpdateReservationDatesRequest struct {
 
 func (x *UpdateReservationDatesRequest) Reset() {
 	*x = UpdateReservationDatesRequest{}
-	mi := &file_proto_reservation_reservation_proto_msgTypes[32]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[33]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1810,7 +1886,7 @@ func (x *UpdateReservationDatesRequest) String() string {
 func (*UpdateReservationDatesRequest) ProtoMessage() {}
 
 func (x *UpdateReservationDatesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_reservation_reservation_proto_msgTypes[32]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[33]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1823,7 +1899,7 @@ func (x *UpdateReservationDatesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateReservationDatesRequest.ProtoReflect.Descriptor instead.
 func (*UpdateReservationDatesRequest) Descriptor() ([]byte, []int) {
-	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{32}
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{33}
 }
 
 func (x *UpdateReservationDatesRequest) GetDate() []*ReservationDate {
@@ -1842,7 +1918,7 @@ type DeleteReservationDatesRequest struct {
 
 func (x *DeleteReservationDatesRequest) Reset() {
 	*x = DeleteReservationDatesRequest{}
-	mi := &file_proto_reservation_reservation_proto_msgTypes[33]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[34]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1854,7 +1930,7 @@ func (x *DeleteReservationDatesRequest) String() string {
 func (*DeleteReservationDatesRequest) ProtoMessage() {}
 
 func (x *DeleteReservationDatesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_reservation_reservation_proto_msgTypes[33]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[34]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1867,7 +1943,7 @@ func (x *DeleteReservationDatesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteReservationDatesRequest.ProtoReflect.Descriptor instead.
 func (*DeleteReservationDatesRequest) Descriptor() ([]byte, []int) {
-	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{33}
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{34}
 }
 
 func (x *DeleteReservationDatesRequest) GetId() []int64 {
@@ -1886,7 +1962,7 @@ type CreateReservationFeeRequest struct {
 
 func (x *CreateReservationFeeRequest) Reset() {
 	*x = CreateReservationFeeRequest{}
-	mi := &file_proto_reservation_reservation_proto_msgTypes[34]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[35]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1898,7 +1974,7 @@ func (x *CreateReservationFeeRequest) String() string {
 func (*CreateReservationFeeRequest) ProtoMessage() {}
 
 func (x *CreateReservationFeeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_reservation_reservation_proto_msgTypes[34]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[35]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1911,7 +1987,7 @@ func (x *CreateReservationFeeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateReservationFeeRequest.ProtoReflect.Descriptor instead.
 func (*CreateReservationFeeRequest) Descriptor() ([]byte, []int) {
-	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{34}
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{35}
 }
 
 func (x *CreateReservationFeeRequest) GetFee() []*ReservationFee {
@@ -1930,7 +2006,7 @@ type UpdateReservationFeeRequest struct {
 
 func (x *UpdateReservationFeeRequest) Reset() {
 	*x = UpdateReservationFeeRequest{}
-	mi := &file_proto_reservation_reservation_proto_msgTypes[35]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[36]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1942,7 +2018,7 @@ func (x *UpdateReservationFeeRequest) String() string {
 func (*UpdateReservationFeeRequest) ProtoMessage() {}
 
 func (x *UpdateReservationFeeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_reservation_reservation_proto_msgTypes[35]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[36]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1955,7 +2031,7 @@ func (x *UpdateReservationFeeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateReservationFeeRequest.ProtoReflect.Descriptor instead.
 func (*UpdateReservationFeeRequest) Descriptor() ([]byte, []int) {
-	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{35}
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{36}
 }
 
 func (x *UpdateReservationFeeRequest) GetFee() *ReservationFee {
@@ -1974,7 +2050,7 @@ type DeleteReservationFeeRequest struct {
 
 func (x *DeleteReservationFeeRequest) Reset() {
 	*x = DeleteReservationFeeRequest{}
-	mi := &file_proto_reservation_reservation_proto_msgTypes[36]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[37]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1986,7 +2062,7 @@ func (x *DeleteReservationFeeRequest) String() string {
 func (*DeleteReservationFeeRequest) ProtoMessage() {}
 
 func (x *DeleteReservationFeeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_reservation_reservation_proto_msgTypes[36]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[37]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1999,7 +2075,7 @@ func (x *DeleteReservationFeeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteReservationFeeRequest.ProtoReflect.Descriptor instead.
 func (*DeleteReservationFeeRequest) Descriptor() ([]byte, []int) {
-	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{36}
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{37}
 }
 
 func (x *DeleteReservationFeeRequest) GetId() int64 {
@@ -2018,7 +2094,7 @@ type CostReducerRequest struct {
 
 func (x *CostReducerRequest) Reset() {
 	*x = CostReducerRequest{}
-	mi := &file_proto_reservation_reservation_proto_msgTypes[37]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[38]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2030,7 +2106,7 @@ func (x *CostReducerRequest) String() string {
 func (*CostReducerRequest) ProtoMessage() {}
 
 func (x *CostReducerRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_reservation_reservation_proto_msgTypes[37]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[38]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2043,7 +2119,7 @@ func (x *CostReducerRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CostReducerRequest.ProtoReflect.Descriptor instead.
 func (*CostReducerRequest) Descriptor() ([]byte, []int) {
-	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{37}
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{38}
 }
 
 func (x *CostReducerRequest) GetId() int64 {
@@ -2062,7 +2138,7 @@ type CostReducerResponse struct {
 
 func (x *CostReducerResponse) Reset() {
 	*x = CostReducerResponse{}
-	mi := &file_proto_reservation_reservation_proto_msgTypes[38]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[39]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2074,7 +2150,7 @@ func (x *CostReducerResponse) String() string {
 func (*CostReducerResponse) ProtoMessage() {}
 
 func (x *CostReducerResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_reservation_reservation_proto_msgTypes[38]
+	mi := &file_proto_reservation_reservation_proto_msgTypes[39]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2087,7 +2163,7 @@ func (x *CostReducerResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CostReducerResponse.ProtoReflect.Descriptor instead.
 func (*CostReducerResponse) Descriptor() ([]byte, []int) {
-	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{38}
+	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{39}
 }
 
 func (x *CostReducerResponse) GetCost() string {
@@ -2169,7 +2245,11 @@ const file_proto_reservation_reservation_proto_rawDesc = "" +
 	"\n" +
 	"by_weekday\x18\x02 \x03(\tR\tbyWeekday\x12\x14\n" +
 	"\x05until\x18\x03 \x01(\tR\x05until\x12\x14\n" +
-	"\x05count\x18\x04 \x01(\x05R\x05count\"\xa0\x01\n" +
+	"\x05count\x18\x04 \x01(\x05R\x05count\"4\n" +
+	"\n" +
+	"Occurrence\x12\x14\n" +
+	"\x05start\x18\x01 \x01(\tR\x05start\x12\x10\n" +
+	"\x03end\x18\x02 \x01(\tR\x03end\"\xa0\x01\n" +
 	"\x0eReservationFee\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12'\n" +
 	"\x0fadditional_fees\x18\x02 \x01(\tR\x0eadditionalFees\x12 \n" +
@@ -2204,7 +2284,7 @@ const file_proto_reservation_reservation_proto_rawDesc = "" +
 	"\x13RequestCountRequest\",\n" +
 	"\x14RequestCountResponse\x12\x14\n" +
 	"\x05count\x18\x01 \x01(\x03R\x05count\"\x1c\n" +
-	"\x1aGetRequestsThisWeekRequest\"\xcc\x04\n" +
+	"\x1aGetRequestsThisWeekRequest\"\xc5\x05\n" +
 	"\x18CreateReservationRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x1d\n" +
 	"\n" +
@@ -2221,13 +2301,17 @@ const file_proto_reservation_reservation_proto_rawDesc = "" +
 	"\vdoor_access\x18\n" +
 	" \x01(\bR\n" +
 	"doorAccess\x12(\n" +
-	"\rdoors_details\x18\v \x01(\tH\x01R\fdoorsDetails\x88\x01\x01\x12\x1d\n" +
+	"\rdoors_details\x18\v \x01(\tH\x01R\fdoorsDetails\x88\x01\x01\x12=\n" +
+	"\voccurrences\x18\f \x03(\v2\x1b.api.reservation.OccurrenceR\voccurrences\x12\x1d\n" +
 	"\n" +
-	"start_date\x18\f \x01(\tR\tstartDate\x12\x19\n" +
-	"\bend_date\x18\r \x01(\tR\aendDate\x12A\n" +
-	"\apattern\x18\x0e \x01(\v2\".api.reservation.RecurrencePatternH\x02R\apattern\x88\x01\x01\x12\x16\n" +
-	"\x06rdates\x18\x0f \x03(\tR\x06rdates\x12\x18\n" +
-	"\aexdates\x18\x10 \x03(\tR\aexdatesB\x0f\n" +
+	"start_date\x18\r \x01(\tR\tstartDate\x12\x1d\n" +
+	"\n" +
+	"start_time\x18\x0e \x01(\tR\tstartTime\x12\x19\n" +
+	"\bend_date\x18\x0f \x01(\tR\aendDate\x12\x19\n" +
+	"\bend_time\x18\x10 \x01(\tR\aendTime\x12A\n" +
+	"\apattern\x18\x11 \x01(\v2\".api.reservation.RecurrencePatternH\x02R\apattern\x88\x01\x01\x12\x16\n" +
+	"\x06rdates\x18\x12 \x03(\tR\x06rdates\x12\x18\n" +
+	"\aexdates\x18\x13 \x03(\tR\aexdatesB\x0f\n" +
 	"\r_tech_detailsB\x10\n" +
 	"\x0e_doors_detailsB\n" +
 	"\n" +
@@ -2295,102 +2379,104 @@ func file_proto_reservation_reservation_proto_rawDescGZIP() []byte {
 	return file_proto_reservation_reservation_proto_rawDescData
 }
 
-var file_proto_reservation_reservation_proto_msgTypes = make([]protoimpl.MessageInfo, 39)
+var file_proto_reservation_reservation_proto_msgTypes = make([]protoimpl.MessageInfo, 40)
 var file_proto_reservation_reservation_proto_goTypes = []any{
 	(*Reservation)(nil),                          // 0: api.reservation.Reservation
 	(*ReservationDate)(nil),                      // 1: api.reservation.ReservationDate
 	(*RecurrencePattern)(nil),                    // 2: api.reservation.RecurrencePattern
-	(*ReservationFee)(nil),                       // 3: api.reservation.ReservationFee
-	(*FullReservation)(nil),                      // 4: api.reservation.FullReservation
-	(*UpdateReservationStatusRequest)(nil),       // 5: api.reservation.UpdateReservationStatusRequest
-	(*UpdateReservationDatesStatusRequest)(nil),  // 6: api.reservation.UpdateReservationDatesStatusRequest
-	(*UpdateReservationDatesStatusResponse)(nil), // 7: api.reservation.UpdateReservationDatesStatusResponse
-	(*AllReservationsResponse)(nil),              // 8: api.reservation.AllReservationsResponse
-	(*RequestThisWeekResponse)(nil),              // 9: api.reservation.RequestThisWeekResponse
-	(*ApprovedReservationsResponse)(nil),         // 10: api.reservation.ApprovedReservationsResponse
-	(*PendingReservationsResponse)(nil),          // 11: api.reservation.PendingReservationsResponse
-	(*UserReservationsResponse)(nil),             // 12: api.reservation.UserReservationsResponse
-	(*GetAllReservationsRequest)(nil),            // 13: api.reservation.GetAllReservationsRequest
-	(*GetReservationRequest)(nil),                // 14: api.reservation.GetReservationRequest
-	(*RequestCountRequest)(nil),                  // 15: api.reservation.RequestCountRequest
-	(*RequestCountResponse)(nil),                 // 16: api.reservation.RequestCountResponse
-	(*GetRequestsThisWeekRequest)(nil),           // 17: api.reservation.GetRequestsThisWeekRequest
-	(*CreateReservationRequest)(nil),             // 18: api.reservation.CreateReservationRequest
-	(*CreateReservationResponse)(nil),            // 19: api.reservation.CreateReservationResponse
-	(*UpdateReservationRequest)(nil),             // 20: api.reservation.UpdateReservationRequest
-	(*UpdateReservationResponse)(nil),            // 21: api.reservation.UpdateReservationResponse
-	(*DeleteReservationRequest)(nil),             // 22: api.reservation.DeleteReservationRequest
-	(*DeleteReservationResponse)(nil),            // 23: api.reservation.DeleteReservationResponse
-	(*UserReservationsRequest)(nil),              // 24: api.reservation.UserReservationsRequest
-	(*CreateReservationDatesRequest)(nil),        // 25: api.reservation.CreateReservationDatesRequest
-	(*CreateReservationDatesResponse)(nil),       // 26: api.reservation.CreateReservationDatesResponse
-	(*UpdateReservationDatesResponse)(nil),       // 27: api.reservation.UpdateReservationDatesResponse
-	(*DeleteReservationDatesResponse)(nil),       // 28: api.reservation.DeleteReservationDatesResponse
-	(*CreateReservationFeeResponse)(nil),         // 29: api.reservation.CreateReservationFeeResponse
-	(*UpdateReservationFeeResponse)(nil),         // 30: api.reservation.UpdateReservationFeeResponse
-	(*DeleteReservationFeeResponse)(nil),         // 31: api.reservation.DeleteReservationFeeResponse
-	(*UpdateReservationDatesRequest)(nil),        // 32: api.reservation.UpdateReservationDatesRequest
-	(*DeleteReservationDatesRequest)(nil),        // 33: api.reservation.DeleteReservationDatesRequest
-	(*CreateReservationFeeRequest)(nil),          // 34: api.reservation.CreateReservationFeeRequest
-	(*UpdateReservationFeeRequest)(nil),          // 35: api.reservation.UpdateReservationFeeRequest
-	(*DeleteReservationFeeRequest)(nil),          // 36: api.reservation.DeleteReservationFeeRequest
-	(*CostReducerRequest)(nil),                   // 37: api.reservation.CostReducerRequest
-	(*CostReducerResponse)(nil),                  // 38: api.reservation.CostReducerResponse
+	(*Occurrence)(nil),                           // 3: api.reservation.Occurrence
+	(*ReservationFee)(nil),                       // 4: api.reservation.ReservationFee
+	(*FullReservation)(nil),                      // 5: api.reservation.FullReservation
+	(*UpdateReservationStatusRequest)(nil),       // 6: api.reservation.UpdateReservationStatusRequest
+	(*UpdateReservationDatesStatusRequest)(nil),  // 7: api.reservation.UpdateReservationDatesStatusRequest
+	(*UpdateReservationDatesStatusResponse)(nil), // 8: api.reservation.UpdateReservationDatesStatusResponse
+	(*AllReservationsResponse)(nil),              // 9: api.reservation.AllReservationsResponse
+	(*RequestThisWeekResponse)(nil),              // 10: api.reservation.RequestThisWeekResponse
+	(*ApprovedReservationsResponse)(nil),         // 11: api.reservation.ApprovedReservationsResponse
+	(*PendingReservationsResponse)(nil),          // 12: api.reservation.PendingReservationsResponse
+	(*UserReservationsResponse)(nil),             // 13: api.reservation.UserReservationsResponse
+	(*GetAllReservationsRequest)(nil),            // 14: api.reservation.GetAllReservationsRequest
+	(*GetReservationRequest)(nil),                // 15: api.reservation.GetReservationRequest
+	(*RequestCountRequest)(nil),                  // 16: api.reservation.RequestCountRequest
+	(*RequestCountResponse)(nil),                 // 17: api.reservation.RequestCountResponse
+	(*GetRequestsThisWeekRequest)(nil),           // 18: api.reservation.GetRequestsThisWeekRequest
+	(*CreateReservationRequest)(nil),             // 19: api.reservation.CreateReservationRequest
+	(*CreateReservationResponse)(nil),            // 20: api.reservation.CreateReservationResponse
+	(*UpdateReservationRequest)(nil),             // 21: api.reservation.UpdateReservationRequest
+	(*UpdateReservationResponse)(nil),            // 22: api.reservation.UpdateReservationResponse
+	(*DeleteReservationRequest)(nil),             // 23: api.reservation.DeleteReservationRequest
+	(*DeleteReservationResponse)(nil),            // 24: api.reservation.DeleteReservationResponse
+	(*UserReservationsRequest)(nil),              // 25: api.reservation.UserReservationsRequest
+	(*CreateReservationDatesRequest)(nil),        // 26: api.reservation.CreateReservationDatesRequest
+	(*CreateReservationDatesResponse)(nil),       // 27: api.reservation.CreateReservationDatesResponse
+	(*UpdateReservationDatesResponse)(nil),       // 28: api.reservation.UpdateReservationDatesResponse
+	(*DeleteReservationDatesResponse)(nil),       // 29: api.reservation.DeleteReservationDatesResponse
+	(*CreateReservationFeeResponse)(nil),         // 30: api.reservation.CreateReservationFeeResponse
+	(*UpdateReservationFeeResponse)(nil),         // 31: api.reservation.UpdateReservationFeeResponse
+	(*DeleteReservationFeeResponse)(nil),         // 32: api.reservation.DeleteReservationFeeResponse
+	(*UpdateReservationDatesRequest)(nil),        // 33: api.reservation.UpdateReservationDatesRequest
+	(*DeleteReservationDatesRequest)(nil),        // 34: api.reservation.DeleteReservationDatesRequest
+	(*CreateReservationFeeRequest)(nil),          // 35: api.reservation.CreateReservationFeeRequest
+	(*UpdateReservationFeeRequest)(nil),          // 36: api.reservation.UpdateReservationFeeRequest
+	(*DeleteReservationFeeRequest)(nil),          // 37: api.reservation.DeleteReservationFeeRequest
+	(*CostReducerRequest)(nil),                   // 38: api.reservation.CostReducerRequest
+	(*CostReducerResponse)(nil),                  // 39: api.reservation.CostReducerResponse
 }
 var file_proto_reservation_reservation_proto_depIdxs = []int32{
 	0,  // 0: api.reservation.FullReservation.reservation:type_name -> api.reservation.Reservation
 	1,  // 1: api.reservation.FullReservation.dates:type_name -> api.reservation.ReservationDate
-	3,  // 2: api.reservation.FullReservation.fees:type_name -> api.reservation.ReservationFee
-	4,  // 3: api.reservation.AllReservationsResponse.reservations:type_name -> api.reservation.FullReservation
-	4,  // 4: api.reservation.RequestThisWeekResponse.reservations:type_name -> api.reservation.FullReservation
-	4,  // 5: api.reservation.ApprovedReservationsResponse.reservations:type_name -> api.reservation.FullReservation
-	4,  // 6: api.reservation.PendingReservationsResponse.reservations:type_name -> api.reservation.FullReservation
-	4,  // 7: api.reservation.UserReservationsResponse.reservations:type_name -> api.reservation.FullReservation
-	2,  // 8: api.reservation.CreateReservationRequest.pattern:type_name -> api.reservation.RecurrencePattern
-	0,  // 9: api.reservation.UpdateReservationRequest.reservation:type_name -> api.reservation.Reservation
-	1,  // 10: api.reservation.CreateReservationDatesRequest.date:type_name -> api.reservation.ReservationDate
-	1,  // 11: api.reservation.UpdateReservationDatesRequest.date:type_name -> api.reservation.ReservationDate
-	3,  // 12: api.reservation.CreateReservationFeeRequest.fee:type_name -> api.reservation.ReservationFee
-	3,  // 13: api.reservation.UpdateReservationFeeRequest.fee:type_name -> api.reservation.ReservationFee
-	13, // 14: api.reservation.ReservationService.GetAllReservations:input_type -> api.reservation.GetAllReservationsRequest
-	14, // 15: api.reservation.ReservationService.GetReservation:input_type -> api.reservation.GetReservationRequest
-	15, // 16: api.reservation.ReservationService.RequestCount:input_type -> api.reservation.RequestCountRequest
-	17, // 17: api.reservation.ReservationService.GetRequestsThisWeek:input_type -> api.reservation.GetRequestsThisWeekRequest
-	18, // 18: api.reservation.ReservationService.CreateReservation:input_type -> api.reservation.CreateReservationRequest
-	20, // 19: api.reservation.ReservationService.UpdateReservation:input_type -> api.reservation.UpdateReservationRequest
-	20, // 20: api.reservation.ReservationService.UpdateReservationStatus:input_type -> api.reservation.UpdateReservationRequest
-	22, // 21: api.reservation.ReservationService.DeleteReservation:input_type -> api.reservation.DeleteReservationRequest
-	24, // 22: api.reservation.ReservationService.UserReservations:input_type -> api.reservation.UserReservationsRequest
-	25, // 23: api.reservation.ReservationService.CreateReservationDates:input_type -> api.reservation.CreateReservationDatesRequest
-	32, // 24: api.reservation.ReservationService.UpdateReservationDates:input_type -> api.reservation.UpdateReservationDatesRequest
-	6,  // 25: api.reservation.ReservationService.UpdateReservationDatesStatus:input_type -> api.reservation.UpdateReservationDatesStatusRequest
-	33, // 26: api.reservation.ReservationService.DeleteReservationDates:input_type -> api.reservation.DeleteReservationDatesRequest
-	34, // 27: api.reservation.ReservationService.CreateReservationFee:input_type -> api.reservation.CreateReservationFeeRequest
-	35, // 28: api.reservation.ReservationService.UpdateReservationFee:input_type -> api.reservation.UpdateReservationFeeRequest
-	36, // 29: api.reservation.ReservationService.DeleteReservationFee:input_type -> api.reservation.DeleteReservationFeeRequest
-	37, // 30: api.reservation.ReservationService.CostReducer:input_type -> api.reservation.CostReducerRequest
-	8,  // 31: api.reservation.ReservationService.GetAllReservations:output_type -> api.reservation.AllReservationsResponse
-	4,  // 32: api.reservation.ReservationService.GetReservation:output_type -> api.reservation.FullReservation
-	16, // 33: api.reservation.ReservationService.RequestCount:output_type -> api.reservation.RequestCountResponse
-	9,  // 34: api.reservation.ReservationService.GetRequestsThisWeek:output_type -> api.reservation.RequestThisWeekResponse
-	19, // 35: api.reservation.ReservationService.CreateReservation:output_type -> api.reservation.CreateReservationResponse
-	21, // 36: api.reservation.ReservationService.UpdateReservation:output_type -> api.reservation.UpdateReservationResponse
-	21, // 37: api.reservation.ReservationService.UpdateReservationStatus:output_type -> api.reservation.UpdateReservationResponse
-	23, // 38: api.reservation.ReservationService.DeleteReservation:output_type -> api.reservation.DeleteReservationResponse
-	12, // 39: api.reservation.ReservationService.UserReservations:output_type -> api.reservation.UserReservationsResponse
-	26, // 40: api.reservation.ReservationService.CreateReservationDates:output_type -> api.reservation.CreateReservationDatesResponse
-	27, // 41: api.reservation.ReservationService.UpdateReservationDates:output_type -> api.reservation.UpdateReservationDatesResponse
-	7,  // 42: api.reservation.ReservationService.UpdateReservationDatesStatus:output_type -> api.reservation.UpdateReservationDatesStatusResponse
-	28, // 43: api.reservation.ReservationService.DeleteReservationDates:output_type -> api.reservation.DeleteReservationDatesResponse
-	29, // 44: api.reservation.ReservationService.CreateReservationFee:output_type -> api.reservation.CreateReservationFeeResponse
-	30, // 45: api.reservation.ReservationService.UpdateReservationFee:output_type -> api.reservation.UpdateReservationFeeResponse
-	31, // 46: api.reservation.ReservationService.DeleteReservationFee:output_type -> api.reservation.DeleteReservationFeeResponse
-	38, // 47: api.reservation.ReservationService.CostReducer:output_type -> api.reservation.CostReducerResponse
-	31, // [31:48] is the sub-list for method output_type
-	14, // [14:31] is the sub-list for method input_type
-	14, // [14:14] is the sub-list for extension type_name
-	14, // [14:14] is the sub-list for extension extendee
-	0,  // [0:14] is the sub-list for field type_name
+	4,  // 2: api.reservation.FullReservation.fees:type_name -> api.reservation.ReservationFee
+	5,  // 3: api.reservation.AllReservationsResponse.reservations:type_name -> api.reservation.FullReservation
+	5,  // 4: api.reservation.RequestThisWeekResponse.reservations:type_name -> api.reservation.FullReservation
+	5,  // 5: api.reservation.ApprovedReservationsResponse.reservations:type_name -> api.reservation.FullReservation
+	5,  // 6: api.reservation.PendingReservationsResponse.reservations:type_name -> api.reservation.FullReservation
+	5,  // 7: api.reservation.UserReservationsResponse.reservations:type_name -> api.reservation.FullReservation
+	3,  // 8: api.reservation.CreateReservationRequest.occurrences:type_name -> api.reservation.Occurrence
+	2,  // 9: api.reservation.CreateReservationRequest.pattern:type_name -> api.reservation.RecurrencePattern
+	0,  // 10: api.reservation.UpdateReservationRequest.reservation:type_name -> api.reservation.Reservation
+	1,  // 11: api.reservation.CreateReservationDatesRequest.date:type_name -> api.reservation.ReservationDate
+	1,  // 12: api.reservation.UpdateReservationDatesRequest.date:type_name -> api.reservation.ReservationDate
+	4,  // 13: api.reservation.CreateReservationFeeRequest.fee:type_name -> api.reservation.ReservationFee
+	4,  // 14: api.reservation.UpdateReservationFeeRequest.fee:type_name -> api.reservation.ReservationFee
+	14, // 15: api.reservation.ReservationService.GetAllReservations:input_type -> api.reservation.GetAllReservationsRequest
+	15, // 16: api.reservation.ReservationService.GetReservation:input_type -> api.reservation.GetReservationRequest
+	16, // 17: api.reservation.ReservationService.RequestCount:input_type -> api.reservation.RequestCountRequest
+	18, // 18: api.reservation.ReservationService.GetRequestsThisWeek:input_type -> api.reservation.GetRequestsThisWeekRequest
+	19, // 19: api.reservation.ReservationService.CreateReservation:input_type -> api.reservation.CreateReservationRequest
+	21, // 20: api.reservation.ReservationService.UpdateReservation:input_type -> api.reservation.UpdateReservationRequest
+	21, // 21: api.reservation.ReservationService.UpdateReservationStatus:input_type -> api.reservation.UpdateReservationRequest
+	23, // 22: api.reservation.ReservationService.DeleteReservation:input_type -> api.reservation.DeleteReservationRequest
+	25, // 23: api.reservation.ReservationService.UserReservations:input_type -> api.reservation.UserReservationsRequest
+	26, // 24: api.reservation.ReservationService.CreateReservationDates:input_type -> api.reservation.CreateReservationDatesRequest
+	33, // 25: api.reservation.ReservationService.UpdateReservationDates:input_type -> api.reservation.UpdateReservationDatesRequest
+	7,  // 26: api.reservation.ReservationService.UpdateReservationDatesStatus:input_type -> api.reservation.UpdateReservationDatesStatusRequest
+	34, // 27: api.reservation.ReservationService.DeleteReservationDates:input_type -> api.reservation.DeleteReservationDatesRequest
+	35, // 28: api.reservation.ReservationService.CreateReservationFee:input_type -> api.reservation.CreateReservationFeeRequest
+	36, // 29: api.reservation.ReservationService.UpdateReservationFee:input_type -> api.reservation.UpdateReservationFeeRequest
+	37, // 30: api.reservation.ReservationService.DeleteReservationFee:input_type -> api.reservation.DeleteReservationFeeRequest
+	38, // 31: api.reservation.ReservationService.CostReducer:input_type -> api.reservation.CostReducerRequest
+	9,  // 32: api.reservation.ReservationService.GetAllReservations:output_type -> api.reservation.AllReservationsResponse
+	5,  // 33: api.reservation.ReservationService.GetReservation:output_type -> api.reservation.FullReservation
+	17, // 34: api.reservation.ReservationService.RequestCount:output_type -> api.reservation.RequestCountResponse
+	10, // 35: api.reservation.ReservationService.GetRequestsThisWeek:output_type -> api.reservation.RequestThisWeekResponse
+	20, // 36: api.reservation.ReservationService.CreateReservation:output_type -> api.reservation.CreateReservationResponse
+	22, // 37: api.reservation.ReservationService.UpdateReservation:output_type -> api.reservation.UpdateReservationResponse
+	22, // 38: api.reservation.ReservationService.UpdateReservationStatus:output_type -> api.reservation.UpdateReservationResponse
+	24, // 39: api.reservation.ReservationService.DeleteReservation:output_type -> api.reservation.DeleteReservationResponse
+	13, // 40: api.reservation.ReservationService.UserReservations:output_type -> api.reservation.UserReservationsResponse
+	27, // 41: api.reservation.ReservationService.CreateReservationDates:output_type -> api.reservation.CreateReservationDatesResponse
+	28, // 42: api.reservation.ReservationService.UpdateReservationDates:output_type -> api.reservation.UpdateReservationDatesResponse
+	8,  // 43: api.reservation.ReservationService.UpdateReservationDatesStatus:output_type -> api.reservation.UpdateReservationDatesStatusResponse
+	29, // 44: api.reservation.ReservationService.DeleteReservationDates:output_type -> api.reservation.DeleteReservationDatesResponse
+	30, // 45: api.reservation.ReservationService.CreateReservationFee:output_type -> api.reservation.CreateReservationFeeResponse
+	31, // 46: api.reservation.ReservationService.UpdateReservationFee:output_type -> api.reservation.UpdateReservationFeeResponse
+	32, // 47: api.reservation.ReservationService.DeleteReservationFee:output_type -> api.reservation.DeleteReservationFeeResponse
+	39, // 48: api.reservation.ReservationService.CostReducer:output_type -> api.reservation.CostReducerResponse
+	32, // [32:49] is the sub-list for method output_type
+	15, // [15:32] is the sub-list for method input_type
+	15, // [15:15] is the sub-list for extension type_name
+	15, // [15:15] is the sub-list for extension extendee
+	0,  // [0:15] is the sub-list for field type_name
 }
 
 func init() { file_proto_reservation_reservation_proto_init() }
@@ -2400,15 +2486,15 @@ func file_proto_reservation_reservation_proto_init() {
 	}
 	file_proto_reservation_reservation_proto_msgTypes[0].OneofWrappers = []any{}
 	file_proto_reservation_reservation_proto_msgTypes[1].OneofWrappers = []any{}
-	file_proto_reservation_reservation_proto_msgTypes[3].OneofWrappers = []any{}
-	file_proto_reservation_reservation_proto_msgTypes[18].OneofWrappers = []any{}
+	file_proto_reservation_reservation_proto_msgTypes[4].OneofWrappers = []any{}
+	file_proto_reservation_reservation_proto_msgTypes[19].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_reservation_reservation_proto_rawDesc), len(file_proto_reservation_reservation_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   39,
+			NumMessages:   40,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -53,6 +53,10 @@ message RecurrencePattern {
   string until = 3;
   int32 count = 4;
 }
+message Occurrence {
+  string start = 1; // "YYYY-MM-DDTHH:mm"
+  string end = 2; // "YYYY-MM-DDTHH:mm"
+}
 
 
 message ReservationFee {
@@ -155,11 +159,16 @@ message CreateReservationRequest {
   optional string tech_details = 9;
   bool door_access = 10;
   optional string doors_details = 11;
-  string start_date = 12;
-  string end_date = 13;
-  optional RecurrencePattern pattern = 14;
-  repeated string rdates = 15;
-  repeated string exdates = 16;
+  
+  repeated Occurrence occurrences = 12;
+  
+  string start_date = 13;
+  string start_time = 14;
+  string end_date = 15;
+  string end_time = 16;
+  optional RecurrencePattern pattern = 17;
+  repeated string rdates = 18;
+  repeated string exdates = 19;
 }
 message CreateReservationResponse {
   int64 id = 1;

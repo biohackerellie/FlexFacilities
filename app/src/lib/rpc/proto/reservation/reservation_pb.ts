@@ -10,7 +10,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file proto/reservation/reservation.proto.
  */
 export const file_proto_reservation_reservation: GenFile = /*@__PURE__*/
-  fileDesc("CiNwcm90by9yZXNlcnZhdGlvbi9yZXNlcnZhdGlvbi5wcm90bxIPYXBpLnJlc2VydmF0aW9uIqgGCgtSZXNlcnZhdGlvbhIKCgJpZBgBIAEoAxIPCgd1c2VyX2lkGAIgASgJEhIKCmV2ZW50X25hbWUYAyABKAkSEwoLZmFjaWxpdHlfaWQYBCABKAMSEAoIYXBwcm92ZWQYBSABKAkSEgoKY3JlYXRlZF9hdBgGIAEoCRISCgp1cGRhdGVkX2F0GAcgASgJEhQKB2RldGFpbHMYCCABKAlIAIgBARIMCgRmZWVzGAkgASgJEhEKCWluc3VyYW5jZRgKIAEoCBIYCgtkb29yX2FjY2VzcxgLIAEoCEgBiAEBEhoKDWRvb3JzX2RldGFpbHMYDCABKAlIAogBARIRCgRuYW1lGA0gASgJSAOIAQESGQoMdGVjaF9kZXRhaWxzGA4gASgJSASIAQESGQoMdGVjaF9zdXBwb3J0GA8gASgISAWIAQESEgoFcGhvbmUYECABKAlIBogBARITCgtjYXRlZ29yeV9pZBgRIAEoAxIYCgt0b3RhbF9ob3VycxgSIAEoAUgHiAEBEhEKCWluX3BlcnNvbhgTIAEoCBIMCgRwYWlkGBQgASgIEhgKC3BheW1lbnRfdXJsGBUgASgJSAiIAQESHAoPcGF5bWVudF9saW5rX2lkGBYgASgJSAmIAQESGwoOaW5zdXJhbmNlX2xpbmsYFyABKAlICogBARIVCg1jb3N0X292ZXJyaWRlGBggASgJEhIKBXJydWxlGBkgASgJSAuIAQESDgoGcmRhdGVzGBogAygJEg8KB2V4ZGF0ZXMYGyADKAkSGQoMZ2NhbF9ldmVudGlkGBwgASgJSAyIAQFCCgoIX2RldGFpbHNCDgoMX2Rvb3JfYWNjZXNzQhAKDl9kb29yc19kZXRhaWxzQgcKBV9uYW1lQg8KDV90ZWNoX2RldGFpbHNCDwoNX3RlY2hfc3VwcG9ydEIICgZfcGhvbmVCDgoMX3RvdGFsX2hvdXJzQg4KDF9wYXltZW50X3VybEISChBfcGF5bWVudF9saW5rX2lkQhEKD19pbnN1cmFuY2VfbGlua0IICgZfcnJ1bGVCDwoNX2djYWxfZXZlbnRpZCKbAQoPUmVzZXJ2YXRpb25EYXRlEgoKAmlkGAEgASgDEhYKDnJlc2VydmF0aW9uX2lkGAIgASgDEhAKCGFwcHJvdmVkGAMgASgJEhkKDGdjYWxfZXZlbnRpZBgEIAEoCUgAiAEBEhMKC2xvY2FsX3N0YXJ0GAUgASgJEhEKCWxvY2FsX2VuZBgGIAEoCUIPCg1fZ2NhbF9ldmVudGlkIlMKEVJlY3VycmVuY2VQYXR0ZXJuEgwKBGZyZXEYASABKAkSEgoKYnlfd2Vla2RheRgCIAMoCRINCgV1bnRpbBgDIAEoCRINCgVjb3VudBgEIAEoBSJzCg5SZXNlcnZhdGlvbkZlZRIKCgJpZBgBIAEoAxIXCg9hZGRpdGlvbmFsX2ZlZXMYAiABKAkSFgoJZmVlc190eXBlGAMgASgJSACIAQESFgoOcmVzZXJ2YXRpb25faWQYBCABKANCDAoKX2ZlZXNfdHlwZSKkAQoPRnVsbFJlc2VydmF0aW9uEjEKC3Jlc2VydmF0aW9uGAEgASgLMhwuYXBpLnJlc2VydmF0aW9uLlJlc2VydmF0aW9uEi8KBWRhdGVzGAIgAygLMiAuYXBpLnJlc2VydmF0aW9uLlJlc2VydmF0aW9uRGF0ZRItCgRmZWVzGAMgAygLMh8uYXBpLnJlc2VydmF0aW9uLlJlc2VydmF0aW9uRmVlIjwKHlVwZGF0ZVJlc2VydmF0aW9uU3RhdHVzUmVxdWVzdBIKCgJpZBgBIAEoAxIOCgZzdGF0dXMYAiABKAkiQgojVXBkYXRlUmVzZXJ2YXRpb25EYXRlc1N0YXR1c1JlcXVlc3QSCwoDaWRzGAEgAygDEg4KBnN0YXR1cxgCIAEoCSImCiRVcGRhdGVSZXNlcnZhdGlvbkRhdGVzU3RhdHVzUmVzcG9uc2UiUQoXQWxsUmVzZXJ2YXRpb25zUmVzcG9uc2USNgoMcmVzZXJ2YXRpb25zGAEgAygLMiAuYXBpLnJlc2VydmF0aW9uLkZ1bGxSZXNlcnZhdGlvbiJRChdSZXF1ZXN0VGhpc1dlZWtSZXNwb25zZRI2CgxyZXNlcnZhdGlvbnMYASADKAsyIC5hcGkucmVzZXJ2YXRpb24uRnVsbFJlc2VydmF0aW9uIlYKHEFwcHJvdmVkUmVzZXJ2YXRpb25zUmVzcG9uc2USNgoMcmVzZXJ2YXRpb25zGAEgAygLMiAuYXBpLnJlc2VydmF0aW9uLkZ1bGxSZXNlcnZhdGlvbiJVChtQZW5kaW5nUmVzZXJ2YXRpb25zUmVzcG9uc2USNgoMcmVzZXJ2YXRpb25zGAEgAygLMiAuYXBpLnJlc2VydmF0aW9uLkZ1bGxSZXNlcnZhdGlvbiJSChhVc2VyUmVzZXJ2YXRpb25zUmVzcG9uc2USNgoMcmVzZXJ2YXRpb25zGAEgAygLMiAuYXBpLnJlc2VydmF0aW9uLkZ1bGxSZXNlcnZhdGlvbiIbChlHZXRBbGxSZXNlcnZhdGlvbnNSZXF1ZXN0IiMKFUdldFJlc2VydmF0aW9uUmVxdWVzdBIKCgJpZBgBIAEoAyIVChNSZXF1ZXN0Q291bnRSZXF1ZXN0IiUKFFJlcXVlc3RDb3VudFJlc3BvbnNlEg0KBWNvdW50GAEgASgDIhwKGkdldFJlcXVlc3RzVGhpc1dlZWtSZXF1ZXN0IqkDChhDcmVhdGVSZXNlcnZhdGlvblJlcXVlc3QSDwoHdXNlcl9pZBgBIAEoCRISCgpldmVudF9uYW1lGAIgASgJEhMKC2ZhY2lsaXR5X2lkGAMgASgDEg8KB2RldGFpbHMYBCABKAkSEwoLY2F0ZWdvcnlfaWQYBSABKAMSDAoEbmFtZRgGIAEoCRINCgVwaG9uZRgHIAEoCRIUCgx0ZWNoX3N1cHBvcnQYCCABKAgSGQoMdGVjaF9kZXRhaWxzGAkgASgJSACIAQESEwoLZG9vcl9hY2Nlc3MYCiABKAgSGgoNZG9vcnNfZGV0YWlscxgLIAEoCUgBiAEBEhIKCnN0YXJ0X2RhdGUYDCABKAkSEAoIZW5kX2RhdGUYDSABKAkSOAoHcGF0dGVybhgOIAEoCzIiLmFwaS5yZXNlcnZhdGlvbi5SZWN1cnJlbmNlUGF0dGVybkgCiAEBEg4KBnJkYXRlcxgPIAMoCRIPCgdleGRhdGVzGBAgAygJQg8KDV90ZWNoX2RldGFpbHNCEAoOX2Rvb3JzX2RldGFpbHNCCgoIX3BhdHRlcm4iJwoZQ3JlYXRlUmVzZXJ2YXRpb25SZXNwb25zZRIKCgJpZBgBIAEoAyJNChhVcGRhdGVSZXNlcnZhdGlvblJlcXVlc3QSMQoLcmVzZXJ2YXRpb24YASABKAsyHC5hcGkucmVzZXJ2YXRpb24uUmVzZXJ2YXRpb24iGwoZVXBkYXRlUmVzZXJ2YXRpb25SZXNwb25zZSImChhEZWxldGVSZXNlcnZhdGlvblJlcXVlc3QSCgoCaWQYASABKAMiGwoZRGVsZXRlUmVzZXJ2YXRpb25SZXNwb25zZSIqChdVc2VyUmVzZXJ2YXRpb25zUmVxdWVzdBIPCgd1c2VyX2lkGAEgASgJIk8KHUNyZWF0ZVJlc2VydmF0aW9uRGF0ZXNSZXF1ZXN0Ei4KBGRhdGUYASADKAsyIC5hcGkucmVzZXJ2YXRpb24uUmVzZXJ2YXRpb25EYXRlIiAKHkNyZWF0ZVJlc2VydmF0aW9uRGF0ZXNSZXNwb25zZSIgCh5VcGRhdGVSZXNlcnZhdGlvbkRhdGVzUmVzcG9uc2UiIAoeRGVsZXRlUmVzZXJ2YXRpb25EYXRlc1Jlc3BvbnNlIh4KHENyZWF0ZVJlc2VydmF0aW9uRmVlUmVzcG9uc2UiHgocVXBkYXRlUmVzZXJ2YXRpb25GZWVSZXNwb25zZSIeChxEZWxldGVSZXNlcnZhdGlvbkZlZVJlc3BvbnNlIk8KHVVwZGF0ZVJlc2VydmF0aW9uRGF0ZXNSZXF1ZXN0Ei4KBGRhdGUYASADKAsyIC5hcGkucmVzZXJ2YXRpb24uUmVzZXJ2YXRpb25EYXRlIisKHURlbGV0ZVJlc2VydmF0aW9uRGF0ZXNSZXF1ZXN0EgoKAmlkGAEgAygDIksKG0NyZWF0ZVJlc2VydmF0aW9uRmVlUmVxdWVzdBIsCgNmZWUYASADKAsyHy5hcGkucmVzZXJ2YXRpb24uUmVzZXJ2YXRpb25GZWUiSwobVXBkYXRlUmVzZXJ2YXRpb25GZWVSZXF1ZXN0EiwKA2ZlZRgBIAEoCzIfLmFwaS5yZXNlcnZhdGlvbi5SZXNlcnZhdGlvbkZlZSIpChtEZWxldGVSZXNlcnZhdGlvbkZlZVJlcXVlc3QSCgoCaWQYASABKAMiIAoSQ29zdFJlZHVjZXJSZXF1ZXN0EgoKAmlkGAEgASgDIiMKE0Nvc3RSZWR1Y2VyUmVzcG9uc2USDAoEY29zdBgBIAEoCTKXDwoSUmVzZXJ2YXRpb25TZXJ2aWNlEm8KEkdldEFsbFJlc2VydmF0aW9ucxIqLmFwaS5yZXNlcnZhdGlvbi5HZXRBbGxSZXNlcnZhdGlvbnNSZXF1ZXN0GiguYXBpLnJlc2VydmF0aW9uLkFsbFJlc2VydmF0aW9uc1Jlc3BvbnNlIgOQAgESXwoOR2V0UmVzZXJ2YXRpb24SJi5hcGkucmVzZXJ2YXRpb24uR2V0UmVzZXJ2YXRpb25SZXF1ZXN0GiAuYXBpLnJlc2VydmF0aW9uLkZ1bGxSZXNlcnZhdGlvbiIDkAIBEmAKDFJlcXVlc3RDb3VudBIkLmFwaS5yZXNlcnZhdGlvbi5SZXF1ZXN0Q291bnRSZXF1ZXN0GiUuYXBpLnJlc2VydmF0aW9uLlJlcXVlc3RDb3VudFJlc3BvbnNlIgOQAgEScQoTR2V0UmVxdWVzdHNUaGlzV2VlaxIrLmFwaS5yZXNlcnZhdGlvbi5HZXRSZXF1ZXN0c1RoaXNXZWVrUmVxdWVzdBooLmFwaS5yZXNlcnZhdGlvbi5SZXF1ZXN0VGhpc1dlZWtSZXNwb25zZSIDkAIBEmoKEUNyZWF0ZVJlc2VydmF0aW9uEikuYXBpLnJlc2VydmF0aW9uLkNyZWF0ZVJlc2VydmF0aW9uUmVxdWVzdBoqLmFwaS5yZXNlcnZhdGlvbi5DcmVhdGVSZXNlcnZhdGlvblJlc3BvbnNlEmoKEVVwZGF0ZVJlc2VydmF0aW9uEikuYXBpLnJlc2VydmF0aW9uLlVwZGF0ZVJlc2VydmF0aW9uUmVxdWVzdBoqLmFwaS5yZXNlcnZhdGlvbi5VcGRhdGVSZXNlcnZhdGlvblJlc3BvbnNlEnAKF1VwZGF0ZVJlc2VydmF0aW9uU3RhdHVzEikuYXBpLnJlc2VydmF0aW9uLlVwZGF0ZVJlc2VydmF0aW9uUmVxdWVzdBoqLmFwaS5yZXNlcnZhdGlvbi5VcGRhdGVSZXNlcnZhdGlvblJlc3BvbnNlEmoKEURlbGV0ZVJlc2VydmF0aW9uEikuYXBpLnJlc2VydmF0aW9uLkRlbGV0ZVJlc2VydmF0aW9uUmVxdWVzdBoqLmFwaS5yZXNlcnZhdGlvbi5EZWxldGVSZXNlcnZhdGlvblJlc3BvbnNlEmwKEFVzZXJSZXNlcnZhdGlvbnMSKC5hcGkucmVzZXJ2YXRpb24uVXNlclJlc2VydmF0aW9uc1JlcXVlc3QaKS5hcGkucmVzZXJ2YXRpb24uVXNlclJlc2VydmF0aW9uc1Jlc3BvbnNlIgOQAgESeQoWQ3JlYXRlUmVzZXJ2YXRpb25EYXRlcxIuLmFwaS5yZXNlcnZhdGlvbi5DcmVhdGVSZXNlcnZhdGlvbkRhdGVzUmVxdWVzdBovLmFwaS5yZXNlcnZhdGlvbi5DcmVhdGVSZXNlcnZhdGlvbkRhdGVzUmVzcG9uc2USeQoWVXBkYXRlUmVzZXJ2YXRpb25EYXRlcxIuLmFwaS5yZXNlcnZhdGlvbi5VcGRhdGVSZXNlcnZhdGlvbkRhdGVzUmVxdWVzdBovLmFwaS5yZXNlcnZhdGlvbi5VcGRhdGVSZXNlcnZhdGlvbkRhdGVzUmVzcG9uc2USiwEKHFVwZGF0ZVJlc2VydmF0aW9uRGF0ZXNTdGF0dXMSNC5hcGkucmVzZXJ2YXRpb24uVXBkYXRlUmVzZXJ2YXRpb25EYXRlc1N0YXR1c1JlcXVlc3QaNS5hcGkucmVzZXJ2YXRpb24uVXBkYXRlUmVzZXJ2YXRpb25EYXRlc1N0YXR1c1Jlc3BvbnNlEnkKFkRlbGV0ZVJlc2VydmF0aW9uRGF0ZXMSLi5hcGkucmVzZXJ2YXRpb24uRGVsZXRlUmVzZXJ2YXRpb25EYXRlc1JlcXVlc3QaLy5hcGkucmVzZXJ2YXRpb24uRGVsZXRlUmVzZXJ2YXRpb25EYXRlc1Jlc3BvbnNlEnMKFENyZWF0ZVJlc2VydmF0aW9uRmVlEiwuYXBpLnJlc2VydmF0aW9uLkNyZWF0ZVJlc2VydmF0aW9uRmVlUmVxdWVzdBotLmFwaS5yZXNlcnZhdGlvbi5DcmVhdGVSZXNlcnZhdGlvbkZlZVJlc3BvbnNlEnMKFFVwZGF0ZVJlc2VydmF0aW9uRmVlEiwuYXBpLnJlc2VydmF0aW9uLlVwZGF0ZVJlc2VydmF0aW9uRmVlUmVxdWVzdBotLmFwaS5yZXNlcnZhdGlvbi5VcGRhdGVSZXNlcnZhdGlvbkZlZVJlc3BvbnNlEnMKFERlbGV0ZVJlc2VydmF0aW9uRmVlEiwuYXBpLnJlc2VydmF0aW9uLkRlbGV0ZVJlc2VydmF0aW9uRmVlUmVxdWVzdBotLmFwaS5yZXNlcnZhdGlvbi5EZWxldGVSZXNlcnZhdGlvbkZlZVJlc3BvbnNlElgKC0Nvc3RSZWR1Y2VyEiMuYXBpLnJlc2VydmF0aW9uLkNvc3RSZWR1Y2VyUmVxdWVzdBokLmFwaS5yZXNlcnZhdGlvbi5Db3N0UmVkdWNlclJlc3BvbnNlQjNaMWFwaS9pbnRlcm5hbC9wcm90by9yZXNlcnZhdGlvbjtyZXNlcnZhdGlvbnNlcnZpY2ViBnByb3RvMw");
+  fileDesc("CiNwcm90by9yZXNlcnZhdGlvbi9yZXNlcnZhdGlvbi5wcm90bxIPYXBpLnJlc2VydmF0aW9uIqgGCgtSZXNlcnZhdGlvbhIKCgJpZBgBIAEoAxIPCgd1c2VyX2lkGAIgASgJEhIKCmV2ZW50X25hbWUYAyABKAkSEwoLZmFjaWxpdHlfaWQYBCABKAMSEAoIYXBwcm92ZWQYBSABKAkSEgoKY3JlYXRlZF9hdBgGIAEoCRISCgp1cGRhdGVkX2F0GAcgASgJEhQKB2RldGFpbHMYCCABKAlIAIgBARIMCgRmZWVzGAkgASgJEhEKCWluc3VyYW5jZRgKIAEoCBIYCgtkb29yX2FjY2VzcxgLIAEoCEgBiAEBEhoKDWRvb3JzX2RldGFpbHMYDCABKAlIAogBARIRCgRuYW1lGA0gASgJSAOIAQESGQoMdGVjaF9kZXRhaWxzGA4gASgJSASIAQESGQoMdGVjaF9zdXBwb3J0GA8gASgISAWIAQESEgoFcGhvbmUYECABKAlIBogBARITCgtjYXRlZ29yeV9pZBgRIAEoAxIYCgt0b3RhbF9ob3VycxgSIAEoAUgHiAEBEhEKCWluX3BlcnNvbhgTIAEoCBIMCgRwYWlkGBQgASgIEhgKC3BheW1lbnRfdXJsGBUgASgJSAiIAQESHAoPcGF5bWVudF9saW5rX2lkGBYgASgJSAmIAQESGwoOaW5zdXJhbmNlX2xpbmsYFyABKAlICogBARIVCg1jb3N0X292ZXJyaWRlGBggASgJEhIKBXJydWxlGBkgASgJSAuIAQESDgoGcmRhdGVzGBogAygJEg8KB2V4ZGF0ZXMYGyADKAkSGQoMZ2NhbF9ldmVudGlkGBwgASgJSAyIAQFCCgoIX2RldGFpbHNCDgoMX2Rvb3JfYWNjZXNzQhAKDl9kb29yc19kZXRhaWxzQgcKBV9uYW1lQg8KDV90ZWNoX2RldGFpbHNCDwoNX3RlY2hfc3VwcG9ydEIICgZfcGhvbmVCDgoMX3RvdGFsX2hvdXJzQg4KDF9wYXltZW50X3VybEISChBfcGF5bWVudF9saW5rX2lkQhEKD19pbnN1cmFuY2VfbGlua0IICgZfcnJ1bGVCDwoNX2djYWxfZXZlbnRpZCKbAQoPUmVzZXJ2YXRpb25EYXRlEgoKAmlkGAEgASgDEhYKDnJlc2VydmF0aW9uX2lkGAIgASgDEhAKCGFwcHJvdmVkGAMgASgJEhkKDGdjYWxfZXZlbnRpZBgEIAEoCUgAiAEBEhMKC2xvY2FsX3N0YXJ0GAUgASgJEhEKCWxvY2FsX2VuZBgGIAEoCUIPCg1fZ2NhbF9ldmVudGlkIlMKEVJlY3VycmVuY2VQYXR0ZXJuEgwKBGZyZXEYASABKAkSEgoKYnlfd2Vla2RheRgCIAMoCRINCgV1bnRpbBgDIAEoCRINCgVjb3VudBgEIAEoBSIoCgpPY2N1cnJlbmNlEg0KBXN0YXJ0GAEgASgJEgsKA2VuZBgCIAEoCSJzCg5SZXNlcnZhdGlvbkZlZRIKCgJpZBgBIAEoAxIXCg9hZGRpdGlvbmFsX2ZlZXMYAiABKAkSFgoJZmVlc190eXBlGAMgASgJSACIAQESFgoOcmVzZXJ2YXRpb25faWQYBCABKANCDAoKX2ZlZXNfdHlwZSKkAQoPRnVsbFJlc2VydmF0aW9uEjEKC3Jlc2VydmF0aW9uGAEgASgLMhwuYXBpLnJlc2VydmF0aW9uLlJlc2VydmF0aW9uEi8KBWRhdGVzGAIgAygLMiAuYXBpLnJlc2VydmF0aW9uLlJlc2VydmF0aW9uRGF0ZRItCgRmZWVzGAMgAygLMh8uYXBpLnJlc2VydmF0aW9uLlJlc2VydmF0aW9uRmVlIjwKHlVwZGF0ZVJlc2VydmF0aW9uU3RhdHVzUmVxdWVzdBIKCgJpZBgBIAEoAxIOCgZzdGF0dXMYAiABKAkiQgojVXBkYXRlUmVzZXJ2YXRpb25EYXRlc1N0YXR1c1JlcXVlc3QSCwoDaWRzGAEgAygDEg4KBnN0YXR1cxgCIAEoCSImCiRVcGRhdGVSZXNlcnZhdGlvbkRhdGVzU3RhdHVzUmVzcG9uc2UiUQoXQWxsUmVzZXJ2YXRpb25zUmVzcG9uc2USNgoMcmVzZXJ2YXRpb25zGAEgAygLMiAuYXBpLnJlc2VydmF0aW9uLkZ1bGxSZXNlcnZhdGlvbiJRChdSZXF1ZXN0VGhpc1dlZWtSZXNwb25zZRI2CgxyZXNlcnZhdGlvbnMYASADKAsyIC5hcGkucmVzZXJ2YXRpb24uRnVsbFJlc2VydmF0aW9uIlYKHEFwcHJvdmVkUmVzZXJ2YXRpb25zUmVzcG9uc2USNgoMcmVzZXJ2YXRpb25zGAEgAygLMiAuYXBpLnJlc2VydmF0aW9uLkZ1bGxSZXNlcnZhdGlvbiJVChtQZW5kaW5nUmVzZXJ2YXRpb25zUmVzcG9uc2USNgoMcmVzZXJ2YXRpb25zGAEgAygLMiAuYXBpLnJlc2VydmF0aW9uLkZ1bGxSZXNlcnZhdGlvbiJSChhVc2VyUmVzZXJ2YXRpb25zUmVzcG9uc2USNgoMcmVzZXJ2YXRpb25zGAEgAygLMiAuYXBpLnJlc2VydmF0aW9uLkZ1bGxSZXNlcnZhdGlvbiIbChlHZXRBbGxSZXNlcnZhdGlvbnNSZXF1ZXN0IiMKFUdldFJlc2VydmF0aW9uUmVxdWVzdBIKCgJpZBgBIAEoAyIVChNSZXF1ZXN0Q291bnRSZXF1ZXN0IiUKFFJlcXVlc3RDb3VudFJlc3BvbnNlEg0KBWNvdW50GAEgASgDIhwKGkdldFJlcXVlc3RzVGhpc1dlZWtSZXF1ZXN0IoEEChhDcmVhdGVSZXNlcnZhdGlvblJlcXVlc3QSDwoHdXNlcl9pZBgBIAEoCRISCgpldmVudF9uYW1lGAIgASgJEhMKC2ZhY2lsaXR5X2lkGAMgASgDEg8KB2RldGFpbHMYBCABKAkSEwoLY2F0ZWdvcnlfaWQYBSABKAMSDAoEbmFtZRgGIAEoCRINCgVwaG9uZRgHIAEoCRIUCgx0ZWNoX3N1cHBvcnQYCCABKAgSGQoMdGVjaF9kZXRhaWxzGAkgASgJSACIAQESEwoLZG9vcl9hY2Nlc3MYCiABKAgSGgoNZG9vcnNfZGV0YWlscxgLIAEoCUgBiAEBEjAKC29jY3VycmVuY2VzGAwgAygLMhsuYXBpLnJlc2VydmF0aW9uLk9jY3VycmVuY2USEgoKc3RhcnRfZGF0ZRgNIAEoCRISCgpzdGFydF90aW1lGA4gASgJEhAKCGVuZF9kYXRlGA8gASgJEhAKCGVuZF90aW1lGBAgASgJEjgKB3BhdHRlcm4YESABKAsyIi5hcGkucmVzZXJ2YXRpb24uUmVjdXJyZW5jZVBhdHRlcm5IAogBARIOCgZyZGF0ZXMYEiADKAkSDwoHZXhkYXRlcxgTIAMoCUIPCg1fdGVjaF9kZXRhaWxzQhAKDl9kb29yc19kZXRhaWxzQgoKCF9wYXR0ZXJuIicKGUNyZWF0ZVJlc2VydmF0aW9uUmVzcG9uc2USCgoCaWQYASABKAMiTQoYVXBkYXRlUmVzZXJ2YXRpb25SZXF1ZXN0EjEKC3Jlc2VydmF0aW9uGAEgASgLMhwuYXBpLnJlc2VydmF0aW9uLlJlc2VydmF0aW9uIhsKGVVwZGF0ZVJlc2VydmF0aW9uUmVzcG9uc2UiJgoYRGVsZXRlUmVzZXJ2YXRpb25SZXF1ZXN0EgoKAmlkGAEgASgDIhsKGURlbGV0ZVJlc2VydmF0aW9uUmVzcG9uc2UiKgoXVXNlclJlc2VydmF0aW9uc1JlcXVlc3QSDwoHdXNlcl9pZBgBIAEoCSJPCh1DcmVhdGVSZXNlcnZhdGlvbkRhdGVzUmVxdWVzdBIuCgRkYXRlGAEgAygLMiAuYXBpLnJlc2VydmF0aW9uLlJlc2VydmF0aW9uRGF0ZSIgCh5DcmVhdGVSZXNlcnZhdGlvbkRhdGVzUmVzcG9uc2UiIAoeVXBkYXRlUmVzZXJ2YXRpb25EYXRlc1Jlc3BvbnNlIiAKHkRlbGV0ZVJlc2VydmF0aW9uRGF0ZXNSZXNwb25zZSIeChxDcmVhdGVSZXNlcnZhdGlvbkZlZVJlc3BvbnNlIh4KHFVwZGF0ZVJlc2VydmF0aW9uRmVlUmVzcG9uc2UiHgocRGVsZXRlUmVzZXJ2YXRpb25GZWVSZXNwb25zZSJPCh1VcGRhdGVSZXNlcnZhdGlvbkRhdGVzUmVxdWVzdBIuCgRkYXRlGAEgAygLMiAuYXBpLnJlc2VydmF0aW9uLlJlc2VydmF0aW9uRGF0ZSIrCh1EZWxldGVSZXNlcnZhdGlvbkRhdGVzUmVxdWVzdBIKCgJpZBgBIAMoAyJLChtDcmVhdGVSZXNlcnZhdGlvbkZlZVJlcXVlc3QSLAoDZmVlGAEgAygLMh8uYXBpLnJlc2VydmF0aW9uLlJlc2VydmF0aW9uRmVlIksKG1VwZGF0ZVJlc2VydmF0aW9uRmVlUmVxdWVzdBIsCgNmZWUYASABKAsyHy5hcGkucmVzZXJ2YXRpb24uUmVzZXJ2YXRpb25GZWUiKQobRGVsZXRlUmVzZXJ2YXRpb25GZWVSZXF1ZXN0EgoKAmlkGAEgASgDIiAKEkNvc3RSZWR1Y2VyUmVxdWVzdBIKCgJpZBgBIAEoAyIjChNDb3N0UmVkdWNlclJlc3BvbnNlEgwKBGNvc3QYASABKAkylw8KElJlc2VydmF0aW9uU2VydmljZRJvChJHZXRBbGxSZXNlcnZhdGlvbnMSKi5hcGkucmVzZXJ2YXRpb24uR2V0QWxsUmVzZXJ2YXRpb25zUmVxdWVzdBooLmFwaS5yZXNlcnZhdGlvbi5BbGxSZXNlcnZhdGlvbnNSZXNwb25zZSIDkAIBEl8KDkdldFJlc2VydmF0aW9uEiYuYXBpLnJlc2VydmF0aW9uLkdldFJlc2VydmF0aW9uUmVxdWVzdBogLmFwaS5yZXNlcnZhdGlvbi5GdWxsUmVzZXJ2YXRpb24iA5ACARJgCgxSZXF1ZXN0Q291bnQSJC5hcGkucmVzZXJ2YXRpb24uUmVxdWVzdENvdW50UmVxdWVzdBolLmFwaS5yZXNlcnZhdGlvbi5SZXF1ZXN0Q291bnRSZXNwb25zZSIDkAIBEnEKE0dldFJlcXVlc3RzVGhpc1dlZWsSKy5hcGkucmVzZXJ2YXRpb24uR2V0UmVxdWVzdHNUaGlzV2Vla1JlcXVlc3QaKC5hcGkucmVzZXJ2YXRpb24uUmVxdWVzdFRoaXNXZWVrUmVzcG9uc2UiA5ACARJqChFDcmVhdGVSZXNlcnZhdGlvbhIpLmFwaS5yZXNlcnZhdGlvbi5DcmVhdGVSZXNlcnZhdGlvblJlcXVlc3QaKi5hcGkucmVzZXJ2YXRpb24uQ3JlYXRlUmVzZXJ2YXRpb25SZXNwb25zZRJqChFVcGRhdGVSZXNlcnZhdGlvbhIpLmFwaS5yZXNlcnZhdGlvbi5VcGRhdGVSZXNlcnZhdGlvblJlcXVlc3QaKi5hcGkucmVzZXJ2YXRpb24uVXBkYXRlUmVzZXJ2YXRpb25SZXNwb25zZRJwChdVcGRhdGVSZXNlcnZhdGlvblN0YXR1cxIpLmFwaS5yZXNlcnZhdGlvbi5VcGRhdGVSZXNlcnZhdGlvblJlcXVlc3QaKi5hcGkucmVzZXJ2YXRpb24uVXBkYXRlUmVzZXJ2YXRpb25SZXNwb25zZRJqChFEZWxldGVSZXNlcnZhdGlvbhIpLmFwaS5yZXNlcnZhdGlvbi5EZWxldGVSZXNlcnZhdGlvblJlcXVlc3QaKi5hcGkucmVzZXJ2YXRpb24uRGVsZXRlUmVzZXJ2YXRpb25SZXNwb25zZRJsChBVc2VyUmVzZXJ2YXRpb25zEiguYXBpLnJlc2VydmF0aW9uLlVzZXJSZXNlcnZhdGlvbnNSZXF1ZXN0GikuYXBpLnJlc2VydmF0aW9uLlVzZXJSZXNlcnZhdGlvbnNSZXNwb25zZSIDkAIBEnkKFkNyZWF0ZVJlc2VydmF0aW9uRGF0ZXMSLi5hcGkucmVzZXJ2YXRpb24uQ3JlYXRlUmVzZXJ2YXRpb25EYXRlc1JlcXVlc3QaLy5hcGkucmVzZXJ2YXRpb24uQ3JlYXRlUmVzZXJ2YXRpb25EYXRlc1Jlc3BvbnNlEnkKFlVwZGF0ZVJlc2VydmF0aW9uRGF0ZXMSLi5hcGkucmVzZXJ2YXRpb24uVXBkYXRlUmVzZXJ2YXRpb25EYXRlc1JlcXVlc3QaLy5hcGkucmVzZXJ2YXRpb24uVXBkYXRlUmVzZXJ2YXRpb25EYXRlc1Jlc3BvbnNlEosBChxVcGRhdGVSZXNlcnZhdGlvbkRhdGVzU3RhdHVzEjQuYXBpLnJlc2VydmF0aW9uLlVwZGF0ZVJlc2VydmF0aW9uRGF0ZXNTdGF0dXNSZXF1ZXN0GjUuYXBpLnJlc2VydmF0aW9uLlVwZGF0ZVJlc2VydmF0aW9uRGF0ZXNTdGF0dXNSZXNwb25zZRJ5ChZEZWxldGVSZXNlcnZhdGlvbkRhdGVzEi4uYXBpLnJlc2VydmF0aW9uLkRlbGV0ZVJlc2VydmF0aW9uRGF0ZXNSZXF1ZXN0Gi8uYXBpLnJlc2VydmF0aW9uLkRlbGV0ZVJlc2VydmF0aW9uRGF0ZXNSZXNwb25zZRJzChRDcmVhdGVSZXNlcnZhdGlvbkZlZRIsLmFwaS5yZXNlcnZhdGlvbi5DcmVhdGVSZXNlcnZhdGlvbkZlZVJlcXVlc3QaLS5hcGkucmVzZXJ2YXRpb24uQ3JlYXRlUmVzZXJ2YXRpb25GZWVSZXNwb25zZRJzChRVcGRhdGVSZXNlcnZhdGlvbkZlZRIsLmFwaS5yZXNlcnZhdGlvbi5VcGRhdGVSZXNlcnZhdGlvbkZlZVJlcXVlc3QaLS5hcGkucmVzZXJ2YXRpb24uVXBkYXRlUmVzZXJ2YXRpb25GZWVSZXNwb25zZRJzChREZWxldGVSZXNlcnZhdGlvbkZlZRIsLmFwaS5yZXNlcnZhdGlvbi5EZWxldGVSZXNlcnZhdGlvbkZlZVJlcXVlc3QaLS5hcGkucmVzZXJ2YXRpb24uRGVsZXRlUmVzZXJ2YXRpb25GZWVSZXNwb25zZRJYCgtDb3N0UmVkdWNlchIjLmFwaS5yZXNlcnZhdGlvbi5Db3N0UmVkdWNlclJlcXVlc3QaJC5hcGkucmVzZXJ2YXRpb24uQ29zdFJlZHVjZXJSZXNwb25zZUIzWjFhcGkvaW50ZXJuYWwvcHJvdG8vcmVzZXJ2YXRpb247cmVzZXJ2YXRpb25zZXJ2aWNlYgZwcm90bzM");
 
 /**
  * @generated from message api.reservation.Reservation
@@ -243,6 +243,32 @@ export const RecurrencePatternSchema: GenMessage<RecurrencePattern> = /*@__PURE_
   messageDesc(file_proto_reservation_reservation, 2);
 
 /**
+ * @generated from message api.reservation.Occurrence
+ */
+export type Occurrence = Message<"api.reservation.Occurrence"> & {
+  /**
+   * "YYYY-MM-DDTHH:mm"
+   *
+   * @generated from field: string start = 1;
+   */
+  start: string;
+
+  /**
+   * "YYYY-MM-DDTHH:mm"
+   *
+   * @generated from field: string end = 2;
+   */
+  end: string;
+};
+
+/**
+ * Describes the message api.reservation.Occurrence.
+ * Use `create(OccurrenceSchema)` to create a new message.
+ */
+export const OccurrenceSchema: GenMessage<Occurrence> = /*@__PURE__*/
+  messageDesc(file_proto_reservation_reservation, 3);
+
+/**
  * @generated from message api.reservation.ReservationFee
  */
 export type ReservationFee = Message<"api.reservation.ReservationFee"> & {
@@ -274,7 +300,7 @@ export type ReservationFee = Message<"api.reservation.ReservationFee"> & {
  * Use `create(ReservationFeeSchema)` to create a new message.
  */
 export const ReservationFeeSchema: GenMessage<ReservationFee> = /*@__PURE__*/
-  messageDesc(file_proto_reservation_reservation, 3);
+  messageDesc(file_proto_reservation_reservation, 4);
 
 /**
  * @generated from message api.reservation.FullReservation
@@ -301,7 +327,7 @@ export type FullReservation = Message<"api.reservation.FullReservation"> & {
  * Use `create(FullReservationSchema)` to create a new message.
  */
 export const FullReservationSchema: GenMessage<FullReservation> = /*@__PURE__*/
-  messageDesc(file_proto_reservation_reservation, 4);
+  messageDesc(file_proto_reservation_reservation, 5);
 
 /**
  * @generated from message api.reservation.UpdateReservationStatusRequest
@@ -323,7 +349,7 @@ export type UpdateReservationStatusRequest = Message<"api.reservation.UpdateRese
  * Use `create(UpdateReservationStatusRequestSchema)` to create a new message.
  */
 export const UpdateReservationStatusRequestSchema: GenMessage<UpdateReservationStatusRequest> = /*@__PURE__*/
-  messageDesc(file_proto_reservation_reservation, 5);
+  messageDesc(file_proto_reservation_reservation, 6);
 
 /**
  * @generated from message api.reservation.UpdateReservationDatesStatusRequest
@@ -345,7 +371,7 @@ export type UpdateReservationDatesStatusRequest = Message<"api.reservation.Updat
  * Use `create(UpdateReservationDatesStatusRequestSchema)` to create a new message.
  */
 export const UpdateReservationDatesStatusRequestSchema: GenMessage<UpdateReservationDatesStatusRequest> = /*@__PURE__*/
-  messageDesc(file_proto_reservation_reservation, 6);
+  messageDesc(file_proto_reservation_reservation, 7);
 
 /**
  * @generated from message api.reservation.UpdateReservationDatesStatusResponse
@@ -358,7 +384,7 @@ export type UpdateReservationDatesStatusResponse = Message<"api.reservation.Upda
  * Use `create(UpdateReservationDatesStatusResponseSchema)` to create a new message.
  */
 export const UpdateReservationDatesStatusResponseSchema: GenMessage<UpdateReservationDatesStatusResponse> = /*@__PURE__*/
-  messageDesc(file_proto_reservation_reservation, 7);
+  messageDesc(file_proto_reservation_reservation, 8);
 
 /**
  * @generated from message api.reservation.AllReservationsResponse
@@ -375,7 +401,7 @@ export type AllReservationsResponse = Message<"api.reservation.AllReservationsRe
  * Use `create(AllReservationsResponseSchema)` to create a new message.
  */
 export const AllReservationsResponseSchema: GenMessage<AllReservationsResponse> = /*@__PURE__*/
-  messageDesc(file_proto_reservation_reservation, 8);
+  messageDesc(file_proto_reservation_reservation, 9);
 
 /**
  * @generated from message api.reservation.RequestThisWeekResponse
@@ -392,7 +418,7 @@ export type RequestThisWeekResponse = Message<"api.reservation.RequestThisWeekRe
  * Use `create(RequestThisWeekResponseSchema)` to create a new message.
  */
 export const RequestThisWeekResponseSchema: GenMessage<RequestThisWeekResponse> = /*@__PURE__*/
-  messageDesc(file_proto_reservation_reservation, 9);
+  messageDesc(file_proto_reservation_reservation, 10);
 
 /**
  * @generated from message api.reservation.ApprovedReservationsResponse
@@ -409,7 +435,7 @@ export type ApprovedReservationsResponse = Message<"api.reservation.ApprovedRese
  * Use `create(ApprovedReservationsResponseSchema)` to create a new message.
  */
 export const ApprovedReservationsResponseSchema: GenMessage<ApprovedReservationsResponse> = /*@__PURE__*/
-  messageDesc(file_proto_reservation_reservation, 10);
+  messageDesc(file_proto_reservation_reservation, 11);
 
 /**
  * @generated from message api.reservation.PendingReservationsResponse
@@ -426,7 +452,7 @@ export type PendingReservationsResponse = Message<"api.reservation.PendingReserv
  * Use `create(PendingReservationsResponseSchema)` to create a new message.
  */
 export const PendingReservationsResponseSchema: GenMessage<PendingReservationsResponse> = /*@__PURE__*/
-  messageDesc(file_proto_reservation_reservation, 11);
+  messageDesc(file_proto_reservation_reservation, 12);
 
 /**
  * @generated from message api.reservation.UserReservationsResponse
@@ -443,7 +469,7 @@ export type UserReservationsResponse = Message<"api.reservation.UserReservations
  * Use `create(UserReservationsResponseSchema)` to create a new message.
  */
 export const UserReservationsResponseSchema: GenMessage<UserReservationsResponse> = /*@__PURE__*/
-  messageDesc(file_proto_reservation_reservation, 12);
+  messageDesc(file_proto_reservation_reservation, 13);
 
 /**
  * @generated from message api.reservation.GetAllReservationsRequest
@@ -456,7 +482,7 @@ export type GetAllReservationsRequest = Message<"api.reservation.GetAllReservati
  * Use `create(GetAllReservationsRequestSchema)` to create a new message.
  */
 export const GetAllReservationsRequestSchema: GenMessage<GetAllReservationsRequest> = /*@__PURE__*/
-  messageDesc(file_proto_reservation_reservation, 13);
+  messageDesc(file_proto_reservation_reservation, 14);
 
 /**
  * @generated from message api.reservation.GetReservationRequest
@@ -473,7 +499,7 @@ export type GetReservationRequest = Message<"api.reservation.GetReservationReque
  * Use `create(GetReservationRequestSchema)` to create a new message.
  */
 export const GetReservationRequestSchema: GenMessage<GetReservationRequest> = /*@__PURE__*/
-  messageDesc(file_proto_reservation_reservation, 14);
+  messageDesc(file_proto_reservation_reservation, 15);
 
 /**
  * @generated from message api.reservation.RequestCountRequest
@@ -486,7 +512,7 @@ export type RequestCountRequest = Message<"api.reservation.RequestCountRequest">
  * Use `create(RequestCountRequestSchema)` to create a new message.
  */
 export const RequestCountRequestSchema: GenMessage<RequestCountRequest> = /*@__PURE__*/
-  messageDesc(file_proto_reservation_reservation, 15);
+  messageDesc(file_proto_reservation_reservation, 16);
 
 /**
  * @generated from message api.reservation.RequestCountResponse
@@ -503,7 +529,7 @@ export type RequestCountResponse = Message<"api.reservation.RequestCountResponse
  * Use `create(RequestCountResponseSchema)` to create a new message.
  */
 export const RequestCountResponseSchema: GenMessage<RequestCountResponse> = /*@__PURE__*/
-  messageDesc(file_proto_reservation_reservation, 16);
+  messageDesc(file_proto_reservation_reservation, 17);
 
 /**
  * @generated from message api.reservation.GetRequestsThisWeekRequest
@@ -516,7 +542,7 @@ export type GetRequestsThisWeekRequest = Message<"api.reservation.GetRequestsThi
  * Use `create(GetRequestsThisWeekRequestSchema)` to create a new message.
  */
 export const GetRequestsThisWeekRequestSchema: GenMessage<GetRequestsThisWeekRequest> = /*@__PURE__*/
-  messageDesc(file_proto_reservation_reservation, 17);
+  messageDesc(file_proto_reservation_reservation, 18);
 
 /**
  * @generated from message api.reservation.CreateReservationRequest
@@ -578,27 +604,42 @@ export type CreateReservationRequest = Message<"api.reservation.CreateReservatio
   doorsDetails?: string;
 
   /**
-   * @generated from field: string start_date = 12;
+   * @generated from field: repeated api.reservation.Occurrence occurrences = 12;
+   */
+  occurrences: Occurrence[];
+
+  /**
+   * @generated from field: string start_date = 13;
    */
   startDate: string;
 
   /**
-   * @generated from field: string end_date = 13;
+   * @generated from field: string start_time = 14;
+   */
+  startTime: string;
+
+  /**
+   * @generated from field: string end_date = 15;
    */
   endDate: string;
 
   /**
-   * @generated from field: optional api.reservation.RecurrencePattern pattern = 14;
+   * @generated from field: string end_time = 16;
+   */
+  endTime: string;
+
+  /**
+   * @generated from field: optional api.reservation.RecurrencePattern pattern = 17;
    */
   pattern?: RecurrencePattern;
 
   /**
-   * @generated from field: repeated string rdates = 15;
+   * @generated from field: repeated string rdates = 18;
    */
   rdates: string[];
 
   /**
-   * @generated from field: repeated string exdates = 16;
+   * @generated from field: repeated string exdates = 19;
    */
   exdates: string[];
 };
@@ -608,7 +649,7 @@ export type CreateReservationRequest = Message<"api.reservation.CreateReservatio
  * Use `create(CreateReservationRequestSchema)` to create a new message.
  */
 export const CreateReservationRequestSchema: GenMessage<CreateReservationRequest> = /*@__PURE__*/
-  messageDesc(file_proto_reservation_reservation, 18);
+  messageDesc(file_proto_reservation_reservation, 19);
 
 /**
  * @generated from message api.reservation.CreateReservationResponse
@@ -625,7 +666,7 @@ export type CreateReservationResponse = Message<"api.reservation.CreateReservati
  * Use `create(CreateReservationResponseSchema)` to create a new message.
  */
 export const CreateReservationResponseSchema: GenMessage<CreateReservationResponse> = /*@__PURE__*/
-  messageDesc(file_proto_reservation_reservation, 19);
+  messageDesc(file_proto_reservation_reservation, 20);
 
 /**
  * @generated from message api.reservation.UpdateReservationRequest
@@ -642,7 +683,7 @@ export type UpdateReservationRequest = Message<"api.reservation.UpdateReservatio
  * Use `create(UpdateReservationRequestSchema)` to create a new message.
  */
 export const UpdateReservationRequestSchema: GenMessage<UpdateReservationRequest> = /*@__PURE__*/
-  messageDesc(file_proto_reservation_reservation, 20);
+  messageDesc(file_proto_reservation_reservation, 21);
 
 /**
  * @generated from message api.reservation.UpdateReservationResponse
@@ -655,7 +696,7 @@ export type UpdateReservationResponse = Message<"api.reservation.UpdateReservati
  * Use `create(UpdateReservationResponseSchema)` to create a new message.
  */
 export const UpdateReservationResponseSchema: GenMessage<UpdateReservationResponse> = /*@__PURE__*/
-  messageDesc(file_proto_reservation_reservation, 21);
+  messageDesc(file_proto_reservation_reservation, 22);
 
 /**
  * @generated from message api.reservation.DeleteReservationRequest
@@ -672,7 +713,7 @@ export type DeleteReservationRequest = Message<"api.reservation.DeleteReservatio
  * Use `create(DeleteReservationRequestSchema)` to create a new message.
  */
 export const DeleteReservationRequestSchema: GenMessage<DeleteReservationRequest> = /*@__PURE__*/
-  messageDesc(file_proto_reservation_reservation, 22);
+  messageDesc(file_proto_reservation_reservation, 23);
 
 /**
  * @generated from message api.reservation.DeleteReservationResponse
@@ -685,7 +726,7 @@ export type DeleteReservationResponse = Message<"api.reservation.DeleteReservati
  * Use `create(DeleteReservationResponseSchema)` to create a new message.
  */
 export const DeleteReservationResponseSchema: GenMessage<DeleteReservationResponse> = /*@__PURE__*/
-  messageDesc(file_proto_reservation_reservation, 23);
+  messageDesc(file_proto_reservation_reservation, 24);
 
 /**
  * @generated from message api.reservation.UserReservationsRequest
@@ -702,7 +743,7 @@ export type UserReservationsRequest = Message<"api.reservation.UserReservationsR
  * Use `create(UserReservationsRequestSchema)` to create a new message.
  */
 export const UserReservationsRequestSchema: GenMessage<UserReservationsRequest> = /*@__PURE__*/
-  messageDesc(file_proto_reservation_reservation, 24);
+  messageDesc(file_proto_reservation_reservation, 25);
 
 /**
  * @generated from message api.reservation.CreateReservationDatesRequest
@@ -719,7 +760,7 @@ export type CreateReservationDatesRequest = Message<"api.reservation.CreateReser
  * Use `create(CreateReservationDatesRequestSchema)` to create a new message.
  */
 export const CreateReservationDatesRequestSchema: GenMessage<CreateReservationDatesRequest> = /*@__PURE__*/
-  messageDesc(file_proto_reservation_reservation, 25);
+  messageDesc(file_proto_reservation_reservation, 26);
 
 /**
  * @generated from message api.reservation.CreateReservationDatesResponse
@@ -732,7 +773,7 @@ export type CreateReservationDatesResponse = Message<"api.reservation.CreateRese
  * Use `create(CreateReservationDatesResponseSchema)` to create a new message.
  */
 export const CreateReservationDatesResponseSchema: GenMessage<CreateReservationDatesResponse> = /*@__PURE__*/
-  messageDesc(file_proto_reservation_reservation, 26);
+  messageDesc(file_proto_reservation_reservation, 27);
 
 /**
  * @generated from message api.reservation.UpdateReservationDatesResponse
@@ -745,7 +786,7 @@ export type UpdateReservationDatesResponse = Message<"api.reservation.UpdateRese
  * Use `create(UpdateReservationDatesResponseSchema)` to create a new message.
  */
 export const UpdateReservationDatesResponseSchema: GenMessage<UpdateReservationDatesResponse> = /*@__PURE__*/
-  messageDesc(file_proto_reservation_reservation, 27);
+  messageDesc(file_proto_reservation_reservation, 28);
 
 /**
  * @generated from message api.reservation.DeleteReservationDatesResponse
@@ -758,7 +799,7 @@ export type DeleteReservationDatesResponse = Message<"api.reservation.DeleteRese
  * Use `create(DeleteReservationDatesResponseSchema)` to create a new message.
  */
 export const DeleteReservationDatesResponseSchema: GenMessage<DeleteReservationDatesResponse> = /*@__PURE__*/
-  messageDesc(file_proto_reservation_reservation, 28);
+  messageDesc(file_proto_reservation_reservation, 29);
 
 /**
  * @generated from message api.reservation.CreateReservationFeeResponse
@@ -771,7 +812,7 @@ export type CreateReservationFeeResponse = Message<"api.reservation.CreateReserv
  * Use `create(CreateReservationFeeResponseSchema)` to create a new message.
  */
 export const CreateReservationFeeResponseSchema: GenMessage<CreateReservationFeeResponse> = /*@__PURE__*/
-  messageDesc(file_proto_reservation_reservation, 29);
+  messageDesc(file_proto_reservation_reservation, 30);
 
 /**
  * @generated from message api.reservation.UpdateReservationFeeResponse
@@ -784,7 +825,7 @@ export type UpdateReservationFeeResponse = Message<"api.reservation.UpdateReserv
  * Use `create(UpdateReservationFeeResponseSchema)` to create a new message.
  */
 export const UpdateReservationFeeResponseSchema: GenMessage<UpdateReservationFeeResponse> = /*@__PURE__*/
-  messageDesc(file_proto_reservation_reservation, 30);
+  messageDesc(file_proto_reservation_reservation, 31);
 
 /**
  * @generated from message api.reservation.DeleteReservationFeeResponse
@@ -797,7 +838,7 @@ export type DeleteReservationFeeResponse = Message<"api.reservation.DeleteReserv
  * Use `create(DeleteReservationFeeResponseSchema)` to create a new message.
  */
 export const DeleteReservationFeeResponseSchema: GenMessage<DeleteReservationFeeResponse> = /*@__PURE__*/
-  messageDesc(file_proto_reservation_reservation, 31);
+  messageDesc(file_proto_reservation_reservation, 32);
 
 /**
  * @generated from message api.reservation.UpdateReservationDatesRequest
@@ -814,7 +855,7 @@ export type UpdateReservationDatesRequest = Message<"api.reservation.UpdateReser
  * Use `create(UpdateReservationDatesRequestSchema)` to create a new message.
  */
 export const UpdateReservationDatesRequestSchema: GenMessage<UpdateReservationDatesRequest> = /*@__PURE__*/
-  messageDesc(file_proto_reservation_reservation, 32);
+  messageDesc(file_proto_reservation_reservation, 33);
 
 /**
  * @generated from message api.reservation.DeleteReservationDatesRequest
@@ -831,7 +872,7 @@ export type DeleteReservationDatesRequest = Message<"api.reservation.DeleteReser
  * Use `create(DeleteReservationDatesRequestSchema)` to create a new message.
  */
 export const DeleteReservationDatesRequestSchema: GenMessage<DeleteReservationDatesRequest> = /*@__PURE__*/
-  messageDesc(file_proto_reservation_reservation, 33);
+  messageDesc(file_proto_reservation_reservation, 34);
 
 /**
  * @generated from message api.reservation.CreateReservationFeeRequest
@@ -848,7 +889,7 @@ export type CreateReservationFeeRequest = Message<"api.reservation.CreateReserva
  * Use `create(CreateReservationFeeRequestSchema)` to create a new message.
  */
 export const CreateReservationFeeRequestSchema: GenMessage<CreateReservationFeeRequest> = /*@__PURE__*/
-  messageDesc(file_proto_reservation_reservation, 34);
+  messageDesc(file_proto_reservation_reservation, 35);
 
 /**
  * @generated from message api.reservation.UpdateReservationFeeRequest
@@ -865,7 +906,7 @@ export type UpdateReservationFeeRequest = Message<"api.reservation.UpdateReserva
  * Use `create(UpdateReservationFeeRequestSchema)` to create a new message.
  */
 export const UpdateReservationFeeRequestSchema: GenMessage<UpdateReservationFeeRequest> = /*@__PURE__*/
-  messageDesc(file_proto_reservation_reservation, 35);
+  messageDesc(file_proto_reservation_reservation, 36);
 
 /**
  * @generated from message api.reservation.DeleteReservationFeeRequest
@@ -882,7 +923,7 @@ export type DeleteReservationFeeRequest = Message<"api.reservation.DeleteReserva
  * Use `create(DeleteReservationFeeRequestSchema)` to create a new message.
  */
 export const DeleteReservationFeeRequestSchema: GenMessage<DeleteReservationFeeRequest> = /*@__PURE__*/
-  messageDesc(file_proto_reservation_reservation, 36);
+  messageDesc(file_proto_reservation_reservation, 37);
 
 /**
  * @generated from message api.reservation.CostReducerRequest
@@ -899,7 +940,7 @@ export type CostReducerRequest = Message<"api.reservation.CostReducerRequest"> &
  * Use `create(CostReducerRequestSchema)` to create a new message.
  */
 export const CostReducerRequestSchema: GenMessage<CostReducerRequest> = /*@__PURE__*/
-  messageDesc(file_proto_reservation_reservation, 37);
+  messageDesc(file_proto_reservation_reservation, 38);
 
 /**
  * @generated from message api.reservation.CostReducerResponse
@@ -916,7 +957,7 @@ export type CostReducerResponse = Message<"api.reservation.CostReducerResponse">
  * Use `create(CostReducerResponseSchema)` to create a new message.
  */
 export const CostReducerResponseSchema: GenMessage<CostReducerResponse> = /*@__PURE__*/
-  messageDesc(file_proto_reservation_reservation, 38);
+  messageDesc(file_proto_reservation_reservation, 39);
 
 /**
  * @generated from service api.reservation.ReservationService

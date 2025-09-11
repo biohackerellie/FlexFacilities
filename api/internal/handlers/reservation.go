@@ -1,14 +1,17 @@
 package handlers
 
 import (
+	"api/internal/lib/recur"
 	"api/internal/lib/utils"
 	"api/internal/models"
 	"api/internal/ports"
 	service "api/internal/proto/reservation"
 	"context"
+	"errors"
 	"fmt"
 	"log/slog"
 	"math"
+	"sort"
 	"time"
 
 	"connectrpc.com/connect"
@@ -90,18 +93,119 @@ func (a *ReservationHandler) GetRequestsThisWeek(ctx context.Context, req *conne
 }
 
 func (a *ReservationHandler) CreateReservation(ctx context.Context, req *connect.Request[service.CreateReservationRequest]) (*connect.Response[service.CreateReservationResponse], error) {
-	reservation := req.Msg.GetReservation()
+	loc := a.timezone
+	hasOcc := req.Msg.Occurrences != nil && len(req.Msg.Occurrences) > 0
+	hasRec := (req.Msg.Pattern != nil && req.Msg.Pattern.Freq != "") ||
+		len(req.Msg.Rdates) > 0 || len(req.Msg.Exdates) > 0
 
-	id, err := a.reservationStore.Create(ctx, models.ToReservation(reservation.GetReservation()))
+	var pat recur.RecurrencePattern
+	if req.Msg.Pattern != nil {
+		pat = recur.RecurrencePattern{
+			Freq:      req.Msg.Pattern.Freq,
+			ByWeekday: req.Msg.Pattern.ByWeekday,
+			Until:     req.Msg.Pattern.Until,
+			Count:     int(req.Msg.Pattern.Count),
+		}
+	}
+	if hasOcc == hasRec {
+		return nil, errors.New("invalid request, must have either occurrences or recurrence, not both.")
+	}
+
+	var rruleStr *string
+	var rdatesLocal, exdatesLocal []time.Time
+	var occ []recur.Occ
+
+	if hasOcc {
+		for _, o := range req.Msg.Occurrences {
+			start, startErr := recur.ParseLocal(o.Start, loc)
+			end, endErr := recur.ParseLocal(o.End, loc)
+			if startErr != nil || endErr != nil || !end.After(start) {
+				return nil, fmt.Errorf("invalid occurrence: %v", o)
+			}
+			occ = append(occ, recur.Occ{Start: start, End: end})
+		}
+	} else {
+		p := recur.Payload{
+			StartDate: req.Msg.StartDate,
+			EndDate:   req.Msg.EndDate,
+			StartTime: req.Msg.StartTime,
+			EndTime:   req.Msg.EndTime,
+			Pattern:   pat,
+			RDates:    req.Msg.Rdates,
+			EXDates:   req.Msg.Exdates,
+		}
+
+		rule, dstart, dur, err := recur.BuildRRule(loc, p)
+		if err != nil {
+			return nil, err
+		}
+		set, err := recur.BuildSet(loc, rule, p.RDates, p.EXDates)
+		if err != nil {
+			return nil, err
+		}
+
+		windowEnd, err := recur.PickWindowEnd(loc, dstart, p, rule)
+		if err != nil {
+			return nil, err
+		}
+
+		occ = recur.ExpandFromSet(loc, set, rule, dstart, dur, windowEnd)
+
+		if rule != nil {
+			rs := rule.String()
+			rruleStr = &rs
+		}
+		rdatesLocal, err = recur.ParseLocalArray(p.RDates, loc)
+		if err != nil {
+			return nil, err
+		}
+		exdatesLocal, err = recur.ParseLocalArray(p.EXDates, loc)
+		if err != nil {
+			return nil, err
+		}
+
+	}
+
+	if len(occ) == 0 {
+		return nil, errors.New("no occurrences generated")
+	}
+
+	if len(occ) > 500 {
+		return nil, errors.New("too many occurrences")
+	}
+
+	id, err := a.reservationStore.Create(ctx, &models.Reservation{
+		UserID:       req.Msg.UserId,
+		EventName:    req.Msg.EventName,
+		FacilityID:   req.Msg.FacilityId,
+		Approved:     models.ReservationApprovedPending,
+		Details:      &req.Msg.Details,
+		Insurance:    false,
+		CategoryID:   req.Msg.CategoryId,
+		Name:         &req.Msg.Name,
+		Phone:        &req.Msg.Phone,
+		TechSupport:  &req.Msg.TechSupport,
+		TechDetails:  req.Msg.TechDetails,
+		DoorAccess:   &req.Msg.DoorAccess,
+		DoorsDetails: req.Msg.DoorsDetails,
+		RRule:        rruleStr,
+		RDates:       rdatesLocal,
+		EXDates:      exdatesLocal,
+	})
 
 	if err != nil {
 		return nil, err
 	}
-	dates := models.ToReservationDates(reservation.GetDates())
-	for i := range dates {
-		dates[i].ReservationID = id
+	sort.Slice(occ, func(i, j int) bool { return occ[i].Start.Before(occ[j].Start) })
+	dates := make([]models.ReservationDate, len(occ))
+	for i, o := range occ {
+		dates[i] = models.ReservationDate{
+			ReservationID: id,
+			LocalStart:    utils.TimeToPgTimestamp(o.Start),
+			LocalEnd:      utils.TimeToPgTimestamp(o.End),
+			Approved:      models.ReservationDateApprovedPending,
+		}
 	}
-
 	err = a.reservationStore.CreateDates(ctx, dates)
 
 	if err != nil {
