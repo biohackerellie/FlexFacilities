@@ -9,6 +9,7 @@ import (
 	"log/slog"
 	"time"
 
+	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -212,19 +213,15 @@ func (s *ReservationStore) Create(ctx context.Context, reservation *models.Reser
 }
 
 const createReservationDatesQuery = `INSERT INTO reservation_date (
-	start_date,
-	end_date,
-	start_time,
-	end_time,
+	reservation_id,
 	approved,
-	reservation_id
+	local_start,
+	local_end
 ) VALUES (
-	:startDate,
-	:endDate,
-	:startTime,
-	:endTime,
+	:reservationId,
 	:approved,
-	:reservationId
+	:local_start,
+	:local_end
 )`
 
 func (s *ReservationStore) CreateDates(ctx context.Context, dates []models.ReservationDate) error {
@@ -235,12 +232,10 @@ func (s *ReservationStore) CreateDates(ctx context.Context, dates []models.Reser
 	defer stmt.Close()
 	for _, date := range dates {
 		params := map[string]any{
-			"startDate":     date.StartDate,
-			"endDate":       date.EndDate,
-			"startTime":     date.StartTime,
-			"endTime":       date.EndTime,
-			"approved":      date.Approved,
 			"reservationId": date.ReservationID,
+			"approved":      date.Approved,
+			"local_start":   date.LocalStart,
+			"local_end":     date.LocalEnd,
 		}
 		if _, err := stmt.ExecContext(ctx, params); err != nil {
 			return err
@@ -278,14 +273,32 @@ func (s *ReservationStore) CreateFee(ctx context.Context, fee models.Reservation
 
 const updateReservationQuery = `UPDATE reservation SET
 	approved = :approved,
-	updated_at = :updatedAt
-	WHERE id = :id`
+	updated_at = :updatedAt,
+	insurance = :insurance,
+	category_id = :categoryId,
+	total_hours = :totalHours,
+	in_person = :inPerson,
+	paid = :paid,
+	payment_url = :paymentUrl,
+	payment_link_id = :paymentLinkId,
+	insurance_link = :insuranceLink,
+	gcal_eventid = :gcalEventid
+WHERE id = :id`
 
 func (s *ReservationStore) Update(ctx context.Context, reservation *models.Reservation) error {
 	params := map[string]any{
-		"approved":  reservation.Approved,
-		"updatedAt": reservation.UpdatedAt,
-		"id":        reservation.ID,
+		"approved":      reservation.Approved,
+		"updatedAt":     pgtype.Timestamp{Time: time.Now(), Valid: true},
+		"insurance":     reservation.Insurance,
+		"categoryId":    reservation.CategoryID,
+		"totalHours":    reservation.TotalHours,
+		"inPerson":      reservation.InPerson,
+		"paid":          reservation.Paid,
+		"paymentUrl":    reservation.PaymentUrl,
+		"paymentLinkId": reservation.PaymentLinkID,
+		"insuranceLink": reservation.InsuranceLink,
+		"gcalEventid":   reservation.GCalEventID,
+		"id":            reservation.ID,
 	}
 	stmt, err := s.db.PreparexContext(ctx, updateReservationQuery)
 	if err != nil {
@@ -349,14 +362,18 @@ func (s *ReservationStore) UpdateCostOverride(ctx context.Context, id int64, cos
 
 const updateReservationDatesQuery = `UPDATE reservation_date SET
 	approved = :approved,
-	updated_at = :updatedAt
+	gcal_eventid = :gcal_eventid,
+	local_start = :local_start,
+	local_end = :local_end
 	WHERE id = :id`
 
 func (s *ReservationStore) UpdateDate(ctx context.Context, date *models.ReservationDate) error {
 	params := map[string]any{
-		"approved":  date.Approved,
-		"updatedAt": time.Now(),
-		"id":        date.ID,
+		"approved":     date.Approved,
+		"gcal_eventid": date.GcalEventid,
+		"local_start":  date.LocalStart,
+		"local_end":    date.LocalEnd,
+		"id":           date.ID,
 	}
 	stmt, err := s.db.PreparexContext(ctx, updateReservationDatesQuery)
 	if err != nil {

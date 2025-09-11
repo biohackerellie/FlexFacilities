@@ -36,6 +36,13 @@ func TimeToPgTimestamptz(t time.Time) pgtype.Timestamptz {
 func TimeToPgTimestamp(t time.Time) pgtype.Timestamp {
 	return pgtype.Timestamp{Time: t, Valid: true}
 }
+func PGDatesArrayToTimes(dates []pgtype.Timestamp) []time.Time {
+	times := make([]time.Time, len(dates))
+	for i, date := range dates {
+		times[i] = date.Time
+	}
+	return times
+}
 
 func PgDateToString(date pgtype.Date) string {
 	t, err := date.Value()

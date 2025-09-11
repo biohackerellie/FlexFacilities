@@ -6,6 +6,7 @@ import (
 	"api/internal/models"
 	"api/internal/ports"
 	service "api/internal/proto/reservation"
+	"api/pkg/calendar"
 	"context"
 	"errors"
 	"fmt"
@@ -22,6 +23,7 @@ type ReservationHandler struct {
 	facilityStore    ports.FacilityStore
 	log              *slog.Logger
 	timezone         *time.Location
+	calendar         *calendar.Calendar
 }
 
 func NewReservationHandler(reservationStore ports.ReservationStore, log *slog.Logger, timezone *time.Location) *ReservationHandler {
@@ -224,6 +226,11 @@ func (a *ReservationHandler) UpdateReservation(ctx context.Context, req *connect
 	}
 	return connect.NewResponse(&service.UpdateReservationResponse{}), nil
 }
+func (a *ReservationHandler) UpdateReservationStatus(ctx context.Context, req *connect.Request[service.UpdateReservationStatusRequest]) (*connect.Response[service.UpdateReservationResponse], error) {
+	status := req.Msg.GetStatus()
+	err := a.reservationStore.Update
+	return connect.NewResponse(&service.UpdateReservationResponse{}), nil
+}
 
 func (a *ReservationHandler) DeleteReservation(ctx context.Context, req *connect.Request[service.DeleteReservationRequest]) (*connect.Response[service.DeleteReservationResponse], error) {
 	err := a.reservationStore.Delete(ctx, req.Msg.GetId())
@@ -348,4 +355,52 @@ func (a *ReservationHandler) CostReducer(ctx context.Context, req *connect.Reque
 	return connect.NewResponse(&service.CostReducerResponse{
 		Cost: string(stringCost),
 	}), nil
+}
+
+func buildPublishPlan(res models.Reservation, occs []models.ReservationDate, approveAll bool) *calendar.PublishPlan {
+	if approveAll && res.RRule != nil {
+		first := occs[0]
+		return &calendar.PublishPlan{
+			Mode: "series",
+			Series: &calendar.SeriesSpec{
+				Start:       first.LocalStart.Time,
+				End:         first.LocalEnd.Time,
+				RRULE:       *res.RRule,
+				Summary:     res.EventName,
+				Description: *res.Details,
+			},
+		}
+	}
+	var singles []calendar.OccSpec
+	for _, occ := range occs {
+		singles = append(singles, calendar.OccSpec{
+			Start:       occ.LocalStart.Time,
+			End:         occ.LocalEnd.Time,
+			RefID:       occ.ID,
+			Summary:     res.EventName,
+			Description: *res.Details,
+		})
+	}
+	return &calendar.PublishPlan{
+		Mode:    "singles",
+		Singles: singles,
+	}
+}
+
+func filterApproved(dates []models.ReservationDate) []models.ReservationDate {
+	var approved []models.ReservationDate
+	for _, date := range dates {
+		if date.Approved == models.ReservationDateApprovedApproved {
+			approved = append(approved, date)
+		}
+	}
+	return approved
+}
+
+func startsOf(dates []models.ReservationDate) []time.Time {
+	var starts []time.Time
+	for _, date := range dates {
+		starts = append(starts, date.LocalStart.Time)
+	}
+	return starts
 }
