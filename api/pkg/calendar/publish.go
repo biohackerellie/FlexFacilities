@@ -17,6 +17,10 @@ const (
 	ModeSingles Mode = "singles"
 )
 
+func (m Mode) String() string {
+	return string(m)
+}
+
 type PublishPlan struct {
 	Mode
 	Series  *SeriesSpec
@@ -42,12 +46,24 @@ type OccSpec struct {
 	Location    string
 }
 
+type SendUpdates string
+
+const (
+	AllUpdates      SendUpdates = "all"
+	ExternalUpdates SendUpdates = "externalOnly"
+	NoUpdates       SendUpdates = "none"
+)
+
+func (s SendUpdates) String() string {
+	return string(s)
+}
+
 type PublishOptions struct {
 	CalendarID  string
 	Summary     string // default summary if not provided per-spec
 	Description string // default description
 	Location    string // default location
-	SendUpdates string // "none","all","externalOnly" (default "none")
+	SendUpdates SendUpdates
 }
 
 type PublishResult struct {
@@ -63,7 +79,7 @@ func (c *Calendar) Publish(ctx context.Context, plan *PublishPlan, opts PublishO
 	if opts.CalendarID == "" {
 		return nil, fmt.Errorf("calendarID is required")
 	}
-	send := opts.SendUpdates
+	send := opts.SendUpdates.String()
 	if send == "" {
 		send = "none"
 	}

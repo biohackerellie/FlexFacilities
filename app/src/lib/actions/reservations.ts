@@ -2,7 +2,7 @@
 import { client } from '@/lib/rpc';
 import { unstable_cacheTag as cacheTag, revalidateTag } from 'next/cache';
 import { logger } from '@/lib/logger';
-import { Reservation } from '../types';
+import { Reservation, ReservationDate } from '../types';
 
 export async function getReservation(id: string) {
   'use cache';
@@ -58,4 +58,30 @@ export async function updateReservation(reservation: Reservation) {
   }
   revalidateTag('reservations');
   return { message: 'success' };
+}
+
+export async function AddDates({
+  reservationID,
+  localStart,
+  localEnd,
+}: {
+  reservationID: bigint;
+  localStart: string;
+  localEnd: string;
+}) {
+  const { error } = await client.reservations().createReservationDates({
+    date: [
+      {
+        reservationId: reservationID,
+        localStart: localStart,
+        localEnd: localEnd,
+      },
+    ],
+  });
+
+  if (error) {
+    logger.error('Error updating reservation', { 'error ': error });
+    throw error;
+  }
+  revalidateTag('reservations');
 }

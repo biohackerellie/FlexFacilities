@@ -46,3 +46,6 @@ func (c *Calendar) ListEvents(calendarID string) (*gcal.Events, error) {
 func (c *Calendar) InsertEvent(calendarID string, event *gcal.Event) (*gcal.Event, error) {
 	return c.svc.Events.Insert(calendarID, event).Do()
 }
+func (c *Calendar) DeleteEvent(calendarID string, eventID string) error {
+	return c.svc.Events.Delete(calendarID, eventID).Do()
+}

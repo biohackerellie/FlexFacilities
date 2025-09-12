@@ -88,7 +88,7 @@ service ReservationService {
   };
   rpc CreateReservation (CreateReservationRequest) returns (CreateReservationResponse);
   rpc UpdateReservation (UpdateReservationRequest) returns (UpdateReservationResponse);
-  rpc UpdateReservationStatus (UpdateReservationRequest) returns (UpdateReservationResponse);
+  rpc UpdateReservationStatus (UpdateReservationStatusRequest) returns (UpdateReservationResponse);
   rpc DeleteReservation (DeleteReservationRequest) returns (DeleteReservationResponse);
   rpc UserReservations (UserReservationsRequest) returns (UserReservationsResponse){
     option idempotency_level = NO_SIDE_EFFECTS;

@@ -4,11 +4,7 @@ import { notFound } from 'next/navigation';
 import { Skeleton } from '@/components/ui/skeleton';
 import { auth } from '@/lib/auth';
 
-export default async function reservationDatesPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default async function reservationDatesPage() {
   const session = await auth();
   if (!session) {
     return notFound();

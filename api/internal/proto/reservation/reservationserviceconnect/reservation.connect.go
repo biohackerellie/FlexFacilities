@@ -94,7 +94,7 @@ type ReservationServiceClient interface {
 	GetRequestsThisWeek(context.Context, *connect.Request[reservation.GetRequestsThisWeekRequest]) (*connect.Response[reservation.RequestThisWeekResponse], error)
 	CreateReservation(context.Context, *connect.Request[reservation.CreateReservationRequest]) (*connect.Response[reservation.CreateReservationResponse], error)
 	UpdateReservation(context.Context, *connect.Request[reservation.UpdateReservationRequest]) (*connect.Response[reservation.UpdateReservationResponse], error)
-	UpdateReservationStatus(context.Context, *connect.Request[reservation.UpdateReservationRequest]) (*connect.Response[reservation.UpdateReservationResponse], error)
+	UpdateReservationStatus(context.Context, *connect.Request[reservation.UpdateReservationStatusRequest]) (*connect.Response[reservation.UpdateReservationResponse], error)
 	DeleteReservation(context.Context, *connect.Request[reservation.DeleteReservationRequest]) (*connect.Response[reservation.DeleteReservationResponse], error)
 	UserReservations(context.Context, *connect.Request[reservation.UserReservationsRequest]) (*connect.Response[reservation.UserReservationsResponse], error)
 	CreateReservationDates(context.Context, *connect.Request[reservation.CreateReservationDatesRequest]) (*connect.Response[reservation.CreateReservationDatesResponse], error)
@@ -158,7 +158,7 @@ func NewReservationServiceClient(httpClient connect.HTTPClient, baseURL string, 
 			connect.WithSchema(reservationServiceMethods.ByName("UpdateReservation")),
 			connect.WithClientOptions(opts...),
 		),
-		updateReservationStatus: connect.NewClient[reservation.UpdateReservationRequest, reservation.UpdateReservationResponse](
+		updateReservationStatus: connect.NewClient[reservation.UpdateReservationStatusRequest, reservation.UpdateReservationResponse](
 			httpClient,
 			baseURL+ReservationServiceUpdateReservationStatusProcedure,
 			connect.WithSchema(reservationServiceMethods.ByName("UpdateReservationStatus")),
@@ -236,7 +236,7 @@ type reservationServiceClient struct {
 	getRequestsThisWeek          *connect.Client[reservation.GetRequestsThisWeekRequest, reservation.RequestThisWeekResponse]
 	createReservation            *connect.Client[reservation.CreateReservationRequest, reservation.CreateReservationResponse]
 	updateReservation            *connect.Client[reservation.UpdateReservationRequest, reservation.UpdateReservationResponse]
-	updateReservationStatus      *connect.Client[reservation.UpdateReservationRequest, reservation.UpdateReservationResponse]
+	updateReservationStatus      *connect.Client[reservation.UpdateReservationStatusRequest, reservation.UpdateReservationResponse]
 	deleteReservation            *connect.Client[reservation.DeleteReservationRequest, reservation.DeleteReservationResponse]
 	userReservations             *connect.Client[reservation.UserReservationsRequest, reservation.UserReservationsResponse]
 	createReservationDates       *connect.Client[reservation.CreateReservationDatesRequest, reservation.CreateReservationDatesResponse]
@@ -280,7 +280,7 @@ func (c *reservationServiceClient) UpdateReservation(ctx context.Context, req *c
 }
 
 // UpdateReservationStatus calls api.reservation.ReservationService.UpdateReservationStatus.
-func (c *reservationServiceClient) UpdateReservationStatus(ctx context.Context, req *connect.Request[reservation.UpdateReservationRequest]) (*connect.Response[reservation.UpdateReservationResponse], error) {
+func (c *reservationServiceClient) UpdateReservationStatus(ctx context.Context, req *connect.Request[reservation.UpdateReservationStatusRequest]) (*connect.Response[reservation.UpdateReservationResponse], error) {
 	return c.updateReservationStatus.CallUnary(ctx, req)
 }
 
@@ -343,7 +343,7 @@ type ReservationServiceHandler interface {
 	GetRequestsThisWeek(context.Context, *connect.Request[reservation.GetRequestsThisWeekRequest]) (*connect.Response[reservation.RequestThisWeekResponse], error)
 	CreateReservation(context.Context, *connect.Request[reservation.CreateReservationRequest]) (*connect.Response[reservation.CreateReservationResponse], error)
 	UpdateReservation(context.Context, *connect.Request[reservation.UpdateReservationRequest]) (*connect.Response[reservation.UpdateReservationResponse], error)
-	UpdateReservationStatus(context.Context, *connect.Request[reservation.UpdateReservationRequest]) (*connect.Response[reservation.UpdateReservationResponse], error)
+	UpdateReservationStatus(context.Context, *connect.Request[reservation.UpdateReservationStatusRequest]) (*connect.Response[reservation.UpdateReservationResponse], error)
 	DeleteReservation(context.Context, *connect.Request[reservation.DeleteReservationRequest]) (*connect.Response[reservation.DeleteReservationResponse], error)
 	UserReservations(context.Context, *connect.Request[reservation.UserReservationsRequest]) (*connect.Response[reservation.UserReservationsResponse], error)
 	CreateReservationDates(context.Context, *connect.Request[reservation.CreateReservationDatesRequest]) (*connect.Response[reservation.CreateReservationDatesResponse], error)
@@ -539,7 +539,7 @@ func (UnimplementedReservationServiceHandler) UpdateReservation(context.Context,
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.reservation.ReservationService.UpdateReservation is not implemented"))
 }
 
-func (UnimplementedReservationServiceHandler) UpdateReservationStatus(context.Context, *connect.Request[reservation.UpdateReservationRequest]) (*connect.Response[reservation.UpdateReservationResponse], error) {
+func (UnimplementedReservationServiceHandler) UpdateReservationStatus(context.Context, *connect.Request[reservation.UpdateReservationStatusRequest]) (*connect.Response[reservation.UpdateReservationResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.reservation.ReservationService.UpdateReservationStatus is not implemented"))
 }
 

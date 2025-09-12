@@ -48,7 +48,7 @@ type ReservationStore interface {
 	CreateFee(ctx context.Context, fee models.ReservationFee) error
 	Update(ctx context.Context, reservation *models.Reservation) error
 	Delete(ctx context.Context, id int64) error
-	DeleteDates(ctx context.Context, id int64) error
+	DeleteDates(ctx context.Context, id []int64) error
 	DeleteFees(ctx context.Context, id int64) error
 	UpdateCostOverride(ctx context.Context, id int64, cost string) error
 	UpdateDate(ctx context.Context, date *models.ReservationDate) error

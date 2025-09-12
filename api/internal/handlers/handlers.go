@@ -23,7 +23,7 @@ type Handlers struct {
 
 func New(db *repository.DB, log *slog.Logger, config *config.Config) *Handlers {
 
-	cal, err := calendar.NewCalendar(context.Background())
+	cal, err := calendar.NewCalendar(context.Background(), config.GoogleClientID, config.GoogleClientSecret, config.GoogleRefreshToken, time.Local, config.Timezone)
 	if err != nil {
 		log.Error("Could not create calendar", "error", err)
 		panic(err)

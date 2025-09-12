@@ -2347,15 +2347,15 @@ const file_proto_reservation_reservation_proto_rawDesc = "" +
 	"\x12CostReducerRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\")\n" +
 	"\x13CostReducerResponse\x12\x12\n" +
-	"\x04cost\x18\x01 \x01(\tR\x04cost2\x97\x0f\n" +
+	"\x04cost\x18\x01 \x01(\tR\x04cost2\x9d\x0f\n" +
 	"\x12ReservationService\x12o\n" +
 	"\x12GetAllReservations\x12*.api.reservation.GetAllReservationsRequest\x1a(.api.reservation.AllReservationsResponse\"\x03\x90\x02\x01\x12_\n" +
 	"\x0eGetReservation\x12&.api.reservation.GetReservationRequest\x1a .api.reservation.FullReservation\"\x03\x90\x02\x01\x12`\n" +
 	"\fRequestCount\x12$.api.reservation.RequestCountRequest\x1a%.api.reservation.RequestCountResponse\"\x03\x90\x02\x01\x12q\n" +
 	"\x13GetRequestsThisWeek\x12+.api.reservation.GetRequestsThisWeekRequest\x1a(.api.reservation.RequestThisWeekResponse\"\x03\x90\x02\x01\x12j\n" +
 	"\x11CreateReservation\x12).api.reservation.CreateReservationRequest\x1a*.api.reservation.CreateReservationResponse\x12j\n" +
-	"\x11UpdateReservation\x12).api.reservation.UpdateReservationRequest\x1a*.api.reservation.UpdateReservationResponse\x12p\n" +
-	"\x17UpdateReservationStatus\x12).api.reservation.UpdateReservationRequest\x1a*.api.reservation.UpdateReservationResponse\x12j\n" +
+	"\x11UpdateReservation\x12).api.reservation.UpdateReservationRequest\x1a*.api.reservation.UpdateReservationResponse\x12v\n" +
+	"\x17UpdateReservationStatus\x12/.api.reservation.UpdateReservationStatusRequest\x1a*.api.reservation.UpdateReservationResponse\x12j\n" +
 	"\x11DeleteReservation\x12).api.reservation.DeleteReservationRequest\x1a*.api.reservation.DeleteReservationResponse\x12l\n" +
 	"\x10UserReservations\x12(.api.reservation.UserReservationsRequest\x1a).api.reservation.UserReservationsResponse\"\x03\x90\x02\x01\x12y\n" +
 	"\x16CreateReservationDates\x12..api.reservation.CreateReservationDatesRequest\x1a/.api.reservation.CreateReservationDatesResponse\x12y\n" +
@@ -2444,7 +2444,7 @@ var file_proto_reservation_reservation_proto_depIdxs = []int32{
 	18, // 18: api.reservation.ReservationService.GetRequestsThisWeek:input_type -> api.reservation.GetRequestsThisWeekRequest
 	19, // 19: api.reservation.ReservationService.CreateReservation:input_type -> api.reservation.CreateReservationRequest
 	21, // 20: api.reservation.ReservationService.UpdateReservation:input_type -> api.reservation.UpdateReservationRequest
-	21, // 21: api.reservation.ReservationService.UpdateReservationStatus:input_type -> api.reservation.UpdateReservationRequest
+	6,  // 21: api.reservation.ReservationService.UpdateReservationStatus:input_type -> api.reservation.UpdateReservationStatusRequest
 	23, // 22: api.reservation.ReservationService.DeleteReservation:input_type -> api.reservation.DeleteReservationRequest
 	25, // 23: api.reservation.ReservationService.UserReservations:input_type -> api.reservation.UserReservationsRequest
 	26, // 24: api.reservation.ReservationService.CreateReservationDates:input_type -> api.reservation.CreateReservationDatesRequest

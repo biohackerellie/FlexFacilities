@@ -83,7 +83,7 @@ func (a *ReservationHandler) GetRequestsThisWeek(ctx context.Context, req *conne
 	for _, r := range requests {
 		if r.Reservation.Approved != "denied" {
 			for _, d := range r.Dates {
-				if d.StartDate.Time.After(time.Now()) && d.StartDate.Time.Before(sevenDaysFromNow) {
+				if d.LocalStart.Time.After(time.Now()) && d.LocalStart.Time.Before(sevenDaysFromNow) {
 					filtered = append(filtered, r.ToProto())
 				}
 			}
@@ -227,8 +227,103 @@ func (a *ReservationHandler) UpdateReservation(ctx context.Context, req *connect
 	return connect.NewResponse(&service.UpdateReservationResponse{}), nil
 }
 func (a *ReservationHandler) UpdateReservationStatus(ctx context.Context, req *connect.Request[service.UpdateReservationStatusRequest]) (*connect.Response[service.UpdateReservationResponse], error) {
-	status := req.Msg.GetStatus()
-	err := a.reservationStore.Update
+	status := models.ReservationApproved(req.Msg.GetStatus())
+	id := req.Msg.GetId()
+	resWrap, err := a.reservationStore.Get(ctx, id)
+	if err != nil {
+		a.log.Error("Reservation not found", "id", id)
+		return nil, err
+	}
+	res := resWrap.Reservation
+
+	if res.Approved == status && status != models.ReservationApprovedApproved {
+		return connect.NewResponse(&service.UpdateReservationResponse{}), nil
+	}
+
+	res.Approved = status
+	if status != models.ReservationApprovedApproved {
+		if err := a.reservationStore.Update(ctx, res); err != nil {
+			return nil, err
+		}
+		return connect.NewResponse(&service.UpdateReservationResponse{}), nil
+	}
+
+	a.log.Debug("Reservation approved", "id", id)
+
+	facility, err := a.facilityStore.Get(ctx, res.FacilityID)
+	if err != nil {
+		a.log.Error("Facility not found", "id", res.FacilityID)
+		return nil, err
+	}
+	plan := buildPublishPlan(*res, resWrap.Dates, true)
+	if plan.Mode == calendar.ModeSeries && res.GCalEventID != nil && *res.GCalEventID != "" {
+		a.log.Warn("Reservation already published", "id", id)
+		for i := range resWrap.Dates {
+			if resWrap.Dates[i].Approved != models.ReservationDateApprovedApproved {
+				resWrap.Dates[i].Approved = models.ReservationDateApprovedApproved
+				if err := a.reservationStore.UpdateDate(ctx, &resWrap.Dates[i]); err != nil {
+					a.log.Error("Failed to update approval for date", resWrap.Dates[i].ID, "err", err)
+				}
+			}
+		}
+		if err := a.reservationStore.Update(ctx, res); err != nil {
+			return nil, err
+		}
+		return connect.NewResponse(&service.UpdateReservationResponse{}), nil
+	}
+	description := ""
+	if res.Details != nil {
+		description = *res.Details
+	}
+	pubRes, err := a.calendar.Publish(ctx, plan, calendar.PublishOptions{
+		CalendarID:  facility.Facility.GoogleCalendarID,
+		Summary:     res.EventName,
+		Description: description,
+		Location:    fmt.Sprintf("%s %s", facility.Building.Name, facility.Facility.Name),
+		SendUpdates: calendar.NoUpdates,
+	})
+	if err != nil {
+		return nil, err
+	}
+	switch plan.Mode {
+	case calendar.ModeSingles:
+		dateByID := make(map[int64]*models.ReservationDate, len(resWrap.Dates))
+		for i := range resWrap.Dates {
+			d := &resWrap.Dates[i]
+			dateByID[d.ID] = d
+		}
+
+		for refID, eventID := range pubRes.SingleEventID {
+			d := dateByID[refID]
+			if d == nil {
+				a.log.Warn("Publish returned event for unknown date id", "refID", refID)
+				continue
+			}
+			if d.GcalEventid != nil && *d.GcalEventid == eventID && d.Approved == models.ReservationDateApprovedApproved {
+				continue
+			}
+			d.GcalEventid = &eventID
+			d.Approved = models.ReservationDateApprovedApproved
+			if err := a.reservationStore.UpdateDate(ctx, d); err != nil {
+				a.log.Error("Failed to update approval for date", d.ID, "err", err)
+			}
+		}
+	case calendar.ModeSeries:
+		if pubRes.MasterEventID != nil && *pubRes.MasterEventID != "" {
+			res.GCalEventID = pubRes.MasterEventID
+		}
+		for i := range resWrap.Dates {
+			resWrap.Dates[i].Approved = models.ReservationDateApprovedApproved
+			if err := a.reservationStore.UpdateDate(ctx, &resWrap.Dates[i]); err != nil {
+				a.log.Error("Failed to update date after series published", "date_id", resWrap.Dates[i].ID, "err", err)
+			}
+		}
+	}
+
+	if err := a.reservationStore.Update(ctx, res); err != nil {
+		a.log.Error("Failed to update reservation after publish", "id", id, "err", err)
+		return nil, err
+	}
 	return connect.NewResponse(&service.UpdateReservationResponse{}), nil
 }
 
@@ -254,7 +349,7 @@ func (a *ReservationHandler) UserReservations(ctx context.Context, req *connect.
 	}), nil
 }
 
-func (a *ReservationHandler) CreateReservationDate(ctx context.Context, req *connect.Request[service.CreateReservationDatesRequest]) (*connect.Response[service.CreateReservationDateResponse], error) {
+func (a *ReservationHandler) CreateReservationDates(ctx context.Context, req *connect.Request[service.CreateReservationDatesRequest]) (*connect.Response[service.CreateReservationDatesResponse], error) {
 	dates := models.ToReservationDates(req.Msg.GetDate())
 	err := a.reservationStore.CreateDates(ctx, dates)
 	if err != nil {
@@ -263,7 +358,7 @@ func (a *ReservationHandler) CreateReservationDate(ctx context.Context, req *con
 	return connect.NewResponse(&service.CreateReservationDatesResponse{}), nil
 }
 
-func (a *ReservationHandler) UpdateReservationDates(ctx context.Context, req *connect.Request[service.UpdateReservationDatesRequest]) (*connect.Response[service.UpdateReservationDateResponse], error) {
+func (a *ReservationHandler) UpdateReservationDates(ctx context.Context, req *connect.Request[service.UpdateReservationDatesRequest]) (*connect.Response[service.UpdateReservationDatesResponse], error) {
 	dates := models.ToReservationDates(req.Msg.GetDate())
 	for _, d := range dates {
 		err := a.reservationStore.UpdateDate(ctx, &d)
@@ -273,12 +368,146 @@ func (a *ReservationHandler) UpdateReservationDates(ctx context.Context, req *co
 	}
 	return connect.NewResponse(&service.UpdateReservationDatesResponse{}), nil
 }
-func (a *ReservationHandler) DeleteReservationDates(ctx context.Context, req *connect.Request[service.DeleteReservationDatesRequest]) (*connect.Response[service.DeleteReservationDateResponse], error) {
+
+func (a *ReservationHandler) UpdateReservationDatesStatus(
+	ctx context.Context,
+	req *connect.Request[service.UpdateReservationDatesStatusRequest],
+) (*connect.Response[service.UpdateReservationDatesStatusResponse], error) {
+	ids := req.Msg.GetIds()
+	if len(ids) == 0 {
+		return nil, connect.NewError(connect.CodeInvalidArgument, fmt.Errorf("no ids provided"))
+	}
+	targetStatus := models.ReservationDateApproved(req.Msg.GetStatus())
+
+	rows, err := a.reservationStore.GetDates(ctx, ids)
+	if err != nil {
+		return nil, err
+	}
+	if len(rows) != len(ids) {
+		return nil, connect.NewError(connect.CodeNotFound, fmt.Errorf("some ids not found"))
+	}
+
+	resID := rows[0].ReservationID
+	for _, r := range rows {
+		if r.ReservationID != resID {
+			return nil, connect.NewError(connect.CodeInvalidArgument, fmt.Errorf("ids must belong to the same reservation"))
+		}
+	}
+
+	wrap, err := a.reservationStore.Get(ctx, resID)
+	if err != nil {
+		return nil, err
+	}
+	res := wrap.Reservation
+
+	facility, err := a.facilityStore.Get(ctx, res.FacilityID)
+	if err != nil {
+		return nil, err
+	}
+
+	// Guard: if a series was already published for this reservation, disallow per-date changes (or handle via EXDATE in a separate flow)
+	if res.GCalEventID != nil && *res.GCalEventID != "" {
+		return nil, connect.NewError(connect.CodeFailedPrecondition, fmt.Errorf("reservation already published as a series; per-date updates not supported here"))
+	}
+
+	calendarID := facility.Facility.GoogleCalendarID
+	summary := res.EventName
+	description := ""
+	if res.Details != nil {
+		description = *res.Details
+	}
+	location := fmt.Sprintf("%s %s", facility.Building.Name, facility.Facility.Name)
+
+	switch targetStatus {
+	case models.ReservationDateApprovedApproved:
+		var singles []calendar.OccSpec
+		for _, r := range rows {
+			if r.GcalEventid != nil && *r.GcalEventid != "" {
+				continue // already published
+			}
+			singles = append(singles, calendar.OccSpec{
+				Start:       r.LocalStart.Time, // or r.LocalStart if time.Time directly
+				End:         r.LocalEnd.Time,
+				RefID:       r.ID,
+				Summary:     summary,
+				Description: description,
+				Location:    location,
+			})
+		}
+
+		// Publish in one batch
+		var pubRes *calendar.PublishResult
+		if len(singles) > 0 {
+			pubRes, err = a.calendar.Publish(ctx, &calendar.PublishPlan{
+				Mode:    calendar.ModeSingles,
+				Singles: singles,
+			}, calendar.PublishOptions{
+				CalendarID:  calendarID,
+				Summary:     summary,
+				Description: description,
+				Location:    location,
+				SendUpdates: calendar.NoUpdates,
+			})
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		// Update DB rows: set approved + gcal_eventid
+
+		for i := range rows {
+			r := &rows[i]
+			r.Approved = models.ReservationDateApprovedApproved
+			if pubRes != nil {
+				if evID, ok := pubRes.SingleEventID[r.ID]; ok {
+					r.GcalEventid = &evID
+				}
+			}
+			if err = a.reservationStore.UpdateDate(ctx, r); err != nil {
+				return nil, err
+			}
+		}
+		// Optionally mark reservation itself approved if all dates are approved
+		if res.Approved == models.ReservationApprovedPending {
+			res.Approved = models.ReservationApprovedApproved
+			if err = a.reservationStore.Update(ctx, res); err != nil {
+				return nil, err
+			}
+		}
+
+	case models.ReservationDateApprovedDenied, models.ReservationDateApprovedPending:
+		// For deny/pending: delete Google events if present, then update rows
+		for _, r := range rows {
+			if r.GcalEventid != nil && *r.GcalEventid != "" {
+				if err = a.calendar.DeleteEvent(calendarID, *r.GcalEventid); err != nil {
+					a.log.Error("Failed to delete event", "id", *r.GcalEventid, "err", err)
+				}
+			}
+		}
+		for i := range rows {
+			r := &rows[i]
+			r.Approved = targetStatus
+			// Clear gcal id if we deleted it
+			if r.GcalEventid != nil {
+				r.GcalEventid = nil
+			}
+			if err = a.reservationStore.UpdateDate(ctx, r); err != nil {
+				return nil, err
+			}
+		}
+	default:
+		return nil, connect.NewError(connect.CodeInvalidArgument, fmt.Errorf("unknown status %q", req.Msg.GetStatus()))
+	}
+
+	return connect.NewResponse(&service.UpdateReservationDatesStatusResponse{}), nil
+}
+
+func (a *ReservationHandler) DeleteReservationDates(ctx context.Context, req *connect.Request[service.DeleteReservationDatesRequest]) (*connect.Response[service.DeleteReservationDatesResponse], error) {
 	err := a.reservationStore.DeleteDates(ctx, req.Msg.GetId())
 	if err != nil {
 		return nil, err
 	}
-	return connect.NewResponse(&service.DeleteReservationDateResponse{}), nil
+	return connect.NewResponse(&service.DeleteReservationDatesResponse{}), nil
 }
 
 func (a *ReservationHandler) CreateReservationFee(ctx context.Context, req *connect.Request[service.CreateReservationFeeRequest]) (*connect.Response[service.CreateReservationFeeResponse], error) {
@@ -297,6 +526,7 @@ func (a *ReservationHandler) UpdateReservationFee(ctx context.Context, req *conn
 	// }
 	return connect.NewResponse(&service.UpdateReservationFeeResponse{}), nil
 }
+
 func (a *ReservationHandler) DeleteReservationFee(ctx context.Context, req *connect.Request[service.DeleteReservationFeeRequest]) (*connect.Response[service.DeleteReservationFeeResponse], error) {
 	err := a.reservationStore.DeleteFees(ctx, req.Msg.GetId())
 	if err != nil {
@@ -317,25 +547,13 @@ func (a *ReservationHandler) CostReducer(ctx context.Context, req *connect.Reque
 		return nil, err
 	}
 	category := categories[0]
-	loc := a.timezone
 	var total time.Duration
 	for _, date := range reservation.Dates {
 		if date.Approved != models.ReservationDateApprovedApproved {
 			continue
 		}
-		startDate := date.StartDate
-		endDate := date.EndDate
-		if !endDate.Valid {
-			endDate = startDate
-		}
-		start, err := utils.CombineDateAndTime(loc, startDate, date.StartTime)
-		if err != nil {
-			return nil, fmt.Errorf("invalid start date: %w", err)
-		}
-		end, err := utils.CombineDateAndTime(loc, endDate, date.EndTime)
-		if err != nil {
-			return nil, fmt.Errorf("invalid end date: %w", err)
-		}
+		start := date.LocalStart.Time
+		end := date.LocalEnd.Time
 		if end.Before(start) {
 			return nil, fmt.Errorf("end before start for date id %d", date.ID)
 		}
