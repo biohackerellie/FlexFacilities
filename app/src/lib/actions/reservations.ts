@@ -85,3 +85,17 @@ export async function AddDates({
   }
   revalidateTag('reservations');
 }
+
+export async function UpdateDateStatus(
+  ids: bigint[],
+  status: 'approved' | 'denied' | 'pending' | 'canceled',
+) {
+  const { error } = await client
+    .reservations()
+    .updateReservationDatesStatus({ ids: ids, status: status });
+  if (error) {
+    logger.error('Error updating reservation', { 'error ': error });
+    throw error;
+  }
+  revalidateTag('reservations');
+}

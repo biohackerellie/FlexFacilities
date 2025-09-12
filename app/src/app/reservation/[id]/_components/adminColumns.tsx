@@ -1,32 +1,31 @@
-"use client";
+'use client';
 
-import type { ColumnDef } from "@tanstack/react-table";
-import React from "react";
-import { ArrowUpDown } from "lucide-react";
+import type { ColumnDef } from '@tanstack/react-table';
+import { ArrowUpDown } from 'lucide-react';
 
-import type { ReservationDateType } from "@local/db/schema";
-
-import EditDates from "@/components/forms/EditDates";
-import EditMultipleDates from "@/components/forms/EditMultipleDays";
-import { Button } from "@/components/ui/buttons";
-import { Checkbox } from "@/components/ui/checkbox";
+import { format } from 'date-fns';
+import EditDates from '@/components/forms/EditDates';
+import EditMultipleDates from '@/components/forms/EditMultipleDays';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import HandleDelete from "@/functions/reservations/deleteDates";
-import UpdateStatus from "@/functions/reservations/updateStatus";
+} from '@/components/ui/dropdown-menu';
+import HandleDelete from '@/functions/reservations/deleteDates';
+import UpdateStatus from '@/functions/reservations/updateStatus';
+import { ReservationDate } from '@/lib/types';
 
-export const adminColumns: ColumnDef<ReservationDateType>[] = [
+export const adminColumns: ColumnDef<ReservationDate>[] = [
   {
-    id: "select",
+    id: 'select',
     header: ({ table }) => (
       <Checkbox
         checked={
           table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
+          (table.getIsSomePageRowsSelected() && 'indeterminate')
         }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
         aria-label="Select all"
@@ -41,50 +40,64 @@ export const adminColumns: ColumnDef<ReservationDateType>[] = [
     ),
   },
   {
-    accessorKey: "startDate",
+    accessorKey: 'localStart',
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Start Date
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
+    cell: ({ row }) => {
+      const date = new Date(row.original.localStart);
+      return <div>{format(date, 'yyyy-MM-dd')}</div>;
+    },
   },
   {
-    accessorKey: "endDate",
+    accessorKey: 'localEnd',
     header: ({ column }) => {
       column.toggleVisibility(false);
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           End Date
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
+    cell: ({ row }) => {
+      const date = new Date(row.original.localEnd);
+      return <div>{format(date, 'yyyy-MM-dd')}</div>;
+    },
   },
   {
-    accessorKey: "startTime",
-    header: "Start Time",
+    header: 'Start Time',
+    cell: ({ row }) => {
+      const date = new Date(row.original.localStart);
+      return <div>{format(date, 'HH:mm:ss')}</div>;
+    },
   },
   {
-    accessorKey: "endTime",
-    header: "End Time",
+    header: 'End Time',
+    cell: ({ row }) => {
+      const date = new Date(row.original.localEnd);
+      return <div>{format(date, 'HH:mm:ss')}</div>;
+    },
   },
   {
-    accessorKey: "approved",
-    header: "Status",
+    accessorKey: 'approved',
+    header: 'Status',
   },
 
   {
-    accessorKey: "id",
-    header: "Options",
+    accessorKey: 'id',
+    header: 'Options',
     cell: ({ row }) => {
       const dateID = row.original.id;
       const ReservationID = row.original.reservationId;
@@ -102,7 +115,7 @@ export const adminColumns: ColumnDef<ReservationDateType>[] = [
                   onClick={() =>
                     UpdateStatus({
                       id: dateID,
-                      status: "approved",
+                      status: 'approved',
                       reservationID: ReservationID,
                     })
                   }
@@ -117,7 +130,7 @@ export const adminColumns: ColumnDef<ReservationDateType>[] = [
                   onClick={() =>
                     UpdateStatus({
                       id: dateID,
-                      status: "denied",
+                      status: 'denied',
                       reservationID: ReservationID,
                     })
                   }
@@ -139,7 +152,7 @@ export const adminColumns: ColumnDef<ReservationDateType>[] = [
   },
 
   {
-    accessorKey: "reservationId",
+    accessorKey: 'reservationId',
     header: ({ table }) => {
       const selectedRows = table.getSelectedRowModel();
       const selectedData = selectedRows.flatRows.map((row) => row.original);

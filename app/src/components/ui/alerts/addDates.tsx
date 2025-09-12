@@ -8,12 +8,13 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 import { AddDates } from '@/lib/actions/reservations';
 import { toast } from 'sonner';
 import { Calendar } from '@/components/ui/calendar';
 import { logger } from '@/lib/logger';
+import { Label } from '../label';
+import { Input } from '../input';
 
 // form action to add dates to reservation
 
@@ -63,20 +64,39 @@ const AddDateDialog = ({ id }: { id: bigint }) => {
         <DialogDescription>Add a date to this reservation.</DialogDescription>
         <div className="flex flex-col space-y-4">
           <div className="flex flex-col space-y-2">
-            <label htmlFor="startDate">Start Date</label>
-            <input name="startDate" id="startDate" type="date" />
+            <Label htmlFor="startDate">Start Date</Label>
+            <Calendar
+              mode="single"
+              selected={date}
+              onSelect={setDate}
+              className="bg-transparent p-0 [--cell-size:--spacing(10.5)]"
+            />
           </div>
           <div className="flex flex-col space-y-2">
-            <label htmlFor="startTime">Start Time</label>
-            <input name="startTime" id="startTime" type="time" />
+            <Label htmlFor="startTime">Start Time</Label>
+            <Input
+              id="startTime"
+              type="time"
+              step="1"
+              defaultValue="10.30:00"
+              onChange={handleSetStartTime}
+              className="appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+            />
           </div>
           <div className="flex flex-col space-y-2">
-            <label htmlFor="endTime">End Time</label>
-            <input name="endTime" id="endTime" type="time" />
+            <Label htmlFor="endTime">End Time</Label>
+            <Input
+              id="endTime"
+              type="time"
+              step="1"
+              defaultValue="11.30:00"
+              onChange={handleSetEndTime}
+              className="appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+            />
           </div>
         </div>
         <DialogFooter>
-          <Button>Save Changes</Button>
+          <Button onClick={handleSubmit}>Save Changes</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -1,53 +1,65 @@
-"use client";
+'use client';
 
-import type { ColumnDef } from "@tanstack/react-table";
-import React from "react";
-import { ArrowUpDown } from "lucide-react";
+import type { ColumnDef } from '@tanstack/react-table';
+import { format } from 'date-fns';
+import { ArrowUpDown } from 'lucide-react';
 
-import type { ReservationDateType } from "@local/db/schema";
+import { Button } from '@/components/ui/button';
+import { ReservationDate } from '@/lib/types';
 
-import { Button } from "@/components/ui/buttons";
-
-export const columns: ColumnDef<ReservationDateType>[] = [
+export const columns: ColumnDef<ReservationDate>[] = [
   {
-    accessorKey: "startDate",
+    accessorKey: 'localStart',
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Start Date
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
+    cell: ({ row }) => {
+      const date = new Date(row.getValue('localStart') as string);
+      return <div>{format(date, 'yyyy-MM-dd')}</div>;
+    },
   },
   {
-    accessorKey: "endDate",
+    accessorKey: 'localEnd',
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           End Date
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
+    cell: ({ row }) => {
+      const date = new Date(row.getValue('localEnd') as string);
+      return <div>{format(date, 'yyyy-MM-dd')}</div>;
+    },
   },
   {
-    accessorKey: "startTime",
-
-    header: "Start Time",
+    header: 'Start Time',
+    cell: ({ row }) => {
+      const date = new Date(row.getValue('localStart') as string);
+      return <div>{format(date, 'HH:mm:ss')}</div>;
+    },
   },
   {
-    accessorKey: "endTime",
-    header: "End Time",
+    header: 'End Time',
+    cell: ({ row }) => {
+      const date = new Date(row.getValue('localEnd') as string);
+      return <div>{format(date, 'HH:mm:ss')}</div>;
+    },
   },
   {
-    accessorKey: "approved",
-    header: "Status",
+    accessorKey: 'approved',
+    header: 'Status',
   },
 ];
