@@ -33,6 +33,7 @@ export interface Session extends Omit<SessionType, 'userRole'> {
 }
 
 export type UserRole = 'USER' | 'ADMIN' | 'STAFF' | 'GUEST';
+export type ReservationStatus = 'pending' | 'approved' | 'denied' | 'canceled';
 
 export interface FormData {
   eventName: string;

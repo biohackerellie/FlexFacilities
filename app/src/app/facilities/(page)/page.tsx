@@ -6,7 +6,6 @@ import { client } from '@/lib/rpc';
 import { Separator } from '@/components/ui/separator';
 import { SidebarSearchParamsNav } from '@/components/ui/sidebar-searchParams';
 import { notFound } from 'next/navigation';
-import { Building, Facility } from '@/lib/types';
 import { logger } from '@/lib/logger';
 
 async function getData() {

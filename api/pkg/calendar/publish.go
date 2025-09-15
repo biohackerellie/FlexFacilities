@@ -195,3 +195,165 @@ func firstNonEmpty(xs ...string) string {
 	}
 	return ""
 }
+
+func (c *Calendar) AddExdatesToMaster(ctx context.Context, calendarID, masterEventID, rrule string, exdates []time.Time) error {
+	rec := buildRecurrence(c.tz, rrule, exdates)
+	patch := &gcal.Event{Recurrence: rec}
+	_, err := c.svc.Events.Patch(calendarID, masterEventID, patch).
+		SendUpdates("none").
+		Context(ctx).
+		Do()
+	return err
+}
+func (c *Calendar) AddRdatesToMaster(ctx context.Context, calendarID, masterEventID, rrule string, exdates, rdates []time.Time) error {
+	rec := buildRecurrenceWithRdates(c.tz, rrule, exdates, rdates, c.loc)
+	patch := &gcal.Event{Recurrence: rec}
+	_, err := c.svc.Events.Patch(calendarID, masterEventID, patch).
+		SendUpdates("none").
+		Context(ctx).
+		Do()
+	return err
+}
+
+func buildRecurrenceWithRdates(tz, rrule string, exdates, rdates []time.Time, loc *time.Location) []string {
+	var out []string
+	// Ensure RRULE: prefix
+	if rrule != "" {
+		if strings.HasPrefix(strings.ToUpper(rrule), "RRULE:") {
+			out = append(out, rrule)
+		} else {
+			out = append(out, "RRULE:"+rrule)
+		}
+	}
+
+	// EXDATE
+	if len(exdates) > 0 {
+		sort.Slice(exdates, func(i, j int) bool { return exdates[i].Before(exdates[j]) })
+		parts := make([]string, 0, len(exdates))
+		for _, t := range exdates {
+			parts = append(parts, t.In(loc).Format("20060102T150405"))
+		}
+		out = append(out, fmt.Sprintf("EXDATE;TZID=%s:%s", tz, strings.Join(parts, ",")))
+	}
+
+	// RDATE
+	if len(rdates) > 0 {
+		sort.Slice(rdates, func(i, j int) bool { return rdates[i].Before(rdates[j]) })
+		parts := make([]string, 0, len(rdates))
+		for _, t := range rdates {
+			parts = append(parts, t.In(loc).Format("20060102T150405"))
+		}
+		out = append(out, fmt.Sprintf("RDATE;TZID=%s:%s", tz, strings.Join(parts, ",")))
+	}
+
+	return out
+}
+
+type RDateSpec struct {
+	Start       time.Time // local wall start for the added occurrence
+	End         time.Time // local wall end (if End-Start != master duration, we’ll override)
+	Summary     string    // optional per-instance override
+	Description string    // optional
+	Location    string    // optional
+}
+
+// Adds RDATEs to the master event and patches instance times for those whose duration differs from master.
+// rrule is the master’s RRULE (without or with "RRULE:" prefix — we’ll handle both).
+func (c *Calendar) AddRdatesWithOverrides(ctx context.Context, calendarID, masterEventID, rrule string, exdates []time.Time, adds []RDateSpec) error {
+	if len(adds) == 0 {
+		return nil
+	}
+
+	// 1) Patch master: RRULE + existing EXDATE + RDATE (starts only)
+	rdateStarts := make([]time.Time, len(adds))
+	for i := range adds {
+		rdateStarts[i] = adds[i].Start
+	}
+	rec := buildRecurrenceWithRdates(c.tz, rrule, exdates, rdateStarts, c.loc)
+
+	_, err := c.svc.Events.Patch(calendarID, masterEventID, &gcal.Event{
+		Recurrence: rec,
+	}).SendUpdates("none").Context(ctx).Do()
+	if err != nil {
+		return fmt.Errorf("patch master with RDATEs: %w", err)
+	}
+
+	// 2) Determine master duration from the event (optional but helpful to decide which need overrides)
+	master, err := c.svc.Events.Get(calendarID, masterEventID).Context(ctx).Do()
+	if err != nil {
+		return fmt.Errorf("get master after patch: %w", err)
+	}
+	masterStart, _ := time.Parse(time.RFC3339, master.Start.DateTime)
+	masterEnd, _ := time.Parse(time.RFC3339, master.End.DateTime)
+	masterDur := masterEnd.Sub(masterStart)
+
+	// 3) For any added date where End-Start != master duration, patch that instance only
+	for _, spec := range adds {
+		if spec.End.Sub(spec.Start) == masterDur {
+			continue // same duration as master; no override needed
+		}
+		if err := c.patchInstance(ctx, calendarID, masterEventID, spec); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Patch one instance (override). Only that occurrence is changed.
+func (c *Calendar) patchInstance(ctx context.Context, calendarID, masterEventID string, spec RDateSpec) error {
+	// Find the instance by original start (Instances API). Give a window for safety.
+	tMin := spec.Start.Add(-2 * time.Hour).In(c.loc).Format(time.RFC3339)
+	tMax := spec.Start.Add(2 * time.Hour).In(c.loc).Format(time.RFC3339)
+	orig := spec.Start.In(c.loc).Format(time.RFC3339)
+
+	inst, err := c.svc.Events.Instances(calendarID, masterEventID).
+		TimeMin(tMin).
+		TimeMax(tMax).
+		ShowDeleted(false).
+		Context(ctx).
+		Do()
+	if err != nil {
+		return fmt.Errorf("instances lookup: %w", err)
+	}
+
+	var target *gcal.Event
+	for _, it := range inst.Items {
+		if it.OriginalStartTime != nil && it.OriginalStartTime.DateTime == orig {
+			target = it
+			break
+		}
+	}
+	if target == nil {
+		// Small propagation delay can happen right after adding RDATE; retry once after a short sleep if desired.
+		return fmt.Errorf("instance not found at %s", orig)
+	}
+
+	patch := &gcal.Event{
+		Start: &gcal.EventDateTime{
+			DateTime: spec.Start.In(c.loc).Format(time.RFC3339),
+			TimeZone: c.tz,
+		},
+		End: &gcal.EventDateTime{
+			DateTime: spec.End.In(c.loc).Format(time.RFC3339),
+			TimeZone: c.tz,
+		},
+	}
+	// Optional per-instance text/location overrides
+	if spec.Summary != "" || spec.Description != "" || spec.Location != "" {
+		if spec.Summary != "" {
+			patch.Summary = spec.Summary
+		}
+		if spec.Description != "" {
+			patch.Description = spec.Description
+		}
+		if spec.Location != "" {
+			patch.Location = spec.Location
+		}
+	}
+
+	_, err = c.svc.Events.Patch(calendarID, target.Id, patch).
+		SendUpdates("none").
+		Context(ctx).
+		Do()
+	return err
+}

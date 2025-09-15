@@ -2,7 +2,7 @@
 import { client } from '@/lib/rpc';
 import { unstable_cacheTag as cacheTag, revalidateTag } from 'next/cache';
 import { logger } from '@/lib/logger';
-import { Reservation, ReservationDate } from '../types';
+import { Reservation, ReservationDate, ReservationStatus } from '../types';
 
 export async function getReservation(id: string) {
   'use cache';
@@ -86,15 +86,41 @@ export async function AddDates({
   revalidateTag('reservations');
 }
 
+export async function ApproveReservation(
+  id: bigint,
+  status: ReservationStatus,
+) {
+  const { error } = await client
+    .reservations()
+    .updateReservationStatus({ id: id, status: status });
+
+  if (error) {
+    logger.error('Error updating reservation', { 'error ': error });
+    throw error;
+  }
+  revalidateTag('reservations');
+}
 export async function UpdateDateStatus(
   ids: bigint[],
-  status: 'approved' | 'denied' | 'pending' | 'canceled',
+  status: ReservationStatus,
 ) {
   const { error } = await client
     .reservations()
     .updateReservationDatesStatus({ ids: ids, status: status });
   if (error) {
     logger.error('Error updating reservation', { 'error ': error });
+    throw error;
+  }
+  revalidateTag('reservations');
+}
+
+export async function DeleteDates(ids: bigint[]) {
+  const { error } = await client
+    .reservations()
+    .deleteReservationDates({ id: ids });
+
+  if (error) {
+    logger.error('Error deleting date', { error: error });
     throw error;
   }
   revalidateTag('reservations');

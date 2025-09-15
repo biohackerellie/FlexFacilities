@@ -1,10 +1,9 @@
-import React from "react";
-import { notFound } from "next/navigation";
+import { notFound } from 'next/navigation';
 
-import { auth } from "@local/auth";
+import { auth } from '@/lib/auth';
 
-import { Separator } from "@/components/ui/separator";
-import AccountForm from "./account-form";
+import { Separator } from '@/components/ui/separator';
+import AccountForm from './account-form';
 
 export default async function DetailsPage() {
   const session = await auth();
@@ -12,11 +11,10 @@ export default async function DetailsPage() {
     return notFound();
   }
 
-  const data = session.user;
   const updateUserValues = {
-    id: data.id,
-    name: data.name!,
-    email: data.email!,
+    id: session.userId,
+    name: session.userName!,
+    email: session.userEmail!,
   };
   return (
     <div className="space-y-6">

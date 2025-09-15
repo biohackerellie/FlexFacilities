@@ -1,32 +1,45 @@
-import React, { Suspense } from "react";
-import { notFound } from "next/navigation";
-import { ReloadIcon } from "@radix-ui/react-icons";
+import React, { Suspense } from 'react';
+import { notFound } from 'next/navigation';
+import { ReloadIcon } from '@radix-ui/react-icons';
 
-import { auth } from "@local/auth";
+import { auth } from '@/lib/auth';
+import { client } from '@/lib/rpc';
 
-import { Separator } from "@/components/ui/separator";
-import { DataTable } from "@/components/ui/tables";
-import { userReservations } from "@/functions/calculations/tableData";
-import { api } from "@/trpc/server";
-import { columns } from "./columns";
+import { Separator } from '@/components/ui/separator';
+import { DataTable } from '@/components/ui/tables';
+import { columns } from './columns';
 
 async function getData(id: string) {
-  const user = await api.user.ById({ id: id });
-  const reservations = user?.Reservation;
-  if (!reservations) {
-    return [];
+  'use cache';
+  const { data, error } = await client
+    .reservations()
+    .userReservations({ userId: id });
+
+  if (error) {
+    console.error(error);
+    return null;
   }
-  return userReservations(reservations);
+  return data;
 }
 
 export default async function Account() {
   const session = await auth();
   if (!session) return notFound();
-  const data = await getData(session.user.id);
+  const data = await getData(session.userId);
   if (!data) {
     return <div>loading ...</div>;
   }
-
+  // const mappedData = data.reservations.map((r) => {
+  //   return {
+  //     eventName: r.reservation?.eventName ?? 'N/A',
+  //     Facility: 'N/A',
+  //     ReservationDate:
+  //       r.dates.find((d) => new Date(d.localStart) >= new Date())?.localStart ??
+  //       'N/A',
+  //     approved: r.reservation?.approved ?? 'N/A',
+  //     id: r.reservation?.id ?? 'N/A',
+  //   };
+  // });
   return (
     <div className="space-y-7">
       <div>
@@ -35,7 +48,7 @@ export default async function Account() {
       <Separator />
 
       <Suspense fallback={<LoadingComponent />}>
-        <DataTable columns={columns} data={data} />
+        {/* <DataTable columns={columns} data={mappedData} /> */}
       </Suspense>
     </div>
   );

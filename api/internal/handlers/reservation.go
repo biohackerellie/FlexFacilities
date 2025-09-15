@@ -351,7 +351,25 @@ func (a *ReservationHandler) UserReservations(ctx context.Context, req *connect.
 
 func (a *ReservationHandler) CreateReservationDates(ctx context.Context, req *connect.Request[service.CreateReservationDatesRequest]) (*connect.Response[service.CreateReservationDatesResponse], error) {
 	dates := models.ToReservationDates(req.Msg.GetDate())
-	err := a.reservationStore.CreateDates(ctx, dates)
+	if len(dates) == 0 {
+		return nil, connect.NewError(connect.CodeInvalidArgument, fmt.Errorf("no dates provided"))
+	}
+	resWrap, err := a.reservationStore.Get(ctx, dates[0].ReservationID)
+	if err != nil {
+		return nil, err
+	}
+	reservation := resWrap.Reservation
+	if reservation.RRule == nil || *reservation.RRule == "" {
+		for _, d := range dates {
+			reservation.RDates = append(reservation.RDates, d.LocalStart.Time)
+		}
+		err = a.reservationStore.Update(ctx, reservation)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	err = a.reservationStore.CreateDates(ctx, dates)
 	if err != nil {
 		return nil, err
 	}
@@ -407,7 +425,18 @@ func (a *ReservationHandler) UpdateReservationDatesStatus(
 
 	// Guard: if a series was already published for this reservation, disallow per-date changes (or handle via EXDATE in a separate flow)
 	if res.GCalEventID != nil && *res.GCalEventID != "" {
-		return nil, connect.NewError(connect.CodeFailedPrecondition, fmt.Errorf("reservation already published as a series; per-date updates not supported here"))
+		if targetStatus != models.ReservationDateApprovedApproved {
+			exdates := []time.Time{}
+			for _, r := range rows {
+				exdates = append(exdates, r.LocalStart.Time)
+			}
+			if len(exdates) > 0 {
+				err = a.calendar.AddExdatesToMaster(ctx, facility.Facility.GoogleCalendarID, *res.GCalEventID, *res.RRule, exdates)
+				if err != nil {
+					return nil, err
+				}
+			}
+		}
 	}
 
 	calendarID := facility.Facility.GoogleCalendarID
@@ -503,7 +532,51 @@ func (a *ReservationHandler) UpdateReservationDatesStatus(
 }
 
 func (a *ReservationHandler) DeleteReservationDates(ctx context.Context, req *connect.Request[service.DeleteReservationDatesRequest]) (*connect.Response[service.DeleteReservationDatesResponse], error) {
-	err := a.reservationStore.DeleteDates(ctx, req.Msg.GetId())
+	dates, err := a.reservationStore.GetDates(ctx, req.Msg.GetId())
+	if err != nil {
+		return nil, err
+	}
+	if len(dates) == 0 {
+		return nil, connect.NewError(connect.CodeNotFound, fmt.Errorf("no dates for reservation %s", req.Msg.GetId()))
+	}
+	resWrap, err := a.reservationStore.Get(ctx, dates[0].ReservationID)
+	if err != nil {
+		return nil, err
+	}
+	reservation := resWrap.Reservation
+	facility, err := a.facilityStore.Get(ctx, reservation.FacilityID)
+	if err != nil {
+		a.log.Error("Facility not found", "id", reservation.FacilityID)
+		return nil, err
+	}
+
+	datesToDelete := make([]models.ReservationDate, 0)
+	exDates := reservation.EXDates
+	for _, d := range dates {
+
+		if reservation.RRule != nil && *reservation.RRule != "" {
+			exDates = append(exDates, d.LocalStart.Time)
+			continue
+		} else if d.GcalEventid != nil && *d.GcalEventid != "" {
+			datesToDelete = append(datesToDelete, d)
+			continue
+		}
+	}
+	if len(datesToDelete) > 0 {
+		for _, d := range datesToDelete {
+			if err := a.calendar.DeleteEvent(facility.Facility.GoogleCalendarID, *d.GcalEventid); err != nil {
+				a.log.Error("Failed to delete event", "id", *d.GcalEventid, "err", err)
+				return nil, err
+			}
+		}
+	}
+	if len(exDates) > 0 {
+		if err := a.calendar.AddExdatesToMaster(ctx, facility.Facility.GoogleCalendarID, *reservation.GCalEventID, *reservation.RRule, exDates); err != nil {
+			a.log.Error("Failed to delete event", "id", *reservation.GCalEventID, "err", err)
+			return nil, err
+		}
+	}
+	err = a.reservationStore.DeleteDates(ctx, req.Msg.GetId())
 	if err != nil {
 		return nil, err
 	}

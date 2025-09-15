@@ -1,12 +1,14 @@
-import * as React from "react";
-import { notFound } from "next/navigation";
+import * as React from 'react';
+import { notFound } from 'next/navigation';
 
-import SmallCalendar from "@/components/calendar/smallCalendar";
-import { GetEvents } from "@/functions/events/googleAPI";
-import { api } from "@/trpc/server";
+import SmallCalendar from '@/components/calendar/smallCalendar';
+import { GetEvents } from '@/functions/events/googleAPI';
+import { client } from '@/lib/rpc';
 
 export default async function calPage({ params }: { params: { id: string } }) {
-  const reservation = await api.reservation.byId({ id: parseInt(params.id) });
+  const reservation = await client
+    .reservations()
+    .getReservation({ id: BigInt(params.id) });
   if (!reservation) return notFound();
   const facilityId = reservation.Facility.id;
   return (

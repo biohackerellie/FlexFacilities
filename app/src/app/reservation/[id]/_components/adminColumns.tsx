@@ -2,10 +2,7 @@
 
 import type { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown } from 'lucide-react';
-
 import { format } from 'date-fns';
-import EditDates from '@/components/forms/EditDates';
-import EditMultipleDates from '@/components/forms/EditMultipleDays';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -14,9 +11,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import HandleDelete from '@/functions/reservations/deleteDates';
-import UpdateStatus from '@/functions/reservations/updateStatus';
-import { ReservationDate } from '@/lib/types';
+import {
+  UpdateDateStatus,
+  DeleteDates,
+  ApproveReservation,
+} from '@/lib/actions/reservations';
+import { ReservationDate, ReservationStatus } from '@/lib/types';
+import { toast } from 'sonner';
+import { getErrorMessage } from '@/lib/errors';
 
 export const adminColumns: ColumnDef<ReservationDate>[] = [
   {
@@ -97,92 +99,81 @@ export const adminColumns: ColumnDef<ReservationDate>[] = [
 
   {
     accessorKey: 'id',
-    header: 'Options',
-    cell: ({ row }) => {
-      const dateID = row.original.id;
-      const ReservationID = row.original.reservationId;
-      const isApproved = row.original.approved;
+    header: ({ table }) => {
+      const totalRows = table.getRowCount();
+      const selectedRows = table.getSelectedRowModel();
+      const selectedData = selectedRows.flatRows.map((row) => row.original);
+      const SelectedRowIds = selectedData.map((row) => row.id);
+      const reservationID =
+        table.getRowModel().rows[0]?.original.reservationId!;
 
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline">Options</Button>
+            <Button variant="outline">Edit Selected</Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            {!isApproved && (
-              <>
-                <DropdownMenuItem
-                  onClick={() =>
-                    UpdateStatus({
-                      id: dateID,
-                      status: 'approved',
-                      reservationID: ReservationID,
-                    })
-                  }
-                >
-                  Approve Date
-                </DropdownMenuItem>
-              </>
-            )}
-            {isApproved && (
-              <>
-                <DropdownMenuItem
-                  onClick={() =>
-                    UpdateStatus({
-                      id: dateID,
-                      status: 'denied',
-                      reservationID: ReservationID,
-                    })
-                  }
-                >
-                  Deny Date
-                </DropdownMenuItem>
-              </>
-            )}
-
             <DropdownMenuItem
-              onClick={() => HandleDelete(dateID, ReservationID)}
+              onClick={() =>
+                handleUpdate(
+                  SelectedRowIds,
+                  'approved',
+                  totalRows,
+                  reservationID,
+                )
+              }
             >
-              Delete Date
+              Approve Selected
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() =>
+                handleUpdate(SelectedRowIds, 'denied', totalRows, reservationID)
+              }
+            >
+              Deny Selected
+            </DropdownMenuItem>
+
+            <DropdownMenuItem onClick={() => handleDelete(SelectedRowIds)}>
+              Delete Selected
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
     },
   },
-
-  {
-    accessorKey: 'reservationId',
-    header: ({ table }) => {
-      const selectedRows = table.getSelectedRowModel();
-      const selectedData = selectedRows.flatRows.map((row) => row.original);
-      const SelectedRowIds = selectedData.map((row) => row.id);
-      return (
-        <>
-          <EditMultipleDates ids={SelectedRowIds} />
-        </>
-      );
-    },
-    cell: ({ row }) => {
-      const id = row.original.id;
-      const startDate = row.original.startDate;
-      const endDate = row.original.endDate;
-      const startTime = row.original.startTime;
-      const endTime = row.original.endTime;
-      const reservationID = row.original.reservationId;
-
-      return (
-        <EditDates
-          date={{
-            id: id,
-            startDate: startDate,
-            endDate: endDate,
-            startTime: startTime,
-            endTime: endTime,
-            resID: reservationID,
-          }}
-        />
-      );
-    },
-  },
 ];
+
+const handleUpdate = (
+  ids: bigint[],
+  status: ReservationStatus,
+  totalRows: number,
+  reservationID: bigint,
+) => {
+  if (ids.length === totalRows) {
+    toast.promise(ApproveReservation(reservationID, status), {
+      loading: 'Updating Reservation Status...',
+      success: 'Success',
+      error: (error) => {
+        return getErrorMessage(error);
+      },
+    });
+  } else {
+    toast.promise(UpdateDateStatus(ids, status), {
+      loading: 'Updating selected dates...',
+      success: 'Success',
+      error: (error) => {
+        return getErrorMessage(error);
+      },
+    });
+  }
+};
+
+const handleDelete = (ids: bigint[]) => {
+  toast.promise(DeleteDates(ids), {
+    loading: 'Deleting selected Dates...',
+    success: 'Success',
+    error: (error) => {
+      return getErrorMessage(error);
+    },
+  });
+};
