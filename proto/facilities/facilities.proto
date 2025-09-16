@@ -7,14 +7,12 @@ option go_package = "api/internal/proto/facilities;facilitiesservice";
 message Facility {
   int64 id = 1;
   string name = 2;
-  string building = 3;
-  string address = 4;
-  optional string image_path = 5;
-  optional int64 capacity = 6;
-  string created_at = 7;  // RFC3339 string
-  string updated_at = 8;  // RFC3339 string
-  string google_calendar_id = 9;
-  optional int64 building_id = 10;
+  optional string image_path = 3;
+  optional int64 capacity = 4;
+  string created_at = 5;  // RFC3339 string
+  string updated_at = 6;  // RFC3339 string
+  string google_calendar_id = 7;
+  optional int64 building_id = 8;
 }
 
 message Building {

@@ -20,7 +20,7 @@ func NewFacilityStore(db *DB, log *slog.Logger) *FacilityStore {
 	return &FacilityStore{db: db, log: log}
 }
 
-const getFacilityQuery = `SELECT * FROM facilities WHERE id = $1`
+const getFacilityQuery = `SELECT * FROM facility WHERE id = $1`
 
 func (f *FacilityStore) Get(ctx context.Context, id int64) (*models.FullFacility, error) {
 	var facility models.Facility
@@ -93,7 +93,7 @@ func (f *FacilityStore) GetBuilding(ctx context.Context, id int64) (*models.Buil
 }
 
 const allCategoriesInQuery = `SELECT * FROM categories WHERE facility_id IN (?)`
-const getAllFacilitiesQuery = `SELECT * FROM facilities`
+const getAllFacilitiesQuery = `SELECT * FROM facility`
 
 func (f *FacilityStore) GetAll(ctx context.Context) ([]*models.BuildingWithFacilities, error) {
 
@@ -175,7 +175,7 @@ func (f *FacilityStore) GetByBuilding(ctx context.Context, buildingID int64) (*m
 	}
 
 	var facilities []*models.Facility
-	if err := f.db.SelectContext(ctx, &facilities, "SELECT * FROM facilities WHERE building_id = $1", building.ID); err != nil {
+	if err := f.db.SelectContext(ctx, &facilities, "SELECT * FROM facility WHERE building_id = $1", building.ID); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			facilities = []*models.Facility{}
 		}
@@ -209,14 +209,13 @@ func (f *FacilityStore) GetByBuilding(ctx context.Context, buildingID int64) (*m
 
 }
 
-const createFacilityQuery = `INSERT INTO facilities (
+const createFacilityQuery = `INSERT INTO facility (
 	name,
-	building,
-	address,
 	image_path,
 	capacity,
 	google_calendar_id
-) VALUES (:name, :building, :address, :image_path, :capacity, :google_calendar_id) RETURNING *`
+	building_id
+) VALUES (:name, :image_path, :capacity, :google_calendar_id, :building_id) RETURNING *`
 const createCategoryQuery = `INSERT INTO categories (
 	name,
 	description,
@@ -230,11 +229,10 @@ func (f *FacilityStore) Create(ctx context.Context, input *models.FacilityWithCa
 	var facility models.Facility
 	params := map[string]any{
 		"name":               input.Facility.Name,
-		"building":           input.Facility.Building,
-		"address":            input.Facility.Address,
 		"image_path":         input.Facility.ImagePath,
 		"capacity":           input.Facility.Capacity,
 		"google_calendar_id": input.Facility.GoogleCalendarID,
+		"building_id":        input.Facility.BuildingID,
 	}
 	tx, err := f.db.Beginx()
 	if err != nil {
@@ -270,10 +268,8 @@ func (f *FacilityStore) Create(ctx context.Context, input *models.FacilityWithCa
 	return tx.Commit()
 }
 
-const updateFacilityQuery = `UPDATE facilities SET
+const updateFacilityQuery = `UPDATE facility SET
 	name = :name,
-	building = :building,
-	address = :address,
 	image_path = :image_path,
 	capacity = :capacity,
 	google_calendar_id = :google_calendar_id
@@ -283,8 +279,6 @@ const updateFacilityQuery = `UPDATE facilities SET
 func (f *FacilityStore) Update(ctx context.Context, input *models.Facility) error {
 	params := map[string]any{
 		"name":               input.Name,
-		"building":           input.Building,
-		"address":            input.Address,
 		"image_path":         input.ImagePath,
 		"capacity":           input.Capacity,
 		"google_calendar_id": input.GoogleCalendarID,
@@ -300,14 +294,14 @@ func (f *FacilityStore) Update(ctx context.Context, input *models.Facility) erro
 	return err
 }
 
-const deleteFacilityQuery = `DELETE FROM facilities WHERE id = $1`
+const deleteFacilityQuery = `DELETE FROM facility WHERE id = $1`
 
 func (f *FacilityStore) Delete(ctx context.Context, id int64) error {
 	_, err := f.db.ExecContext(ctx, deleteFacilityQuery, id)
 	return err
 }
 
-const allFacilitiesInQuery = `SELECT * FROM facilities WHERE id IN (?)`
+const allFacilitiesInQuery = `SELECT * FROM facility WHERE id IN (?)`
 
 func (f *FacilityStore) GetAllIn(ctx context.Context, ids []int64) ([]*models.FacilityWithCategories, error) {
 	var facilities []*models.Facility

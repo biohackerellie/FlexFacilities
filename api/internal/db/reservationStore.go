@@ -461,3 +461,25 @@ func (s *ReservationStore) GetFutureDates(ctx context.Context) ([]models.Reserva
 	}
 	return []models.ReservationDate{dates}, nil
 }
+
+const aggregateQuery = `SELECT date_trunc('month', r.created_at) AS month_start,
+	b.name AS building_name,
+	COUNT(*) AS count
+FROM reservation r
+JOIN facility f ON r.facility_id = f.id
+JOIN building b ON f.building_id = b.id
+WHERE r.created_at > now() - INTERVAL '6 months'
+GROUP BY month_start, building_name
+ORDER BY month_start, building_name;
+`
+
+func (s *ReservationStore) Aggregate(ctx context.Context) ([]models.Aggregate, error) {
+	var aggregates []models.Aggregate
+	if err := s.db.SelectContext(ctx, &aggregates, aggregateQuery); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			aggregates = []models.Aggregate{}
+		}
+		return nil, err
+	}
+	return aggregates, nil
+}

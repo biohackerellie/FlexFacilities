@@ -11,27 +11,27 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import aggregateChartData from '@/functions/calculations/reservsByMonth';
+import { AggregateChartData } from '@/lib/actions/reservations';
 
-const buildingColors = [
-  { building: 'West Elementary', color: '#800080' },
-  { building: 'South Elementary', color: '#0000FF' },
-  { building: 'Laurel Middle School', color: '#008000' },
-  { building: 'Laurel High School', color: '#87CEEB' },
-  { building: 'Graff Elementary', color: '#FFC0CB' },
-  { building: 'Administration Building', color: '#FFA500' },
-];
-
+function getRandomColor() {
+  const letters = '0123456789ABCDEF';
+  let color = '#';
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
 export default function ByMonthLine({
   dataPromise,
 }: {
-  dataPromise: ReturnType<typeof aggregateChartData>;
+  dataPromise: ReturnType<typeof AggregateChartData>;
 }) {
   const data = React.use(dataPromise);
+
   return (
     <>
       <ResponsiveContainer width="100%" height={400}>
-        <LineChart width={500} height={300} data={data}>
+        <LineChart width={500} height={300} data={data?.data}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis
             dataKey="month"
@@ -48,15 +48,18 @@ export default function ByMonthLine({
           />
           <Tooltip />
           <Legend />
-          {buildingColors.map((buildingColor) => (
-            <Line
-              connectNulls
-              key={buildingColor.building}
-              type="monotone"
-              dataKey={buildingColor.building}
-              stroke={buildingColor.color}
-            />
-          ))}
+          {data &&
+            data.data.map((v, i) => {
+              return (
+                <Line
+                  connectNulls
+                  key={i}
+                  type="monotone"
+                  dataKey={v.month}
+                  stroke={getRandomColor()}
+                />
+              );
+            })}
         </LineChart>
       </ResponsiveContainer>
     </>

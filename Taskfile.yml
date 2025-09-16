@@ -57,8 +57,9 @@ tasks:
       - concurrently "cd api && air -c .air.toml" "cd app && bun --bun --env-file=../.env run dev"
   dev:go:
     desc: start dev go server
+    dir: "{{.API_ROOT}}"
     cmds:
-      - cd api && air -c .air.toml
+      - air -c .air.toml -- -env ../.env
   dev:www:
     desc: start dev www server
     dir: "{{.WWW_ROOT}}" 

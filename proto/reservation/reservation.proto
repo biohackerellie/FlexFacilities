@@ -104,6 +104,7 @@ service ReservationService {
 }
 
 
+
 message UpdateReservationStatusRequest {
   int64 id = 1;
   string status = 2;

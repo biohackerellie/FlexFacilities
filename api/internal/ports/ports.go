@@ -55,6 +55,7 @@ type ReservationStore interface {
 	GetDates(ctx context.Context, ids []int64) ([]models.ReservationDate, error)
 	GetFees(ctx context.Context, ids []int64) ([]models.ReservationFee, error)
 	GetFutureDates(ctx context.Context) ([]models.ReservationDate, error)
+	Aggregate(ctx context.Context) ([]models.Aggregate, error)
 }
 
 type AuthService interface {

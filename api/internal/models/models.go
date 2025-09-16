@@ -281,8 +281,6 @@ func (b *BuildingWithFacilities) ToProto() *pbFacilities.BuildingWithFacilities 
 type Facility struct {
 	ID               int64              `db:"id" json:"id"`
 	Name             string             `db:"name" json:"name"`
-	Building         string             `db:"building" json:"building"`
-	Address          string             `db:"address" json:"address"`
 	ImagePath        *string            `db:"image_path" json:"image_path"`
 	Capacity         *int64             `db:"capacity" json:"capacity"`
 	CreatedAt        pgtype.Timestamptz `db:"created_at" json:"created_at"`
@@ -295,8 +293,6 @@ func (f *Facility) ToProto() *pbFacilities.Facility {
 	return &pbFacilities.Facility{
 		Id:               f.ID,
 		Name:             f.Name,
-		Building:         f.Building,
-		Address:          f.Address,
 		ImagePath:        f.ImagePath,
 		Capacity:         f.Capacity,
 		CreatedAt:        utils.PgTimestamptzToString(f.CreatedAt),
@@ -309,8 +305,6 @@ func ToFacility(f *pbFacilities.Facility) *Facility {
 	return &Facility{
 		ID:               f.Id,
 		Name:             f.Name,
-		Building:         f.Building,
-		Address:          f.Address,
 		ImagePath:        f.ImagePath,
 		Capacity:         f.Capacity,
 		CreatedAt:        utils.StringToPgTimestamptz(f.CreatedAt),
@@ -685,4 +679,10 @@ type VerificationToken struct {
 	Identifier string             `db:"identifier" json:"identifier"`
 	Token      string             `db:"token" json:"token"`
 	Expires    pgtype.Timestamptz `db:"expires" json:"expires"`
+}
+
+type Aggregate struct {
+	MonthStart   time.Time `db:"month_start"`
+	BuildingName string    `db:"building_name"`
+	Count        int       `db:"count"`
 }

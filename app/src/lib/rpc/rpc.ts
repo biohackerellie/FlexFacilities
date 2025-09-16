@@ -11,6 +11,7 @@ import {
   ReservationService,
   UsersService,
 } from './proto';
+import { UtilityService } from './proto/utility/utility_pb';
 
 export class RPC {
   constructor(private transport: Transport) {}
@@ -43,6 +44,9 @@ export class RPC {
 
   reservations() {
     return this.getWrapped(ReservationService);
+  }
+  utility() {
+    return this.getWrapped(UtilityService);
   }
 }
 

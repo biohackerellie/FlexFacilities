@@ -125,3 +125,13 @@ export async function DeleteDates(ids: bigint[]) {
   }
   revalidateTag('reservations');
 }
+
+export async function AggregateChartData() {
+  const { data, error } = await client.utility().aggregateChartData({});
+
+  if (error) {
+    logger.error('Error fetching aggregate chart data', { 'error ': error });
+    throw error;
+  }
+  return data;
+}

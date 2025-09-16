@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
 import { Skeleton } from '@/components/ui/skeleton';
-import { api } from '@/trpc/server';
+import { client } from '@/lib/rpc';
 
 export default async function facilityEditForm({
   params,
@@ -14,17 +14,11 @@ export default async function facilityEditForm({
   };
 }) {
   const Forms = dynamic(() => import('./forms'));
-  const data = await api.facility.byId({ id: parseInt(params.id, 10) });
-  if (!data) return notFound();
-  const { name, address, building, capacity, imagePath } = data;
-
-  const FacilityCategories = data.Category.map((category) => {
-    return {
-      id: category.id,
-      name: category.name,
-      price: category.price,
-    };
-  });
+  const { data, error } = await client
+    .facilities()
+    .getFacility({ id: BigInt(params.id) });
+  if (!data || error) return notFound();
+  const facility = data?.facility;
 
   const id = parseInt(params.id, 10);
 

@@ -25,14 +25,12 @@ type Facility struct {
 	state            protoimpl.MessageState `protogen:"open.v1"`
 	Id               int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	Name             string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Building         string                 `protobuf:"bytes,3,opt,name=building,proto3" json:"building,omitempty"`
-	Address          string                 `protobuf:"bytes,4,opt,name=address,proto3" json:"address,omitempty"`
-	ImagePath        *string                `protobuf:"bytes,5,opt,name=image_path,json=imagePath,proto3,oneof" json:"image_path,omitempty"`
-	Capacity         *int64                 `protobuf:"varint,6,opt,name=capacity,proto3,oneof" json:"capacity,omitempty"`
-	CreatedAt        string                 `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"` // RFC3339 string
-	UpdatedAt        string                 `protobuf:"bytes,8,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"` // RFC3339 string
-	GoogleCalendarId string                 `protobuf:"bytes,9,opt,name=google_calendar_id,json=googleCalendarId,proto3" json:"google_calendar_id,omitempty"`
-	BuildingId       *int64                 `protobuf:"varint,10,opt,name=building_id,json=buildingId,proto3,oneof" json:"building_id,omitempty"`
+	ImagePath        *string                `protobuf:"bytes,3,opt,name=image_path,json=imagePath,proto3,oneof" json:"image_path,omitempty"`
+	Capacity         *int64                 `protobuf:"varint,4,opt,name=capacity,proto3,oneof" json:"capacity,omitempty"`
+	CreatedAt        string                 `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"` // RFC3339 string
+	UpdatedAt        string                 `protobuf:"bytes,6,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"` // RFC3339 string
+	GoogleCalendarId string                 `protobuf:"bytes,7,opt,name=google_calendar_id,json=googleCalendarId,proto3" json:"google_calendar_id,omitempty"`
+	BuildingId       *int64                 `protobuf:"varint,8,opt,name=building_id,json=buildingId,proto3,oneof" json:"building_id,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -77,20 +75,6 @@ func (x *Facility) GetId() int64 {
 func (x *Facility) GetName() string {
 	if x != nil {
 		return x.Name
-	}
-	return ""
-}
-
-func (x *Facility) GetBuilding() string {
-	if x != nil {
-		return x.Building
-	}
-	return ""
-}
-
-func (x *Facility) GetAddress() string {
-	if x != nil {
-		return x.Address
 	}
 	return ""
 }
@@ -1537,22 +1521,19 @@ var File_proto_facilities_facilities_proto protoreflect.FileDescriptor
 
 const file_proto_facilities_facilities_proto_rawDesc = "" +
 	"\n" +
-	"!proto/facilities/facilities.proto\x12\x0eapi.facilities\"\xe7\x02\n" +
+	"!proto/facilities/facilities.proto\x12\x0eapi.facilities\"\xb1\x02\n" +
 	"\bFacility\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
-	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1a\n" +
-	"\bbuilding\x18\x03 \x01(\tR\bbuilding\x12\x18\n" +
-	"\aaddress\x18\x04 \x01(\tR\aaddress\x12\"\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12\"\n" +
 	"\n" +
-	"image_path\x18\x05 \x01(\tH\x00R\timagePath\x88\x01\x01\x12\x1f\n" +
-	"\bcapacity\x18\x06 \x01(\x03H\x01R\bcapacity\x88\x01\x01\x12\x1d\n" +
+	"image_path\x18\x03 \x01(\tH\x00R\timagePath\x88\x01\x01\x12\x1f\n" +
+	"\bcapacity\x18\x04 \x01(\x03H\x01R\bcapacity\x88\x01\x01\x12\x1d\n" +
 	"\n" +
-	"created_at\x18\a \x01(\tR\tcreatedAt\x12\x1d\n" +
+	"created_at\x18\x05 \x01(\tR\tcreatedAt\x12\x1d\n" +
 	"\n" +
-	"updated_at\x18\b \x01(\tR\tupdatedAt\x12,\n" +
-	"\x12google_calendar_id\x18\t \x01(\tR\x10googleCalendarId\x12$\n" +
-	"\vbuilding_id\x18\n" +
-	" \x01(\x03H\x02R\n" +
+	"updated_at\x18\x06 \x01(\tR\tupdatedAt\x12,\n" +
+	"\x12google_calendar_id\x18\a \x01(\tR\x10googleCalendarId\x12$\n" +
+	"\vbuilding_id\x18\b \x01(\x03H\x02R\n" +
 	"buildingId\x88\x01\x01B\r\n" +
 	"\v_image_pathB\v\n" +
 	"\t_capacityB\x0e\n" +

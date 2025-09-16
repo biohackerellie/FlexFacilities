@@ -2,19 +2,27 @@ package main
 
 import (
 	pg "api/internal/db"
+	"api/internal/models"
 	"context"
-	"embed"
 	"flag"
+	"github.com/jackc/pgx/v5/pgtype"
+	"github.com/joho/godotenv"
 	"log"
 	"os"
-	"path/filepath"
-	"strings"
-
-	"github.com/joho/godotenv"
 )
 
-//go:embed sql/*.sql
-var sqlFiles embed.FS
+type Facility struct {
+	ID               int64              `db:"id" json:"id"`
+	Name             string             `db:"name" json:"name"`
+	Building         string             `db:"building" json:"building"`
+	Address          string             `db:"address" json:"address"`
+	ImagePath        *string            `db:"image_path" json:"image_path"`
+	Capacity         *int64             `db:"capacity" json:"capacity"`
+	CreatedAt        pgtype.Timestamptz `db:"created_at" json:"created_at"`
+	UpdatedAt        pgtype.Timestamptz `db:"updated_at" json:"updated_at"`
+	GoogleCalendarID string             `db:"google_calendar_id" json:"google_calendar_id"`
+	BuildingID       *int64             `db:"building_id" json:"building_id"`
+}
 
 func main() {
 	envPath := flag.String("env", "", "path to env file")
@@ -28,21 +36,29 @@ func main() {
 	ctx := context.Background()
 	db := pg.NewDB(ctx, os.Getenv("DATABASE_URL"))
 	defer db.Close()
-	entries, err := sqlFiles.ReadDir("sql")
+	var facilities []Facility
+	err := db.SelectContext(ctx, &facilities, "SELECT * FROM facility")
 	if err != nil {
 		log.Fatal(err)
 	}
-	for _, entry := range entries {
-		if !strings.HasSuffix(entry.Name(), ".sql") {
-			continue
-		}
-		log.Printf("Applying %s\n", entry.Name())
-		content, err := sqlFiles.ReadFile(filepath.Join("sql", entry.Name()))
-		if err != nil {
-			log.Fatal(err)
-		}
-		if _, err := db.ExecContext(ctx, string(content)); err != nil {
-			log.Fatal(err)
+	var buildings []models.Building
+
+	err = db.SelectContext(ctx, &buildings, "SELECT * FROM building")
+	if err != nil {
+		log.Fatal(err)
+	}
+	// map facilities to buildings by name
+	buildingMap := make(map[string]*int64)
+	for _, building := range buildings {
+		buildingMap[building.Name] = &building.ID
+	}
+	for _, facility := range facilities {
+		if _, ok := buildingMap[facility.Building]; ok {
+			facility.BuildingID = buildingMap[facility.Building]
+			_, err := db.ExecContext(ctx, "UPDATE facility SET building_id = $1 WHERE id = $2", facility.BuildingID, facility.ID)
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
 	}
 	log.Println("Done")
