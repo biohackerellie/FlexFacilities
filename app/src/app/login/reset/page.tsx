@@ -1,6 +1,4 @@
-import React from "react";
-
-import ResetPassword from "./form";
+import ResetPassword from './form';
 
 export default function ResetPasswordPage() {
   return (

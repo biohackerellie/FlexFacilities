@@ -1,5 +1,5 @@
 import * as React from 'react';
-import type { FullReservation, User, Category } from '@/lib/types';
+import type { Category, FullReservation, User } from '@/lib/types';
 
 export interface ReservationContext {
   reservation: FullReservation;

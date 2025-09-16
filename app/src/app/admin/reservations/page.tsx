@@ -1,13 +1,11 @@
-import React from "react";
-
-import { DataTable } from "@/components/ui/tables";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { DataTable } from '@/components/ui/tables';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   mapPastReservations,
   mapReservations,
-} from "@/functions/calculations/tableData";
-import { api } from "@/trpc/server";
-import { columns } from "./columns";
+} from '@/functions/calculations/tableData';
+import { api } from '@/trpc/server';
+import { columns } from './columns';
 
 async function getReservations() {
   const data = await api.reservation.all();

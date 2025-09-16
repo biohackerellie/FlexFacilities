@@ -1,8 +1,8 @@
 'use server';
 
-import { client } from './rpc';
-import { logger } from './logger';
 import { unstable_cacheTag as cacheTag } from 'next/cache';
+import { logger } from './logger';
+import { client } from './rpc';
 import { Session, UserRole } from './types';
 
 function parseRole(role: string): UserRole {

@@ -1,6 +1,6 @@
 'use client';
 import * as React from 'react';
-import type { Reservation, User, Facility, ReservationDate } from '@/lib/types';
+import type { Facility, Reservation, ReservationDate, User } from '@/lib/types';
 
 interface ReservationContext {
   reservation: Reservation;

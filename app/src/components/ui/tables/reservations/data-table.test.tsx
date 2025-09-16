@@ -1,24 +1,24 @@
-import { render, screen } from "@testing-library/react";
-import { describe, expect, test } from "vitest";
+import { render, screen } from '@testing-library/react';
+import { describe, expect, test } from 'vitest';
 
-import { DataTable } from "./data-table";
+import { DataTable } from './data-table';
 
-describe("DataTable", () => {
+describe('DataTable', () => {
   const columns = [
-    { header: "Name", cell: (data: any) => data.name },
-    { header: "Age", cell: (data: any) => data.age },
+    { header: 'Name', cell: (data: any) => data.name },
+    { header: 'Age', cell: (data: any) => data.age },
   ];
 
   const data = [
-    { name: "John Doe", age: 25 },
-    { name: "Jane Smith", age: 30 },
+    { name: 'John Doe', age: 25 },
+    { name: 'Jane Smith', age: 30 },
   ];
 
-  test("renders table headers correctly", () => {
+  test('renders table headers correctly', () => {
     render(<DataTable columns={columns} data={data} />);
 
-    const nameHeader = screen.getByText("Name");
-    const ageHeader = screen.getByText("Age");
+    const nameHeader = screen.getByText('Name');
+    const ageHeader = screen.getByText('Age');
 
     expect(nameHeader).toBeDefined();
     expect(ageHeader).toBeDefined();
@@ -37,7 +37,7 @@ describe("DataTable", () => {
   test("renders 'No results' message when data is empty", () => {
     render(<DataTable columns={columns} data={[]} />);
 
-    const noResultsMessage = screen.getByText("No results.");
+    const noResultsMessage = screen.getByText('No results.');
 
     expect(noResultsMessage).toBeDefined();
   });

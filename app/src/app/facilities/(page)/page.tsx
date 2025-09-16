@@ -1,12 +1,11 @@
+import { notFound } from 'next/navigation';
 import * as React from 'react';
 import LoadingScreen from '@/components/ui/loadingScreen';
-import CardLayout from './cardLayout';
-import { client } from '@/lib/rpc';
-
 import { Separator } from '@/components/ui/separator';
 import { SidebarSearchParamsNav } from '@/components/ui/sidebar-searchParams';
-import { notFound } from 'next/navigation';
 import { logger } from '@/lib/logger';
+import { client } from '@/lib/rpc';
+import CardLayout from './cardLayout';
 
 async function getData() {
   'use cache';

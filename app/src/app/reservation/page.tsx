@@ -1,10 +1,8 @@
-import { Suspense } from 'react';
 import { redirect } from 'next/navigation';
-
-import { auth } from '@/lib/auth';
-
+import { Suspense } from 'react';
 import ReservationForm from '@/components/forms/reservationForm2';
 import { Skeleton } from '@/components/ui/skeleton';
+import { auth } from '@/lib/auth';
 
 const Loading = () => {
   return (

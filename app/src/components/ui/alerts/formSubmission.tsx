@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation';
+import * as React from 'react';
 
 import {
   AlertDialog,
@@ -12,8 +12,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
-} from "./alert-dialog";
+} from './alert-dialog';
 
 interface Props {
   isOpen: boolean;
@@ -35,13 +34,13 @@ export default function SubmissionDialog() {
         <AlertDialogFooter>
           Submit another request?
           <AlertDialogCancel
-            onClick={() => router.push("/")}
+            onClick={() => router.push('/')}
             className="bg-primary"
           >
             No
           </AlertDialogCancel>
           <AlertDialogAction
-            onClick={() => router.push("/reservation")}
+            onClick={() => router.push('/reservation')}
             className="bg-primary"
           >
             Yes

@@ -1,8 +1,8 @@
-import * as React from "react";
+import * as React from 'react';
 
-import { DataTable } from "@/components/ui/tables/reservations/data-table";
-import { api } from "@/trpc/server";
-import columns from "./columns";
+import { DataTable } from '@/components/ui/tables/reservations/data-table';
+import { api } from '@/trpc/server';
+import columns from './columns';
 
 async function GetData() {
   const data = await api.user.GetAllEmailPrefs();

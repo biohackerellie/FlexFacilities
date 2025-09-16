@@ -1,5 +1,5 @@
-import * as React from 'react';
 import { notFound } from 'next/navigation';
+import * as React from 'react';
 
 import SmallCalendar from '@/components/calendar/smallCalendar';
 import { GetEvents } from '@/functions/events/googleAPI';

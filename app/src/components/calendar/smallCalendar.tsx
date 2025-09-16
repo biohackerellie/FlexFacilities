@@ -1,17 +1,16 @@
-"use client";
+'use client';
 
-import type { Event } from "react-big-calendar";
-import * as React from "react";
-import moment from "moment";
-import { Calendar, momentLocalizer } from "react-big-calendar";
+import moment from 'moment';
+import * as React from 'react';
+import type { Event } from 'react-big-calendar';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
 
-import "react-big-calendar/lib/css/react-big-calendar.css";
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 
-import type { GoogleEvents } from "@/lib/types";
-import { useTheme } from "next-themes";
-import Modal from "react-modal";
-
-import { GetEvents } from "@/functions/events/googleAPI";
+import { useTheme } from 'next-themes';
+import Modal from 'react-modal';
+import { GetEvents } from '@/functions/events/googleAPI';
+import type { GoogleEvents } from '@/lib/types';
 
 const localizer = momentLocalizer(moment);
 
@@ -27,9 +26,9 @@ export default function SmallCalendar({ promise }: Props) {
   const events = React.use(promise);
   const mappedEvents: MappedEvent[] = events.map((event: GoogleEvents) => {
     const facility =
-      (event.location ?? "Event-Unknown").split("-")[0] || "Event";
+      (event.location ?? 'Event-Unknown').split('-')[0] || 'Event';
     return {
-      title: event?.title || "Event",
+      title: event?.title || 'Event',
       start: new Date(event?.start as unknown as string),
       end: new Date(event?.end as unknown as string),
       building: facility,
@@ -38,14 +37,14 @@ export default function SmallCalendar({ promise }: Props) {
 
   const { theme } = useTheme();
 
-  const isDarkMode = theme === "dark";
+  const isDarkMode = theme === 'dark';
   const calendarStyle = {
     height: 450,
     width: 500,
     border: 2,
     ...(isDarkMode && {
-      WebkitTextFillColor: "white",
-      WebkitTextStrokeColor: "white",
+      WebkitTextFillColor: 'white',
+      WebkitTextStrokeColor: 'white',
     }),
   };
 
@@ -61,9 +60,9 @@ export default function SmallCalendar({ promise }: Props) {
 
   React.useEffect(() => {
     if (selectedEvent) {
-      document.body.classList.add("modal-open");
+      document.body.classList.add('modal-open');
     } else {
-      document.body.classList.remove("modal-open");
+      document.body.classList.remove('modal-open');
     }
   }, [selectedEvent]);
 
@@ -93,11 +92,11 @@ export default function SmallCalendar({ promise }: Props) {
             <h4 className="mb-2 text-lg">{selectedEvent?.building}</h4>
 
             <p className="mb-2">
-              {" "}
+              {' '}
               Starts at {selectedEvent?.start?.toLocaleString()}
             </p>
             <p className="mb-4">
-              {" "}
+              {' '}
               Ends at {selectedEvent?.end?.toLocaleString()}
             </p>
             <button

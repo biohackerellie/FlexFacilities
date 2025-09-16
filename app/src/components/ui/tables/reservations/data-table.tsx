@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import type { ColumnDef, SortingState } from "@tanstack/react-table";
-import * as React from "react";
+import type { ColumnDef, SortingState } from '@tanstack/react-table';
 import {
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table";
+} from '@tanstack/react-table';
+import * as React from 'react';
 
-import { Button } from "@/components/ui/buttons";
+import { Button } from '@/components/ui/buttons';
 import {
   Table,
   TableBody,
@@ -18,7 +18,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from '@/components/ui/table';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -29,9 +29,9 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  "use no memo";
+  'use no memo';
   const [sorting, setSorting] = React.useState<SortingState>([
-    { id: "ReservationDate", desc: false },
+    { id: 'ReservationDate', desc: false },
   ]);
   const table = useReactTable({
     data,
@@ -72,7 +72,7 @@ export function DataTable<TData, TValue>({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
+                  data-state={row.getIsSelected() && 'selected'}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

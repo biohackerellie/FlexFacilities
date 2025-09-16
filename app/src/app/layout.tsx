@@ -1,6 +1,6 @@
-import * as React from 'react';
 import { GeistMono } from 'geist/font/mono';
 import { GeistSans } from 'geist/font/sans';
+import * as React from 'react';
 
 import { ThemeProviders } from '@/components/contexts/providers/ThemeProvider';
 import Footer from '@/components/ui/footer';

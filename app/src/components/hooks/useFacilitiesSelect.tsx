@@ -1,5 +1,5 @@
-import type { Facility } from "@/lib/types";
-import React, { useState } from "react";
+import React, { useState } from 'react';
+import type { Facility } from '@/lib/types';
 
 interface FacilitySelectProps {
   facilities: Facility[];
@@ -24,9 +24,9 @@ export default function FacilitySelect({
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
     const facility = facilities.find(
-      (f) => f.id === parseInt(event.target.value),
+      (f) => f.id === parseInt(event.target.value, 10),
     );
-    if (facility && typeof onFacilitySelect === "function") {
+    if (facility && typeof onFacilitySelect === 'function') {
       onFacilitySelect(facility);
     }
   };

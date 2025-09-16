@@ -1,13 +1,9 @@
-import React, { Suspense } from 'react';
-import { notFound } from 'next/navigation';
 import { ReloadIcon } from '@radix-ui/react-icons';
-
+import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
+import { Separator } from '@/components/ui/separator';
 import { auth } from '@/lib/auth';
 import { client } from '@/lib/rpc';
-
-import { Separator } from '@/components/ui/separator';
-import { DataTable } from '@/components/ui/tables';
-import { columns } from './columns';
 
 async function getData(id: string) {
   'use cache';

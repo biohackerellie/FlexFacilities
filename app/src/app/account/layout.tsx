@@ -1,9 +1,7 @@
 import React from 'react';
-
-import { userSideBar } from '@/lib/validators/constants';
-
 import { Separator } from '@/components/ui/separator';
 import { SidebarNav } from '@/components/ui/sidebar-nav';
+import { userSideBar } from '@/lib/validators/constants';
 
 export default function accountLayout({
   children,

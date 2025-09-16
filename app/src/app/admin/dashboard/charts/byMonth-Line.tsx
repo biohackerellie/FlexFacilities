@@ -1,7 +1,6 @@
-"use client";
+'use client';
 
-import type { ChartData } from "@/lib/types";
-import * as React from "react";
+import * as React from 'react';
 import {
   CartesianGrid,
   Legend,
@@ -11,18 +10,16 @@ import {
   Tooltip,
   XAxis,
   YAxis,
-} from "recharts";
-
-import aggregateChartData from "@/functions/calculations/reservsByMonth";
-import { ReservationWithAll } from "@/lib/types";
+} from 'recharts';
+import aggregateChartData from '@/functions/calculations/reservsByMonth';
 
 const buildingColors = [
-  { building: "West Elementary", color: "#800080" },
-  { building: "South Elementary", color: "#0000FF" },
-  { building: "Laurel Middle School", color: "#008000" },
-  { building: "Laurel High School", color: "#87CEEB" },
-  { building: "Graff Elementary", color: "#FFC0CB" },
-  { building: "Administration Building", color: "#FFA500" },
+  { building: 'West Elementary', color: '#800080' },
+  { building: 'South Elementary', color: '#0000FF' },
+  { building: 'Laurel Middle School', color: '#008000' },
+  { building: 'Laurel High School', color: '#87CEEB' },
+  { building: 'Graff Elementary', color: '#FFC0CB' },
+  { building: 'Administration Building', color: '#FFA500' },
 ];
 
 export default function ByMonthLine({

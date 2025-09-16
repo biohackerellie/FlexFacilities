@@ -1,9 +1,5 @@
-import React from "react";
-
-import { Button } from "../buttons/button";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -11,7 +7,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "./alert-dialog";
+} from './alert-dialog';
 
 export default function Contact() {
   return (
@@ -35,7 +31,7 @@ export default function Contact() {
               href="mailto:lpsactivities@laurel.k12.mt.us"
             >
               lpsactivities@laurel.k12.mt.us
-            </a>{" "}
+            </a>{' '}
             <br />
             or call the Laurel High School Office:
             <br />

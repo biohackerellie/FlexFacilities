@@ -1,17 +1,16 @@
-"use client";
+'use client';
 
-import type * as z from "zod";
-import * as React from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Check, ChevronsUpDown, Loader2, ScrollText } from "lucide-react";
-import { useFieldArray, useForm } from "react-hook-form";
-import { toast } from "sonner";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { formSchema } from '@local/validators';
+import { Loader2, ScrollText } from 'lucide-react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import * as React from 'react';
+import { useFieldArray, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import type * as z from 'zod';
 
-import { formSchema } from "@local/validators";
-
-import { ModalInput } from "@/components/forms/recurringModal";
-import useHandleAddDate from "@/components/hooks/useHandleAddDate";
+import { ModalInput } from '@/components/forms/recurringModal';
+import useHandleAddDate from '@/components/hooks/useHandleAddDate';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,16 +21,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/buttons";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command";
+} from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/buttons';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Form,
   FormControl,
@@ -40,59 +32,53 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import submitReservation from "@/functions/reservations/createReservation";
-import { categoryOptions } from "@/lib/formOptions";
-import { cn } from "@/lib/utils";
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import submitReservation from '@/functions/reservations/createReservation';
+import { categoryOptions } from '@/lib/formOptions';
 
 type formValues = z.infer<typeof formSchema>;
 
 const locations = [
-  { label: "Administration Board Room", value: "1" },
-  { label: "Graff Classroom", value: "2" },
-  { label: "Graff Field", value: "3" },
-  { label: "Graff Gym", value: "4 " },
-  { label: "Graff Cafeteria", value: "5" },
-  { label: "Graff Library", value: "6" },
-  { label: "LHS Auditorium", value: "7" },
-  { label: "LHS Band Room", value: "8" },
-  { label: "LHS Choir Room", value: "9" },
-  { label: "LHS Classroom-FACS", value: "10" },
-  { label: "LHS Classroom", value: "11" },
-  { label: "LHS Depot", value: "12" },
-  { label: "LHS Gym", value: "13" },
-  { label: "LHS Library", value: "14" },
-  { label: "LHS Parking Lot", value: "15" },
-  { label: "LHS Practice Field", value: "16" },
-  { label: "LMS Band Room", value: "17" },
-  { label: "LMS Classroom FACS", value: "18" },
-  { label: "LMS Classroom", value: "19" },
-  { label: "LMS Commons", value: "20" },
-  { label: "LMS Gym", value: "21" },
-  { label: "LMS Library", value: "22" },
-  { label: "LMS Mogan Field", value: "23" },
-  { label: "South Elementary Cafeteria", value: "24" },
-  { label: "South Elementary Baseball Field", value: "25" },
-  { label: "South Elementary Classroom", value: "26" },
-  { label: "Laurel Stadium", value: "27" },
-  { label: "Laurel Stadium Warming Rooms", value: "28" },
-  { label: "West Elementary Baseball Field", value: "29" },
-  { label: "West Elementary Classroom", value: "30" },
-  { label: "West Elementary Gym", value: "31" },
+  { label: 'Administration Board Room', value: '1' },
+  { label: 'Graff Classroom', value: '2' },
+  { label: 'Graff Field', value: '3' },
+  { label: 'Graff Gym', value: '4 ' },
+  { label: 'Graff Cafeteria', value: '5' },
+  { label: 'Graff Library', value: '6' },
+  { label: 'LHS Auditorium', value: '7' },
+  { label: 'LHS Band Room', value: '8' },
+  { label: 'LHS Choir Room', value: '9' },
+  { label: 'LHS Classroom-FACS', value: '10' },
+  { label: 'LHS Classroom', value: '11' },
+  { label: 'LHS Depot', value: '12' },
+  { label: 'LHS Gym', value: '13' },
+  { label: 'LHS Library', value: '14' },
+  { label: 'LHS Parking Lot', value: '15' },
+  { label: 'LHS Practice Field', value: '16' },
+  { label: 'LMS Band Room', value: '17' },
+  { label: 'LMS Classroom FACS', value: '18' },
+  { label: 'LMS Classroom', value: '19' },
+  { label: 'LMS Commons', value: '20' },
+  { label: 'LMS Gym', value: '21' },
+  { label: 'LMS Library', value: '22' },
+  { label: 'LMS Mogan Field', value: '23' },
+  { label: 'South Elementary Cafeteria', value: '24' },
+  { label: 'South Elementary Baseball Field', value: '25' },
+  { label: 'South Elementary Classroom', value: '26' },
+  { label: 'Laurel Stadium', value: '27' },
+  { label: 'Laurel Stadium Warming Rooms', value: '28' },
+  { label: 'West Elementary Baseball Field', value: '29' },
+  { label: 'West Elementary Classroom', value: '30' },
+  { label: 'West Elementary Gym', value: '31' },
 ];
 
 export default function ReservationForm(props: {
@@ -106,12 +92,12 @@ export default function ReservationForm(props: {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const hideModal = () => setIsVisible(false);
 
-  let selectedFacility = "0";
+  let selectedFacility = '0';
   const router = useRouter();
 
   const searchParams = useSearchParams();
-  if (searchParams.has("id")) {
-    selectedFacility = searchParams.get("id")!;
+  if (searchParams.has('id')) {
+    selectedFacility = searchParams.get('id')!;
   }
   const form = useForm<formValues>({
     resolver: zodResolver(formSchema),
@@ -121,34 +107,34 @@ export default function ReservationForm(props: {
       facility: selectedFacility,
       techSupport: false,
       doorAccess: false,
-      category: "",
-      techDetails: "",
-      doorsDetails: "",
+      category: '',
+      techDetails: '',
+      doorsDetails: '',
     },
   });
   const control = form.control;
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "events",
+    name: 'events',
     rules: { required: true },
   });
   //@ts-expect-error - TS doesn't like the function signature
   const handleAddDate = useHandleAddDate(append);
-  const watchTechSupport = form.watch("techSupport", false);
-  const watchDoorAccess = form.watch("doorAccess", false);
+  const watchTechSupport = form.watch('techSupport', false);
+  const watchDoorAccess = form.watch('doorAccess', false);
 
   const onSubmit = (data: formValues) => {
     startRequestTransition(() => {
       toast.promise(submitReservation(data), {
-        position: "top-center",
-        loading: "Submitting...",
+        position: 'top-center',
+        loading: 'Submitting...',
         success: () => {
           setOpen(true);
-          return "Request Submitted!";
+          return 'Request Submitted!';
         },
-        error: (error) => {
-          return "something went wrong";
+        error: (_error) => {
+          return 'something went wrong';
         },
       });
     });
@@ -163,7 +149,7 @@ export default function ReservationForm(props: {
           <div>
             <FormField
               control={form.control}
-              name={"eventName"}
+              name={'eventName'}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-lg">Event Name</FormLabel>
@@ -186,7 +172,7 @@ export default function ReservationForm(props: {
           <div className="flex flex-col justify-between gap-y-2 sm:flex-row">
             <FormField
               control={form.control}
-              name={"name"}
+              name={'name'}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-lg">
@@ -207,7 +193,7 @@ export default function ReservationForm(props: {
             />
             <FormField
               control={form.control}
-              name={"phone"}
+              name={'phone'}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-lg">Phone Number</FormLabel>
@@ -226,7 +212,7 @@ export default function ReservationForm(props: {
             />
             <FormField
               control={form.control}
-              name={"email"}
+              name={'email'}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-lg">Email</FormLabel>
@@ -243,7 +229,7 @@ export default function ReservationForm(props: {
           </div>
           <FormField
             control={form.control}
-            name={"details"}
+            name={'details'}
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-lg">Event Description</FormLabel>
@@ -265,14 +251,14 @@ export default function ReservationForm(props: {
             <div className="flex justify-center">
               <Button
                 className="h-8 hover:cursor-pointer"
-                size={"sm"}
+                size={'sm'}
                 variant="outline"
                 type="button"
                 onClick={() =>
                   append({
-                    startDate: "",
-                    startTime: "",
-                    endTime: "",
+                    startDate: '',
+                    startTime: '',
+                    endTime: '',
                   })
                 }
               >
@@ -282,7 +268,7 @@ export default function ReservationForm(props: {
               <Button
                 className="h-8 hover:cursor-pointer"
                 variant="outline"
-                size={"sm"}
+                size={'sm'}
                 type="button"
                 onClick={() => remove()}
               >
@@ -369,7 +355,7 @@ export default function ReservationForm(props: {
             <div className="text-center sm:text-start">
               <FormField
                 control={form.control}
-                name={"facility"}
+                name={'facility'}
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-center text-lg sm:text-start">
@@ -386,7 +372,7 @@ export default function ReservationForm(props: {
                             ? locations.find(
                                 (location) => location.value === field.value,
                               )?.label
-                            : "Select a Facility"}
+                            : 'Select a Facility'}
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent className="h-[180px]">
@@ -436,12 +422,12 @@ export default function ReservationForm(props: {
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
                           <p className="flex">
-                            Category Descriptions{" "}
+                            Category Descriptions{' '}
                             <ScrollText
                               className="animate-pulse cursor-pointer hover:stroke-blue-500"
                               size={16}
                               strokeWidth={1.5}
-                            />{" "}
+                            />{' '}
                           </p>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
@@ -504,7 +490,7 @@ export default function ReservationForm(props: {
             <div>
               <FormField
                 control={form.control}
-                name={"techSupport"}
+                name={'techSupport'}
                 render={({ field }) => (
                   <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                     <FormControl>
@@ -525,7 +511,7 @@ export default function ReservationForm(props: {
             {watchTechSupport && (
               <FormField
                 control={form.control}
-                name={"techDetails"}
+                name={'techDetails'}
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
@@ -544,7 +530,7 @@ export default function ReservationForm(props: {
             <div>
               <FormField
                 control={form.control}
-                name={"doorAccess"}
+                name={'doorAccess'}
                 render={({ field }) => (
                   <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                     <FormControl>
@@ -566,7 +552,7 @@ export default function ReservationForm(props: {
               {watchDoorAccess && (
                 <FormField
                   control={form.control}
-                  name={"doorsDetails"}
+                  name={'doorsDetails'}
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
@@ -603,7 +589,7 @@ export default function ReservationForm(props: {
           </AlertDialogDescription>
           <AlertDialogFooter>
             Submit another request?
-            <AlertDialogCancel onClick={() => router.push("/")}>
+            <AlertDialogCancel onClick={() => router.push('/')}>
               No
             </AlertDialogCancel>
             <AlertDialogAction onClick={() => location.reload()}>

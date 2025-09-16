@@ -1,10 +1,9 @@
-import React, { Suspense } from "react";
+import { buildingSideBar2 } from '@local/validators/constants';
+import React, { Suspense } from 'react';
 
-import { buildingSideBar2 } from "@local/validators/constants";
-
-import { Separator } from "@/components/ui/separator";
-import { SidebarSearchParamsNav } from "@/components/ui/sidebar-searchParams";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Separator } from '@/components/ui/separator';
+import { SidebarSearchParamsNav } from '@/components/ui/sidebar-searchParams';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function calendarLayout({
   children,

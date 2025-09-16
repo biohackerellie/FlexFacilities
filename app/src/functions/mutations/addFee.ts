@@ -1,10 +1,8 @@
 'use server';
 
-import { revalidateTag } from 'next/cache';
-import { eq, sql } from 'drizzle-orm';
-
 import { db } from '@local/db/client';
 import { ReservationFees } from '@local/db/schema';
+import { revalidateTag } from 'next/cache';
 
 interface IForminput {
   additionalFees: any;
@@ -17,7 +15,7 @@ interface IForminput {
 export default async function addFee(data: IForminput, id: any) {
   try {
     await db.insert(ReservationFees).values({
-      additionalFees: parseInt(data.additionalFees),
+      additionalFees: parseInt(data.additionalFees, 10),
       feesType: data.feesType,
       reservationId: id,
     });

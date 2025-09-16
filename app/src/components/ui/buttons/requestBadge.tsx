@@ -1,9 +1,7 @@
-import * as React from 'react';
-
 import { client } from '@/lib/rpc';
 import { Badge } from '../badge';
 
-export default async function RequestBadge(props: { requestCount: number }) {
+export default async function RequestBadge(_props: { requestCount: number }) {
   const { data: requestCount, error } = await client
     .reservation()
     .requestCount({});

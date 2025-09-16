@@ -2,20 +2,31 @@
 // @generated from file proto/auth/auth.proto (package api.auth, syntax proto3)
 /* eslint-disable */
 
-import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
-import { fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
-import type { Message } from "@bufbuild/protobuf";
+import type { Message } from '@bufbuild/protobuf';
+import type {
+  GenFile,
+  GenMessage,
+  GenService,
+} from '@bufbuild/protobuf/codegenv2';
+import {
+  fileDesc,
+  messageDesc,
+  serviceDesc,
+} from '@bufbuild/protobuf/codegenv2';
 
 /**
  * Describes the file proto/auth/auth.proto.
  */
-export const file_proto_auth_auth: GenFile = /*@__PURE__*/
-  fileDesc("ChVwcm90by9hdXRoL2F1dGgucHJvdG8SCGFwaS5hdXRoIncKB1Nlc3Npb24SCgoCaWQYASABKAkSDwoHdXNlcl9pZBgCIAEoCRIVCg1yZWZyZXNoX3Rva2VuGAMgASgJEhAKCHByb3ZpZGVyGAQgASgJEhIKCmNyZWF0ZWRfYXQYBSABKAkSEgoKZXhwaXJlc19hdBgGIAEoCSITChFHZXRTZXNzaW9uUmVxdWVzdCJzChJHZXRTZXNzaW9uUmVzcG9uc2USEgoKc2Vzc2lvbl9pZBgBIAEoCRIPCgd1c2VyX2lkGAIgASgJEhEKCXVzZXJfbmFtZRgDIAEoCRISCgp1c2VyX2VtYWlsGAQgASgJEhEKCXVzZXJfcm9sZRgFIAEoCSIvCgxMb2dpblJlcXVlc3QSDQoFZW1haWwYASABKAkSEAoIcGFzc3dvcmQYAiABKAkiDwoNTG9naW5SZXNwb25zZSJACg9SZWdpc3RlclJlcXVlc3QSDAoEbmFtZRgBIAEoCRINCgVlbWFpbBgCIAEoCRIQCghwYXNzd29yZBgDIAEoCTLOAQoEQXV0aBJMCgpHZXRTZXNzaW9uEhsuYXBpLmF1dGguR2V0U2Vzc2lvblJlcXVlc3QaHC5hcGkuYXV0aC5HZXRTZXNzaW9uUmVzcG9uc2UiA5ACARI4CgVMb2dpbhIWLmFwaS5hdXRoLkxvZ2luUmVxdWVzdBoXLmFwaS5hdXRoLkxvZ2luUmVzcG9uc2USPgoIUmVnaXN0ZXISGS5hcGkuYXV0aC5SZWdpc3RlclJlcXVlc3QaFy5hcGkuYXV0aC5Mb2dpblJlc3BvbnNlQiVaI2FwaS9pbnRlcm5hbC9wcm90by9hdXRoO2F1dGhzZXJ2aWNlYgZwcm90bzM");
+export const file_proto_auth_auth: GenFile =
+  /*@__PURE__*/
+  fileDesc(
+    'ChVwcm90by9hdXRoL2F1dGgucHJvdG8SCGFwaS5hdXRoIncKB1Nlc3Npb24SCgoCaWQYASABKAkSDwoHdXNlcl9pZBgCIAEoCRIVCg1yZWZyZXNoX3Rva2VuGAMgASgJEhAKCHByb3ZpZGVyGAQgASgJEhIKCmNyZWF0ZWRfYXQYBSABKAkSEgoKZXhwaXJlc19hdBgGIAEoCSITChFHZXRTZXNzaW9uUmVxdWVzdCJzChJHZXRTZXNzaW9uUmVzcG9uc2USEgoKc2Vzc2lvbl9pZBgBIAEoCRIPCgd1c2VyX2lkGAIgASgJEhEKCXVzZXJfbmFtZRgDIAEoCRISCgp1c2VyX2VtYWlsGAQgASgJEhEKCXVzZXJfcm9sZRgFIAEoCSIvCgxMb2dpblJlcXVlc3QSDQoFZW1haWwYASABKAkSEAoIcGFzc3dvcmQYAiABKAkiDwoNTG9naW5SZXNwb25zZSJACg9SZWdpc3RlclJlcXVlc3QSDAoEbmFtZRgBIAEoCRINCgVlbWFpbBgCIAEoCRIQCghwYXNzd29yZBgDIAEoCTLOAQoEQXV0aBJMCgpHZXRTZXNzaW9uEhsuYXBpLmF1dGguR2V0U2Vzc2lvblJlcXVlc3QaHC5hcGkuYXV0aC5HZXRTZXNzaW9uUmVzcG9uc2UiA5ACARI4CgVMb2dpbhIWLmFwaS5hdXRoLkxvZ2luUmVxdWVzdBoXLmFwaS5hdXRoLkxvZ2luUmVzcG9uc2USPgoIUmVnaXN0ZXISGS5hcGkuYXV0aC5SZWdpc3RlclJlcXVlc3QaFy5hcGkuYXV0aC5Mb2dpblJlc3BvbnNlQiVaI2FwaS9pbnRlcm5hbC9wcm90by9hdXRoO2F1dGhzZXJ2aWNlYgZwcm90bzM',
+  );
 
 /**
  * @generated from message api.auth.Session
  */
-export type Session = Message<"api.auth.Session"> & {
+export type Session = Message<'api.auth.Session'> & {
   /**
    * @generated from field: string id = 1;
    */
@@ -51,26 +62,27 @@ export type Session = Message<"api.auth.Session"> & {
  * Describes the message api.auth.Session.
  * Use `create(SessionSchema)` to create a new message.
  */
-export const SessionSchema: GenMessage<Session> = /*@__PURE__*/
+export const SessionSchema: GenMessage<Session> =
+  /*@__PURE__*/
   messageDesc(file_proto_auth_auth, 0);
 
 /**
  * @generated from message api.auth.GetSessionRequest
  */
-export type GetSessionRequest = Message<"api.auth.GetSessionRequest"> & {
-};
+export type GetSessionRequest = Message<'api.auth.GetSessionRequest'> & {};
 
 /**
  * Describes the message api.auth.GetSessionRequest.
  * Use `create(GetSessionRequestSchema)` to create a new message.
  */
-export const GetSessionRequestSchema: GenMessage<GetSessionRequest> = /*@__PURE__*/
+export const GetSessionRequestSchema: GenMessage<GetSessionRequest> =
+  /*@__PURE__*/
   messageDesc(file_proto_auth_auth, 1);
 
 /**
  * @generated from message api.auth.GetSessionResponse
  */
-export type GetSessionResponse = Message<"api.auth.GetSessionResponse"> & {
+export type GetSessionResponse = Message<'api.auth.GetSessionResponse'> & {
   /**
    * @generated from field: string session_id = 1;
    */
@@ -101,13 +113,14 @@ export type GetSessionResponse = Message<"api.auth.GetSessionResponse"> & {
  * Describes the message api.auth.GetSessionResponse.
  * Use `create(GetSessionResponseSchema)` to create a new message.
  */
-export const GetSessionResponseSchema: GenMessage<GetSessionResponse> = /*@__PURE__*/
+export const GetSessionResponseSchema: GenMessage<GetSessionResponse> =
+  /*@__PURE__*/
   messageDesc(file_proto_auth_auth, 2);
 
 /**
  * @generated from message api.auth.LoginRequest
  */
-export type LoginRequest = Message<"api.auth.LoginRequest"> & {
+export type LoginRequest = Message<'api.auth.LoginRequest'> & {
   /**
    * @generated from field: string email = 1;
    */
@@ -123,26 +136,27 @@ export type LoginRequest = Message<"api.auth.LoginRequest"> & {
  * Describes the message api.auth.LoginRequest.
  * Use `create(LoginRequestSchema)` to create a new message.
  */
-export const LoginRequestSchema: GenMessage<LoginRequest> = /*@__PURE__*/
+export const LoginRequestSchema: GenMessage<LoginRequest> =
+  /*@__PURE__*/
   messageDesc(file_proto_auth_auth, 3);
 
 /**
  * @generated from message api.auth.LoginResponse
  */
-export type LoginResponse = Message<"api.auth.LoginResponse"> & {
-};
+export type LoginResponse = Message<'api.auth.LoginResponse'> & {};
 
 /**
  * Describes the message api.auth.LoginResponse.
  * Use `create(LoginResponseSchema)` to create a new message.
  */
-export const LoginResponseSchema: GenMessage<LoginResponse> = /*@__PURE__*/
+export const LoginResponseSchema: GenMessage<LoginResponse> =
+  /*@__PURE__*/
   messageDesc(file_proto_auth_auth, 4);
 
 /**
  * @generated from message api.auth.RegisterRequest
  */
-export type RegisterRequest = Message<"api.auth.RegisterRequest"> & {
+export type RegisterRequest = Message<'api.auth.RegisterRequest'> & {
   /**
    * @generated from field: string name = 1;
    */
@@ -163,7 +177,8 @@ export type RegisterRequest = Message<"api.auth.RegisterRequest"> & {
  * Describes the message api.auth.RegisterRequest.
  * Use `create(RegisterRequestSchema)` to create a new message.
  */
-export const RegisterRequestSchema: GenMessage<RegisterRequest> = /*@__PURE__*/
+export const RegisterRequestSchema: GenMessage<RegisterRequest> =
+  /*@__PURE__*/
   messageDesc(file_proto_auth_auth, 5);
 
 /**
@@ -174,26 +189,24 @@ export const Auth: GenService<{
    * @generated from rpc api.auth.Auth.GetSession
    */
   getSession: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof GetSessionRequestSchema;
     output: typeof GetSessionResponseSchema;
-  },
+  };
   /**
    * @generated from rpc api.auth.Auth.Login
    */
   login: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof LoginRequestSchema;
     output: typeof LoginResponseSchema;
-  },
+  };
   /**
    * @generated from rpc api.auth.Auth.Register
    */
   register: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof RegisterRequestSchema;
     output: typeof LoginResponseSchema;
-  },
-}> = /*@__PURE__*/
-  serviceDesc(file_proto_auth_auth, 0);
-
+  };
+}> = /*@__PURE__*/ serviceDesc(file_proto_auth_auth, 0);

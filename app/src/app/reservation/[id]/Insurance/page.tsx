@@ -1,16 +1,18 @@
-import Link from "next/link";
-import { notFound } from "next/navigation";
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
 
-import { UploadFile } from "@/components/forms/uploadFile";
-import { Button } from "@/components/ui/buttons";
-import { api } from "@/trpc/server";
+import { UploadFile } from '@/components/forms/uploadFile';
+import { Button } from '@/components/ui/buttons';
+import { api } from '@/trpc/server';
 
 export default async function insurancePage({
   params,
 }: {
   params: { id: string };
 }) {
-  const reservation = await api.reservation.byId({ id: parseInt(params.id) });
+  const reservation = await api.reservation.byId({
+    id: parseInt(params.id, 10),
+  });
   if (!reservation) return notFound();
   let link = undefined;
   if (reservation.insuranceLink) {
@@ -58,12 +60,12 @@ export default async function insurancePage({
             </h2>
             <div className="m-3 flex flex-wrap bg-gray-300 p-5 dark:bg-gray-500">
               <h3 className="m-2 mb-5 border-b-2">
-                You may upload your certificate of liability insurance here.{" "}
+                You may upload your certificate of liability insurance here.{' '}
                 <b className="underline decoration-red-500 decoration-8">
-                  Note:{" "}
-                </b>{" "}
-                Your policy must name <strong> Laurel Public Schools </strong>{" "}
-                as an additional insured.{" "}
+                  Note:{' '}
+                </b>{' '}
+                Your policy must name <strong> Laurel Public Schools </strong>{' '}
+                as an additional insured.{' '}
               </h3>
               <div className="w-full">
                 {link && (

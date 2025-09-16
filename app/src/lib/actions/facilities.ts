@@ -1,6 +1,6 @@
 'use server';
-import { client } from '@/lib/rpc';
 import { unstable_cacheTag as cacheTag } from 'next/cache';
+import { client } from '@/lib/rpc';
 import { logger } from '../logger';
 
 export async function getFacility(id: string) {

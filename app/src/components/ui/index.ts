@@ -1,3 +1,3 @@
-import CalendarInfo from "./calendarInfo";
+import CalendarInfo from './calendarInfo';
 
 export { CalendarInfo };

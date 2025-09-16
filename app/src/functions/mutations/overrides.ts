@@ -1,10 +1,9 @@
 'use server';
 
-import { revalidateTag } from 'next/cache';
-import { eq } from 'drizzle-orm';
-
 import { db } from '@local/db/client';
 import { Reservation } from '@local/db/schema';
+import { eq } from 'drizzle-orm';
+import { revalidateTag } from 'next/cache';
 
 import { api } from '@/trpc/server';
 /**
@@ -18,7 +17,7 @@ export async function costChange(id: number, formData: FormData) {
     value = null;
   } else {
     //@ts-expect-error
-    value = parseInt(cost);
+    value = parseInt(cost, 10);
   }
   try {
     await db
@@ -37,7 +36,7 @@ export async function costChange(id: number, formData: FormData) {
  *  TODO: rewrite this in golang
  */
 export async function facilityChange(id: number, data: any) {
-  const facilityID = parseInt(data);
+  const facilityID = parseInt(data, 10);
   try {
     await db
       .update(Reservation)

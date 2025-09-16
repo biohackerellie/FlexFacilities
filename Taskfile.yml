@@ -27,13 +27,26 @@ tasks:
     cmds:
       - cd app && bun run clean
   lint:bun:
-    desc: lint files
+    desc: lint ts files
+    dir: "{{.NEXT_ROOT}}"
     cmds: 
-      - cd app && bun run check:fix
-  typecheck:
-    desc: typecheck files
+      - bun run check:fix
+  lint:go:
+    dir: "{{.API_ROOT}}"
+    desc: lint go files
     cmds:
-      - cd app && bun run typecheck
+      - golangci-lint run 
+  lint:types:
+    dir: "{{.NEXT_ROOT}}"
+    desc: typecheck typescript files
+    cmds:
+      - bun --bun run typecheck
+  lint:
+    desc: lint all files
+    cmds:
+      - task: lint:bun
+      - task: lint:go
+      - task: lint:types
   dev:bun:
     desc: start dev server
     cmds:

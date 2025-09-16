@@ -1,10 +1,10 @@
-import { Suspense } from "react";
+import { Suspense } from 'react';
 
-import { DataTable } from "@/components/ui/tables";
-import { mapFacilityTable } from "@/functions/calculations/tableData";
-import { api } from "@/trpc/server";
-import TableSkeleton from "../requests/skeleton";
-import { columns } from "./columns";
+import { DataTable } from '@/components/ui/tables';
+import { mapFacilityTable } from '@/functions/calculations/tableData';
+import { api } from '@/trpc/server';
+import TableSkeleton from '../requests/skeleton';
+import { columns } from './columns';
 
 async function getFacilities() {
   const facilities = await api.facility.all();

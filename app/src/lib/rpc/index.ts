@@ -1,7 +1,7 @@
-import { RPC } from './rpc';
+import { createConnectTransport } from '@connectrpc/connect-web';
 
 import { env } from '@/env';
-import { createConnectTransport } from '@connectrpc/connect-web';
+import { RPC } from './rpc';
 
 const base = new URL(env.API_HOST);
 base.port = String(env.API_PORT);

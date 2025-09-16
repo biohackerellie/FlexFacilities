@@ -1,10 +1,10 @@
 'use client';
+import * as React from 'react';
+import { toast } from 'sonner';
+import { Spinner } from '@/components/spinner';
 import { Button } from '@/components/ui/button';
 import { updateReservation } from '@/lib/actions/reservations';
 import { Reservation } from '@/lib/types';
-import { toast } from 'sonner';
-import * as React from 'react';
-import { Spinner } from '@/components/spinner';
 
 export default function Paid({ reservation }: { reservation: Reservation }) {
   const [isSubmitting, startTransition] = React.useTransition();

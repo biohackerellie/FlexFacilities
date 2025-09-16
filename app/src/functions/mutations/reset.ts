@@ -1,14 +1,12 @@
 'use server';
 
-import { Buffer } from 'buffer';
-import { NextRequest, NextResponse } from 'next/server';
+import { Buffer } from 'node:buffer';
+import { db } from '@local/db/client';
+import { User } from '@local/db/schema';
 import bcrypt from 'bcryptjs';
 import { eq } from 'drizzle-orm';
-import jwt, { Secret } from 'jsonwebtoken';
-
-import { db } from '@local/db/client';
-import { UserByEmail } from '@local/db/queries';
-import { User } from '@local/db/schema';
+import jwt from 'jsonwebtoken';
+import { NextResponse } from 'next/server';
 
 import { api } from '@/trpc/server';
 

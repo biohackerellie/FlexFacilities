@@ -1,7 +1,6 @@
-"use client";
+'use client';
 
-import React from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContext } from 'react-hook-form';
 
 export default function CustomInput({ name, rules, ...rest }: any) {
   const { register } = useFormContext();

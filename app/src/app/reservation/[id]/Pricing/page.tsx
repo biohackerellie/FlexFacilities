@@ -1,23 +1,22 @@
-import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 
 import { ShowPayment } from '@/components/forms';
 import EditPricing from '@/components/forms/paymentModal';
+import { Spinner } from '@/components/spinner';
 import { Skeleton } from '@/components/ui/skeleton';
 import { DataTable } from '@/components/ui/tables/reservations/data-table';
-import Paid from '../_components/paid';
-import { adminColumns } from './adminColumns';
-import { columns } from './columns';
-import Options from '../_components/options';
-import { auth } from '@/lib/auth';
+import { getFacilities } from '@/lib/actions/facilities';
 import {
   costReducer,
   getReservation,
   getReservationCategory,
 } from '@/lib/actions/reservations';
-import { getFacilities, getFacility } from '@/lib/actions/facilities';
-import { getUser } from '@/lib/actions/users';
-import { Spinner } from '@/components/spinner';
+import { auth } from '@/lib/auth';
+import Options from '../_components/options';
+import Paid from '../_components/paid';
+import { adminColumns } from './adminColumns';
+import { columns } from './columns';
 
 export default async function paymentPage({
   params,

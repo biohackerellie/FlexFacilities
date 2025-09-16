@@ -1,12 +1,11 @@
-import { Suspense } from "react";
-import { notFound } from "next/navigation";
+import { adminSideBar } from '@local/validators/constants';
+import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 
-import { adminSideBar } from "@local/validators/constants";
-
-import { Separator } from "@/components/ui/separator";
-import { SidebarNav } from "@/components/ui/sidebar-nav";
-import { Skeleton } from "@/components/ui/skeleton";
-import { IsAdmin } from "@/functions/other/helpers";
+import { Separator } from '@/components/ui/separator';
+import { SidebarNav } from '@/components/ui/sidebar-nav';
+import { Skeleton } from '@/components/ui/skeleton';
+import { IsAdmin } from '@/functions/other/helpers';
 
 export const revalidate = 60;
 

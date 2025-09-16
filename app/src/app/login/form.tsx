@@ -1,7 +1,8 @@
+import { Grid2x2 } from 'lucide-react';
 import Link from 'next/link';
 import * as React from 'react';
-import { cn } from '@/lib/utils';
 import { Button, buttonVariants } from '@/components/ui/button';
+import { SubmitButton } from '@/components/ui/buttons/submitButton';
 import {
   Card,
   CardContent,
@@ -11,9 +12,8 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Login, type FormState } from './actions';
-import { SubmitButton } from '@/components/ui/buttons/submitButton';
-import { Grid2x2 } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { type FormState, Login } from './actions';
 
 const initialState = { message: '', errors: undefined } as FormState;
 

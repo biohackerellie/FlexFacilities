@@ -1,11 +1,10 @@
-"use client";
+'use client';
 
-import type { ColumnDef } from "@tanstack/react-table";
-import Link from "next/link";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-import moment from "moment";
+import type { ColumnDef } from '@tanstack/react-table';
+import { ArrowUpDown } from 'lucide-react';
+import Link from 'next/link';
 
-import { Button } from "@/components/ui/buttons";
+import { Button } from '@/components/ui/buttons';
 
 interface TableUsers {
   User: string;
@@ -16,12 +15,12 @@ interface TableUsers {
 
 export const columns: ColumnDef<TableUsers>[] = [
   {
-    accessorKey: "User",
+    accessorKey: 'User',
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           User
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -30,17 +29,17 @@ export const columns: ColumnDef<TableUsers>[] = [
     },
   },
   {
-    accessorKey: "Email",
-    header: "Email",
+    accessorKey: 'Email',
+    header: 'Email',
   },
   {
-    accessorKey: "Role",
+    accessorKey: 'Role',
 
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Role
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -49,8 +48,8 @@ export const columns: ColumnDef<TableUsers>[] = [
     },
   },
   {
-    accessorKey: "Details",
-    header: "Details",
+    accessorKey: 'Details',
+    header: 'Details',
     cell: ({ row }) => {
       const id = row.original.Details;
       return (

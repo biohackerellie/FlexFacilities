@@ -1,7 +1,6 @@
-import React from "react";
-import { Controller, useForm } from "react-hook-form";
-import Select from "react-select";
-import makeAnimated from "react-select/animated";
+import { Controller, useForm } from 'react-hook-form';
+import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
 
 import {
   Dialog,
@@ -9,17 +8,17 @@ import {
   DialogContent,
   DialogFooter,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { dayOptions } from "@/lib/formOptions";
-import { Button } from "../ui/buttons";
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { dayOptions } from '@/lib/formOptions';
+import { Button } from '../ui/buttons';
 
 export const ModalInput = (props: { onSave: (data: any) => void }) => {
   const { onSave } = props;
   const { register, handleSubmit, control } = useForm();
   const dialogClose = () => {
-    document.getElementById("closeDialog")?.click();
+    document.getElementById('closeDialog')?.click();
   };
   const animatedComponents = makeAnimated();
   const forwardChange = (data: any) => {
@@ -32,7 +31,7 @@ export const ModalInput = (props: { onSave: (data: any) => void }) => {
         <Button
           className="h-8 hover:cursor-pointer"
           variant="outline"
-          size={"sm"}
+          size={'sm'}
         >
           Add Reoccurring Dates
         </Button>
@@ -46,7 +45,7 @@ export const ModalInput = (props: { onSave: (data: any) => void }) => {
               <Input
                 className="form-date bg-gray-300 text-black hover:bg-gray-200"
                 type="date"
-                {...register("startDate")}
+                {...register('startDate')}
               />
             </div>
             <div className="my-2 gap-2 border-b-2 p-2">
@@ -54,7 +53,7 @@ export const ModalInput = (props: { onSave: (data: any) => void }) => {
               <Input
                 type="time"
                 className="form-date my-2 bg-gray-300 text-black hover:bg-gray-200"
-                {...register("startTime")}
+                {...register('startTime')}
               />
             </div>
             <div>
@@ -63,7 +62,7 @@ export const ModalInput = (props: { onSave: (data: any) => void }) => {
                 <Input
                   type="time"
                   className="form-date bg-gray-300 text-black hover:bg-gray-200"
-                  {...register("endTime")}
+                  {...register('endTime')}
                 />
               </div>
               <div className="my-2 gap-2 border-b-2 p-2">
@@ -92,7 +91,7 @@ export const ModalInput = (props: { onSave: (data: any) => void }) => {
                   <Input
                     type="date"
                     className="form-date bg-gray-300 text-black hover:bg-gray-200"
-                    {...register("repeatUntil")}
+                    {...register('repeatUntil')}
                   />
                 </div>
               </div>

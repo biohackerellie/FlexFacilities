@@ -1,10 +1,9 @@
 'use server';
 
-import { revalidateTag } from 'next/cache';
-import { eq, sql } from 'drizzle-orm';
-
 import { db } from '@local/db/client';
 import { ReservationDate } from '@local/db/schema';
+import { eq } from 'drizzle-orm';
+import { revalidateTag } from 'next/cache';
 
 /**
  * @deprecated
@@ -12,7 +11,7 @@ import { ReservationDate } from '@local/db/schema';
  */
 export default async function modifyDate(
   id: number,
-  reservationID: number,
+  _reservationID: number,
   formData: FormData,
 ) {
   const data = {

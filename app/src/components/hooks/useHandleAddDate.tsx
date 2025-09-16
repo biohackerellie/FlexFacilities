@@ -1,9 +1,9 @@
-import type { FieldArrayMethodProps } from "react-hook-form";
-import moment from "moment-timezone";
+import moment from 'moment-timezone';
+import type { FieldArrayMethodProps } from 'react-hook-form';
 
-import useCalculateNumberOfEvents from "./useCalculateNumberOfEvents";
+import useCalculateNumberOfEvents from './useCalculateNumberOfEvents';
 
-moment.tz.setDefault("America/Denver");
+moment.tz.setDefault('America/Denver');
 
 interface Event {
   startDate: string;
@@ -32,7 +32,7 @@ export default function useHandleAddDate(append: {
   const calculateNumberOfWeeks = useCalculateNumberOfEvents();
   // helper function to format the dates
   const formatDate = (date: moment.Moment) => {
-    return date.format("YYYY-MM-DD");
+    return date.format('YYYY-MM-DD');
   };
 
   // Main function returned by the hook
@@ -45,21 +45,21 @@ export default function useHandleAddDate(append: {
   }) => {
     // Helper function to add days to a date
     const addDays = (date: moment.Moment, days: number) => {
-      return date.clone().add(days, "days");
+      return date.clone().add(days, 'days');
     };
 
     // Parse the start date, start time, and end time from the data object
     const startDate = moment(data.startDate);
     const startTime = moment();
     startTime.set({
-      hour: data.startTime.split(":")[0],
-      minute: data.startTime.split(":")[1],
+      hour: data.startTime.split(':')[0],
+      minute: data.startTime.split(':')[1],
     });
 
     const endTime = moment();
     endTime.set({
-      hour: data.endTime.split(":")[0],
-      minute: data.endTime.split(":")[1],
+      hour: data.endTime.split(':')[0],
+      minute: data.endTime.split(':')[1],
     });
     // Set the time of the start date
     startDate.set({
@@ -71,11 +71,11 @@ export default function useHandleAddDate(append: {
     const duration = moment.duration(endTime.diff(startTime)).asMilliseconds();
     // Map the day of the week values to integers
     const daysOfWeek = data.dayOfWeek.map((day: any) => {
-      return parseInt(day.value);
+      return parseInt(day.value, 10);
     });
     // Helper function to format the time
     const formatTime = (date: moment.Moment) => {
-      return date.format("HH:mm");
+      return date.format('HH:mm');
     };
 
     // Create an array to hold the events
@@ -117,7 +117,7 @@ export default function useHandleAddDate(append: {
           hour: startTime.hour(),
           minute: startTime.minute(),
         });
-        const endDate = moment(startDate).add(duration, "milliseconds");
+        const endDate = moment(startDate).add(duration, 'milliseconds');
         endDate.set({
           hour: endTime.hour(),
           minute: endTime.minute(),

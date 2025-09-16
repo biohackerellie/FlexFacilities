@@ -1,8 +1,6 @@
 import { notFound } from 'next/navigation';
-
-import { auth } from '@/lib/auth';
-
 import { Separator } from '@/components/ui/separator';
+import { auth } from '@/lib/auth';
 import AccountForm from './account-form';
 
 export default async function DetailsPage() {

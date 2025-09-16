@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
-import ReactModal from "react-modal";
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import ReactModal from 'react-modal';
 
-import { Button } from "../ui/buttons";
+import { Button } from '../ui/buttons';
 
 interface IFormInput {
   department: string;
@@ -27,15 +27,15 @@ export default function JiraModal() {
 
     const formData = JSON.stringify(data);
     try {
-      const res = await fetch("/api/jira", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('/api/jira', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: formData,
       });
-      alert("Ticket Submitted");
+      alert('Ticket Submitted');
       hideModal();
     } catch (error) {
-      alert("An error occurred while submitting your ticket. Lol");
+      alert('An error occurred while submitting your ticket. Lol');
     } finally {
       setIsSubmitting(false);
     }
@@ -60,7 +60,7 @@ export default function JiraModal() {
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col">
               <label htmlFor="department">Department</label>
-              <select {...register("department", { required: true })}>
+              <select {...register('department', { required: true })}>
                 <option value="Select">Select</option>
                 <option value="IT">IT</option>
                 <option value="Facilities">Facilities</option>
@@ -71,14 +71,14 @@ export default function JiraModal() {
               <input
                 type="text"
                 id="summary"
-                {...register("summary", { required: true })}
+                {...register('summary', { required: true })}
               />
             </div>
             <div className="flex flex-col">
               <label htmlFor="description">Description</label>
               <textarea
                 id="description"
-                {...register("description")}
+                {...register('description')}
                 placeholder="Provide additional details, if any."
               />
             </div>

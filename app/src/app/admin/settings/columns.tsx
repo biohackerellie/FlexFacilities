@@ -1,18 +1,11 @@
-"use client";
+'use client';
 
-import type { ColumnDef } from "@tanstack/react-table";
-import * as React from "react";
-import { useActionState } from "react";
-import { PlusIcon, TrashIcon } from "lucide-react";
-
-import { EmailNotificationsType } from "@local/db/schema";
-
-import type {
-  CreateEmailNotifications,
-  UpdateEmailNotifications,
-} from "./actions";
-import { Button } from "@/components/ui/buttons";
-import { Checkbox } from "@/components/ui/checkbox";
+import { EmailNotificationsType } from '@local/db/schema';
+import type { ColumnDef } from '@tanstack/react-table';
+import { PlusIcon, TrashIcon } from 'lucide-react';
+import { useActionState } from 'react';
+import { Button } from '@/components/ui/buttons';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Dialog,
   DialogContent,
@@ -21,19 +14,20 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { CreateEmail, DeleteEmail, UpdateNotifications } from "./actions";
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import type { UpdateEmailNotifications } from './actions';
+import { CreateEmail, DeleteEmail, UpdateNotifications } from './actions';
 
 const columns: ColumnDef<EmailNotificationsType>[] = [
   {
-    accessorKey: "email",
-    header: "Email",
+    accessorKey: 'email',
+    header: 'Email',
   },
   {
-    accessorKey: "HsEmails",
-    header: "LHS",
+    accessorKey: 'HsEmails',
+    header: 'LHS',
     cell: ({ row }) => {
       const id = row.original.id;
       const HsEmails = row.original.HsEmails;
@@ -50,8 +44,8 @@ const columns: ColumnDef<EmailNotificationsType>[] = [
     },
   },
   {
-    accessorKey: "MsEmails",
-    header: "LMS",
+    accessorKey: 'MsEmails',
+    header: 'LMS',
     cell: ({ row }) => {
       const id = row.original.id;
       const MsEmails = row.original.MsEmails;
@@ -68,8 +62,8 @@ const columns: ColumnDef<EmailNotificationsType>[] = [
     },
   },
   {
-    accessorKey: "GrEmails",
-    header: "Graff",
+    accessorKey: 'GrEmails',
+    header: 'Graff',
     cell: ({ row }) => {
       const id = row.original.id;
       const GrEmails = row.original.GrEmails;
@@ -86,8 +80,8 @@ const columns: ColumnDef<EmailNotificationsType>[] = [
     },
   },
   {
-    accessorKey: "WeEmails",
-    header: "West",
+    accessorKey: 'WeEmails',
+    header: 'West',
     cell: ({ row }) => {
       const id = row.original.id;
       const WeEmails = row.original.WeEmails;
@@ -104,8 +98,8 @@ const columns: ColumnDef<EmailNotificationsType>[] = [
     },
   },
   {
-    accessorKey: "SoEmails",
-    header: "South",
+    accessorKey: 'SoEmails',
+    header: 'South',
     cell: ({ row }) => {
       const id = row.original.id;
       const SoEmails = row.original.SoEmails;
@@ -122,8 +116,8 @@ const columns: ColumnDef<EmailNotificationsType>[] = [
     },
   },
   {
-    accessorKey: "StEmails",
-    header: "Stadium",
+    accessorKey: 'StEmails',
+    header: 'Stadium',
     cell: ({ row }) => {
       const id = row.original.id;
       const StEmails = row.original.StEmails;
@@ -140,7 +134,7 @@ const columns: ColumnDef<EmailNotificationsType>[] = [
     },
   },
   {
-    accessorKey: "id",
+    accessorKey: 'id',
     header: () => {
       return <Create />;
     },
@@ -148,8 +142,8 @@ const columns: ColumnDef<EmailNotificationsType>[] = [
       const email = row.original.email;
       return (
         <Button variant="ghost" size="icon" onClick={() => DeleteEmail(email)}>
-          {" "}
-          <TrashIcon />{" "}
+          {' '}
+          <TrashIcon />{' '}
         </Button>
       );
     },
@@ -158,7 +152,7 @@ const columns: ColumnDef<EmailNotificationsType>[] = [
 
 const initialState = {
   message: null,
-  errors: "",
+  errors: '',
 };
 function Create() {
   const [state, formAction] = useActionState(CreateEmail, initialState);

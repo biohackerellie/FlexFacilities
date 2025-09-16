@@ -1,5 +1,4 @@
-import React from "react";
-import Link from "next/link";
+import Link from 'next/link';
 
 export function ReservationButton() {
   return (
@@ -8,8 +7,8 @@ export function ReservationButton() {
         href="/reservation"
         className="hover:animate-bounce text-xl font-bold drop-shadow-lg"
       >
-        {" "}
-        Request a rental{" "}
+        {' '}
+        Request a rental{' '}
       </Link>
     </div>
   );

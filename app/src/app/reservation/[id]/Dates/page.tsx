@@ -1,5 +1,5 @@
-import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { auth } from '@/lib/auth';
 import DatesTables from '../_components/datesTables';

@@ -1,13 +1,12 @@
 'use server';
 
+import { revalidateTag } from 'next/cache';
 /**
  * Serverless function for creating a new reservation from form data
  */
 import type { z } from 'zod';
-import { revalidateTag } from 'next/cache';
-
-import { formSchema } from '@/lib/validators';
 import type { Reservation } from '@/lib/types';
+import { formSchema } from '@/lib/validators';
 
 import { newReservationEmail } from '../emails/reservationEmail';
 
@@ -18,12 +17,14 @@ export default async function submitReservation(data: formValues) {
   try {
     // Helper database function to find a category by facility and category name
     const categoryId = await api.category.byFacility({
-      facilityId: parseInt(data.facility),
+      facilityId: parseInt(data.facility, 10),
       name: `%${data.category}%`,
     });
 
     // Helper database function to find a facility by id
-    const Facility = await api.facility.byId({ id: parseInt(data.facility) });
+    const Facility = await api.facility.byId({
+      id: parseInt(data.facility, 10),
+    });
     // Helper database function to find a building by id
     const Building = Facility?.building!;
 
@@ -31,7 +32,7 @@ export default async function submitReservation(data: formValues) {
     const NReservation: NewReservation = {
       userId: data.userId,
       eventName: data.eventName,
-      facilityId: parseInt(data.facility),
+      facilityId: parseInt(data.facility, 10),
       details: data.details,
       insurance: false,
       categoryId: Number(categoryId?.id) || 0,

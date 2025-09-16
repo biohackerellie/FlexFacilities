@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import { useActionState as useFormState } from "react";
+import * as React from 'react';
+import { useActionState as useFormState } from 'react';
 
 import {
   Dialog,
@@ -10,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 import {
   Drawer,
   DrawerClose,
@@ -20,19 +20,19 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer";
-import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
-import { useMediaQuery } from "../hooks";
-import { Button } from "../ui/buttons";
-import { Checkbox } from "../ui/checkbox";
-import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
-import { submitIssue } from "./actions";
+} from '@/components/ui/drawer';
+import { Label } from '@/components/ui/label';
+import { cn } from '@/lib/utils';
+import { useMediaQuery } from '../hooks';
+import { Button } from '../ui/buttons';
+import { Checkbox } from '../ui/checkbox';
+import { Input } from '../ui/input';
+import { Textarea } from '../ui/textarea';
+import { submitIssue } from './actions';
 
 export function IssuesForm() {
   const [open, setOpen] = React.useState(false);
-  const isDesktop = useMediaQuery("(min-width: 768px)");
+  const isDesktop = useMediaQuery('(min-width: 768px)');
 
   if (isDesktop) {
     return (
@@ -74,16 +74,16 @@ export function IssuesForm() {
 }
 
 const initialState = {
-  message: "",
+  message: '',
 };
 
-function Form({ className }: React.ComponentProps<"form">) {
+function Form({ className }: React.ComponentProps<'form'>) {
   //eslint-disable-next-line
   const [state, formAction] = useFormState(submitIssue, initialState);
   return (
     <form
       action={formAction}
-      className={cn("grid items-start gap-4", className)}
+      className={cn('grid items-start gap-4', className)}
     >
       <div className="grid gap-2">
         <Label htmlFor="email">Your Email</Label>

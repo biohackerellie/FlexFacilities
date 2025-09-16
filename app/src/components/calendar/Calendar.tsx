@@ -1,29 +1,26 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import moment from "moment";
-import { Calendar, momentLocalizer } from "react-big-calendar";
+import moment from 'moment';
+import * as React from 'react';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
 
-import "react-big-calendar/lib/css/react-big-calendar.css";
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 
-import type { Schema$Event } from "@/functions/events/types";
-import { useSearchParams } from "next/navigation";
-import { AlertDialogAction } from "@radix-ui/react-alert-dialog";
-import { useTheme } from "next-themes";
-
-import type { BuildingAll } from "@local/validators/constants";
-import { buildingCalendars, buildingColors } from "@local/validators/constants";
-
-import { GetAllEvents } from "@/functions/events/googleAPI";
-import { CalendarInfo } from "../ui";
+import type { BuildingAll } from '@local/validators/constants';
+import { buildingCalendars, buildingColors } from '@local/validators/constants';
+import { AlertDialogAction } from '@radix-ui/react-alert-dialog';
+import { useSearchParams } from 'next/navigation';
+import { useTheme } from 'next-themes';
+import { GetAllEvents } from '@/functions/events/googleAPI';
+import { CalendarInfo } from '../ui';
 import {
   AlertDialog,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-} from "../ui/alert-dialog";
-import { Button } from "../ui/buttons";
+} from '../ui/alert-dialog';
+import { Button } from '../ui/buttons';
 
 const localizer = momentLocalizer(moment);
 
@@ -52,31 +49,31 @@ export default function CalendarMain({
     React.useState<EventComponentProps>(null);
   const [isOpen, setIsOpen] = React.useState(false);
 
-  let selectedBuilding: string | null = "All";
-  if (searchParams?.has("building")) {
-    selectedBuilding = searchParams.get("building");
+  let selectedBuilding: string | null = 'All';
+  if (searchParams?.has('building')) {
+    selectedBuilding = searchParams.get('building');
   }
 
   const { theme } = useTheme();
 
-  const isDarkMode = theme === "dark";
+  const isDarkMode = theme === 'dark';
   const calendarStyle = {
     height: 600,
     width: 1000,
-    justifyContent: "",
+    justifyContent: '',
     border: 5,
     ...(isDarkMode && {
-      WebkitTextFillColor: "white",
-      WebkitTextStrokeColor: "white",
+      WebkitTextFillColor: 'white',
+      WebkitTextStrokeColor: 'white',
     }),
   };
   const fetchedEvents = React.use(promise);
   const mappedEvents = fetchedEvents.map((event) => {
-    if (!event.location) event.location = "unknown";
-    const facility = event.location.split("-")[0] || "unknown";
+    if (!event.location) event.location = 'unknown';
+    const facility = event.location.split('-')[0] || 'unknown';
     return {
       //@ts-expect-error - fixing weird gcal typings
-      title: event.summary || event.title || "Event",
+      title: event.summary || event.title || 'Event',
       start: new Date(event?.start as unknown as string),
       end: new Date(event?.end as unknown as string),
       building: facility,
@@ -84,7 +81,7 @@ export default function CalendarMain({
   });
 
   const filteredEvents =
-    selectedBuilding === "All"
+    selectedBuilding === 'All'
       ? mappedEvents
       : mappedEvents.filter(
           (event: Event) => event?.building === selectedBuilding,
@@ -113,7 +110,7 @@ export default function CalendarMain({
           eventPropGetter={(event) => ({
             style: {
               backgroundColor:
-                buildingColors[event.building || "Administration Building"],
+                buildingColors[event.building || 'Administration Building'],
             },
           })}
           startAccessor="start"
@@ -129,11 +126,11 @@ export default function CalendarMain({
           </AlertDialogHeader>
           <AlertDialogDescription>
             <p className="mb-2">
-              {" "}
+              {' '}
               Starts at {selectedEvent?.start.toLocaleString()}
             </p>
             <p className="mb-4">
-              {" "}
+              {' '}
               Ends at {selectedEvent?.end.toLocaleString()}
             </p>
           </AlertDialogDescription>

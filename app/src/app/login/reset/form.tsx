@@ -1,9 +1,7 @@
-import React from "react";
-
-import { Button } from "@/components/ui/buttons";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Email } from "@/functions/mutations/reset";
+import { Button } from '@/components/ui/buttons';
+import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Email } from '@/functions/mutations/reset';
 
 export default function ResetPassword() {
   return (

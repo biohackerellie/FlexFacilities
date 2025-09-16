@@ -1,8 +1,6 @@
-import React from "react";
-
-import { IssuesForm } from "../forms";
-import TosModal from "../forms/tos";
-import Contact from "./alerts/contact";
+import { IssuesForm } from '../forms';
+import TosModal from '../forms/tos';
+import Contact from './alerts/contact';
 
 export default function Footer() {
   const year = new Date().getFullYear();

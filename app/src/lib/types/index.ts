@@ -1,20 +1,19 @@
+import type { Message } from '@bufbuild/protobuf';
 import type { Path, UseFormRegister } from 'react-hook-form';
 import type {
-  FullReservation as PBFullReservation,
-  FullFacility as PBFulFacility,
-  FacilityWithCategories as PBFacilityWithCategories,
   Building as PBBuilding,
   BuildingWithFacilities as PBBuildingWithFacilities,
   Category as PBCategory,
   Facility as PBFacility,
+  FacilityWithCategories as PBFacilityWithCategories,
+  FullFacility as PBFulFacility,
+  FullReservation as PBFullReservation,
   Reservation as PBReservation,
-  Users as PBUser,
   ReservationDate as PBReservationDate,
   ReservationFee as PBReservationFee,
   GetSessionResponse as PBSession,
+  Users as PBUser,
 } from '../rpc/proto';
-
-import type { Message } from '@bufbuild/protobuf';
 export type ProtoType<T> = Omit<T, keyof Message<any>>;
 export type Category = ProtoType<PBCategory>;
 export type Facility = ProtoType<PBFacility>;

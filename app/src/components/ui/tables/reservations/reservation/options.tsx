@@ -1,10 +1,10 @@
 'use client';
 
-import * as React from 'react';
-import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import * as React from 'react';
 import { toast } from 'sonner';
-
+import { ReservationContext } from '@/app/reservation/[id]/_components/context';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -30,8 +30,6 @@ import {
   denyReservation,
   HandleDelete,
 } from '@/functions/reservations';
-
-import { ReservationContext } from '@/app/reservation/[id]/_components/context';
 
 export default function ReservationOptions() {
   const data = React.use(ReservationContext);

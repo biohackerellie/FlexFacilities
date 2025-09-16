@@ -7,7 +7,7 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "includes": ["src/**/*", "!node_modules"]
+    "includes": ["src/**/*", "!node_modules", "!**/*.css"]
   },
   "formatter": {
     "enabled": true,
@@ -113,6 +113,7 @@
         "noUnsafeDeclarationMerging": "error",
         "noUnsafeNegation": "error",
         "useAwait": "error",
+        "useIterableCallbackReturn": "warn",
         "useGetterReturn": "error",
         "useNamespaceKeyword": "error",
         "noWith": "error"

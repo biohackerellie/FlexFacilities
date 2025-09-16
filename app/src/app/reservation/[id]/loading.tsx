@@ -1,7 +1,4 @@
-import React from "react";
-
-import LoadingScreen from "@/components/ui/loadingScreen";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function Loading() {
   return (

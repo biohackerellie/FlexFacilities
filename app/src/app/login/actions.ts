@@ -27,7 +27,7 @@ const loginSchema = z.object({
   password: z.string().min(8, 'Password must be at least 8 characters').trim(),
 });
 export async function Login(
-  state: any,
+  _state: any,
   formData: FormData,
 ): Promise<FormState> {
   'use server';

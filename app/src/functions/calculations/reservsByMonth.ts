@@ -5,7 +5,9 @@
 //TODO: rewrite this in golang
 
 type ChartData = Record<string, number | string | undefined>;
-
+/**
+ * @deprecated
+ */
 export default function aggregateChartData(): Promise<ChartData[]> {
   // calculate 6 months ago
   const now = new Date();

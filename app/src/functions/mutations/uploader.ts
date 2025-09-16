@@ -8,7 +8,7 @@ import { revalidatePath } from 'next/cache';
 export default async function Uploader(body: any, id: any) {
   const file = body.files[0];
   try {
-    const res = await fetch(process.env.NEXT_PUBLIC_HOST + '/api/files', {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/files`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

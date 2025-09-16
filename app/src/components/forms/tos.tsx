@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import React from "react";
-import ReactModal from "react-modal";
+import React from 'react';
+import ReactModal from 'react-modal';
 
-import { Button } from "../ui/buttons";
+import { Button } from '../ui/buttons';
 
 export default function TosModal() {
   const hideModal = () => setIsVisible(false);
@@ -85,7 +85,7 @@ export default function TosModal() {
             </p>
             <h2>Rent and deposit</h2>
             <p>
-              {" "}
+              {' '}
               The requesting organization or individual agrees to pay the
               District, as rent for the premises and as payment for special
               services (if any) provided by the District, the total amount

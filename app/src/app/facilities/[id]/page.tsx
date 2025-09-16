@@ -1,9 +1,9 @@
-import { Suspense } from 'react';
+import { ExternalLink } from 'lucide-react';
+import moment from 'moment';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ExternalLink } from 'lucide-react';
-import moment from 'moment';
+import { Suspense } from 'react';
 
 import { Button } from '@/components/ui/button';
 import LoadingScreen from '@/components/ui/loadingScreen';
@@ -14,7 +14,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { getFacility, getEventsByFacility } from '@/lib/actions/facilities';
+import { getEventsByFacility, getFacility } from '@/lib/actions/facilities';
 
 export default async function FacilityPage({
   params,

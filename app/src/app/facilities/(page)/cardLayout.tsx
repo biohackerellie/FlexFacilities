@@ -1,13 +1,11 @@
 'use client';
 
-import * as React from 'react';
 import { useSearchParams } from 'next/navigation';
-
-import FacilityCard from './facility_card';
 import type {
   BuildingWithFacilities,
   FacilityWithCategories,
 } from '@/lib/types';
+import FacilityCard from './facility_card';
 
 export default function CardLayout(props: {
   buildings: BuildingWithFacilities[];

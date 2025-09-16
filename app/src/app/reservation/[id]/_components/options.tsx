@@ -13,9 +13,9 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { getFacilities } from '@/lib/actions/facilities';
 import { updateReservation } from '@/lib/actions/reservations';
 import { ReservationContext } from './context';
-import { getFacilities } from '@/lib/actions/facilities';
 
 export default function Options({
   facilitiesPromise,

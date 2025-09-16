@@ -1,12 +1,10 @@
 'use server';
 
-import { revalidateTag } from 'next/cache';
-import { NextResponse } from 'next/server';
-import { eq } from 'drizzle-orm';
-import { Client, Environment } from 'square';
-
 import { db } from '@local/db/client';
 import { Reservation } from '@local/db/schema';
+import { eq } from 'drizzle-orm';
+import { revalidateTag } from 'next/cache';
+import { Client, Environment } from 'square';
 
 import { env } from '@/env';
 import generateId from '@/functions/calculations/generate-id';

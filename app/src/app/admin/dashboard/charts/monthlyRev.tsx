@@ -1,7 +1,5 @@
-"use client";
+'use client';
 
-import type { RevenueData } from "@/lib/types";
-import React from "react";
 import {
   Bar,
   BarChart,
@@ -13,7 +11,8 @@ import {
   Tooltip,
   XAxis,
   YAxis,
-} from "recharts";
+} from 'recharts';
+import type { RevenueData } from '@/lib/types';
 
 export default function MonthlyRevChart({ data }: { data: RevenueData[] }) {
   console.log(data);
@@ -21,7 +20,7 @@ export default function MonthlyRevChart({ data }: { data: RevenueData[] }) {
     <>
       <ResponsiveContainer width="100%" height="100%">
         <BarChart width={760} height={500} data={data}>
-          <CartesianGrid strokeDasharray={"3 3"} />
+          <CartesianGrid strokeDasharray={'3 3'} />
           <XAxis
             dataKey="month"
             stroke="#888888"
@@ -39,7 +38,7 @@ export default function MonthlyRevChart({ data }: { data: RevenueData[] }) {
           <Legend />
           <ReferenceLine y={0} stroke="#000" />
           <Bar minPointSize={0} dataKey="Revenue" fill="#22c55e">
-            {data.map((entry, index) => (
+            {data.map((_entry, index) => (
               <Cell key={`cell-${index}`} fill="#22c55e" />
             ))}
           </Bar>

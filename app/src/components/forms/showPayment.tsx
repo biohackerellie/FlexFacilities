@@ -2,12 +2,11 @@
 
 import * as React from 'react';
 import { toast } from 'sonner';
-
-import { updateReservation } from '@/lib/actions/reservations';
-import { GeneratePaymentLink } from '@/functions/other/payments';
-import { Button } from '../ui/button';
-import { logger } from '@/lib/logger';
 import { ReservationContext } from '@/app/reservation/[id]/_components/context';
+import { GeneratePaymentLink } from '@/functions/other/payments';
+import { updateReservation } from '@/lib/actions/reservations';
+import { logger } from '@/lib/logger';
+import { Button } from '../ui/button';
 
 interface feeProps {
   fees: number;

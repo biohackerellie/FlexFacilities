@@ -1,10 +1,10 @@
-import { Suspense } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { Loader2 } from "lucide-react";
+import { Loader2 } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { Suspense } from 'react';
 
-import { ModeToggle } from "../buttons";
-import NavMenu from "./Menu";
+import { ModeToggle } from '../buttons';
+import NavMenu from './Menu';
 
 export default function Navbar() {
   return (

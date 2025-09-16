@@ -1,3 +1,3 @@
-import { DataTable } from "./reservations/data-table";
+import { DataTable } from './reservations/data-table';
 
 export { DataTable };

@@ -1,11 +1,11 @@
 'use client';
-import * as React from 'react';
-import { ReservationContext } from './context';
 
 import dynamic from 'next/dynamic';
+import * as React from 'react';
 import { DataTable } from '@/components/ui/tables/reservations/reservation/data-table';
 import { adminColumns } from './adminColumns';
 import { columns } from './columns';
+import { ReservationContext } from './context';
 export default function DatesTables({ isAdmin }: { isAdmin: boolean }) {
   const data = React.use(ReservationContext);
   if (!data) return <div>no data</div>;

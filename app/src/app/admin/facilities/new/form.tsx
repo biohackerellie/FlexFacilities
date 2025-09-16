@@ -1,13 +1,10 @@
-"use client";
+'use client';
 
-import { useActionState as useFormState, useState } from "react";
-import Image from "next/image";
-import { toast } from "sonner";
+import { CreateFacilitySchema } from '@local/db/schema';
+import { buildingNames } from '@local/validators/constants';
+import { toast } from 'sonner';
 
-import { CreateFacilitySchema } from "@local/db/schema";
-import { buildingNames } from "@local/validators/constants";
-
-import { Button } from "@/components/ui/buttons";
+import { Button } from '@/components/ui/buttons';
 import {
   Form,
   FormControl,
@@ -16,19 +13,19 @@ import {
   FormLabel,
   FormMessage,
   useForm,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { api } from "@/trpc/react";
+} from '@/components/ui/select';
+import { api } from '@/trpc/react';
 
 const inputStyle =
-  " mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-xs placeholder-slate-400 focus:outline-hidden focus:border-sky-500 focus:ring-1 focus:ring-sky-500 disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none  disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none invalid:border-pink-500 invalid:text-pink-600 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 ";
+  ' mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-xs placeholder-slate-400 focus:outline-hidden focus:border-sky-500 focus:ring-1 focus:ring-sky-500 disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none  disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none invalid:border-pink-500 invalid:text-pink-600 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 ';
 
 const initialState = {
   message: null,
@@ -47,9 +44,9 @@ export default function NewFacilityForm() {
     },
     onError: (err) => {
       toast.error(
-        err.data?.code === "UNAUTHORIZED"
-          ? "You are not authorized to create a facility"
-          : "Error creating facility",
+        err.data?.code === 'UNAUTHORIZED'
+          ? 'You are not authorized to create a facility'
+          : 'Error creating facility',
       );
     },
   });
@@ -201,7 +198,7 @@ export default function NewFacilityForm() {
                   <Input
                     {...field}
                     className={inputStyle}
-                    value={field.value || ""}
+                    value={field.value || ''}
                     required
                   />
                 </FormControl>

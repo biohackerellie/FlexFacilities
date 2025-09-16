@@ -1,5 +1,3 @@
-import { IFormInput } from "@/lib/types";
-
 export default function useCalculateNumberOfEvents() {
   return (
     startDate: string | number | Date,

@@ -1,11 +1,7 @@
-import type { Reservation } from "@/lib/types";
-import { headers } from "next/headers";
-
-import { DataTable } from "@/components/ui/tables";
-import { mapRequests } from "@/functions/calculations/tableData";
-import { TableReservation } from "@/lib/types";
-import { api } from "@/trpc/server";
-import { columns } from "./columns";
+import { DataTable } from '@/components/ui/tables';
+import { mapRequests } from '@/functions/calculations/tableData';
+import { api } from '@/trpc/server';
+import { columns } from './columns';
 
 async function getData() {
   const data = await api.reservation.allRequests();

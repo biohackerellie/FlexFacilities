@@ -1,8 +1,8 @@
-import React, { Suspense } from "react";
+import { Suspense } from 'react';
 
-import CalendarMain from "@/components/calendar/Calendar";
-import { Skeleton } from "@/components/ui/skeleton";
-import { GetAllEvents } from "@/functions/events/googleAPI";
+import CalendarMain from '@/components/calendar/Calendar';
+import { Skeleton } from '@/components/ui/skeleton';
+import { GetAllEvents } from '@/functions/events/googleAPI';
 
 export default function Page() {
   return (

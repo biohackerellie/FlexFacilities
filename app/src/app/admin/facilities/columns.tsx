@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import type { ColumnDef } from "@tanstack/react-table";
-import Image from "next/image";
-import Link from "next/link";
-import { ArrowUpDown } from "lucide-react";
+import type { ColumnDef } from '@tanstack/react-table';
+import { ArrowUpDown } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
 
-import { Button } from "@/components/ui/buttons";
+import { Button } from '@/components/ui/buttons';
 
 type TableFacility = {
   id: number;
@@ -19,8 +19,8 @@ type TableFacility = {
 };
 export const columns: ColumnDef<TableFacility>[] = [
   {
-    accessorKey: "imagePath",
-    header: "Image",
+    accessorKey: 'imagePath',
+    header: 'Image',
     cell: ({ row }) => {
       const imagePath = row.original.imagePath;
       return (
@@ -47,12 +47,12 @@ export const columns: ColumnDef<TableFacility>[] = [
     },
   },
   {
-    accessorKey: "name",
+    accessorKey: 'name',
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Name
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -61,12 +61,12 @@ export const columns: ColumnDef<TableFacility>[] = [
     },
   },
   {
-    accessorKey: "building",
+    accessorKey: 'building',
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Building
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -75,21 +75,25 @@ export const columns: ColumnDef<TableFacility>[] = [
     },
   },
   {
-    accessorKey: "capacity",
-    header: "Capacity",
+    accessorKey: 'capacity',
+    header: 'Capacity',
   },
   {
-    accessorKey: "Category",
-    header: "Category Prices",
+    accessorKey: 'Category',
+    header: 'Category Prices',
     cell: ({ row }) => {
       const prices = row.original.Category;
       return (
-        <>{prices?.map((price, index) => <div key={index}>${price}/hr</div>)}</>
+        <>
+          {prices?.map((price, index) => (
+            <div key={index}>${price}/hr</div>
+          ))}
+        </>
       );
     },
   },
   {
-    accessorKey: "id",
+    accessorKey: 'id',
     header: ({ column }) => {
       return (
         <Button variant="link" asChild>

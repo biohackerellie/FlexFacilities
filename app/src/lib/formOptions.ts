@@ -1,46 +1,43 @@
-"use client";
-
+'use client';
 
 export const recurringOptions = [
   {
-    value: "single",
-    label: "Single or Multiple Specific Dates",
+    value: 'single',
+    label: 'Single or Multiple Specific Dates',
   },
   {
-    value: "reoccurring",
-    label: "Reoccurring Dates",
+    value: 'reoccurring',
+    label: 'Reoccurring Dates',
   },
 ];
 
 export const dayOptions = [
   {
     value: 0,
-    label: "Sunday",
+    label: 'Sunday',
   },
   {
     value: 1,
-    label: "Monday",
+    label: 'Monday',
   },
   {
     value: 2,
-    label: "Tuesday",
+    label: 'Tuesday',
   },
   {
     value: 3,
-    label: "Wednesday",
+    label: 'Wednesday',
   },
   {
     value: 4,
-    label: "Thursday",
+    label: 'Thursday',
   },
   {
     value: 5,
-    label: "Friday",
+    label: 'Friday',
   },
   {
     value: 6,
-    label: "Saturday",
+    label: 'Saturday',
   },
 ];
-
-

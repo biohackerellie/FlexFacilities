@@ -1,4 +1,4 @@
-import NewFacilityForm from "./form";
+import NewFacilityForm from './form';
 
 export default function newFacilityForm() {
   return (

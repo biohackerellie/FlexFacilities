@@ -1,16 +1,15 @@
-import React from "react";
-import jwt from "jsonwebtoken";
+import jwt from 'jsonwebtoken';
 
-import ResetForm from "./form";
+import ResetForm from './form';
 
 function decodeToken(token: string) {
   const publicKey: string = Buffer.from(
     process.env.RSA_PUBLIC_KEY!,
-    "base64",
-  ).toString("utf-8");
-  const decoded = jwt.verify(token, publicKey, { algorithms: ["RS256"] });
+    'base64',
+  ).toString('utf-8');
+  const decoded = jwt.verify(token, publicKey, { algorithms: ['RS256'] });
   if (!decoded) {
-    throw new Error("Invalid token");
+    throw new Error('Invalid token');
   }
 
   return decoded;

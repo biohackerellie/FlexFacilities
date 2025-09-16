@@ -1,3 +1,3 @@
-import updateEmail from "./update-email";
+import updateEmail from './update-email';
 
 export { updateEmail };

@@ -1,15 +1,13 @@
-"use server";
-
-import { revalidatePath } from "next/cache";
-import { TrashIcon } from "lucide-react";
-import z from "zod";
+'use server';
 
 import {
   CreateEmailNotificationsSchema,
   UpdateEmailNotificationsSchema,
-} from "@local/db/schema";
+} from '@local/db/schema';
+import { revalidatePath } from 'next/cache';
+import z from 'zod';
 
-import { api } from "@/trpc/server";
+import { api } from '@/trpc/server';
 
 export type CreateEmailNotifications = z.infer<
   typeof CreateEmailNotificationsSchema
@@ -24,7 +22,7 @@ export async function DeleteEmail(email: string) {
   } catch (error) {
     console.error(error);
   }
-  revalidatePath("/admin/settings", "page");
+  revalidatePath('/admin/settings', 'page');
 }
 
 export async function UpdateNotifications(data: UpdateEmailNotifications) {
@@ -33,18 +31,18 @@ export async function UpdateNotifications(data: UpdateEmailNotifications) {
   } catch (error) {
     console.error(error);
   }
-  revalidatePath("/admin/settings", "page");
+  revalidatePath('/admin/settings', 'page');
 }
 
-export async function CreateEmail(prevState: any, formData: FormData) {
+export async function CreateEmail(_prevState: any, formData: FormData) {
   const initial: CreateEmailNotifications = {
-    email: formData.get("email") as string,
-    HsEmails: Boolean(formData.get("HsEmails") as string),
-    MsEmails: Boolean(formData.get("MsEmails") as string),
-    GrEmails: Boolean(formData.get("GrEmails") as string),
-    WeEmails: Boolean(formData.get("WeEmails") as string),
-    SoEmails: Boolean(formData.get("SoEmails") as string),
-    StEmails: Boolean(formData.get("StEmails") as string),
+    email: formData.get('email') as string,
+    HsEmails: Boolean(formData.get('HsEmails') as string),
+    MsEmails: Boolean(formData.get('MsEmails') as string),
+    GrEmails: Boolean(formData.get('GrEmails') as string),
+    WeEmails: Boolean(formData.get('WeEmails') as string),
+    SoEmails: Boolean(formData.get('SoEmails') as string),
+    StEmails: Boolean(formData.get('StEmails') as string),
   };
   console.log(initial);
   const data = CreateEmailNotificationsSchema.safeParse(initial);
@@ -68,9 +66,9 @@ export async function CreateEmail(prevState: any, formData: FormData) {
       };
     }
   }
-  revalidatePath("/admin/settings", "page");
+  revalidatePath('/admin/settings', 'page');
   return {
     errors: null,
-    message: "Email added successfully",
+    message: 'Email added successfully',
   };
 }

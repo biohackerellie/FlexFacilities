@@ -1,9 +1,9 @@
-import * as React from "react";
-import { School } from "lucide-react";
+import { School } from 'lucide-react';
+import * as React from 'react';
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import MonthlyRevenue from "@/functions/calculations/revPerMonth";
-import MonthlyRevChart from "../charts/monthlyRev";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import MonthlyRevenue from '@/functions/calculations/revPerMonth';
+import MonthlyRevChart from '../charts/monthlyRev';
 
 export default function PaidCard({
   dataPromise,

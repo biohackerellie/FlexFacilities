@@ -1,11 +1,10 @@
-"use client";
+'use client';
 
 import type {
   ColumnDef,
   ColumnFiltersState,
   SortingState,
-} from "@tanstack/react-table";
-import * as React from "react";
+} from '@tanstack/react-table';
 import {
   flexRender,
   getCoreRowModel,
@@ -13,10 +12,11 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table";
+} from '@tanstack/react-table';
+import * as React from 'react';
 
-import { Button } from "@/components/ui/buttons";
-import { Input } from "@/components/ui/input";
+import { Button } from '@/components/ui/buttons';
+import { Input } from '@/components/ui/input';
 import {
   Table,
   TableBody,
@@ -24,7 +24,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from '@/components/ui/table';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -35,7 +35,7 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  "use no memo";
+  'use no memo';
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
@@ -60,9 +60,9 @@ export function DataTable<TData, TValue>({
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter Users..."
-          value={(table.getColumn("User")?.getFilterValue() as string) ?? ""}
+          value={(table.getColumn('User')?.getFilterValue() as string) ?? ''}
           onChange={(event) =>
-            table.getColumn("User")?.setFilterValue(event.target.value)
+            table.getColumn('User')?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
@@ -92,7 +92,7 @@ export function DataTable<TData, TValue>({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
+                  data-state={row.getIsSelected() && 'selected'}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

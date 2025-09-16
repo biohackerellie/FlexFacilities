@@ -1,8 +1,9 @@
+import type { DescService } from '@bufbuild/protobuf';
 import {
-  createClient,
-  type Transport,
   type Client,
   ConnectError,
+  createClient,
+  type Transport,
 } from '@connectrpc/connect';
 import {
   Auth,
@@ -10,7 +11,6 @@ import {
   ReservationService,
   UsersService,
 } from './proto';
-import type { DescService } from '@bufbuild/protobuf';
 
 export class RPC {
   constructor(private transport: Transport) {}

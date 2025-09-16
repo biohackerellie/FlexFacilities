@@ -1,8 +1,7 @@
 'use client';
 
-import React from 'react';
 import { useRouter } from 'next/navigation';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
 import { Button } from '@/components/ui/buttons';
 import { Label } from '@/components/ui/label';
@@ -16,7 +15,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { addFee, removeFee } from '@/functions/mutations';
+import { addFee } from '@/functions/mutations';
 
 interface IForminput {
   additionalFees: number;

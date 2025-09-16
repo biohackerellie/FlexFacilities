@@ -1,19 +1,16 @@
-import React from "react";
-
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Button } from "@/components/ui/buttons";
+} from '@/components/ui/accordion';
+import { Button } from '@/components/ui/buttons';
 import {
-  deleteFacility,
   updateCapaciaty,
   updateCategoryPrices,
   updateFacilityName,
   uploadImage,
-} from "./actions";
+} from './actions';
 
 interface FormProps {
   id: number;
@@ -27,7 +24,7 @@ interface FormProps {
 }
 
 const inputStyle =
-  " mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-xs placeholder-slate-400 focus:outline-hidden focus:border-sky-500 focus:ring-1 focus:ring-sky-500 disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none  disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none invalid:border-pink-500 invalid:text-pink-600 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 ";
+  ' mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-xs placeholder-slate-400 focus:outline-hidden focus:border-sky-500 focus:ring-1 focus:ring-sky-500 disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none  disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none invalid:border-pink-500 invalid:text-pink-600 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 ';
 
 const ImageUploadForm = ({ id }: FormProps) => {
   const uploadWithParam = uploadImage.bind(null, id);
@@ -50,7 +47,7 @@ const ImageUploadForm = ({ id }: FormProps) => {
 
 const FacilityNameForm = ({ id, name }: FormProps) => {
   const updateWithParam = updateFacilityName.bind(null, id);
-  console.log("name: ", name);
+  console.log('name: ', name);
   return (
     <>
       <form action={updateWithParam}>

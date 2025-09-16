@@ -1,10 +1,4 @@
 'use server';
-// @ts-nocheck
-// TODO: rewrite this in golang
-/**
- * This function is used to calculate the monthly revenue for the last 6 months
- */
-import type { RevenueData } from '@/lib/types';
 import {
   compareAsc,
   format,
@@ -14,6 +8,12 @@ import {
   parse,
   sub,
 } from 'date-fns';
+// @ts-nocheck
+// TODO: rewrite this in golang
+/**
+ * This function is used to calculate the monthly revenue for the last 6 months
+ */
+import type { RevenueData } from '@/lib/types';
 
 import { CostReducer } from '../other/helpers';
 

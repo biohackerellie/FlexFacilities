@@ -1,13 +1,10 @@
-import { Suspense } from "react";
-import dynamic from "next/dynamic";
-import Image from "next/image";
-import { notFound } from "next/navigation";
+import dynamic from 'next/dynamic';
+import Image from 'next/image';
+import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 
-import { FacilityType } from "@local/db/schema";
-
-import { Skeleton } from "@/components/ui/skeleton";
-import { env } from "@/env";
-import { api } from "@/trpc/server";
+import { Skeleton } from '@/components/ui/skeleton';
+import { api } from '@/trpc/server';
 
 export default async function facilityEditForm({
   params,
@@ -16,8 +13,8 @@ export default async function facilityEditForm({
     id: string;
   };
 }) {
-  const Forms = dynamic(() => import("./forms"));
-  const data = await api.facility.byId({ id: parseInt(params.id) });
+  const Forms = dynamic(() => import('./forms'));
+  const data = await api.facility.byId({ id: parseInt(params.id, 10) });
   if (!data) return notFound();
   const { name, address, building, capacity, imagePath } = data;
 
@@ -29,7 +26,7 @@ export default async function facilityEditForm({
     };
   });
 
-  const id = parseInt(params.id);
+  const id = parseInt(params.id, 10);
 
   return (
     <div className="gap-y-4 space-y-7">

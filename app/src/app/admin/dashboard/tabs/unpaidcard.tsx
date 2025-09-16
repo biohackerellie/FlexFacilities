@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import { School } from "lucide-react";
+import { School } from 'lucide-react';
+import * as React from 'react';
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import WeeklyUnpaidCount from "@/functions/calculations/unpaidCount";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import WeeklyUnpaidCount from '@/functions/calculations/unpaidCount';
 
 export default function UnpaidCard({
   dataPromise,

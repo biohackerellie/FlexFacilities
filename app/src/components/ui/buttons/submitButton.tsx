@@ -1,7 +1,7 @@
 'use client';
-import { Button } from '../button';
 import { Spinner } from '@/components/spinner';
 import { cn } from '@/lib/utils';
+import { Button } from '../button';
 
 type Props = {
   children?: React.ReactNode;

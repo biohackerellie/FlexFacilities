@@ -6,7 +6,7 @@
  *  @see https://nextjs.org/docs/app/building-your-application/routing/middleware
  */
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 
 // wrap default middleware with withAuth to provide NextAuth Token context to middleware
 export function middleware(req: NextRequest) {
@@ -15,10 +15,10 @@ export function middleware(req: NextRequest) {
    * A path was changed during some refactoring, and this
    * redirect catches the old path and redirects to the new one.
    */
-  if (req.nextUrl.pathname.startsWith("/admin/reservations/")) {
+  if (req.nextUrl.pathname.startsWith('/admin/reservations/')) {
     const path = req.nextUrl.pathname;
-    const segments = path.split("/");
-    const index = segments.findIndex((segment) => segment === "reservations");
+    const segments = path.split('/');
+    const index = segments.findIndex((segment) => segment === 'reservations');
     const paramValue = segments[index + 1];
     if (paramValue) {
       return NextResponse.rewrite(
@@ -34,10 +34,10 @@ export function middleware(req: NextRequest) {
 export const config = {
   matcher: [
     {
-      source: "/((?!api|trpc|_next/static|_next/image|favicon.ico).*)",
+      source: '/((?!api|trpc|_next/static|_next/image|favicon.ico).*)',
       missing: [
-        { type: "header", key: "next-router-prefetch" },
-        { type: "header", key: "purpose", value: "prefetch" },
+        { type: 'header', key: 'next-router-prefetch' },
+        { type: 'header', key: 'purpose', value: 'prefetch' },
       ],
     },
   ],

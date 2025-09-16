@@ -1,10 +1,9 @@
 'use server';
+
 //@ts-nocheck
 
-import type { ReservationClassType } from '@/lib/classes';
 import moment from 'moment';
 
-import { ReservationClass } from '@/lib/classes';
 import { api } from '@/trpc/server';
 
 type ChartData = Record<string, number | string | undefined>;

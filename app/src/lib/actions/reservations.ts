@@ -1,8 +1,8 @@
 'use server';
-import { client } from '@/lib/rpc';
 import { unstable_cacheTag as cacheTag, revalidateTag } from 'next/cache';
 import { logger } from '@/lib/logger';
-import { Reservation, ReservationDate, ReservationStatus } from '../types';
+import { client } from '@/lib/rpc';
+import { Reservation, ReservationStatus } from '../types';
 
 export async function getReservation(id: string) {
   'use cache';

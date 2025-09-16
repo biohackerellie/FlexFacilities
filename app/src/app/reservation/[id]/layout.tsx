@@ -1,19 +1,16 @@
-import * as React from 'react';
 import { notFound } from 'next/navigation';
-
-import type { SideBarType } from '@/lib/validators/constants';
-
-import IsUserReserv from '@/components/contexts/isUserReserv';
+import * as React from 'react';
+import { Spinner } from '@/components/spinner';
 import { Separator } from '@/components/ui/separator';
 import { SidebarNav } from '@/components/ui/sidebar-nav';
 import range from '@/functions/calculations/dateRange';
-import AdminPanel from './adminButtons';
-import { auth } from '@/lib/auth';
-import { Spinner } from '@/components/spinner';
-import { getReservation } from '@/lib/actions/reservations';
 import { getFacility } from '@/lib/actions/facilities';
-import { ReservationProvider } from './_components/context';
+import { getReservation } from '@/lib/actions/reservations';
 import { getUser } from '@/lib/actions/users';
+import { auth } from '@/lib/auth';
+import type { SideBarType } from '@/lib/validators/constants';
+import { ReservationProvider } from './_components/context';
+import AdminPanel from './adminButtons';
 
 export default async function reservationLayout({
   children,

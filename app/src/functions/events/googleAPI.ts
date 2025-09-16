@@ -1,10 +1,7 @@
 'use server';
 
-import type { GoogleEvents } from '@/lib/types';
-import { cache } from 'react';
-
-import { env } from '@/env';
 import { getClient } from '@/lib/oauth';
+import type { GoogleEvents } from '@/lib/types';
 import { api } from '@/trpc/server';
 
 async function GEvents(id: number) {

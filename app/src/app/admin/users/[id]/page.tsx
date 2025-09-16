@@ -1,17 +1,16 @@
-import React, { Suspense } from "react";
-import { notFound } from "next/navigation";
-import moment from "moment";
-
 import type {
   FacilityType,
   ReservationDateType,
   ReservationType,
-} from "@local/db/schema";
+} from '@local/db/schema';
+import moment from 'moment';
+import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 
-import { DataTable } from "@/components/ui/tables";
-import { api } from "@/trpc/server";
-import { columns } from "./columns";
-import TableSkeleton from "./skeleton";
+import { DataTable } from '@/components/ui/tables';
+import { api } from '@/trpc/server';
+import { columns } from './columns';
+import TableSkeleton from './skeleton';
 
 interface TableUser {
   Name: string;
@@ -19,7 +18,7 @@ interface TableUser {
   eventName: string;
   Facility: string;
   ReservationDate?: string;
-  approved: "pending" | "approved" | "denied" | "canceled" | "N/A";
+  approved: 'pending' | 'approved' | 'denied' | 'canceled' | 'N/A';
   Details: number;
 }
 
@@ -28,7 +27,7 @@ interface Reservation extends ReservationType {
   Facility: FacilityType;
 }
 
-const currentDate = moment().format("YYYY-MM-DD");
+const currentDate = moment().format('YYYY-MM-DD');
 
 async function getData(id: string) {
   const user = await api.user.ById({ id: id });
@@ -38,11 +37,11 @@ async function getData(id: string) {
   if (reservation.length === 0) {
     mappedReservations = [
       {
-        Name: user?.name ?? "N/A",
-        eventName: "N/A",
-        Facility: "N/A",
-        ReservationDate: "N/A",
-        approved: "N/A",
+        Name: user?.name ?? 'N/A',
+        eventName: 'N/A',
+        Facility: 'N/A',
+        ReservationDate: 'N/A',
+        approved: 'N/A',
         Details: 0,
       },
     ];
@@ -55,10 +54,10 @@ async function getData(id: string) {
         moment(date.startDate).isSameOrAfter(currentDate),
       );
       return {
-        Name: user?.name ?? "N/A",
+        Name: user?.name ?? 'N/A',
         eventName: reservation.eventName,
         Facility: reservation.Facility.name,
-        ReservationDate: nextUpcomingDate ? nextUpcomingDate.startDate : "N/A",
+        ReservationDate: nextUpcomingDate ? nextUpcomingDate.startDate : 'N/A',
         approved: reservation.approved,
         Details: reservation.id,
       };

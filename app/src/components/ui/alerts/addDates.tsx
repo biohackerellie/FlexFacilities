@@ -1,6 +1,7 @@
 import * as React from 'react';
-
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
 import {
   Dialog,
   DialogContent,
@@ -10,11 +11,9 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { AddDates } from '@/lib/actions/reservations';
-import { toast } from 'sonner';
-import { Calendar } from '@/components/ui/calendar';
 import { logger } from '@/lib/logger';
-import { Label } from '../label';
 import { Input } from '../input';
+import { Label } from '../label';
 
 // form action to add dates to reservation
 
