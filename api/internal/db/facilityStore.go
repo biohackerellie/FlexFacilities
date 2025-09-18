@@ -146,6 +146,16 @@ func (f *FacilityStore) GetAll(ctx context.Context) ([]*models.BuildingWithFacil
 	return result, nil
 }
 
+func (f *FacilityStore) GetAllFacilities(ctx context.Context) ([]*models.Facility, error) {
+	var facilities []*models.Facility
+	if err := f.db.SelectContext(ctx, &facilities, getAllFacilitiesQuery); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return facilities, nil
+}
 func (f *FacilityStore) GetCategories(ctx context.Context, ids []int64) ([]models.Category, error) {
 	var categories []models.Category
 	query, args, err := sqlx.In(allCategoriesInQuery, ids)

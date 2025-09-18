@@ -71,6 +71,14 @@ message FullReservation {
   repeated ReservationDate dates = 2;
   repeated ReservationFee fees = 3;
 }
+message FullResWithFacilityName {
+  string event_name = 1;
+  string facility_name = 2;
+  string reservation_date = 3;
+  string approved = 4;
+  string user_name = 5;
+  int64 resrervation_id = 6;
+}
 
 
 service ReservationService {
@@ -101,9 +109,22 @@ service ReservationService {
   rpc UpdateReservationFee (UpdateReservationFeeRequest) returns (UpdateReservationFeeResponse);
   rpc DeleteReservationFee (DeleteReservationFeeRequest) returns (DeleteReservationFeeResponse);
   rpc CostReducer (CostReducerRequest) returns (CostReducerResponse);
+  rpc GetAllPending(GetAllReservationsRequest) returns (AllPendingResponse){
+    option idempotency_level = NO_SIDE_EFFECTS;
+  };
+  rpc AllSortedReservations (GetAllReservationsRequest) returns (AllSortedResponse){
+    option idempotency_level = NO_SIDE_EFFECTS;
+  };
 }
 
 
+message AllPendingResponse {
+  repeated FullResWithFacilityName data = 1; 
+}
+message AllSortedResponse {
+  repeated FullResWithFacilityName past = 1;
+  repeated FullResWithFacilityName future = 2;
+}
 
 message UpdateReservationStatusRequest {
   int64 id = 1;
@@ -229,3 +250,5 @@ message CostReducerRequest {
 message CostReducerResponse {
   string cost = 1;
 }
+
+

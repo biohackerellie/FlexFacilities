@@ -10,7 +10,7 @@ import { getUser } from '@/lib/actions/users';
 import { auth } from '@/lib/auth';
 import type { SideBarType } from '@/lib/validators/constants';
 import { ReservationProvider } from './_components/context';
-import AdminPanel from './adminButtons';
+import AdminPanel from './_components/adminButtons';
 
 export default async function reservationLayout({
   children,
@@ -79,7 +79,7 @@ export default async function reservationLayout({
           <div className="space-y-0.5">
             <h1 className="text-2xl font-bold">{eventName}</h1>
             <h2 className="text-muted-foreground">
-              {Facility?.building} {Facility?.name}
+              {fac?.building?.name} {Facility?.name}
             </h2>
             <h3 className="text-muted-foreground">{range(data.dates)}</h3>
             <React.Suspense fallback={<Spinner />}>

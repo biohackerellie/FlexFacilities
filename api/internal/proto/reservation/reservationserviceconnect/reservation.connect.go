@@ -84,6 +84,12 @@ const (
 	// ReservationServiceCostReducerProcedure is the fully-qualified name of the ReservationService's
 	// CostReducer RPC.
 	ReservationServiceCostReducerProcedure = "/api.reservation.ReservationService/CostReducer"
+	// ReservationServiceGetAllPendingProcedure is the fully-qualified name of the ReservationService's
+	// GetAllPending RPC.
+	ReservationServiceGetAllPendingProcedure = "/api.reservation.ReservationService/GetAllPending"
+	// ReservationServiceAllSortedReservationsProcedure is the fully-qualified name of the
+	// ReservationService's AllSortedReservations RPC.
+	ReservationServiceAllSortedReservationsProcedure = "/api.reservation.ReservationService/AllSortedReservations"
 )
 
 // ReservationServiceClient is a client for the api.reservation.ReservationService service.
@@ -105,6 +111,8 @@ type ReservationServiceClient interface {
 	UpdateReservationFee(context.Context, *connect.Request[reservation.UpdateReservationFeeRequest]) (*connect.Response[reservation.UpdateReservationFeeResponse], error)
 	DeleteReservationFee(context.Context, *connect.Request[reservation.DeleteReservationFeeRequest]) (*connect.Response[reservation.DeleteReservationFeeResponse], error)
 	CostReducer(context.Context, *connect.Request[reservation.CostReducerRequest]) (*connect.Response[reservation.CostReducerResponse], error)
+	GetAllPending(context.Context, *connect.Request[reservation.GetAllReservationsRequest]) (*connect.Response[reservation.AllPendingResponse], error)
+	AllSortedReservations(context.Context, *connect.Request[reservation.GetAllReservationsRequest]) (*connect.Response[reservation.AllSortedResponse], error)
 }
 
 // NewReservationServiceClient constructs a client for the api.reservation.ReservationService
@@ -225,6 +233,20 @@ func NewReservationServiceClient(httpClient connect.HTTPClient, baseURL string, 
 			connect.WithSchema(reservationServiceMethods.ByName("CostReducer")),
 			connect.WithClientOptions(opts...),
 		),
+		getAllPending: connect.NewClient[reservation.GetAllReservationsRequest, reservation.AllPendingResponse](
+			httpClient,
+			baseURL+ReservationServiceGetAllPendingProcedure,
+			connect.WithSchema(reservationServiceMethods.ByName("GetAllPending")),
+			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
+			connect.WithClientOptions(opts...),
+		),
+		allSortedReservations: connect.NewClient[reservation.GetAllReservationsRequest, reservation.AllSortedResponse](
+			httpClient,
+			baseURL+ReservationServiceAllSortedReservationsProcedure,
+			connect.WithSchema(reservationServiceMethods.ByName("AllSortedReservations")),
+			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -247,6 +269,8 @@ type reservationServiceClient struct {
 	updateReservationFee         *connect.Client[reservation.UpdateReservationFeeRequest, reservation.UpdateReservationFeeResponse]
 	deleteReservationFee         *connect.Client[reservation.DeleteReservationFeeRequest, reservation.DeleteReservationFeeResponse]
 	costReducer                  *connect.Client[reservation.CostReducerRequest, reservation.CostReducerResponse]
+	getAllPending                *connect.Client[reservation.GetAllReservationsRequest, reservation.AllPendingResponse]
+	allSortedReservations        *connect.Client[reservation.GetAllReservationsRequest, reservation.AllSortedResponse]
 }
 
 // GetAllReservations calls api.reservation.ReservationService.GetAllReservations.
@@ -335,6 +359,16 @@ func (c *reservationServiceClient) CostReducer(ctx context.Context, req *connect
 	return c.costReducer.CallUnary(ctx, req)
 }
 
+// GetAllPending calls api.reservation.ReservationService.GetAllPending.
+func (c *reservationServiceClient) GetAllPending(ctx context.Context, req *connect.Request[reservation.GetAllReservationsRequest]) (*connect.Response[reservation.AllPendingResponse], error) {
+	return c.getAllPending.CallUnary(ctx, req)
+}
+
+// AllSortedReservations calls api.reservation.ReservationService.AllSortedReservations.
+func (c *reservationServiceClient) AllSortedReservations(ctx context.Context, req *connect.Request[reservation.GetAllReservationsRequest]) (*connect.Response[reservation.AllSortedResponse], error) {
+	return c.allSortedReservations.CallUnary(ctx, req)
+}
+
 // ReservationServiceHandler is an implementation of the api.reservation.ReservationService service.
 type ReservationServiceHandler interface {
 	GetAllReservations(context.Context, *connect.Request[reservation.GetAllReservationsRequest]) (*connect.Response[reservation.AllReservationsResponse], error)
@@ -354,6 +388,8 @@ type ReservationServiceHandler interface {
 	UpdateReservationFee(context.Context, *connect.Request[reservation.UpdateReservationFeeRequest]) (*connect.Response[reservation.UpdateReservationFeeResponse], error)
 	DeleteReservationFee(context.Context, *connect.Request[reservation.DeleteReservationFeeRequest]) (*connect.Response[reservation.DeleteReservationFeeResponse], error)
 	CostReducer(context.Context, *connect.Request[reservation.CostReducerRequest]) (*connect.Response[reservation.CostReducerResponse], error)
+	GetAllPending(context.Context, *connect.Request[reservation.GetAllReservationsRequest]) (*connect.Response[reservation.AllPendingResponse], error)
+	AllSortedReservations(context.Context, *connect.Request[reservation.GetAllReservationsRequest]) (*connect.Response[reservation.AllSortedResponse], error)
 }
 
 // NewReservationServiceHandler builds an HTTP handler from the service implementation. It returns
@@ -470,6 +506,20 @@ func NewReservationServiceHandler(svc ReservationServiceHandler, opts ...connect
 		connect.WithSchema(reservationServiceMethods.ByName("CostReducer")),
 		connect.WithHandlerOptions(opts...),
 	)
+	reservationServiceGetAllPendingHandler := connect.NewUnaryHandler(
+		ReservationServiceGetAllPendingProcedure,
+		svc.GetAllPending,
+		connect.WithSchema(reservationServiceMethods.ByName("GetAllPending")),
+		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
+		connect.WithHandlerOptions(opts...),
+	)
+	reservationServiceAllSortedReservationsHandler := connect.NewUnaryHandler(
+		ReservationServiceAllSortedReservationsProcedure,
+		svc.AllSortedReservations,
+		connect.WithSchema(reservationServiceMethods.ByName("AllSortedReservations")),
+		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/api.reservation.ReservationService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case ReservationServiceGetAllReservationsProcedure:
@@ -506,6 +556,10 @@ func NewReservationServiceHandler(svc ReservationServiceHandler, opts ...connect
 			reservationServiceDeleteReservationFeeHandler.ServeHTTP(w, r)
 		case ReservationServiceCostReducerProcedure:
 			reservationServiceCostReducerHandler.ServeHTTP(w, r)
+		case ReservationServiceGetAllPendingProcedure:
+			reservationServiceGetAllPendingHandler.ServeHTTP(w, r)
+		case ReservationServiceAllSortedReservationsProcedure:
+			reservationServiceAllSortedReservationsHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -581,4 +635,12 @@ func (UnimplementedReservationServiceHandler) DeleteReservationFee(context.Conte
 
 func (UnimplementedReservationServiceHandler) CostReducer(context.Context, *connect.Request[reservation.CostReducerRequest]) (*connect.Response[reservation.CostReducerResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.reservation.ReservationService.CostReducer is not implemented"))
+}
+
+func (UnimplementedReservationServiceHandler) GetAllPending(context.Context, *connect.Request[reservation.GetAllReservationsRequest]) (*connect.Response[reservation.AllPendingResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.reservation.ReservationService.GetAllPending is not implemented"))
+}
+
+func (UnimplementedReservationServiceHandler) AllSortedReservations(context.Context, *connect.Request[reservation.GetAllReservationsRequest]) (*connect.Response[reservation.AllSortedResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.reservation.ReservationService.AllSortedReservations is not implemented"))
 }

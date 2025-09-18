@@ -1,4 +1,5 @@
 'use client';
+import * as React from 'react';
 import {
   Accordion,
   AccordionContent,
@@ -6,16 +7,15 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
+import { FullFacility } from '@/lib/types';
+import { Input } from '@/components/ui/input';
 import { updateCategory, updateFacility } from './actions';
-import { Facility } from '@/lib/types';
+import { toast } from 'sonner';
+import { getErrorMessage } from '@/lib/errors';
 
 interface FormProps {
-  facility: Facility;
-  categories: Facility;
+  data: FullFacility;
 }
-
-const inputStyle =
-  ' mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-xs placeholder-slate-400 focus:outline-hidden focus:border-sky-500 focus:ring-1 focus:ring-sky-500 disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none  disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none invalid:border-pink-500 invalid:text-pink-600 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 ';
 
 // const ImageUploadForm = ({ id }: FormProps) => {
 //   const uploadWithParam = uploadImage.bind(null, id);
@@ -36,72 +36,29 @@ const inputStyle =
 //   );
 // };
 
-const FacilityNameForm = ({ id, name }: FormProps) => {
-  const updateWithParam = updateFacilityName.bind(null, id);
-  return (
-    <>
-      <form action={updateWithParam}>
-        <label htmlFor="name">Name</label>
-        <input
-          type="text"
-          name="name"
-          id="name"
-          defaultValue={name}
-          placeholder={name}
-          className={inputStyle}
-        />
-        <Button variant="outline">Update</Button>
-      </form>
-    </>
-  );
-};
-
-const UpdatePricesForm = ({ CategoryIDs }: FormProps) => {
-  return (
-    <>
-      {CategoryIDs?.map((category, index) => (
-        <div key={index}>
-          <form action={updateCategoryPrices} className="my-4 gap-y-4">
-            <label htmlFor="Category" className="overflow-hidden text-ellipsis">
-              {category.name}
-            </label>
-            <input type="hidden" name="id" id="id" value={category.id} />
-            <label htmlFor="price">Price</label>
-            <input
-              type="number"
-              name="price"
-              id="price"
-              defaultValue={category.price}
-              className={inputStyle}
-            />
-            <Button variant="outline">Update</Button>
-          </form>
-        </div>
-      ))}
-    </>
-  );
-};
-
-const UpdateCapacityForm = ({ id, capacity }: FormProps) => {
-  const updateCapaciatywithID = updateCapaciaty.bind(null, id);
-  return (
-    <>
-      <form action={updateCapaciatywithID}>
-        <label htmlFor="capacity">Capacity</label>
-        <input
-          type="number"
-          name="capacity"
-          id="capacity"
-          defaultValue={capacity}
-          className={inputStyle}
-        />
-        <Button variant="outline">Update</Button>
-      </form>
-    </>
-  );
-};
-
-export default function Forms({ id, name, capacity, CategoryIDs }: FormProps) {
+export default function Forms({ data }: FormProps) {
+  const facility = data?.facility!;
+  const categories = data?.categories!;
+  const [fac, setFac] = React.useState(facility);
+  const [categoriesState, setCategories] = React.useState(categories);
+  const handleUpdateFacility = () => {
+    toast.promise(updateFacility(fac), {
+      success: 'Success',
+      loading: 'Updating...',
+      error: (error) => {
+        return getErrorMessage(error);
+      },
+    });
+  };
+  const handleUpdateCategories = (index: number) => {
+    toast.promise(updateCategory(categoriesState[index]!), {
+      success: 'Success',
+      loading: 'Updating...',
+      error: (error) => {
+        return getErrorMessage(error);
+      },
+    });
+  };
   return (
     <div className="my-2 flex flex-col gap-8">
       {/* <div className="flex flex-row"> */}
@@ -111,19 +68,73 @@ export default function Forms({ id, name, capacity, CategoryIDs }: FormProps) {
         <AccordionItem value="item-1">
           <AccordionTrigger className="w-full">Facility Name</AccordionTrigger>
           <AccordionContent>
-            <FacilityNameForm id={id} name={name} />
+            <label htmlFor="name">Name</label>
+            <Input
+              type="text"
+              name="name"
+              id="name"
+              defaultValue={facility.name}
+              placeholder={facility.name}
+              onChange={(e) => {
+                setFac({ ...fac, name: e.target.value });
+              }}
+            />
+            <Button onClick={() => handleUpdateFacility()} variant="outline">
+              Update
+            </Button>
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="item-2">
           <AccordionTrigger className="w-full">Capacity</AccordionTrigger>
           <AccordionContent>
-            <UpdateCapacityForm id={id} capacity={capacity} />
+            <label htmlFor="capacity">Capacity</label>
+            <Input
+              type="number"
+              name="capacity"
+              id="capacity"
+              placeholder={facility.capacity?.toString() ?? ''}
+              onChange={(e) => {
+                setFac({ ...fac, capacity: BigInt(e.target.value) });
+              }}
+            />
+            <Button onClick={() => handleUpdateFacility()} variant="outline">
+              Update
+            </Button>
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="item-3">
           <AccordionTrigger className="w-full">Prices</AccordionTrigger>
           <AccordionContent>
-            <UpdatePricesForm id={id} CategoryIDs={CategoryIDs} />
+            {categories?.map((category, index) => (
+              <div key={index}>
+                <label
+                  htmlFor="Category"
+                  className="overflow-hidden text-ellipsis"
+                >
+                  {category.name}
+                </label>
+                <Input
+                  type="number"
+                  name="price"
+                  id="price"
+                  placeholder={category.price?.toString() ?? ''}
+                  onChange={(e) => {
+                    const newCategories = [...categoriesState];
+                    newCategories[index] = {
+                      ...category,
+                      price: parseFloat(e.target.value),
+                    };
+                    setCategories(newCategories);
+                  }}
+                />
+                <Button
+                  variant="outline"
+                  onClick={() => handleUpdateCategories(index)}
+                >
+                  Update
+                </Button>
+              </div>
+            ))}
           </AccordionContent>
         </AccordionItem>
       </Accordion>

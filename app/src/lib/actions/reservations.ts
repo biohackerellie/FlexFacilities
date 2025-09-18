@@ -99,6 +99,7 @@ export async function ApproveReservation(
     throw error;
   }
   revalidateTag('reservations');
+  revalidateTag('requests');
 }
 export async function UpdateDateStatus(
   ids: bigint[],

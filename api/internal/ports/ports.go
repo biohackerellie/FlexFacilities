@@ -28,6 +28,7 @@ type FacilityStore interface {
 	Get(ctx context.Context, id int64) (*models.FullFacility, error)
 	GetAllBuildings(ctx context.Context) ([]*models.Building, error)
 	GetAll(ctx context.Context) ([]*models.BuildingWithFacilities, error)
+	GetAllFacilities(ctx context.Context) ([]*models.Facility, error)
 	GetByBuilding(ctx context.Context, buildingID int64) (*models.BuildingWithFacilities, error)
 	GetBuilding(ctx context.Context, id int64) (*models.Building, error)
 	GetCategories(ctx context.Context, ids []int64) ([]models.Category, error)

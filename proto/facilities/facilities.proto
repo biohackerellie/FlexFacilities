@@ -171,4 +171,5 @@ message FullFacility {
   Facility facility = 1;
   repeated Category categories = 2;
   repeated int64 reservation_id = 3;
+  Building building = 4;
 }

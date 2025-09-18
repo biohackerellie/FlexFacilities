@@ -4,7 +4,6 @@ import {
   mapPastReservations,
   mapReservations,
 } from '@/functions/calculations/tableData';
-import { api } from '@/trpc/server';
 import { columns } from './columns';
 
 async function getReservations() {

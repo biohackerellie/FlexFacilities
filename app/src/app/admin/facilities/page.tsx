@@ -1,14 +1,44 @@
 import { Suspense } from 'react';
 
 import { DataTable } from '@/components/ui/tables';
-import { mapFacilityTable } from '@/functions/calculations/tableData';
-import { api } from '@/trpc/server';
 import TableSkeleton from '../requests/skeleton';
-import { columns } from './columns';
+import { client } from '@/lib/rpc';
+import { columns, type TableFacility } from './columns';
+import { unstable_cacheTag as cacheTag } from 'next/cache';
+import { logger } from '@/lib/logger';
 
 async function getFacilities() {
-  const facilities = await api.facility.all();
-  return mapFacilityTable(facilities);
+  'use cache';
+  const { data, error } = await client.facilities().getAllFacilities({});
+  if (error) {
+    logger.error('error fetching facilities', { error: error });
+    return [] as TableFacility[];
+  }
+  if (!data) {
+    return [] as TableFacility[];
+  }
+  const facilities: TableFacility[] = [];
+  const facData = data.buildings;
+  for (const building of facData) {
+    for (const f of building.facilities) {
+      if (!f.facility) {
+        continue;
+      }
+      const facility = {
+        id: f.facility.id,
+        name: f.facility.name,
+        building: building.building?.name,
+        address: building.building?.address,
+        imagePath: f.facility.imagePath,
+        capacity: f.facility.capacity!,
+        googleCalendarId: f.facility.googleCalendarId,
+        Category: f.categories.map((c) => c.id),
+      } as TableFacility;
+      facilities.push(facility);
+    }
+  }
+  cacheTag('facilities');
+  return facilities;
 }
 
 export default async function adminFacilitiesPage() {

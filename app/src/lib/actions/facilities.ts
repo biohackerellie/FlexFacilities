@@ -42,3 +42,19 @@ export async function getFacilities() {
 
   return data;
 }
+
+export async function getAllBuildingNames() {
+  'use cache';
+  const { data, error } = await client.facilities().getAllBuildings({});
+
+  if (error) {
+    logger.error('Error fetching facilities', { 'error ': error });
+  }
+  if (!data) {
+    return null;
+  }
+  cacheTag('facilities');
+  return data.buildings.map((b) => {
+    return { name: b.name, id: b.id };
+  });
+}

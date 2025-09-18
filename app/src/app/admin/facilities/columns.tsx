@@ -5,17 +5,17 @@ import { ArrowUpDown } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { Button } from '@/components/ui/buttons';
+import { Button } from '@/components/ui/button';
 
-type TableFacility = {
-  id: number;
+export type TableFacility = {
+  id: bigint;
   name: string;
   building: string;
   address: string;
-  imagePath: string | null;
-  capacity: number | null;
+  imagePath: string | undefined;
+  capacity: bigint | undefined;
   googleCalendarId: string;
-  Category: number[];
+  Category: bigint[];
 };
 export const columns: ColumnDef<TableFacility>[] = [
   {

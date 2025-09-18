@@ -19,14 +19,15 @@ export default async function facilityEditForm({
     .getFacility({ id: BigInt(params.id) });
   if (!data || error) return notFound();
   const facility = data?.facility;
-
-  const id = parseInt(params.id, 10);
+  if (!facility) return notFound();
+  const imagePath = facility?.imagePath;
+  const name = facility?.name;
 
   return (
     <div className="gap-y-4 space-y-7">
       <div>
         <h1 className="text-lg font-medium">
-          Edit {building} {name}
+          Edit {data.building?.name} {facility?.name}
         </h1>
       </div>
       <div className="flex flex-col justify-center">
@@ -35,7 +36,7 @@ export default async function facilityEditForm({
             {imagePath ? (
               <Image
                 src={imagePath}
-                alt={name}
+                alt={name!}
                 width={400}
                 height={400}
                 className="border-2 shadow-md drop-shadow-md"
@@ -43,7 +44,7 @@ export default async function facilityEditForm({
             ) : (
               <Image
                 src="/logo.jpg"
-                alt={name}
+                alt={name!}
                 width={480}
                 height={480}
                 className="border-2 drop-shadow-xl"
@@ -52,12 +53,7 @@ export default async function facilityEditForm({
           </div>
         </Suspense>
         <Suspense fallback={<Skeleton className="h-[400px] w-[400px]" />}>
-          <Forms
-            id={id}
-            name={name}
-            capacity={capacity ?? 30}
-            CategoryIDs={FacilityCategories}
-          />
+          <Forms data={data} />
         </Suspense>
       </div>
     </div>

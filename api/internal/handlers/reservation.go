@@ -13,22 +13,25 @@ import (
 	"log/slog"
 	"math"
 	"sort"
+	"sync"
 	"time"
 
 	"connectrpc.com/connect"
+	"golang.org/x/sync/errgroup"
 )
 
 type ReservationHandler struct {
 	reservationStore ports.ReservationStore
+	userStore        ports.UserStore
 	facilityStore    ports.FacilityStore
 	log              *slog.Logger
 	timezone         *time.Location
 	calendar         *calendar.Calendar
 }
 
-func NewReservationHandler(reservationStore ports.ReservationStore, log *slog.Logger, timezone *time.Location) *ReservationHandler {
+func NewReservationHandler(reservationStore ports.ReservationStore, userStore ports.UserStore, log *slog.Logger, timezone *time.Location) *ReservationHandler {
 	log.With(slog.Group("Core_ReservationHandler", slog.String("name", "reservation")))
-	return &ReservationHandler{reservationStore: reservationStore, log: log, timezone: timezone}
+	return &ReservationHandler{reservationStore: reservationStore, userStore: userStore, log: log, timezone: timezone}
 }
 func (a *ReservationHandler) GetAllReservations(ctx context.Context, req *connect.Request[service.GetAllReservationsRequest]) (*connect.Response[service.AllReservationsResponse], error) {
 	res, err := a.reservationStore.GetAll(ctx)
@@ -537,7 +540,7 @@ func (a *ReservationHandler) DeleteReservationDates(ctx context.Context, req *co
 		return nil, err
 	}
 	if len(dates) == 0 {
-		return nil, connect.NewError(connect.CodeNotFound, fmt.Errorf("no dates for reservation %s", req.Msg.GetId()))
+		return nil, connect.NewError(connect.CodeNotFound, fmt.Errorf("no dates for reservation %q", req.Msg.GetId()))
 	}
 	resWrap, err := a.reservationStore.Get(ctx, dates[0].ReservationID)
 	if err != nil {
@@ -648,6 +651,177 @@ func (a *ReservationHandler) CostReducer(ctx context.Context, req *connect.Reque
 	}), nil
 }
 
+func (a *ReservationHandler) GetAllPending(ctx context.Context, req *connect.Request[service.GetAllReservationsRequest]) (*connect.Response[service.AllPendingResponse], error) {
+	reservations, err := a.reservationStore.GetAll(ctx)
+	if err != nil {
+		return nil, err
+	}
+	filtered := make([]*service.FullReservation, 0)
+	for _, r := range reservations {
+		if r.Reservation.Approved == models.ReservationApprovedPending {
+			filtered = append(filtered, r.ToProto())
+		}
+	}
+	withFacName := make([]*service.FullResWithFacilityName, len(filtered))
+	for i, res := range filtered {
+		fac, err := a.facilityStore.Get(ctx, res.Reservation.FacilityId)
+		if err != nil {
+			return nil, err
+		}
+		u, err := a.userStore.Get(ctx, res.Reservation.UserId)
+		if err != nil {
+			return nil, err
+		}
+
+		withFacName[i] = &service.FullResWithFacilityName{
+			ResWrap:      res,
+			FacilityName: fac.Facility.Name,
+			UserName:     u.Name,
+		}
+	}
+	return connect.NewResponse(&service.AllPendingResponse{
+		Data: withFacName,
+	}), nil
+}
+
+type entry struct {
+	item *service.FullResWithFacilityName
+	key  time.Time
+}
+
+func (a *ReservationHandler) AllSortedReservations(ctx context.Context, req *connect.Request[service.GetAllReservationsRequest]) (*connect.Response[service.AllSortedResponse], error) {
+
+	reservations, err := a.reservationStore.GetAll(ctx)
+	if err != nil {
+		return nil, err
+	}
+	users, err := a.userStore.GetAll(ctx)
+	if err != nil {
+		return nil, err
+	}
+	facilities, err := a.facilityStore.GetAllFacilities(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	userName := make(map[string]string, len(users))
+	for _, u := range users {
+		userName[u.ID] = u.Name
+	}
+
+	facName := make(map[int64]string, len(facilities))
+	for _, f := range facilities {
+		facName[f.ID] = f.Name
+	}
+
+	now := time.Now()
+	const concLimit = 10
+	sem := make(chan struct{}, concLimit)
+	g, gctx := errgroup.WithContext(ctx)
+	var mu sync.Mutex
+
+	futureEntries := make([]entry, 0, len(reservations))
+	pastEntries := make([]entry, 0, len(reservations))
+
+	for _, r0 := range reservations {
+
+		r := r0
+		select {
+		case <-gctx.Done():
+			break
+		default:
+		}
+		sem <- struct{}{}
+		g.Go(func() error {
+			defer func() { <-sem }()
+			futureDates := make([]models.ReservationDate, 0, len(r.Dates))
+			pastDates := make([]models.ReservationDate, 0, len(r.Dates))
+			for _, d := range r.Dates {
+				if !d.LocalEnd.Time.Before(now) {
+					futureDates = append(futureDates, d)
+				} else {
+					pastDates = append(pastDates, d)
+				}
+			}
+
+			uKey := r.Reservation.UserID
+			facKey := r.Reservation.FacilityID
+
+			userN := userName[uKey]
+			facN := facName[facKey]
+
+			if len(futureDates) == 0 {
+				sort.Slice(pastDates, func(i, j int) bool {
+					return pastDates[i].LocalStart.Time.After(pastDates[j].LocalStart.Time)
+				})
+				r.Dates = pastDates
+				var key time.Time
+				if len(pastDates) > 0 {
+					key = pastDates[0].LocalStart.Time
+				} else {
+					key = time.Time{}
+				}
+				wrapped := &service.FullResWithFacilityName{
+					EventName:       r.Reservation.EventName,
+					ReservationDate: key.Format("2006-01-02 10:04 PM"),
+
+					FacilityName: facN,
+					UserName:     userN,
+				}
+				mu.Lock()
+				pastEntries = append(pastEntries, entry{item: wrapped, key: key})
+				mu.Unlock()
+			} else {
+				sort.Slice(futureDates, func(i, j int) bool {
+					return futureDates[i].LocalStart.Time.Before(futureDates[j].LocalStart.Time)
+				})
+				r.Dates = futureDates
+
+				var key time.Time
+				if len(futureDates) > 0 {
+					key = futureDates[0].LocalStart.Time
+				} else {
+					key = time.Time{}
+				}
+				wrapped := &service.FullResWithFacilityName{
+					ResWrap:      r.ToProto(),
+					FacilityName: facN,
+					UserName:     userN,
+				}
+				mu.Lock()
+				futureEntries = append(futureEntries, entry{item: wrapped, key: key})
+				mu.Unlock()
+
+			}
+			return nil
+		})
+	}
+
+	if err := g.Wait(); err != nil {
+		return nil, err
+	}
+
+	sort.Slice(futureEntries, func(i, j int) bool {
+		return futureEntries[i].key.Before(futureEntries[j].key)
+	})
+	sort.Slice(pastEntries, func(i, j int) bool {
+		return pastEntries[i].key.Before(pastEntries[j].key)
+	})
+	future := make([]*service.FullResWithFacilityName, 0, len(futureEntries))
+	for _, e := range futureEntries {
+		future = append(future, e.item)
+	}
+	past := make([]*service.FullResWithFacilityName, 0, len(pastEntries))
+	for _, e := range pastEntries {
+		past = append(past, e.item)
+	}
+
+	return connect.NewResponse(&service.AllSortedResponse{
+		Past:   past,
+		Future: future,
+	}), nil
+}
+
 func buildPublishPlan(res models.Reservation, occs []models.ReservationDate, approveAll bool) *calendar.PublishPlan {
 	if approveAll && res.RRule != nil {
 		first := occs[0]
@@ -678,20 +852,29 @@ func buildPublishPlan(res models.Reservation, occs []models.ReservationDate, app
 	}
 }
 
-func filterApproved(dates []models.ReservationDate) []models.ReservationDate {
-	var approved []models.ReservationDate
-	for _, date := range dates {
-		if date.Approved == models.ReservationDateApprovedApproved {
-			approved = append(approved, date)
-		}
-	}
-	return approved
-}
+// func filterApproved(dates []models.ReservationDate) []models.ReservationDate {
+// 	var approved []models.ReservationDate
+// 	for _, date := range dates {
+// 		if date.Approved == models.ReservationDateApprovedApproved {
+// 			approved = append(approved, date)
+// 		}
+// 	}
+// 	return approved
+// }
+// func filterPending(dates []models.ReservationDate) []models.ReservationDate {
+// 	var pending []models.ReservationDate
+// 	for _, date := range dates {
+// 		if date.Approved == models.ReservationDateApprovedPending {
+// 			pending = append(pending, date)
+// 		}
+// 	}
+// 	return pending
+// }
 
-func startsOf(dates []models.ReservationDate) []time.Time {
-	var starts []time.Time
-	for _, date := range dates {
-		starts = append(starts, date.LocalStart.Time)
-	}
-	return starts
-}
+// func startsOf(dates []models.ReservationDate) []time.Time {
+// 	var starts []time.Time
+// 	for _, date := range dates {
+// 		starts = append(starts, date.LocalStart.Time)
+// 	}
+// 	return starts
+// }

@@ -1,5 +1,4 @@
 'use client';
-
 import moment from 'moment';
 import * as React from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
@@ -20,7 +19,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
 } from '../ui/alert-dialog';
-import { Button } from '../ui/buttons';
+import { Button } from '../ui/button';
 
 const localizer = momentLocalizer(moment);
 
@@ -44,7 +43,6 @@ export default function CalendarMain({
   promise: ReturnType<typeof GetAllEvents>;
 }) {
   const searchParams = useSearchParams();
-
   const [selectedEvent, setSelectedEvent] =
     React.useState<EventComponentProps>(null);
   const [isOpen, setIsOpen] = React.useState(false);

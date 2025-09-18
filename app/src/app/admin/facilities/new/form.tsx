@@ -1,10 +1,8 @@
 'use client';
-
-import { CreateFacilitySchema } from '@local/db/schema';
-import { buildingNames } from '@local/validators/constants';
+import * as React from 'react';
 import { toast } from 'sonner';
-
-import { Button } from '@/components/ui/buttons';
+import { getAllBuildingNames } from '@/lib/actions/facilities';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -12,50 +10,77 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  useForm,
 } from '@/components/ui/form';
+import { useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
+import { createFacility } from './actions';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
 } from '@/components/ui/select';
-import { api } from '@/trpc/react';
+import * as z from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { getErrorMessage } from '@/lib/errors';
+import { notFound } from 'next/navigation';
 
 const inputStyle =
   ' mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-xs placeholder-slate-400 focus:outline-hidden focus:border-sky-500 focus:ring-1 focus:ring-sky-500 disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none  disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none invalid:border-pink-500 invalid:text-pink-600 focus:invalid:border-pink-500 focus:invalid:ring-pink-500 ';
 
-const initialState = {
-  message: null,
-};
+const categoryPrice = z
+  .string()
+  .regex(/^(0|[1-9]\d*)\.\d{2}$/, {
+    message: 'Must be a number with exactly 2 decimal places',
+  })
+  .refine((val) => parseFloat(val) >= 0, {
+    message: 'Amount must be zero or positive',
+  })
+  .default('0.00');
+const schema = z.object({
+  name: z.string().min(1, { message: 'Facility name is required' }),
+  capacity: z.number().min(1, { message: 'Capacity is required' }),
+  googleCalendarId: z
+    .string()
+    .min(1, { message: 'Google Calendar ID is required' }),
+  buildingId: z.string().min(1, { message: 'Building is required' }),
+  category1: categoryPrice,
+  category2: categoryPrice,
+  category3: categoryPrice,
+});
+export type CreateFacilitySchema = z.infer<typeof schema>;
 
-export default function NewFacilityForm() {
-  const form = useForm({
-    schema: CreateFacilitySchema,
+export default function NewFacilityForm({
+  buildingPromise,
+}: {
+  buildingPromise: Promise<Awaited<ReturnType<typeof getAllBuildingNames>>>;
+}) {
+  const form = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
   });
-
-  const utils = api.useUtils();
-  const createFacility = api.facility.new.useMutation({
-    onSuccess: async () => {
-      form.reset();
-      await utils.facility.invalidate();
-    },
-    onError: (err) => {
-      toast.error(
-        err.data?.code === 'UNAUTHORIZED'
-          ? 'You are not authorized to create a facility'
-          : 'Error creating facility',
-      );
-    },
-  });
+  const [submitting, startTransition] = React.useTransition();
+  const buildingNames = React.use(buildingPromise);
+  if (!buildingNames) return notFound();
+  function onSubmit(values: z.infer<typeof schema>) {
+    startTransition(() => {
+      toast.promise(createFacility(values), {
+        loading: 'Creating...',
+        success: () => {
+          form.reset;
+          return 'Facility created!';
+        },
+        error: (error) => {
+          return getErrorMessage(error);
+        },
+      });
+    });
+  }
   return (
     <div className="flex flex-col justify-center">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit((data) => {
-            createFacility.mutate(data);
+            onSubmit(data);
           })}
         >
           <FormField
@@ -72,38 +97,33 @@ export default function NewFacilityForm() {
           />
           <FormField
             control={form.control}
-            name="building"
+            name="buildingId"
             render={({ field }) => (
               <FormItem>
                 <Select
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  defaultValue={field.value.toString()}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select a building" />
+                      {field.value
+                        ? buildingNames.find(
+                            (b) => b.id.toString() === field.value,
+                          )?.name
+                        : 'Select a building'}
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {buildingNames.map((building, index) => (
-                      <SelectItem key={index} value={building}>
-                        {building}
+                    {buildingNames.map((building) => (
+                      <SelectItem
+                        key={building.id}
+                        value={building.id.toString()}
+                      >
+                        {building.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="address"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input {...field} className={inputStyle} />
-                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
@@ -138,7 +158,7 @@ export default function NewFacilityForm() {
                   <Input
                     {...field}
                     name="category1"
-                    value={field.value || 0}
+                    value={field.value}
                     className={inputStyle}
                   />
                 </FormControl>

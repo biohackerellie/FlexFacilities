@@ -1462,6 +1462,7 @@ type FullFacility struct {
 	Facility      *Facility              `protobuf:"bytes,1,opt,name=facility,proto3" json:"facility,omitempty"`
 	Categories    []*Category            `protobuf:"bytes,2,rep,name=categories,proto3" json:"categories,omitempty"`
 	ReservationId []int64                `protobuf:"varint,3,rep,packed,name=reservation_id,json=reservationId,proto3" json:"reservation_id,omitempty"`
+	Building      *Building              `protobuf:"bytes,4,opt,name=building,proto3" json:"building,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1513,6 +1514,13 @@ func (x *FullFacility) GetCategories() []*Category {
 func (x *FullFacility) GetReservationId() []int64 {
 	if x != nil {
 		return x.ReservationId
+	}
+	return nil
+}
+
+func (x *FullFacility) GetBuilding() *Building {
+	if x != nil {
+		return x.Building
 	}
 	return nil
 }
@@ -1622,13 +1630,14 @@ const file_proto_facilities_facilities_proto_rawDesc = "" +
 	"\x1dUpdateFacilityCategoryRequest\x124\n" +
 	"\bcategory\x18\x01 \x01(\v2\x18.api.facilities.CategoryR\bcategory\"\x18\n" +
 	"\x16CreateFacilityResponse\"\x18\n" +
-	"\x16UpdateFacilityResponse\"\xa5\x01\n" +
+	"\x16UpdateFacilityResponse\"\xdb\x01\n" +
 	"\fFullFacility\x124\n" +
 	"\bfacility\x18\x01 \x01(\v2\x18.api.facilities.FacilityR\bfacility\x128\n" +
 	"\n" +
 	"categories\x18\x02 \x03(\v2\x18.api.facilities.CategoryR\n" +
 	"categories\x12%\n" +
-	"\x0ereservation_id\x18\x03 \x03(\x03R\rreservationId2\xd6\n" +
+	"\x0ereservation_id\x18\x03 \x03(\x03R\rreservationId\x124\n" +
+	"\bbuilding\x18\x04 \x01(\v2\x18.api.facilities.BuildingR\bbuilding2\xd6\n" +
 	"\n" +
 	"\x11FacilitiesService\x12j\n" +
 	"\x10GetAllFacilities\x12'.api.facilities.GetAllFacilitiesRequest\x1a(.api.facilities.GetAllFacilitiesResponse\"\x03\x90\x02\x01\x12g\n" +
@@ -1709,37 +1718,38 @@ var file_proto_facilities_facilities_proto_depIdxs = []int32{
 	3,  // 15: api.facilities.UpdateFacilityCategoryRequest.category:type_name -> api.facilities.Category
 	0,  // 16: api.facilities.FullFacility.facility:type_name -> api.facilities.Facility
 	3,  // 17: api.facilities.FullFacility.categories:type_name -> api.facilities.Category
-	15, // 18: api.facilities.FacilitiesService.GetAllFacilities:input_type -> api.facilities.GetAllFacilitiesRequest
-	13, // 19: api.facilities.FacilitiesService.GetAllBuildings:input_type -> api.facilities.GetAllBuildingsRequest
-	16, // 20: api.facilities.FacilitiesService.GetFacility:input_type -> api.facilities.GetFacilityRequest
-	7,  // 21: api.facilities.FacilitiesService.GetEventsByFacility:input_type -> api.facilities.GetEventsByFacilityRequest
-	9,  // 22: api.facilities.FacilitiesService.GetEventsByBuilding:input_type -> api.facilities.GetEventsByBuildingRequest
-	11, // 23: api.facilities.FacilitiesService.GetAllEvents:input_type -> api.facilities.GetAllEventsRequest
-	17, // 24: api.facilities.FacilitiesService.GetFacilityCategories:input_type -> api.facilities.GetFacilityCategoriesRequest
-	18, // 25: api.facilities.FacilitiesService.GetBuildingFacilities:input_type -> api.facilities.GetBuildingFacilitiesRequest
-	22, // 26: api.facilities.FacilitiesService.CreateFacility:input_type -> api.facilities.CreateFacilityRequest
-	23, // 27: api.facilities.FacilitiesService.UpdateFacility:input_type -> api.facilities.UpdateFacilityRequest
-	24, // 28: api.facilities.FacilitiesService.DeleteFacility:input_type -> api.facilities.DeleteFacilityRequest
-	26, // 29: api.facilities.FacilitiesService.UpdateFacilityCategory:input_type -> api.facilities.UpdateFacilityCategoryRequest
-	6,  // 30: api.facilities.FacilitiesService.GetCategory:input_type -> api.facilities.GetCategoryRequest
-	19, // 31: api.facilities.FacilitiesService.GetAllFacilities:output_type -> api.facilities.GetAllFacilitiesResponse
-	14, // 32: api.facilities.FacilitiesService.GetAllBuildings:output_type -> api.facilities.GetAllBuildingsResponse
-	29, // 33: api.facilities.FacilitiesService.GetFacility:output_type -> api.facilities.FullFacility
-	8,  // 34: api.facilities.FacilitiesService.GetEventsByFacility:output_type -> api.facilities.GetEventsByFacilityResponse
-	10, // 35: api.facilities.FacilitiesService.GetEventsByBuilding:output_type -> api.facilities.GetEventsByBuildingResponse
-	12, // 36: api.facilities.FacilitiesService.GetAllEvents:output_type -> api.facilities.GetAllEventsResponse
-	20, // 37: api.facilities.FacilitiesService.GetFacilityCategories:output_type -> api.facilities.GetFacilityCategoriesResponse
-	21, // 38: api.facilities.FacilitiesService.GetBuildingFacilities:output_type -> api.facilities.GetBuildingFacilitiesResponse
-	27, // 39: api.facilities.FacilitiesService.CreateFacility:output_type -> api.facilities.CreateFacilityResponse
-	28, // 40: api.facilities.FacilitiesService.UpdateFacility:output_type -> api.facilities.UpdateFacilityResponse
-	25, // 41: api.facilities.FacilitiesService.DeleteFacility:output_type -> api.facilities.DeleteFacilityResponse
-	3,  // 42: api.facilities.FacilitiesService.UpdateFacilityCategory:output_type -> api.facilities.Category
-	3,  // 43: api.facilities.FacilitiesService.GetCategory:output_type -> api.facilities.Category
-	31, // [31:44] is the sub-list for method output_type
-	18, // [18:31] is the sub-list for method input_type
-	18, // [18:18] is the sub-list for extension type_name
-	18, // [18:18] is the sub-list for extension extendee
-	0,  // [0:18] is the sub-list for field type_name
+	1,  // 18: api.facilities.FullFacility.building:type_name -> api.facilities.Building
+	15, // 19: api.facilities.FacilitiesService.GetAllFacilities:input_type -> api.facilities.GetAllFacilitiesRequest
+	13, // 20: api.facilities.FacilitiesService.GetAllBuildings:input_type -> api.facilities.GetAllBuildingsRequest
+	16, // 21: api.facilities.FacilitiesService.GetFacility:input_type -> api.facilities.GetFacilityRequest
+	7,  // 22: api.facilities.FacilitiesService.GetEventsByFacility:input_type -> api.facilities.GetEventsByFacilityRequest
+	9,  // 23: api.facilities.FacilitiesService.GetEventsByBuilding:input_type -> api.facilities.GetEventsByBuildingRequest
+	11, // 24: api.facilities.FacilitiesService.GetAllEvents:input_type -> api.facilities.GetAllEventsRequest
+	17, // 25: api.facilities.FacilitiesService.GetFacilityCategories:input_type -> api.facilities.GetFacilityCategoriesRequest
+	18, // 26: api.facilities.FacilitiesService.GetBuildingFacilities:input_type -> api.facilities.GetBuildingFacilitiesRequest
+	22, // 27: api.facilities.FacilitiesService.CreateFacility:input_type -> api.facilities.CreateFacilityRequest
+	23, // 28: api.facilities.FacilitiesService.UpdateFacility:input_type -> api.facilities.UpdateFacilityRequest
+	24, // 29: api.facilities.FacilitiesService.DeleteFacility:input_type -> api.facilities.DeleteFacilityRequest
+	26, // 30: api.facilities.FacilitiesService.UpdateFacilityCategory:input_type -> api.facilities.UpdateFacilityCategoryRequest
+	6,  // 31: api.facilities.FacilitiesService.GetCategory:input_type -> api.facilities.GetCategoryRequest
+	19, // 32: api.facilities.FacilitiesService.GetAllFacilities:output_type -> api.facilities.GetAllFacilitiesResponse
+	14, // 33: api.facilities.FacilitiesService.GetAllBuildings:output_type -> api.facilities.GetAllBuildingsResponse
+	29, // 34: api.facilities.FacilitiesService.GetFacility:output_type -> api.facilities.FullFacility
+	8,  // 35: api.facilities.FacilitiesService.GetEventsByFacility:output_type -> api.facilities.GetEventsByFacilityResponse
+	10, // 36: api.facilities.FacilitiesService.GetEventsByBuilding:output_type -> api.facilities.GetEventsByBuildingResponse
+	12, // 37: api.facilities.FacilitiesService.GetAllEvents:output_type -> api.facilities.GetAllEventsResponse
+	20, // 38: api.facilities.FacilitiesService.GetFacilityCategories:output_type -> api.facilities.GetFacilityCategoriesResponse
+	21, // 39: api.facilities.FacilitiesService.GetBuildingFacilities:output_type -> api.facilities.GetBuildingFacilitiesResponse
+	27, // 40: api.facilities.FacilitiesService.CreateFacility:output_type -> api.facilities.CreateFacilityResponse
+	28, // 41: api.facilities.FacilitiesService.UpdateFacility:output_type -> api.facilities.UpdateFacilityResponse
+	25, // 42: api.facilities.FacilitiesService.DeleteFacility:output_type -> api.facilities.DeleteFacilityResponse
+	3,  // 43: api.facilities.FacilitiesService.UpdateFacilityCategory:output_type -> api.facilities.Category
+	3,  // 44: api.facilities.FacilitiesService.GetCategory:output_type -> api.facilities.Category
+	32, // [32:45] is the sub-list for method output_type
+	19, // [19:32] is the sub-list for method input_type
+	19, // [19:19] is the sub-list for extension type_name
+	19, // [19:19] is the sub-list for extension extendee
+	0,  // [0:19] is the sub-list for field type_name
 }
 
 func init() { file_proto_facilities_facilities_proto_init() }

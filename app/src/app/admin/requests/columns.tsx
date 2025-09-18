@@ -15,16 +15,16 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { Button } from '@/components/ui/buttons';
-import { approveReservation, denyReservation } from '@/functions/reservations';
+import { Button } from '@/components/ui/button';
+import { ApproveReservation } from '@/lib/actions/reservations';
 
-type TableReservation = {
+export type TableReservation = {
   eventName: string;
   Facility: string;
   ReservationDate: string;
   approved: 'pending' | 'approved' | 'denied' | 'canceled';
   User: string;
-  Details: number;
+  Id: bigint;
 };
 
 export const columns: ColumnDef<TableReservation>[] = [
@@ -65,7 +65,7 @@ export const columns: ColumnDef<TableReservation>[] = [
     accessorKey: 'approved',
     header: 'Approve or Deny',
     cell: ({ row }) => {
-      const id = parseInt(row.getValue('Details'), 10);
+      const id = row.original.Id;
 
       return (
         <AlertDialog>
@@ -82,16 +82,12 @@ export const columns: ColumnDef<TableReservation>[] = [
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
               <AlertDialogAction
-                onClick={() => {
-                  void approveReservation(id);
-                }}
+                onClick={() => ApproveReservation(id, 'approved')}
               >
                 Approve
               </AlertDialogAction>
               <AlertDialogAction
-                onClick={() => {
-                  void denyReservation(id);
-                }}
+                onClick={() => ApproveReservation(id, 'denied')}
               >
                 Deny
               </AlertDialogAction>
