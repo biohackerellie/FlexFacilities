@@ -9,8 +9,8 @@ import { getReservation } from '@/lib/actions/reservations';
 import { getUser } from '@/lib/actions/users';
 import { auth } from '@/lib/auth';
 import type { SideBarType } from '@/lib/validators/constants';
-import { ReservationProvider } from './_components/context';
 import AdminPanel from './_components/adminButtons';
+import { ReservationProvider } from './_components/context';
 
 export default async function reservationLayout({
   children,

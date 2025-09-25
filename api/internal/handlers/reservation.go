@@ -99,7 +99,7 @@ func (a *ReservationHandler) GetRequestsThisWeek(ctx context.Context, req *conne
 
 func (a *ReservationHandler) CreateReservation(ctx context.Context, req *connect.Request[service.CreateReservationRequest]) (*connect.Response[service.CreateReservationResponse], error) {
 	loc := a.timezone
-	hasOcc := req.Msg.Occurrences != nil && len(req.Msg.Occurrences) > 0
+	hasOcc := len(req.Msg.Occurrences) > 0
 	hasRec := (req.Msg.Pattern != nil && req.Msg.Pattern.Freq != "") ||
 		len(req.Msg.Rdates) > 0 || len(req.Msg.Exdates) > 0
 
@@ -187,7 +187,7 @@ func (a *ReservationHandler) CreateReservation(ctx context.Context, req *connect
 		Details:      &req.Msg.Details,
 		Insurance:    false,
 		CategoryID:   req.Msg.CategoryId,
-		Name:         &req.Msg.Name,
+		Name:         req.Msg.Name,
 		Phone:        &req.Msg.Phone,
 		TechSupport:  &req.Msg.TechSupport,
 		TechDetails:  req.Msg.TechDetails,
@@ -265,7 +265,7 @@ func (a *ReservationHandler) UpdateReservationStatus(ctx context.Context, req *c
 			if resWrap.Dates[i].Approved != models.ReservationDateApprovedApproved {
 				resWrap.Dates[i].Approved = models.ReservationDateApprovedApproved
 				if err := a.reservationStore.UpdateDate(ctx, &resWrap.Dates[i]); err != nil {
-					a.log.Error("Failed to update approval for date", resWrap.Dates[i].ID, "err", err)
+					a.log.Error("Failed to update approval for date", slog.Int64("id", resWrap.Dates[i].ID), "err", err)
 				}
 			}
 		}
@@ -308,7 +308,7 @@ func (a *ReservationHandler) UpdateReservationStatus(ctx context.Context, req *c
 			d.GcalEventid = &eventID
 			d.Approved = models.ReservationDateApprovedApproved
 			if err := a.reservationStore.UpdateDate(ctx, d); err != nil {
-				a.log.Error("Failed to update approval for date", d.ID, "err", err)
+				a.log.Error("Failed to update approval for date", slog.Int64("date_id", d.ID), "err", err)
 			}
 		}
 	case calendar.ModeSeries:
@@ -339,16 +339,43 @@ func (a *ReservationHandler) DeleteReservation(ctx context.Context, req *connect
 }
 
 func (a *ReservationHandler) UserReservations(ctx context.Context, req *connect.Request[service.UserReservationsRequest]) (*connect.Response[service.UserReservationsResponse], error) {
-	res, err := a.reservationStore.GetUserReservations(ctx, req.Msg.GetUserId())
+	reservations, err := a.reservationStore.GetUserReservations(ctx, req.Msg.GetUserId())
 	if err != nil {
 		return nil, err
 	}
-	reservations := make([]*service.FullReservation, len(res))
-	for i, reservation := range res {
-		reservations[i] = reservation.ToProto()
+	filtered := make([]*service.FullReservation, 0)
+	for _, r := range reservations {
+		if r.Reservation.Approved == models.ReservationApprovedPending {
+			filtered = append(filtered, r.ToProto())
+		}
+	}
+
+	facilities, err := a.facilityStore.GetAllFacilities(ctx)
+	if err != nil {
+		return nil, err
+	}
+	facMap := make(map[int64]string, len(facilities))
+	for _, f := range facilities {
+		facMap[f.ID] = f.Name
+	}
+	withFacName := make([]*service.FullResWithFacilityName, len(filtered))
+	for i, res := range filtered {
+		fac, ok := facMap[res.Reservation.FacilityId]
+		if !ok {
+			return nil, fmt.Errorf("facility not found for reservation id %d", res.Reservation.Id)
+		}
+
+		withFacName[i] = &service.FullResWithFacilityName{
+			EventName:       res.Reservation.EventName,
+			ReservationDate: res.Dates[0].LocalStart,
+			Approved:        res.Reservation.Approved,
+			FacilityName:    fac,
+			UserName:        res.Reservation.Name,
+			ReservationId:   res.Reservation.Id,
+		}
 	}
 	return connect.NewResponse(&service.UserReservationsResponse{
-		Reservations: reservations,
+		Reservations: withFacName,
 	}), nil
 }
 
@@ -589,7 +616,7 @@ func (a *ReservationHandler) DeleteReservationDates(ctx context.Context, req *co
 func (a *ReservationHandler) CreateReservationFee(ctx context.Context, req *connect.Request[service.CreateReservationFeeRequest]) (*connect.Response[service.CreateReservationFeeResponse], error) {
 	fees := models.ToReservationFees(req.Msg.GetFee())
 	for i := range fees {
-		a.reservationStore.CreateFee(ctx, fees[i])
+		_ = a.reservationStore.CreateFee(ctx, fees[i])
 	}
 	return connect.NewResponse(&service.CreateReservationFeeResponse{}), nil
 }
@@ -647,7 +674,7 @@ func (a *ReservationHandler) CostReducer(ctx context.Context, req *connect.Reque
 	totalCents := max(costCents+feeCents, 0)
 	stringCost := fmt.Sprintf("%.2f", float64(totalCents)/100.0)
 	return connect.NewResponse(&service.CostReducerResponse{
-		Cost: string(stringCost),
+		Cost: stringCost,
 	}), nil
 }
 
@@ -662,21 +689,29 @@ func (a *ReservationHandler) GetAllPending(ctx context.Context, req *connect.Req
 			filtered = append(filtered, r.ToProto())
 		}
 	}
+
+	facilities, err := a.facilityStore.GetAllFacilities(ctx)
+	if err != nil {
+		return nil, err
+	}
+	facMap := make(map[int64]string, len(facilities))
+	for _, f := range facilities {
+		facMap[f.ID] = f.Name
+	}
 	withFacName := make([]*service.FullResWithFacilityName, len(filtered))
 	for i, res := range filtered {
-		fac, err := a.facilityStore.Get(ctx, res.Reservation.FacilityId)
-		if err != nil {
-			return nil, err
-		}
-		u, err := a.userStore.Get(ctx, res.Reservation.UserId)
-		if err != nil {
-			return nil, err
+		fac, ok := facMap[res.Reservation.FacilityId]
+		if !ok {
+			return nil, fmt.Errorf("facility not found for reservation id %d", res.Reservation.Id)
 		}
 
 		withFacName[i] = &service.FullResWithFacilityName{
-			ResWrap:      res,
-			FacilityName: fac.Facility.Name,
-			UserName:     u.Name,
+			EventName:       res.Reservation.EventName,
+			ReservationDate: res.Dates[0].LocalStart,
+			Approved:        res.Reservation.Approved,
+			FacilityName:    fac,
+			UserName:        res.Reservation.Name,
+			ReservationId:   res.Reservation.Id,
 		}
 	}
 	return connect.NewResponse(&service.AllPendingResponse{
@@ -695,18 +730,9 @@ func (a *ReservationHandler) AllSortedReservations(ctx context.Context, req *con
 	if err != nil {
 		return nil, err
 	}
-	users, err := a.userStore.GetAll(ctx)
-	if err != nil {
-		return nil, err
-	}
 	facilities, err := a.facilityStore.GetAllFacilities(ctx)
 	if err != nil {
 		return nil, err
-	}
-
-	userName := make(map[string]string, len(users))
-	for _, u := range users {
-		userName[u.ID] = u.Name
 	}
 
 	facName := make(map[int64]string, len(facilities))
@@ -744,10 +770,8 @@ func (a *ReservationHandler) AllSortedReservations(ctx context.Context, req *con
 				}
 			}
 
-			uKey := r.Reservation.UserID
 			facKey := r.Reservation.FacilityID
 
-			userN := userName[uKey]
 			facN := facName[facKey]
 
 			if len(futureDates) == 0 {
@@ -764,9 +788,10 @@ func (a *ReservationHandler) AllSortedReservations(ctx context.Context, req *con
 				wrapped := &service.FullResWithFacilityName{
 					EventName:       r.Reservation.EventName,
 					ReservationDate: key.Format("2006-01-02 10:04 PM"),
-
-					FacilityName: facN,
-					UserName:     userN,
+					Approved:        r.Reservation.Approved.String(),
+					ReservationId:   r.Reservation.ID,
+					FacilityName:    facN,
+					UserName:        r.Reservation.Name,
 				}
 				mu.Lock()
 				pastEntries = append(pastEntries, entry{item: wrapped, key: key})
@@ -784,9 +809,12 @@ func (a *ReservationHandler) AllSortedReservations(ctx context.Context, req *con
 					key = time.Time{}
 				}
 				wrapped := &service.FullResWithFacilityName{
-					ResWrap:      r.ToProto(),
-					FacilityName: facN,
-					UserName:     userN,
+					EventName:       r.Reservation.EventName,
+					Approved:        r.Reservation.Approved.String(),
+					ReservationId:   r.Reservation.ID,
+					ReservationDate: key.Format("2006-01-02 10:04 PM"),
+					FacilityName:    facN,
+					UserName:        r.Reservation.Name,
 				}
 				mu.Lock()
 				futureEntries = append(futureEntries, entry{item: wrapped, key: key})
@@ -836,15 +864,15 @@ func buildPublishPlan(res models.Reservation, occs []models.ReservationDate, app
 			},
 		}
 	}
-	var singles []calendar.OccSpec
-	for _, occ := range occs {
-		singles = append(singles, calendar.OccSpec{
+	singles := make([]calendar.OccSpec, 0, len(occs))
+	for i, occ := range occs {
+		singles[i] = calendar.OccSpec{
 			Start:       occ.LocalStart.Time,
 			End:         occ.LocalEnd.Time,
 			RefID:       occ.ID,
 			Summary:     res.EventName,
 			Description: *res.Details,
-		})
+		}
 	}
 	return &calendar.PublishPlan{
 		Mode:    "singles",

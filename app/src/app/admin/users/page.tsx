@@ -1,5 +1,6 @@
 import { DataTable } from '@/components/ui/tables/users/data-table';
-import { api } from '@/trpc/server';
+import { logger } from '@/lib/logger';
+import { client } from '@/lib/rpc';
 import { columns } from './columns';
 
 interface TableUsers {
@@ -10,28 +11,25 @@ interface TableUsers {
 }
 
 async function getUsers() {
-  const users = await api.user.all();
+  'use cache';
 
-  const mappedUsers: TableUsers[] = users.map((user) => {
-    return {
-      User: user.name,
-      Email: user.email,
-      Role: user.role,
-      Details: user.id.toString(),
-    };
-  });
-  return mappedUsers;
+  const { data, error } = await client.users().getUsers({});
+
+  if (error) {
+    logger.error(error.message);
+  }
+
+  return data;
 }
 
 export default async function Users() {
   const data = await getUsers();
-
   return (
     <div className="space-y-7">
       <div>
         <h1 className="text-lg font-medium">Users</h1>
       </div>
-      <DataTable columns={columns} data={data} />
+      <DataTable columns={columns} data={data?.users ?? []} />
     </div>
   );
 }

@@ -1,11 +1,11 @@
-import { adminSideBar } from '@local/validators/constants';
+import { adminSideBar } from '@/lib/validators/constants';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
+import { auth } from '@/lib/auth';
 
 import { Separator } from '@/components/ui/separator';
 import { SidebarNav } from '@/components/ui/sidebar-nav';
 import { Skeleton } from '@/components/ui/skeleton';
-import { IsAdmin } from '@/functions/other/helpers';
 
 export const revalidate = 60;
 
@@ -14,7 +14,9 @@ export default async function authLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const admin = await IsAdmin();
+  const user = await auth();
+
+  const admin = user?.userRole === 'ADMIN';
   if (!admin) return notFound();
   return (
     <div className="container relative">

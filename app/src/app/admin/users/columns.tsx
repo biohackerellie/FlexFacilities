@@ -4,18 +4,13 @@ import type { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown } from 'lucide-react';
 import Link from 'next/link';
 
-import { Button } from '@/components/ui/buttons';
+import { Button } from '@/components/ui/button';
 
-interface TableUsers {
-  User: string;
-  Email: string;
-  Role: string;
-  Details: string | number;
-}
+import type { User } from '@/lib/types';
 
-export const columns: ColumnDef<TableUsers>[] = [
+export const columns: ColumnDef<User>[] = [
   {
-    accessorKey: 'User',
+    accessorKey: 'name',
     header: ({ column }) => {
       return (
         <Button
@@ -29,11 +24,11 @@ export const columns: ColumnDef<TableUsers>[] = [
     },
   },
   {
-    accessorKey: 'Email',
+    accessorKey: 'email',
     header: 'Email',
   },
   {
-    accessorKey: 'Role',
+    accessorKey: 'role',
 
     header: ({ column }) => {
       return (
@@ -48,10 +43,10 @@ export const columns: ColumnDef<TableUsers>[] = [
     },
   },
   {
-    accessorKey: 'Details',
+    accessorKey: 'id',
     header: 'Details',
     cell: ({ row }) => {
-      const id = row.original.Details;
+      const id = row.original.id;
       return (
         <Button asChild>
           <Link href={`/admin/users/${id}`}>Details</Link>

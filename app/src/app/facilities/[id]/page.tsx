@@ -1,5 +1,4 @@
 import { ExternalLink } from 'lucide-react';
-import moment from 'moment';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -28,7 +27,7 @@ export default async function FacilityPage({
 
   if (!fac) return notFound();
   const facility = fac.facility!;
-  const map = `https://www.google.com/maps/search/?api=1&query=${facility.address}`;
+  const map = `https://www.google.com/maps/search/?api=1&query=${fac.building?.address}`;
 
   return (
     <TooltipProvider>
@@ -38,14 +37,14 @@ export default async function FacilityPage({
             {facility.name}
           </h1>
           <h2 className="text-md text-center font-bold text-gray-600 drop-shadow-sm dark:text-gray-300 sm:text-start sm:text-xl">
-            {facility.building} ⋅ Max Capacity: {facility.capacity}{' '}
+            {fac.building?.name} ⋅ Max Capacity: {facility.capacity}{' '}
           </h2>
           <Link
             href={map}
             target="_blank"
             className="text-center sm:text-start"
           >
-            {facility.address}{' '}
+            {fac.building?.address}{' '}
             <ExternalLink className="inline-block scale-75" />
           </Link>
           <div className="hidden sm:flex">
@@ -143,10 +142,9 @@ export default async function FacilityPage({
                       <div className="grid grid-cols-2 border-b p-4">
                         <h3 className="col-start-1">{event.title}</h3>
                         <p className="bg-transparent text-sm">
-                          {moment(event.start).format(
-                            'ddd, MMM Do YYYY,  h:mm a',
-                          )}{' '}
-                          {' to '} {moment(event.end).format('h:mm a')}
+                          {new Date(event.start!).toDateString()}
+                          to
+                          {new Date(event.end!).toTimeString()}
                         </p>
                       </div>
                     </div>

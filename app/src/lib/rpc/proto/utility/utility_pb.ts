@@ -2,20 +2,31 @@
 // @generated from file proto/utility/utility.proto (package api.utility, syntax proto3)
 /* eslint-disable */
 
-import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
-import { fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
-import type { Message } from "@bufbuild/protobuf";
+import type { Message } from '@bufbuild/protobuf';
+import type {
+  GenFile,
+  GenMessage,
+  GenService,
+} from '@bufbuild/protobuf/codegenv2';
+import {
+  fileDesc,
+  messageDesc,
+  serviceDesc,
+} from '@bufbuild/protobuf/codegenv2';
 
 /**
  * Describes the file proto/utility/utility.proto.
  */
-export const file_proto_utility_utility: GenFile = /*@__PURE__*/
-  fileDesc("Chtwcm90by91dGlsaXR5L3V0aWxpdHkucHJvdG8SC2FwaS51dGlsaXR5IoMBCgxSUE1EYXRhRW50cnkSDQoFbW9udGgYASABKAkSNQoGdmFsdWVzGAIgAygLMiUuYXBpLnV0aWxpdHkuUlBNRGF0YUVudHJ5LlZhbHVlc0VudHJ5Gi0KC1ZhbHVlc0VudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoBToCOAEiGwoZQWdncmVnYXRlQ2hhcnREYXRhUmVxdWVzdCJFChpBZ2dyZWdhdGVDaGFydERhdGFSZXNwb25zZRInCgRkYXRhGAEgAygLMhkuYXBpLnV0aWxpdHkuUlBNRGF0YUVudHJ5MnwKDlV0aWxpdHlTZXJ2aWNlEmoKEkFnZ3JlZ2F0ZUNoYXJ0RGF0YRImLmFwaS51dGlsaXR5LkFnZ3JlZ2F0ZUNoYXJ0RGF0YVJlcXVlc3QaJy5hcGkudXRpbGl0eS5BZ2dyZWdhdGVDaGFydERhdGFSZXNwb25zZSIDkAIBQitaKWFwaS9pbnRlcm5hbC9wcm90by91dGlsaXR5O3V0aWxpdHlzZXJ2aWNlYgZwcm90bzM");
+export const file_proto_utility_utility: GenFile =
+  /*@__PURE__*/
+  fileDesc(
+    'Chtwcm90by91dGlsaXR5L3V0aWxpdHkucHJvdG8SC2FwaS51dGlsaXR5IoMBCgxSUE1EYXRhRW50cnkSDQoFbW9udGgYASABKAkSNQoGdmFsdWVzGAIgAygLMiUuYXBpLnV0aWxpdHkuUlBNRGF0YUVudHJ5LlZhbHVlc0VudHJ5Gi0KC1ZhbHVlc0VudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoBToCOAEiGwoZQWdncmVnYXRlQ2hhcnREYXRhUmVxdWVzdCJFChpBZ2dyZWdhdGVDaGFydERhdGFSZXNwb25zZRInCgRkYXRhGAEgAygLMhkuYXBpLnV0aWxpdHkuUlBNRGF0YUVudHJ5MnwKDlV0aWxpdHlTZXJ2aWNlEmoKEkFnZ3JlZ2F0ZUNoYXJ0RGF0YRImLmFwaS51dGlsaXR5LkFnZ3JlZ2F0ZUNoYXJ0RGF0YVJlcXVlc3QaJy5hcGkudXRpbGl0eS5BZ2dyZWdhdGVDaGFydERhdGFSZXNwb25zZSIDkAIBQitaKWFwaS9pbnRlcm5hbC9wcm90by91dGlsaXR5O3V0aWxpdHlzZXJ2aWNlYgZwcm90bzM',
+  );
 
 /**
  * @generated from message api.utility.RPMDataEntry
  */
-export type RPMDataEntry = Message<"api.utility.RPMDataEntry"> & {
+export type RPMDataEntry = Message<'api.utility.RPMDataEntry'> & {
   /**
    * @generated from field: string month = 1;
    */
@@ -31,37 +42,41 @@ export type RPMDataEntry = Message<"api.utility.RPMDataEntry"> & {
  * Describes the message api.utility.RPMDataEntry.
  * Use `create(RPMDataEntrySchema)` to create a new message.
  */
-export const RPMDataEntrySchema: GenMessage<RPMDataEntry> = /*@__PURE__*/
+export const RPMDataEntrySchema: GenMessage<RPMDataEntry> =
+  /*@__PURE__*/
   messageDesc(file_proto_utility_utility, 0);
 
 /**
  * @generated from message api.utility.AggregateChartDataRequest
  */
-export type AggregateChartDataRequest = Message<"api.utility.AggregateChartDataRequest"> & {
-};
+export type AggregateChartDataRequest =
+  Message<'api.utility.AggregateChartDataRequest'> & {};
 
 /**
  * Describes the message api.utility.AggregateChartDataRequest.
  * Use `create(AggregateChartDataRequestSchema)` to create a new message.
  */
-export const AggregateChartDataRequestSchema: GenMessage<AggregateChartDataRequest> = /*@__PURE__*/
+export const AggregateChartDataRequestSchema: GenMessage<AggregateChartDataRequest> =
+  /*@__PURE__*/
   messageDesc(file_proto_utility_utility, 1);
 
 /**
  * @generated from message api.utility.AggregateChartDataResponse
  */
-export type AggregateChartDataResponse = Message<"api.utility.AggregateChartDataResponse"> & {
-  /**
-   * @generated from field: repeated api.utility.RPMDataEntry data = 1;
-   */
-  data: RPMDataEntry[];
-};
+export type AggregateChartDataResponse =
+  Message<'api.utility.AggregateChartDataResponse'> & {
+    /**
+     * @generated from field: repeated api.utility.RPMDataEntry data = 1;
+     */
+    data: RPMDataEntry[];
+  };
 
 /**
  * Describes the message api.utility.AggregateChartDataResponse.
  * Use `create(AggregateChartDataResponseSchema)` to create a new message.
  */
-export const AggregateChartDataResponseSchema: GenMessage<AggregateChartDataResponse> = /*@__PURE__*/
+export const AggregateChartDataResponseSchema: GenMessage<AggregateChartDataResponse> =
+  /*@__PURE__*/
   messageDesc(file_proto_utility_utility, 2);
 
 /**
@@ -72,10 +87,8 @@ export const UtilityService: GenService<{
    * @generated from rpc api.utility.UtilityService.AggregateChartData
    */
   aggregateChartData: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof AggregateChartDataRequestSchema;
     output: typeof AggregateChartDataResponseSchema;
-  },
-}> = /*@__PURE__*/
-  serviceDesc(file_proto_utility_utility, 0);
-
+  };
+}> = /*@__PURE__*/ serviceDesc(file_proto_utility_utility, 0);

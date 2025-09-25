@@ -20,6 +20,7 @@ type UserStore interface {
 	UpdateSession(ctx context.Context, session *models.Session) error
 	DeleteExpiredSessions(ctx context.Context) error
 	GetNotifications(context.Context) ([]*models.Notification, error)
+	GetUserNotifications(ctx context.Context, id string) ([]*models.NotificationReadable, error)
 	CreateNotification(context.Context, *models.Notification) error
 	EditNotification(context.Context, *models.Notification) error
 	DeleteNotification(context.Context, int64) error

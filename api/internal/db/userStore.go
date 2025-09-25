@@ -6,6 +6,8 @@ import (
 	"database/sql"
 	"errors"
 	"log/slog"
+
+	"github.com/jmoiron/sqlx"
 )
 
 type UserStore struct {
@@ -22,6 +24,7 @@ const getUserQuery = `SELECT id, name, email, provider, role FROM users WHERE id
 
 func (s *UserStore) Get(ctx context.Context, id string) (*models.Users, error) {
 	stmt, _ := s.db.PreparexContext(ctx, getUserQuery)
+	defer func() { _ = stmt.Close() }()
 	var user *models.Users
 
 	if err := stmt.GetContext(ctx, &user, id); err != nil {
@@ -37,6 +40,7 @@ const getUserByEmailQuery = `SELECT * FROM users WHERE email = $1 LIMIT 1`
 
 func (s *UserStore) GetByEmail(ctx context.Context, email string) (*models.Users, error) {
 	stmt, _ := s.db.PreparexContext(ctx, getUserByEmailQuery)
+	defer func() { _ = stmt.Close() }()
 	var user *models.Users
 
 	if err := stmt.GetContext(ctx, &user, email); err != nil {
@@ -128,6 +132,7 @@ const getAllUsersQuery = `SELECT id, name, email, provider, role FROM users`
 
 func (s *UserStore) GetAll(ctx context.Context) ([]*models.Users, error) {
 	stmt, _ := s.db.PreparexContext(ctx, getAllUsersQuery)
+	defer func() { _ = stmt.Close() }()
 	var users []*models.Users
 	if err := stmt.SelectContext(ctx, &users); err != nil {
 		return nil, err
@@ -210,9 +215,65 @@ const getNotificationsQuery = `SELECT * FROM notifications`
 func (s *UserStore) GetNotifications(ctx context.Context) ([]*models.Notification, error) {
 	var notifications []*models.Notification
 	if err := s.db.SelectContext(ctx, &notifications, getNotificationsQuery); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			notifications = []*models.Notification{}
+		}
 		return nil, err
 	}
 	return notifications, nil
+}
+
+const buildingNamesInQuery = `SELECT * FROM buildings WHERE id IN (?)`
+const getUserNotificationsQuery = `SELECT * FROM notifications WHERE user_id = $1`
+
+func (s *UserStore) GetUserNotifications(ctx context.Context, id string) ([]*models.NotificationReadable, error) {
+	var notifications []*models.Notification
+	if err := s.db.SelectContext(ctx, &notifications, getUserNotificationsQuery, id); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return []*models.NotificationReadable{}, nil
+		} else {
+			return nil, err
+		}
+	}
+	ids := make([]int64, len(notifications))
+	for i, n := range notifications {
+		ids[i] = n.BuildingID
+	}
+
+	var buildings []*models.Building
+	query, args, err := sqlx.In(buildingNamesInQuery, ids)
+	if err != nil {
+		return nil, err
+	}
+	query = s.db.Rebind(query)
+	err = s.db.SelectContext(ctx, &buildings, query, args...)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			buildings = []*models.Building{}
+		} else {
+			return nil, err
+		}
+	}
+	buildingNames := make(map[int64]string)
+	for _, b := range buildings {
+		buildingNames[b.ID] = b.Name
+	}
+	user, err := s.Get(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+
+	notificationsReadable := make([]*models.NotificationReadable, len(notifications))
+	for i, notification := range notifications {
+		notificationsReadable[i] = &models.NotificationReadable{
+			ID:           notification.ID,
+			BuildingID:   notification.BuildingID,
+			BuildingName: buildingNames[notification.BuildingID],
+			UserID:       notification.UserID,
+			UserName:     user.Name,
+		}
+	}
+	return notificationsReadable, nil
 }
 
 const deleteNotificationQuery = `DELETE FROM notifications WHERE id = $1`

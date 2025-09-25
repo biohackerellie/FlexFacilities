@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log/slog"
 	"path/filepath"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -26,7 +27,13 @@ func (db *DB) getAppliedMigrations(ctx context.Context) (map[int64]bool, error) 
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+	defer func() {
+		err = rows.Close()
+		if err != nil {
+			slog.Error("Failed to close rows", "error", err)
+			return
+		}
+	}()
 
 	applied := make(map[int64]bool)
 	for rows.Next() {
@@ -65,7 +72,7 @@ func (db *DB) runMigrations(ctx context.Context) error {
 			slog.Int64("version", migration.Version),
 			slog.String("name", migration.Name))
 		if _, err := tx.ExecContext(ctx, migration.SQL); err != nil {
-			tx.Rollback()
+			_ = tx.Rollback()
 			return fmt.Errorf("failed to apply migration %d: %w", migration.Version, err)
 		}
 
@@ -74,7 +81,7 @@ func (db *DB) runMigrations(ctx context.Context) error {
 		_, err = tx.ExecContext(ctx, insertSQL, migration.Version, migration.Name)
 
 		if err != nil {
-			tx.Rollback()
+			_ = tx.Rollback()
 			return fmt.Errorf("migration %d failed: %w", migration.Version, err)
 		}
 	}
@@ -92,8 +99,8 @@ func loadMigrations() ([]Migration, error) {
 		return nil, err
 	}
 
-	var migrations []Migration
-	for _, entry := range entries {
+	migrations := make([]Migration, 0, len(entries))
+	for i, entry := range entries {
 		if !strings.HasSuffix(entry.Name(), ".sql") {
 			continue
 		}
@@ -114,16 +121,21 @@ func loadMigrations() ([]Migration, error) {
 		}
 
 		name := strings.TrimSuffix(parts[1], ".sql")
-		migrations = append(migrations, Migration{
+		migrations[i] = Migration{
 			Version: version,
 			Name:    name,
 			SQL:     string(content),
-		})
+		}
+	}
+
+	if len(migrations) == 0 {
+		return migrations, nil
 	}
 
 	sort.Slice(migrations, func(i, j int) bool {
 		return migrations[i].Version < migrations[j].Version
 	})
+	migrations = slices.Clip(migrations)
 
 	return migrations, nil
 }

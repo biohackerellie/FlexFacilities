@@ -248,12 +248,12 @@ func (f *FacilityStore) Create(ctx context.Context, input *models.FacilityWithCa
 	if err != nil {
 		return err
 	}
-	defer tx.Rollback()
+	defer func() { _ = tx.Rollback() }()
 	txStmt, err := tx.PrepareNamedContext(ctx, createFacilityQuery)
 	if err != nil {
 		return err
 	}
-	defer txStmt.Close()
+	defer func() { _ = txStmt.Close() }() //nolint:errcheck // ctxStmt.Close()
 	err = txStmt.QueryRowxContext(ctx, params).StructScan(&facility)
 	if err != nil {
 		return err
@@ -262,7 +262,7 @@ func (f *FacilityStore) Create(ctx context.Context, input *models.FacilityWithCa
 	if err != nil {
 		return err
 	}
-	defer txCatStmt.Close()
+	defer func() { _ = txCatStmt.Close() }() //nolint:errcheck // txCatStmt.Close()
 	facilityID := facility.ID
 	for _, category := range categories {
 		catParams := map[string]any{
@@ -299,7 +299,7 @@ func (f *FacilityStore) Update(ctx context.Context, input *models.Facility) erro
 	if err != nil {
 		return err
 	}
-	defer stmt.Close()
+	defer func() { _ = stmt.Close() }() //nolint:errcheck // stmt.Close()
 	_, err = stmt.ExecContext(ctx, params)
 	return err
 }
@@ -368,7 +368,7 @@ func (f *FacilityStore) EditCategory(ctx context.Context, category *models.Categ
 	if err != nil {
 		return err
 	}
-	defer stmt.Close()
+	defer func() { _ = stmt.Close() }() //nolint:errcheck // stmt.Close()
 	_, err = stmt.ExecContext(ctx, params)
 	return err
 }

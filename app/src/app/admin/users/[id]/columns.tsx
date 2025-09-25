@@ -3,25 +3,17 @@
 import type { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown } from 'lucide-react';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
-import { Button } from '@/components/ui/buttons';
+import type { FullResWithFacilityName } from '@/lib/types';
 
-interface TableUser {
-  Name: string;
-  eventName: string;
-  Facility?: string;
-  ReservationDate?: string;
-  approved: 'pending' | 'approved' | 'denied' | 'canceled' | 'N/A';
-  Details: number;
-}
-
-export const columns: ColumnDef<TableUser>[] = [
+export const columns: ColumnDef<FullResWithFacilityName>[] = [
   {
     accessorKey: 'eventName',
     header: 'Event Name',
   },
   {
-    accessorKey: 'Facility',
+    accessorKey: 'facilityName',
     header: ({ column }) => {
       return (
         <Button
@@ -35,8 +27,7 @@ export const columns: ColumnDef<TableUser>[] = [
     },
   },
   {
-    accessorKey: 'ReservationDate',
-
+    accessorKey: 'reservationDate',
     header: ({ column }) => {
       return (
         <Button
@@ -54,10 +45,9 @@ export const columns: ColumnDef<TableUser>[] = [
     header: 'Status',
   },
   {
-    accessorKey: 'Details',
     header: 'Details',
     cell: ({ row }) => {
-      const id = parseInt(row.getValue('Details'), 10);
+      const id = row.original.reservationId;
       return (
         <Button asChild>
           <Link href={`/reservation/${id}`}>Details</Link>

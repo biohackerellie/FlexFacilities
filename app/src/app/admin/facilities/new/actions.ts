@@ -1,10 +1,9 @@
 'use server';
 
-import { client } from '@/lib/rpc';
 import { revalidateTag } from 'next/cache';
-
+import { client } from '@/lib/rpc';
+import type { Category, Facility } from '@/lib/types';
 import type { CreateFacilitySchema } from './form';
-import type { Facility, Category } from '@/lib/types';
 export async function createFacility(facility: CreateFacilitySchema) {
   const fac: Partial<Facility> = {
     name: facility.name,

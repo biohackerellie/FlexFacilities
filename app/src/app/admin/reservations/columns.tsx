@@ -5,23 +5,15 @@ import { ArrowUpDown } from 'lucide-react';
 import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
+import type { FullResWithFacilityName } from '@/lib/types';
 
-type TableReservation = {
-  eventName: string;
-  Facility: string;
-  ReservationDate: string | undefined;
-  approved: 'approved' | 'pending' | 'denied' | 'canceled';
-  User: string;
-  Details: number;
-};
-
-export const columns: ColumnDef<TableReservation>[] = [
+export const columns: ColumnDef<FullResWithFacilityName>[] = [
   {
     accessorKey: 'eventName',
     header: 'Event Name',
   },
   {
-    accessorKey: 'Facility',
+    accessorKey: 'facilityName',
     header: ({ column }) => {
       return (
         <Button
@@ -35,7 +27,7 @@ export const columns: ColumnDef<TableReservation>[] = [
     },
   },
   {
-    accessorKey: 'ReservationDate',
+    accessorKey: 'reservationDate',
 
     header: ({ column }) => {
       return (
@@ -54,7 +46,7 @@ export const columns: ColumnDef<TableReservation>[] = [
     header: 'Status',
   },
   {
-    accessorKey: 'User',
+    accessorKey: 'userName',
     header: ({ column }) => {
       return (
         <Button
@@ -68,10 +60,10 @@ export const columns: ColumnDef<TableReservation>[] = [
     },
   },
   {
-    accessorKey: 'Details',
+    accessorKey: 'reservationId',
     header: 'Details',
     cell: ({ row }) => {
-      const id = row.original.Details;
+      const id = row.original.reservationId;
 
       return (
         <Button asChild>

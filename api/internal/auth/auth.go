@@ -125,6 +125,10 @@ func (a *Auth) AuthCallback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	userInfo, err := provider.GetUserInfo(ctx, tokens.AccessToken)
+	if err != nil {
+		http.Error(w, "failed to get user info from auth provider", http.StatusBadRequest)
+		return
+	}
 
 	user, err := a.GetOrCreateAuthUser(r.Context(), &models.Users{
 		ID:       userInfo.ID,

@@ -5,7 +5,9 @@ import { Separator } from '@/components/ui/separator';
 import { SidebarSearchParamsNav } from '@/components/ui/sidebar-searchParams';
 import { logger } from '@/lib/logger';
 import { client } from '@/lib/rpc';
-import CardLayout from './cardLayout';
+
+import FacilityCard from './facility_card';
+import { FacilityWithCategories } from '@/lib/types';
 
 async function getData() {
   'use cache';
@@ -17,12 +19,35 @@ async function getData() {
   return data;
 }
 
-export default async function FacilitiesPage() {
+export default async function FacilitiesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | undefined }>;
+}) {
   const data = await getData();
+  const params = await searchParams;
+  const buildingQuery = params.building;
   if (!data) return notFound();
   const buildingSideBar = data.buildings.map(
     (building) => building.building?.name ?? 'all',
   );
+
+  let selectedBuilding = 'All';
+
+  if (params && buildingQuery) {
+    selectedBuilding = buildingQuery;
+  }
+  const buildings = data.buildings;
+
+  let facilities: FacilityWithCategories[];
+
+  if (selectedBuilding !== 'All') {
+    facilities =
+      buildings.find((building) => building.building?.name === selectedBuilding)
+        ?.facilities || [];
+  } else {
+    facilities = buildings.flatMap((building) => building.facilities);
+  }
   return (
     <div className="container relative">
       <div className=" space-y-6 p-2 pb-16 sm:block">
@@ -39,7 +64,22 @@ export default async function FacilitiesPage() {
           <div className="flex-1 lg:max-w-4xl">
             <div className="space-y-7">
               <React.Suspense fallback={<LoadingScreen />}>
-                <CardLayout buildings={data.buildings} />
+                <div className="mt-0 flex flex-col gap-4 p-0 pb-px sm:grid sm:grid-cols-2 sm:pb-[150px]">
+                  {facilities?.map((facility) => (
+                    <div
+                      key={facility.facility?.id}
+                      className="show m-2 flex-1 gap-3"
+                    >
+                      <FacilityCard
+                        {...facility}
+                        {...buildings.find(
+                          (building) =>
+                            building.building?.name === selectedBuilding,
+                        )}
+                      />
+                    </div>
+                  ))}
+                </div>
               </React.Suspense>
             </div>
           </div>

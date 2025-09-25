@@ -35,7 +35,7 @@ tasks:
     dir: "{{.API_ROOT}}"
     desc: lint go files
     cmds:
-      - golangci-lint run 
+      - golangci-lint run -c .golangci.yml
   lint:types:
     dir: "{{.NEXT_ROOT}}"
     desc: typecheck typescript files

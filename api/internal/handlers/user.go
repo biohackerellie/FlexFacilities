@@ -77,8 +77,20 @@ func (a *UserHandler) GetNotifications(ctx context.Context, req *connect.Request
 	if err != nil {
 		return nil, err
 	}
+
 	return connect.NewResponse(&service.GetNotificationsResponse{
 		Notifications: models.NotificationsToProto(notifications),
+	}), nil
+}
+
+func (a *UserHandler) GetUserNotifications(ctx context.Context, req *connect.Request[service.GetUserNotificationsRequest]) (*connect.Response[service.GetUserNotificationsResponse], error) {
+	notifications, err := a.userStore.GetUserNotifications(ctx, req.Msg.UserId)
+	if err != nil {
+		return nil, err
+	}
+
+	return connect.NewResponse(&service.GetUserNotificationsResponse{
+		Notifications: models.NotificationsReadableToProto(notifications),
 	}), nil
 }
 

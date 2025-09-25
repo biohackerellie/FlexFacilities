@@ -8,6 +8,9 @@ import type {
   FacilityWithCategories as PBFacilityWithCategories,
   FullFacility as PBFulFacility,
   FullReservation as PBFullReservation,
+  FullResWithFacilityName as PBFullResWithFacilityName,
+  Notifications as PBNotification,
+  NotificationsReadable as PBNotificationReadable,
   Reservation as PBReservation,
   ReservationDate as PBReservationDate,
   ReservationFee as PBReservationFee,
@@ -26,6 +29,9 @@ export type FullReservation = ProtoType<PBFullReservation>;
 export type Building = ProtoType<PBBuilding>;
 export type BuildingWithFacilities = ProtoType<PBBuildingWithFacilities>;
 export type FacilityWithCategories = ProtoType<PBFacilityWithCategories>;
+export type FullResWithFacilityName = ProtoType<PBFullResWithFacilityName>;
+export type Notification = ProtoType<PBNotification>;
+export type NotificationReadable = ProtoType<PBNotificationReadable>;
 type SessionType = ProtoType<PBSession>;
 export interface Session extends Omit<SessionType, 'userRole'> {
   userRole: UserRole;

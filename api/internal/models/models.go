@@ -391,6 +391,31 @@ func ToNotification(n *pbUsers.Notifications) *Notification {
 	}
 }
 
+type NotificationReadable struct {
+	ID           int64  `db:"id" json:"id"`
+	BuildingID   int64  `db:"building_id" json:"building_id"`
+	BuildingName string `db:"building_name" json:"building_name"`
+	UserID       string `db:"user_id" json:"user_id"`
+	UserName     string `db:"user_name" json:"user_name"`
+}
+
+func (n *NotificationReadable) ToProto() *pbUsers.NotificationsReadable {
+	return &pbUsers.NotificationsReadable{
+		Id:           n.ID,
+		BuildingId:   n.BuildingID,
+		BuildingName: n.BuildingName,
+		UserId:       n.UserID,
+		UserName:     n.UserName,
+	}
+}
+func NotificationsReadableToProto(n []*NotificationReadable) []*pbUsers.NotificationsReadable {
+	protoNotifications := make([]*pbUsers.NotificationsReadable, len(n))
+	for i, notification := range n {
+		protoNotifications[i] = notification.ToProto()
+	}
+	return protoNotifications
+}
+
 type Reservation struct {
 	ID            int64               `db:"id" json:"id"`
 	UserID        string              `db:"user_id" json:"user_id"`
@@ -404,7 +429,7 @@ type Reservation struct {
 	Insurance     bool                `db:"insurance" json:"insurance"`
 	DoorAccess    *bool               `db:"door_access" json:"door_access"`
 	DoorsDetails  *string             `db:"doors_details" json:"doors_details"`
-	Name          *string             `db:"name" json:"name"`
+	Name          string              `db:"name" json:"name"`
 	TechDetails   *string             `db:"tech_details" json:"tech_details"`
 	TechSupport   *bool               `db:"tech_support" json:"tech_support"`
 	Phone         *string             `db:"phone" json:"phone"`

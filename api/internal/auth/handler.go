@@ -116,7 +116,7 @@ func (s *Auth) AuthMiddleware(next http.Handler) http.Handler {
 			next.ServeHTTP(w, r)
 			return
 		}
-		user := new(models.Users)
+		var user *models.Users
 		jwtVal, jwtOk := s.readCookie(r, fmt.Sprintf("%s%s", s.cookiePrefix, jwtCookieName))
 		sessVal, sessOk := s.readCookie(r, fmt.Sprintf("%s%s", s.cookiePrefix, sessionCookieName))
 		if !jwtOk || !sessOk {

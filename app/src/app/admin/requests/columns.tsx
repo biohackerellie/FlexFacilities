@@ -17,23 +17,15 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { ApproveReservation } from '@/lib/actions/reservations';
+import type { FullResWithFacilityName } from '@/lib/types';
 
-export type TableReservation = {
-  eventName: string;
-  Facility: string;
-  ReservationDate: string;
-  approved: 'pending' | 'approved' | 'denied' | 'canceled';
-  User: string;
-  Id: bigint;
-};
-
-export const columns: ColumnDef<TableReservation>[] = [
+export const columns: ColumnDef<FullResWithFacilityName>[] = [
   {
     accessorKey: 'eventName',
     header: 'Event Name',
   },
   {
-    accessorKey: 'Facility',
+    accessorKey: 'facilityName',
     header: ({ column }) => {
       return (
         <Button
@@ -47,7 +39,7 @@ export const columns: ColumnDef<TableReservation>[] = [
     },
   },
   {
-    accessorKey: 'ReservationDate',
+    accessorKey: 'reservationDate',
 
     header: ({ column }) => {
       return (
@@ -65,7 +57,7 @@ export const columns: ColumnDef<TableReservation>[] = [
     accessorKey: 'approved',
     header: 'Approve or Deny',
     cell: ({ row }) => {
-      const id = row.original.Id;
+      const id = row.original.reservationId;
 
       return (
         <AlertDialog>
@@ -74,7 +66,7 @@ export const columns: ColumnDef<TableReservation>[] = [
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Approve All</AlertDialogTitle>
+              <AlertDialogTitle>Approve Reservation</AlertDialogTitle>
             </AlertDialogHeader>
             <AlertDialogDescription>
               This action will notify the user of their reservation status.
@@ -98,7 +90,7 @@ export const columns: ColumnDef<TableReservation>[] = [
     },
   },
   {
-    accessorKey: 'User',
+    accessorKey: 'userName',
     header: ({ column }) => {
       return (
         <Button
@@ -112,10 +104,10 @@ export const columns: ColumnDef<TableReservation>[] = [
     },
   },
   {
-    accessorKey: 'Details',
+    accessorKey: 'reservationId',
     header: 'Details',
     cell: ({ row }) => {
-      const id = parseInt(row.getValue('Details'), 10);
+      const id = row.original.reservationId;
       return (
         <Button asChild>
           <Link prefetch={false} href={`/reservation/${id}`}>

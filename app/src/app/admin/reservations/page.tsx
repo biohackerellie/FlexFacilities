@@ -1,25 +1,24 @@
+import { unstable_cacheTag as cacheTag } from 'next/cache';
 import { DataTable } from '@/components/ui/tables';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {
-  mapPastReservations,
-  mapReservations,
-} from '@/functions/calculations/tableData';
+import { client } from '@/lib/rpc';
 import { columns } from './columns';
 
 async function getReservations() {
-  const data = await api.reservation.all();
-  const [ReservationsData, PastReservationsData] = await Promise.all([
-    mapReservations(data),
-    mapPastReservations(data),
-  ]);
-
-  return { ReservationsData, PastReservationsData };
+  'use cache';
+  const { data, error } = await client.reservations().allSortedReservations({});
+  if (error) {
+    console.error(error);
+    return null;
+  }
+  cacheTag('reservations');
+  return data;
 }
 
 export default async function Reservations() {
-  const { ReservationsData, PastReservationsData } = await getReservations();
-  const Reservations = ReservationsData ?? [];
-  const PastReservations = PastReservationsData ?? [];
+  const data = await getReservations();
+  const Reservations = data?.future ?? [];
+  const PastReservations = data?.past ?? [];
   return (
     <div className="space-y-7">
       <div>

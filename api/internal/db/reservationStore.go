@@ -28,6 +28,7 @@ const getReservationQuery = "SELECT * FROM reservation WHERE id = $1 LIMIT 1"
 func (s *ReservationStore) Get(ctx context.Context, id int64) (*models.FullReservation, error) {
 	var reservation models.Reservation
 	stmt, _ := s.db.PreparexContext(ctx, getReservationQuery)
+	defer func() { _ = stmt.Close() }()
 	if err := stmt.GetContext(ctx, &reservation, id); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, nil

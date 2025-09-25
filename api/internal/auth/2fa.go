@@ -93,7 +93,10 @@ func (s *Auth) Login(ctx context.Context, req *connect.Request[service.LoginRequ
 	if err != nil {
 		return nil, connect.NewError(connect.CodeUnauthenticated, err)
 	}
-	s.send2FACode(email, s.config.Host)
+	if err := s.send2FACode(email, s.config.Host); err != nil {
+		return nil, connect.NewError(connect.CodeInternal, err)
+	}
+
 	return connect.NewResponse(&service.LoginResponse{}), nil
 }
 
@@ -130,7 +133,7 @@ func (s *Auth) verifyCredentials(ctx context.Context, email, password string) er
 		return err
 	}
 
-	if err := bcrypt.CompareHashAndPassword([]byte(*user.Password), []byte(password)); err != nil {
+	if err := bcrypt.CompareHashAndPassword(*user.Password, []byte(password)); err != nil {
 		return err
 	}
 	return nil
@@ -172,7 +175,9 @@ func (s *Auth) Register(ctx context.Context, req *connect.Request[service.Regist
 		return nil, connect.NewError(connect.CodeInternal, err)
 	}
 
-	s.send2FACode(email, s.config.Host)
+	if err := s.send2FACode(email, s.config.Host); err != nil {
+		return nil, connect.NewError(connect.CodeInternal, err)
+	}
 	return connect.NewResponse(&service.LoginResponse{}), nil
 }
 

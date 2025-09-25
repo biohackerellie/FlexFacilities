@@ -1,11 +1,10 @@
-import { Suspense } from 'react';
-
-import { DataTable } from '@/components/ui/tables';
-import TableSkeleton from '../requests/skeleton';
-import { client } from '@/lib/rpc';
-import { columns, type TableFacility } from './columns';
 import { unstable_cacheTag as cacheTag } from 'next/cache';
+import { Suspense } from 'react';
+import { DataTable } from '@/components/ui/tables';
 import { logger } from '@/lib/logger';
+import { client } from '@/lib/rpc';
+import TableSkeleton from '../requests/skeleton';
+import { columns, type TableFacility } from './columns';
 
 async function getFacilities() {
   'use cache';

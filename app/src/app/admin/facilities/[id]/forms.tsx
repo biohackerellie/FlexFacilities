@@ -1,5 +1,6 @@
 'use client';
 import * as React from 'react';
+import { toast } from 'sonner';
 import {
   Accordion,
   AccordionContent,
@@ -7,11 +8,10 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
-import { FullFacility } from '@/lib/types';
 import { Input } from '@/components/ui/input';
-import { updateCategory, updateFacility } from './actions';
-import { toast } from 'sonner';
 import { getErrorMessage } from '@/lib/errors';
+import { FullFacility } from '@/lib/types';
+import { updateCategory, updateFacility } from './actions';
 
 interface FormProps {
   data: FullFacility;

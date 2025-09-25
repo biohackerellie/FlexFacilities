@@ -18,7 +18,7 @@ message Reservation {
   bool insurance = 10;
   optional bool door_access = 11;
   optional string doors_details = 12;
-  optional string name = 13;
+  string name = 13;
   optional string tech_details = 14;
   optional bool tech_support = 15;
   optional string phone = 16;
@@ -77,7 +77,7 @@ message FullResWithFacilityName {
   string reservation_date = 3;
   string approved = 4;
   string user_name = 5;
-  int64 resrervation_id = 6;
+  int64 reservation_id = 6;
 }
 
 
@@ -152,7 +152,7 @@ message PendingReservationsResponse {
 }
 
 message UserReservationsResponse {
-  repeated FullReservation reservations = 1;
+  repeated FullResWithFacilityName  reservations = 1;
 }
 
 

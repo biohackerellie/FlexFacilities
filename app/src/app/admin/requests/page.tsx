@@ -1,10 +1,10 @@
-import { DataTable } from '@/components/ui/tables';
-import * as React from 'react';
-import { columns } from './columns';
-import { client } from '@/lib/rpc';
 import { unstable_cacheTag as cacheTag } from 'next/cache';
-import type { TableReservation } from './columns';
+import * as React from 'react';
+import { DataTable } from '@/components/ui/tables';
 import { logger } from '@/lib/logger';
+import { client } from '@/lib/rpc';
+import type { FullResWithFacilityName } from '@/lib/types';
+import { columns } from './columns';
 import TableSkeleton from './skeleton';
 
 async function getData() {
@@ -13,27 +13,13 @@ async function getData() {
 
   if (error) {
     logger.error(error.message);
-    return [] as TableReservation[];
+    return [] as FullResWithFacilityName[];
   }
   if (!data) {
-    return [] as TableReservation[];
+    return [] as FullResWithFacilityName[];
   }
-  const response: TableReservation[] = data.data.map((r) => {
-    const reservation = r.resWrap?.reservation;
-    if (!reservation) {
-      return {} as TableReservation;
-    }
-    return {
-      eventName: reservation.name ?? 'N/A',
-      Facility: r.facilityName ?? 'N/A',
-      ReservationDate: r.resWrap?.dates[0]?.localStart ?? 'N/A',
-      approved: reservation.approved ?? 'N/A',
-      User: r.userName ?? 'unknown',
-      Id: reservation.id,
-    } as TableReservation;
-  });
   cacheTag('requests');
-  return response;
+  return data.data;
 }
 
 export default async function Requests() {

@@ -49,7 +49,7 @@ func New(db *repository.DB, log *slog.Logger, config *config.Config) *Handlers {
 	}
 	userHandler := NewUserHandler(userStore, log)
 	facilityHandler := NewFacilityHandler(facilityStore, log, cal)
-	reservationHandler := NewReservationHandler(reservationStore, log, timezone)
+	reservationHandler := NewReservationHandler(reservationStore, userStore, log, timezone)
 	utilityHandler := NewUtilityHandler(reservationStore, log, timezone)
 
 	return &Handlers{

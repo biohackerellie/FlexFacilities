@@ -35,7 +35,7 @@ type Reservation struct {
 	Insurance     bool                   `protobuf:"varint,10,opt,name=insurance,proto3" json:"insurance,omitempty"`
 	DoorAccess    *bool                  `protobuf:"varint,11,opt,name=door_access,json=doorAccess,proto3,oneof" json:"door_access,omitempty"`
 	DoorsDetails  *string                `protobuf:"bytes,12,opt,name=doors_details,json=doorsDetails,proto3,oneof" json:"doors_details,omitempty"`
-	Name          *string                `protobuf:"bytes,13,opt,name=name,proto3,oneof" json:"name,omitempty"`
+	Name          string                 `protobuf:"bytes,13,opt,name=name,proto3" json:"name,omitempty"`
 	TechDetails   *string                `protobuf:"bytes,14,opt,name=tech_details,json=techDetails,proto3,oneof" json:"tech_details,omitempty"`
 	TechSupport   *bool                  `protobuf:"varint,15,opt,name=tech_support,json=techSupport,proto3,oneof" json:"tech_support,omitempty"`
 	Phone         *string                `protobuf:"bytes,16,opt,name=phone,proto3,oneof" json:"phone,omitempty"`
@@ -170,8 +170,8 @@ func (x *Reservation) GetDoorsDetails() string {
 }
 
 func (x *Reservation) GetName() string {
-	if x != nil && x.Name != nil {
-		return *x.Name
+	if x != nil {
+		return x.Name
 	}
 	return ""
 }
@@ -620,7 +620,7 @@ type FullResWithFacilityName struct {
 	ReservationDate string                 `protobuf:"bytes,3,opt,name=reservation_date,json=reservationDate,proto3" json:"reservation_date,omitempty"`
 	Approved        string                 `protobuf:"bytes,4,opt,name=approved,proto3" json:"approved,omitempty"`
 	UserName        string                 `protobuf:"bytes,5,opt,name=user_name,json=userName,proto3" json:"user_name,omitempty"`
-	ResrervationId  int64                  `protobuf:"varint,6,opt,name=resrervation_id,json=resrervationId,proto3" json:"resrervation_id,omitempty"`
+	ReservationId   int64                  `protobuf:"varint,6,opt,name=reservation_id,json=reservationId,proto3" json:"reservation_id,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -690,9 +690,9 @@ func (x *FullResWithFacilityName) GetUserName() string {
 	return ""
 }
 
-func (x *FullResWithFacilityName) GetResrervationId() int64 {
+func (x *FullResWithFacilityName) GetReservationId() int64 {
 	if x != nil {
-		return x.ResrervationId
+		return x.ReservationId
 	}
 	return 0
 }
@@ -1110,8 +1110,8 @@ func (x *PendingReservationsResponse) GetReservations() []*FullReservation {
 }
 
 type UserReservationsResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Reservations  []*FullReservation     `protobuf:"bytes,1,rep,name=reservations,proto3" json:"reservations,omitempty"`
+	state         protoimpl.MessageState     `protogen:"open.v1"`
+	Reservations  []*FullResWithFacilityName `protobuf:"bytes,1,rep,name=reservations,proto3" json:"reservations,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1146,7 +1146,7 @@ func (*UserReservationsResponse) Descriptor() ([]byte, []int) {
 	return file_proto_reservation_reservation_proto_rawDescGZIP(), []int{16}
 }
 
-func (x *UserReservationsResponse) GetReservations() []*FullReservation {
+func (x *UserReservationsResponse) GetReservations() []*FullResWithFacilityName {
 	if x != nil {
 		return x.Reservations
 	}
@@ -2357,7 +2357,7 @@ var File_proto_reservation_reservation_proto protoreflect.FileDescriptor
 
 const file_proto_reservation_reservation_proto_rawDesc = "" +
 	"\n" +
-	"#proto/reservation/reservation.proto\x12\x0fapi.reservation\"\xcb\b\n" +
+	"#proto/reservation/reservation.proto\x12\x0fapi.reservation\"\xbd\b\n" +
 	"\vReservation\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x1d\n" +
@@ -2376,32 +2376,31 @@ const file_proto_reservation_reservation_proto_rawDesc = "" +
 	" \x01(\bR\tinsurance\x12$\n" +
 	"\vdoor_access\x18\v \x01(\bH\x01R\n" +
 	"doorAccess\x88\x01\x01\x12(\n" +
-	"\rdoors_details\x18\f \x01(\tH\x02R\fdoorsDetails\x88\x01\x01\x12\x17\n" +
-	"\x04name\x18\r \x01(\tH\x03R\x04name\x88\x01\x01\x12&\n" +
-	"\ftech_details\x18\x0e \x01(\tH\x04R\vtechDetails\x88\x01\x01\x12&\n" +
-	"\ftech_support\x18\x0f \x01(\bH\x05R\vtechSupport\x88\x01\x01\x12\x19\n" +
-	"\x05phone\x18\x10 \x01(\tH\x06R\x05phone\x88\x01\x01\x12\x1f\n" +
+	"\rdoors_details\x18\f \x01(\tH\x02R\fdoorsDetails\x88\x01\x01\x12\x12\n" +
+	"\x04name\x18\r \x01(\tR\x04name\x12&\n" +
+	"\ftech_details\x18\x0e \x01(\tH\x03R\vtechDetails\x88\x01\x01\x12&\n" +
+	"\ftech_support\x18\x0f \x01(\bH\x04R\vtechSupport\x88\x01\x01\x12\x19\n" +
+	"\x05phone\x18\x10 \x01(\tH\x05R\x05phone\x88\x01\x01\x12\x1f\n" +
 	"\vcategory_id\x18\x11 \x01(\x03R\n" +
 	"categoryId\x12$\n" +
-	"\vtotal_hours\x18\x12 \x01(\x01H\aR\n" +
+	"\vtotal_hours\x18\x12 \x01(\x01H\x06R\n" +
 	"totalHours\x88\x01\x01\x12\x1b\n" +
 	"\tin_person\x18\x13 \x01(\bR\binPerson\x12\x12\n" +
 	"\x04paid\x18\x14 \x01(\bR\x04paid\x12$\n" +
-	"\vpayment_url\x18\x15 \x01(\tH\bR\n" +
+	"\vpayment_url\x18\x15 \x01(\tH\aR\n" +
 	"paymentUrl\x88\x01\x01\x12+\n" +
-	"\x0fpayment_link_id\x18\x16 \x01(\tH\tR\rpaymentLinkId\x88\x01\x01\x12*\n" +
-	"\x0einsurance_link\x18\x17 \x01(\tH\n" +
-	"R\rinsuranceLink\x88\x01\x01\x12#\n" +
+	"\x0fpayment_link_id\x18\x16 \x01(\tH\bR\rpaymentLinkId\x88\x01\x01\x12*\n" +
+	"\x0einsurance_link\x18\x17 \x01(\tH\tR\rinsuranceLink\x88\x01\x01\x12#\n" +
 	"\rcost_override\x18\x18 \x01(\tR\fcostOverride\x12\x19\n" +
-	"\x05rrule\x18\x19 \x01(\tH\vR\x05rrule\x88\x01\x01\x12\x16\n" +
+	"\x05rrule\x18\x19 \x01(\tH\n" +
+	"R\x05rrule\x88\x01\x01\x12\x16\n" +
 	"\x06rdates\x18\x1a \x03(\tR\x06rdates\x12\x18\n" +
 	"\aexdates\x18\x1b \x03(\tR\aexdates\x12&\n" +
-	"\fgcal_eventid\x18\x1c \x01(\tH\fR\vgcalEventid\x88\x01\x01B\n" +
+	"\fgcal_eventid\x18\x1c \x01(\tH\vR\vgcalEventid\x88\x01\x01B\n" +
 	"\n" +
 	"\b_detailsB\x0e\n" +
 	"\f_door_accessB\x10\n" +
-	"\x0e_doors_detailsB\a\n" +
-	"\x05_nameB\x0f\n" +
+	"\x0e_doors_detailsB\x0f\n" +
 	"\r_tech_detailsB\x0f\n" +
 	"\r_tech_supportB\b\n" +
 	"\x06_phoneB\x0e\n" +
@@ -2440,15 +2439,15 @@ const file_proto_reservation_reservation_proto_rawDesc = "" +
 	"\x0fFullReservation\x12>\n" +
 	"\vreservation\x18\x01 \x01(\v2\x1c.api.reservation.ReservationR\vreservation\x126\n" +
 	"\x05dates\x18\x02 \x03(\v2 .api.reservation.ReservationDateR\x05dates\x123\n" +
-	"\x04fees\x18\x03 \x03(\v2\x1f.api.reservation.ReservationFeeR\x04fees\"\xea\x01\n" +
+	"\x04fees\x18\x03 \x03(\v2\x1f.api.reservation.ReservationFeeR\x04fees\"\xe8\x01\n" +
 	"\x17FullResWithFacilityName\x12\x1d\n" +
 	"\n" +
 	"event_name\x18\x01 \x01(\tR\teventName\x12#\n" +
 	"\rfacility_name\x18\x02 \x01(\tR\ffacilityName\x12)\n" +
 	"\x10reservation_date\x18\x03 \x01(\tR\x0freservationDate\x12\x1a\n" +
 	"\bapproved\x18\x04 \x01(\tR\bapproved\x12\x1b\n" +
-	"\tuser_name\x18\x05 \x01(\tR\buserName\x12'\n" +
-	"\x0fresrervation_id\x18\x06 \x01(\x03R\x0eresrervationId\"R\n" +
+	"\tuser_name\x18\x05 \x01(\tR\buserName\x12%\n" +
+	"\x0ereservation_id\x18\x06 \x01(\x03R\rreservationId\"R\n" +
 	"\x12AllPendingResponse\x12<\n" +
 	"\x04data\x18\x01 \x03(\v2(.api.reservation.FullResWithFacilityNameR\x04data\"\x93\x01\n" +
 	"\x11AllSortedResponse\x12<\n" +
@@ -2468,9 +2467,9 @@ const file_proto_reservation_reservation_proto_rawDesc = "" +
 	"\x1cApprovedReservationsResponse\x12D\n" +
 	"\freservations\x18\x01 \x03(\v2 .api.reservation.FullReservationR\freservations\"c\n" +
 	"\x1bPendingReservationsResponse\x12D\n" +
-	"\freservations\x18\x01 \x03(\v2 .api.reservation.FullReservationR\freservations\"`\n" +
-	"\x18UserReservationsResponse\x12D\n" +
-	"\freservations\x18\x01 \x03(\v2 .api.reservation.FullReservationR\freservations\"\x1b\n" +
+	"\freservations\x18\x01 \x03(\v2 .api.reservation.FullReservationR\freservations\"h\n" +
+	"\x18UserReservationsResponse\x12L\n" +
+	"\freservations\x18\x01 \x03(\v2(.api.reservation.FullResWithFacilityNameR\freservations\"\x1b\n" +
 	"\x19GetAllReservationsRequest\"'\n" +
 	"\x15GetReservationRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\"\x15\n" +
@@ -2631,7 +2630,7 @@ var file_proto_reservation_reservation_proto_depIdxs = []int32{
 	5,  // 7: api.reservation.RequestThisWeekResponse.reservations:type_name -> api.reservation.FullReservation
 	5,  // 8: api.reservation.ApprovedReservationsResponse.reservations:type_name -> api.reservation.FullReservation
 	5,  // 9: api.reservation.PendingReservationsResponse.reservations:type_name -> api.reservation.FullReservation
-	5,  // 10: api.reservation.UserReservationsResponse.reservations:type_name -> api.reservation.FullReservation
+	6,  // 10: api.reservation.UserReservationsResponse.reservations:type_name -> api.reservation.FullResWithFacilityName
 	3,  // 11: api.reservation.CreateReservationRequest.occurrences:type_name -> api.reservation.Occurrence
 	2,  // 12: api.reservation.CreateReservationRequest.pattern:type_name -> api.reservation.RecurrencePattern
 	0,  // 13: api.reservation.UpdateReservationRequest.reservation:type_name -> api.reservation.Reservation

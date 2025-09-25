@@ -1,8 +1,8 @@
 'use server';
 
+import { revalidateTag } from 'next/cache';
 import { client } from '@/lib/rpc';
 import { Category, Facility } from '@/lib/types';
-import { revalidateTag } from 'next/cache';
 
 // export async function uploadImage(id: number, formData: FormData) {
 //   const file = formData.get('file') as File;
