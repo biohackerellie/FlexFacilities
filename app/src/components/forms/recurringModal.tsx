@@ -12,7 +12,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { dayOptions } from '@/lib/formOptions';
-import { Button } from '../ui/buttons';
+import { Button } from '../ui/button';
 
 export const ModalInput = (props: { onSave: (data: any) => void }) => {
   const { onSave } = props;

@@ -119,7 +119,6 @@ export default function ReservationForm(props: {
     name: 'events',
     rules: { required: true },
   });
-  //@ts-expect-error - TS doesn't like the function signature
   const handleAddDate = useHandleAddDate(append);
   const watchTechSupport = form.watch('techSupport', false);
   const watchDoorAccess = form.watch('doorAccess', false);
