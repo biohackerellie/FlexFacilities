@@ -31,6 +31,18 @@ export async function getEventsByFacility(id: string) {
   return events;
 }
 
+export async function getAllEvents() {
+  'use cache';
+  const { data, error } = await client.facilities().getAllEvents({});
+
+  if (error) {
+    logger.error('Error fetching facilities', { 'error ': error });
+    return null;
+  }
+  cacheTag('events');
+  return data;
+}
+
 export async function getFacilities() {
   'use cache';
   const { data, error } = await client.facilities().getAllFacilities({});

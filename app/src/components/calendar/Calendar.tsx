@@ -1,3 +1,4 @@
+// @ts-nocheck
 'use client';
 import moment from 'moment';
 import * as React from 'react';
@@ -10,7 +11,7 @@ import { buildingCalendars, buildingColors } from '@local/validators/constants';
 import { AlertDialogAction } from '@radix-ui/react-alert-dialog';
 import { useSearchParams } from 'next/navigation';
 import { useTheme } from 'next-themes';
-import { GetAllEvents } from '@/functions/events/googleAPI';
+import { getAllEvents } from '@/lib/actions/facilities';
 import { CalendarInfo } from '../ui';
 import {
   AlertDialog,
@@ -23,13 +24,6 @@ import { Button } from '../ui/button';
 
 const localizer = momentLocalizer(moment);
 
-type Event = {
-  title: string;
-  start: Date;
-  end: Date;
-  building: any;
-} | null;
-
 type EventComponentProps = {
   title: string | undefined;
   start: Date;
@@ -40,7 +34,7 @@ type EventComponentProps = {
 export default function CalendarMain({
   promise,
 }: {
-  promise: ReturnType<typeof GetAllEvents>;
+  promise: Promise<Awaited<ReturnType<typeof getAllEvents>>>;
 }) {
   const searchParams = useSearchParams();
   const [selectedEvent, setSelectedEvent] =

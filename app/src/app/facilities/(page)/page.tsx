@@ -5,7 +5,6 @@ import { Separator } from '@/components/ui/separator';
 import { SidebarSearchParamsNav } from '@/components/ui/sidebar-searchParams';
 import { logger } from '@/lib/logger';
 import { client } from '@/lib/rpc';
-
 import FacilityCard from './facility_card';
 import { FacilityWithCategories } from '@/lib/types';
 

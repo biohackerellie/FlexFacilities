@@ -2,13 +2,13 @@ import { Suspense } from 'react';
 
 import CalendarMain from '@/components/calendar/Calendar';
 import { Skeleton } from '@/components/ui/skeleton';
-import { GetAllEvents } from '@/functions/events/googleAPI';
+import { getAllEvents } from '@/lib/actions/facilities';
 
 export default function Page() {
   return (
     <div className="space-y-7">
       <Suspense fallback={<LoadingScreen />}>
-        <CalendarMain promise={GetAllEvents()} />
+        <CalendarMain promise={getAllEvents()} />
       </Suspense>
     </div>
   );
