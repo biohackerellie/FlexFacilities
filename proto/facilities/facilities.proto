@@ -28,6 +28,11 @@ message BuildingWithFacilities {
   repeated FacilityWithCategories facilities = 2;
 }
 
+message BuildingWithEvents {
+  Building building = 1;
+  repeated Event events = 2;
+}
+
 message Category {
   int64 id = 1;
   string name = 2;
@@ -106,12 +111,10 @@ message GetEventsByBuildingResponse {
   repeated Event events = 1;
 }
 
-message GetAllEventsRequest {
-  string calendar_id = 1;
-}
+message GetAllEventsRequest {}
 
 message GetAllEventsResponse {
-  repeated Event events = 1;
+  repeated BuildingWithEvents data = 1;
 }
 message GetAllBuildingsRequest {}
 

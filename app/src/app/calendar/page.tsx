@@ -1,23 +1,15 @@
-import { Suspense } from 'react';
+import { ClientContainer } from '@/calendar/components/client-container';
+import { TCalendarView } from '@/calendar/types';
 
-import CalendarMain from '@/components/calendar/Calendar';
-import { Skeleton } from '@/components/ui/skeleton';
-import { getAllEvents } from '@/lib/actions/facilities';
-
-export default function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | undefined }>;
+}) {
+  const view = ((await searchParams).view as TCalendarView) || 'month';
   return (
     <div className="space-y-7">
-      <Suspense fallback={<LoadingScreen />}>
-        <CalendarMain promise={getAllEvents()} />
-      </Suspense>
-    </div>
-  );
-}
-
-function LoadingScreen() {
-  return (
-    <div className="flex h-96 items-center justify-center">
-      <Skeleton className="h-96 w-96" />
+      <ClientContainer view={view} />
     </div>
   );
 }

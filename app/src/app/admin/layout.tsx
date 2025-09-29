@@ -1,11 +1,10 @@
-import { adminSideBar } from '@/lib/validators/constants';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
-import { auth } from '@/lib/auth';
-
 import { Separator } from '@/components/ui/separator';
 import { SidebarNav } from '@/components/ui/sidebar-nav';
 import { Skeleton } from '@/components/ui/skeleton';
+import { auth } from '@/lib/auth';
+import { adminSideBar } from '@/lib/validators/constants';
 
 export const revalidate = 60;
 

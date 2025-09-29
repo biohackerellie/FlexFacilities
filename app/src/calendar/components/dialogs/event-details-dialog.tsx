@@ -2,7 +2,7 @@
 
 import { format, parseISO } from 'date-fns';
 import { Calendar, Clock, Text, User } from 'lucide-react';
-
+import type { IEvent } from '@/calendar/interfaces';
 import {
   Dialog,
   DialogContent,
@@ -11,8 +11,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-
-import type { IEvent } from '@/calendar/interfaces';
 
 interface IProps {
   event: IEvent;
@@ -37,9 +35,9 @@ export function EventDetailsDialog({ event, children }: IProps) {
             <div className="flex items-start gap-2">
               <User className="mt-1 size-4 shrink-0" />
               <div>
-                <p className="text-sm font-medium">Responsible</p>
+                <p className="text-sm font-medium">Location</p>
                 <p className="text-sm text-muted-foreground">
-                  {event.user.name}
+                  {event.location}
                 </p>
               </div>
             </div>

@@ -1,10 +1,5 @@
-import type { TEventColor } from "@/calendar/types";
-
-export interface IUser {
-  id: string;
-  name: string;
-  picturePath: string | null;
-}
+import type { TEventColor } from '@/calendar/types';
+import type { Building } from '@/lib/types';
 
 export interface IEvent {
   id: number;
@@ -13,7 +8,8 @@ export interface IEvent {
   title: string;
   color: TEventColor;
   description: string;
-  user: IUser;
+  building: Building;
+  location: string;
 }
 
 export interface ICalendarCell {

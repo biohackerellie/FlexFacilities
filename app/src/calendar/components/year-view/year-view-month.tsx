@@ -1,12 +1,16 @@
-import { useMemo } from "react";
-import { useRouter } from "next/navigation";
-import { format, isSameDay, parseISO, getDaysInMonth, startOfMonth } from "date-fns";
+import {
+  format,
+  getDaysInMonth,
+  isSameDay,
+  parseISO,
+  startOfMonth,
+} from 'date-fns';
+import { useRouter } from 'next/navigation';
+import { useMemo } from 'react';
+import { YearViewDayCell } from '@/calendar/components/year-view/year-view-day-cell';
+import { useCalendar } from '@/calendar/contexts/calendar-context';
 
-import { useCalendar } from "@/calendar/contexts/calendar-context";
-
-import { YearViewDayCell } from "@/calendar/components/year-view/year-view-day-cell";
-
-import type { IEvent } from "@/calendar/interfaces";
+import type { IEvent } from '@/calendar/interfaces';
 
 interface IProps {
   month: Date;
@@ -17,7 +21,7 @@ export function YearViewMonth({ month, events }: IProps) {
   const { push } = useRouter();
   const { setSelectedDate } = useCalendar();
 
-  const monthName = format(month, "MMMM");
+  const monthName = format(month, 'MMMM');
 
   const daysInMonth = useMemo(() => {
     const totalDays = getDaysInMonth(month);
@@ -29,11 +33,11 @@ export function YearViewMonth({ month, events }: IProps) {
     return [...blanks, ...days];
   }, [month]);
 
-  const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
   const handleClick = () => {
     setSelectedDate(new Date(month.getFullYear(), month.getMonth(), 1));
-    push("/month-view");
+    push('/month-view');
   };
 
   return (
@@ -49,7 +53,10 @@ export function YearViewMonth({ month, events }: IProps) {
       <div className="flex-1 space-y-2 rounded-b-lg border border-t-0 p-3">
         <div className="grid grid-cols-7 gap-x-0.5 text-center">
           {weekDays.map((day, index) => (
-            <div key={index} className="text-xs font-medium text-muted-foreground">
+            <div
+              key={index}
+              className="text-xs font-medium text-muted-foreground"
+            >
               {day}
             </div>
           ))}
@@ -57,12 +64,24 @@ export function YearViewMonth({ month, events }: IProps) {
 
         <div className="grid grid-cols-7 gap-x-0.5 gap-y-2">
           {daysInMonth.map((day, index) => {
-            if (day === null) return <div key={`blank-${index}`} className="h-10" />;
+            if (day === null)
+              return <div key={`blank-${index}`} className="h-10" />;
 
             const date = new Date(month.getFullYear(), month.getMonth(), day);
-            const dayEvents = events.filter(event => isSameDay(parseISO(event.startDate), date) || isSameDay(parseISO(event.endDate), date));
+            const dayEvents = events.filter(
+              (event) =>
+                isSameDay(parseISO(event.startDate), date) ||
+                isSameDay(parseISO(event.endDate), date),
+            );
 
-            return <YearViewDayCell key={`day-${day}`} day={day} date={date} events={dayEvents} />;
+            return (
+              <YearViewDayCell
+                key={`day-${day}`}
+                day={day}
+                date={date}
+                events={dayEvents}
+              />
+            );
           })}
         </div>
       </div>

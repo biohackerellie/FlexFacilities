@@ -104,6 +104,7 @@
         "noFunctionAssign": "error",
         "noGlobalAssign": "error",
         "noImportAssign": "error",
+        "noImplicitAnyLet": "warn",
         "noMisleadingCharacterClass": "error",
         "noMisleadingInstantiator": "error",
         "noPrototypeBuiltins": "error",

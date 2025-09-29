@@ -133,23 +133,40 @@ func (a *FacilityHandler) UpdateFacilityCategory(ctx context.Context, req *conne
 }
 
 func (a *FacilityHandler) GetAllEvents(ctx context.Context, req *connect.Request[service.GetAllEventsRequest]) (*connect.Response[service.GetAllEventsResponse], error) {
-	res, err := a.calendar.ListEvents(req.Msg.GetCalendarId())
+	buildings, err := a.facilityStore.GetAllBuildings(ctx)
 	if err != nil {
 		return nil, err
 	}
-	events := make([]*service.Event, len(res.Items))
-	for i, event := range res.Items {
-		events[i] = &service.Event{
-			Summary:     event.Summary,
-			Start:       event.Start.DateTime,
-			End:         event.End.DateTime,
-			Location:    event.Location,
-			Description: event.Description,
-			Title:       event.Summary,
+
+	result := make([]*service.BuildingWithEvents, len(buildings))
+	for i, building := range buildings {
+		calId := building.GoogleCalendarID
+		if calId == nil || *calId == "" {
+			continue
+		}
+		res, err := a.calendar.ListEvents(*calId)
+		if err != nil {
+			return nil, err
+		}
+		events := make([]*service.Event, len(res.Items))
+		for i, event := range res.Items {
+			events[i] = &service.Event{
+				Summary:     event.Summary,
+				Start:       event.Start.DateTime,
+				End:         event.End.DateTime,
+				Location:    event.Location,
+				Description: event.Description,
+				Title:       event.Summary,
+			}
+		}
+		result[i] = &service.BuildingWithEvents{
+			Building: building.ToProto(),
+			Events:   events,
 		}
 	}
+
 	return connect.NewResponse(&service.GetAllEventsResponse{
-		Events: events,
+		Data: result,
 	}), nil
 }
 

@@ -1,6 +1,6 @@
-import { formatDate } from "date-fns";
+import { formatDate } from 'date-fns';
 
-import { useCalendar } from "@/calendar/contexts/calendar-context";
+import { useCalendar } from '@/calendar/contexts/calendar-context';
 
 export function TodayButton() {
   const { setSelectedDate } = useCalendar();
@@ -14,9 +14,11 @@ export function TodayButton() {
       onClick={handleClick}
     >
       <p className="flex h-6 w-full items-center justify-center bg-primary text-center text-xs font-semibold text-primary-foreground">
-        {formatDate(today, "MMM").toUpperCase()}
+        {formatDate(today, 'MMM').toUpperCase()}
       </p>
-      <p className="flex w-full items-center justify-center text-lg font-bold">{today.getDate()}</p>
+      <p className="flex w-full items-center justify-center text-lg font-bold">
+        {today.getDate()}
+      </p>
     </button>
   );
 }
