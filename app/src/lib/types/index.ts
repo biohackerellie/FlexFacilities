@@ -4,6 +4,7 @@ import type {
   Building as PBBuilding,
   BuildingWithFacilities as PBBuildingWithFacilities,
   Category as PBCategory,
+  CreateReservationRequest as PBCreateReservationRequest,
   Facility as PBFacility,
   FacilityWithCategories as PBFacilityWithCategories,
   FullFacility as PBFulFacility,
@@ -11,6 +12,7 @@ import type {
   FullResWithFacilityName as PBFullResWithFacilityName,
   Notifications as PBNotification,
   NotificationsReadable as PBNotificationReadable,
+  RecurrencePattern as PBRecurrencePattern,
   Reservation as PBReservation,
   ReservationDate as PBReservationDate,
   ReservationFee as PBReservationFee,
@@ -32,6 +34,8 @@ export type FacilityWithCategories = ProtoType<PBFacilityWithCategories>;
 export type FullResWithFacilityName = ProtoType<PBFullResWithFacilityName>;
 export type Notification = ProtoType<PBNotification>;
 export type NotificationReadable = ProtoType<PBNotificationReadable>;
+export type CreateReservationRequest = ProtoType<PBCreateReservationRequest>;
+export type RecurrencePattern = ProtoType<PBRecurrencePattern>;
 type SessionType = ProtoType<PBSession>;
 export interface Session extends Omit<SessionType, 'userRole'> {
   userRole: UserRole;

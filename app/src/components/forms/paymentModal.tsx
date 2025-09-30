@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 
-import { Button } from '@/components/ui/buttons';
+import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import {
   Sheet,
@@ -15,7 +15,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { addFee } from '@/functions/mutations';
+import { addFee } from '@/lib/actions/reservations';
 
 interface IForminput {
   additionalFees: number;

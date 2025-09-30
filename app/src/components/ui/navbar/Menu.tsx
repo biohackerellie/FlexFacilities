@@ -2,43 +2,32 @@
 
 import { Loader2 } from 'lucide-react';
 import Link from 'next/link';
-import { signIn, signOut, useSession } from 'next-auth/react';
 import React from 'react';
 
-import { IssuesForm } from '@/components/forms';
-import { Button, ModeToggle } from '@/components/ui/buttons';
+import { ModeToggle } from '@/components/ui/buttons';
+import { Button } from '@/components/ui/button';
 import {
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  NavigationMenuMobileTrigger,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
 import { cn } from '@/lib/utils';
 
+import { useAuth } from '@/components/hooks/useAuth';
+
 // import { requestCount } from "./requestCount";
 
 export function AuthenticatedMenu() {
-  const { data: session, status } = useSession();
-  console.log('session: ', session);
+  const session = useAuth();
   let admin = false;
-  if (session && session.user.role.includes('ADMIN')) {
+  if (session && session.userRole.includes('ADMIN')) {
     admin = true;
   }
-  if (status === 'loading') {
-    return (
-      <NavigationMenuItem>
-        <Button disabled>
-          <Loader2 className="animate-spin mr-2 h-4 w-4" />
-          Please Wait
-        </Button>
-      </NavigationMenuItem>
-    );
-  }
-  if (status === 'authenticated') {
+  if (session) {
     return (
       <>
         <div className="hidden sm:flex">
@@ -50,8 +39,6 @@ export function AuthenticatedMenu() {
                   href={`${process.env.NEXT_PUBLIC_HOST}/account`}
                   prefetch={false}
                   replace={true}
-                  legacyBehavior
-                  passHref
                 >
                   <ListItem title="My Account">
                     Manage your reservations & account details
@@ -60,7 +47,9 @@ export function AuthenticatedMenu() {
                 <ListItem
                   className="cursor-pointer"
                   title="Sign Out"
-                  onClick={() => signOut()}
+                  onClick={() =>
+                    (window.location.href = `${process.env.NEXT_PUBLIC_HOST}/signout`)
+                  }
                 >
                   Sign out of your account
                 </ListItem>

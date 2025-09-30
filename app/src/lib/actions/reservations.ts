@@ -2,7 +2,58 @@
 import { unstable_cacheTag as cacheTag, revalidateTag } from 'next/cache';
 import { logger } from '@/lib/logger';
 import { client } from '@/lib/rpc';
+import { FormData as CreateReservationSchema } from '../form-store';
 import { Reservation, ReservationStatus } from '../types';
+
+export async function createReservation(formData: CreateReservationSchema) {
+  const { error } = await client.reservations().createReservation({
+    userId: formData.userID,
+    eventName: formData.eventName,
+    facilityId: formData.facilityID,
+    details: formData.details,
+    categoryId: formData.categoryID,
+    name: formData.name,
+    phone: formData.phone,
+    techSupport: formData.techSupport,
+    techDetails: formData.techDetails,
+    doorAccess: formData.doorAccess,
+    doorsDetails: formData.doorDetails,
+    occurrences: formData.occurrences,
+    startDate: formData.startDate,
+    startTime: formData.startTime,
+    endDate: formData.endDate,
+    endTime: formData.endTime,
+    pattern: formData.pattern,
+  });
+
+  if (error) {
+    logger.error('Error creating reservation', { 'error ': error });
+    throw error;
+  }
+  revalidateTag('reservations');
+}
+
+interface IForminput {
+  additionalFees: number;
+  feesType: string;
+  reservationId: any;
+}
+
+export async function addFee(data: IForminput, id: bigint) {
+  const { error } = await client.reservations().updateReservationFee({
+    fee: {
+      additionalFees: String(data.additionalFees),
+      feesType: data.feesType,
+      reservationId: id,
+    },
+  });
+  if (error) {
+    logger.error('Error adding fee', { 'error ': error });
+    throw error;
+  }
+  revalidateTag('reservations');
+  revalidateTag(String(id));
+}
 
 export async function getReservation(id: string) {
   'use cache';

@@ -131,10 +131,10 @@ func (a *ReservationHandler) CreateReservation(ctx context.Context, req *connect
 		}
 	} else {
 		p := recur.Payload{
-			StartDate: req.Msg.StartDate,
-			EndDate:   req.Msg.EndDate,
-			StartTime: req.Msg.StartTime,
-			EndTime:   req.Msg.EndTime,
+			StartDate: *req.Msg.StartDate,
+			EndDate:   *req.Msg.EndDate,
+			StartTime: *req.Msg.StartTime,
+			EndTime:   *req.Msg.EndTime,
 			Pattern:   pat,
 			RDates:    req.Msg.Rdates,
 			EXDates:   req.Msg.Exdates,

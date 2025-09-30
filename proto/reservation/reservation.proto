@@ -184,10 +184,10 @@ message CreateReservationRequest {
   
   repeated Occurrence occurrences = 12;
   
-  string start_date = 13;
-  string start_time = 14;
-  string end_date = 15;
-  string end_time = 16;
+  optional string start_date = 13;
+  optional string start_time = 14;
+  optional string end_date = 15;
+  optional string end_time = 16;
   optional RecurrencePattern pattern = 17;
   repeated string rdates = 18;
   repeated string exdates = 19;

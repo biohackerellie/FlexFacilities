@@ -4,7 +4,7 @@ import { Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 
-import { Button } from '../ui/buttons';
+import { Button } from '../ui/button';
 
 export function UploadFile({ params }: { params: { id: string } }) {
   const inputFileRef = useRef<HTMLInputElement>(null);
@@ -58,7 +58,3 @@ export function UploadFile({ params }: { params: { id: string } }) {
     </div>
   );
 }
-/**
- * https://tqhpkz4oxpax9gag.public.blob.vercel-storage.com/CORS%20Plugin%20-%20ElysiaJS%20ElysiaJS-xH8CbBAPcEXLLZ88rpqIVga2EfWufV.pdf
- * https://tqhpkz4oxpax9gag.public.blob.vercel-storage.com/CORS%2520Plugin%2520-%2520ElysiaJS%2520ElysiaJS-xH8CbBAPcEXLLZ88rpqIVga2EfWufV.pdf
- */

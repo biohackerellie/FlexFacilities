@@ -1,11 +1,12 @@
 'use client';
 
 import { AnimatePresence } from 'framer-motion';
-import { useFormStore } from '@/lib/form-store';
+import { toast } from 'sonner';
 import { FormProgress } from '@/components/form-progress';
 import { Step1 } from '@/components/form-steps/step-1';
 import { Step2 } from '@/components/form-steps/step-2';
 import { Step3 } from '@/components/form-steps/step-3';
+import { Step4 } from '@/components/form-steps/step-4';
 import { StepComplete } from '@/components/form-steps/step-complete';
 import {
   Card,
@@ -14,27 +15,44 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { getFacilities } from '@/lib/actions/facilities';
+import { useFormStore } from '@/lib/form-store';
+import type { Category } from '@/lib/types';
 
 const FORM_STEPS = [
   {
-    title: 'Personal Info',
-    description: 'Basic details',
+    title: 'Select Facility',
+    description: 'Choose your location',
   },
   {
-    title: 'Contact',
-    description: 'How to reach you',
+    title: 'Event Details',
+    description: 'Tell us about your event',
   },
   {
-    title: 'Preferences',
-    description: 'Your choices',
+    title: 'Date & Time',
+    description: 'Schedule your reservation',
+  },
+  {
+    title: 'Additional Services',
+    description: 'Optional support',
   },
 ];
 
-export function MultiStepForm() {
-  const { currentStep, nextStep, previousStep, resetForm } = useFormStore();
+interface MultiStepFormProps {
+  facilitiesPromise: Promise<Awaited<ReturnType<typeof getFacilities>>>;
+  categoriesPromise: Promise<Category[]>;
+  userID: string;
+}
+
+export function MultiStepForm({
+  facilitiesPromise,
+  userID,
+}: MultiStepFormProps) {
+  const { currentStep, nextStep, previousStep, resetForm, formData } =
+    useFormStore();
 
   const handleComplete = () => {
-    console.log('[v0] Form completed successfully');
+    toast.promise();
     nextStep();
   };
 
@@ -56,29 +74,39 @@ export function MultiStepForm() {
         <CardHeader>
           <CardTitle className="text-2xl">
             {currentStep < FORM_STEPS.length
-              ? FORM_STEPS[currentStep].title
+              ? FORM_STEPS[currentStep]?.title
               : 'Complete'}
           </CardTitle>
           <CardDescription>
             {currentStep < FORM_STEPS.length
               ? `Step ${currentStep + 1} of ${FORM_STEPS.length}`
-              : 'Your form has been submitted'}
+              : 'Your reservation has been submitted'}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <AnimatePresence mode="wait">
-            {currentStep === 0 && <Step1 key="step-1" onNext={nextStep} />}
+            {currentStep === 0 && (
+              <Step1
+                key="step-1"
+                onNext={nextStep}
+                facilitiesPromise={facilitiesPromise}
+                userID={userID}
+              />
+            )}
             {currentStep === 1 && (
               <Step2 key="step-2" onNext={nextStep} onBack={previousStep} />
             )}
             {currentStep === 2 && (
-              <Step3
-                key="step-3"
+              <Step3 key="step-3" onNext={nextStep} onBack={previousStep} />
+            )}
+            {currentStep === 3 && (
+              <Step4
+                key="step-4"
                 onSubmit={handleComplete}
                 onBack={previousStep}
               />
             )}
-            {currentStep === 3 && (
+            {currentStep === 4 && (
               <StepComplete key="complete" onReset={handleReset} />
             )}
           </AnimatePresence>

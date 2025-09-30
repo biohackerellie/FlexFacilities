@@ -1,21 +1,22 @@
-"use client"
+'use client';
 
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { step2Schema, type Step2Data } from "@/lib/form-schemas"
-import { useFormStore } from "@/lib/form-store"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { motion } from "framer-motion"
+import { zodResolver } from '@hookform/resolvers/zod';
+import { motion } from 'framer-motion';
+import { useForm } from 'react-hook-form';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { type Step2Data, step2Schema } from '@/lib/form-schemas';
+import { useFormStore } from '@/lib/form-store';
 
 interface Step2Props {
-  onNext: () => void
-  onBack: () => void
+  onNext: () => void;
+  onBack: () => void;
 }
 
 export function Step2({ onNext, onBack }: Step2Props) {
-  const { formData, updateFormData } = useFormStore()
+  const { formData, updateFormData } = useFormStore();
 
   const {
     register,
@@ -24,15 +25,17 @@ export function Step2({ onNext, onBack }: Step2Props) {
   } = useForm<Step2Data>({
     resolver: zodResolver(step2Schema),
     defaultValues: {
+      eventName: formData.eventName,
+      details: formData.details,
+      name: formData.name,
       phone: formData.phone,
-      address: formData.address,
     },
-  })
+  });
 
   const onSubmit = (data: Step2Data) => {
-    updateFormData(data)
-    onNext()
-  }
+    updateFormData(data);
+    onNext();
+  };
 
   return (
     <motion.form
@@ -45,26 +48,60 @@ export function Step2({ onNext, onBack }: Step2Props) {
     >
       <div className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="phone">Phone Number</Label>
+          <Label htmlFor="eventName">Event Name</Label>
           <Input
-            id="phone"
-            type="tel"
-            placeholder="+1 (555) 123-4567"
-            {...register("phone")}
-            className={errors.phone ? "border-destructive" : ""}
+            id="eventName"
+            placeholder="Annual Company Meeting"
+            {...register('eventName')}
+            className={errors.eventName ? 'border-destructive' : ''}
           />
-          {errors.phone && <p className="text-sm text-destructive">{errors.phone.message}</p>}
+          {errors.eventName && (
+            <p className="text-sm text-destructive">
+              {errors.eventName.message}
+            </p>
+          )}
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="address">Address</Label>
-          <Input
-            id="address"
-            placeholder="123 Main St, City, State 12345"
-            {...register("address")}
-            className={errors.address ? "border-destructive" : ""}
+          <Label htmlFor="details">Event Details</Label>
+          <Textarea
+            id="details"
+            placeholder="Describe your event..."
+            rows={4}
+            {...register('details')}
+            className={errors.details ? 'border-destructive' : ''}
           />
-          {errors.address && <p className="text-sm text-destructive">{errors.address.message}</p>}
+          {errors.details && (
+            <p className="text-sm text-destructive">{errors.details.message}</p>
+          )}
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="space-y-2">
+            <Label htmlFor="name">Contact Name</Label>
+            <Input
+              id="name"
+              placeholder="John Doe"
+              {...register('name')}
+              className={errors.name ? 'border-destructive' : ''}
+            />
+            {errors.name && (
+              <p className="text-sm text-destructive">{errors.name.message}</p>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="phone">Phone Number</Label>
+            <Input
+              id="phone"
+              type="tel"
+              placeholder="+1 (555) 123-4567"
+              {...register('phone')}
+              className={errors.phone ? 'border-destructive' : ''}
+            />
+            {errors.phone && (
+              <p className="text-sm text-destructive">{errors.phone.message}</p>
+            )}
+          </div>
         </div>
       </div>
 
@@ -77,5 +114,5 @@ export function Step2({ onNext, onBack }: Step2Props) {
         </Button>
       </div>
     </motion.form>
-  )
+  );
 }

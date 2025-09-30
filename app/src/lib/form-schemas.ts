@@ -1,31 +1,52 @@
-import { z } from "zod"
+// form-schemas.ts
+import { z } from 'zod';
 
-// Step 1: Personal Information Schema
+const Occurrence = z.object({
+  start: z.string(),
+  end: z.string(),
+});
+
+const days = z.literal(['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA']);
+const RecurrencePattern = z.object({
+  freq: z.enum(['DAILY', 'WEEKLY', 'MONTHLY']),
+  byWeekday: z.array(days).optional(),
+  until: z.string().optional(),
+  count: z.number().optional(),
+});
 export const step1Schema = z.object({
-  firstName: z.string().min(2, "First name must be at least 2 characters"),
-  lastName: z.string().min(2, "Last name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email address"),
-  age: z
-    .string()
-    .min(1, "Age is required")
-    .refine((val) => {
-      const num = Number.parseInt(val)
-      return !isNaN(num) && num >= 18 && num <= 120
-    }, "Age must be between 18 and 120"),
-})
+  userID: z.string().min(2, 'You must be logged in to create a reservation'),
+  facilityID: z.bigint().min(BigInt(0), 'You must select a facility'),
 
-// Step 2: Contact Information Schema (placeholder)
+  categoryID: z.bigint().min(BigInt(0), 'You must select a category'),
+});
+
 export const step2Schema = z.object({
-  phone: z.string().min(10, "Phone number must be at least 10 digits"),
-  address: z.string().min(5, "Address must be at least 5 characters"),
-})
+  eventName: z.string().min(2, 'Event name must be at least 2 characters'),
+  details: z.string().min(10, 'Please provide at least 10 characters'),
+  name: z.string().min(2, 'Name must be at least 2 characters'),
+  phone: z.string().min(10, 'Phone number must be at least 10 digits'),
+});
 
-// Step 3: Preferences Schema (placeholder)
 export const step3Schema = z.object({
-  preferences: z.string().min(10, "Please provide at least 10 characters"),
-  newsletter: z.boolean(),
-})
+  startDate: z.iso.date('Start date is required').optional(),
+  startTime: z.iso.time('Start time is required').optional(),
+  endDate: z.iso.date('End date is required').optional(),
+  endTime: z.iso.time('End time is required').optional(),
+  pattern: RecurrencePattern.optional(),
+  occurrences: z.array(Occurrence).optional(),
+});
 
-export type Step1Data = z.infer<typeof step1Schema>
-export type Step2Data = z.infer<typeof step2Schema>
-export type Step3Data = z.infer<typeof step3Schema>
+export const step4Schema = z.object({
+  techSupport: z.boolean(),
+  techDetails: z.string().optional(),
+  doorAccess: z.boolean(),
+  doorDetails: z.string().optional(),
+});
+
+export type Step1Data = z.infer<typeof step1Schema>;
+export type Step2Data = z.infer<typeof step2Schema>;
+export type Step3Data = z.infer<typeof step3Schema>;
+export type Step4Data = z.infer<typeof step4Schema>;
+
+export type RecurrencePatternType = z.infer<typeof RecurrencePattern>;
+export type OccurrenceType = z.infer<typeof Occurrence>;

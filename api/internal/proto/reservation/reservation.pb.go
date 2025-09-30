@@ -1363,10 +1363,10 @@ type CreateReservationRequest struct {
 	DoorAccess    bool                   `protobuf:"varint,10,opt,name=door_access,json=doorAccess,proto3" json:"door_access,omitempty"`
 	DoorsDetails  *string                `protobuf:"bytes,11,opt,name=doors_details,json=doorsDetails,proto3,oneof" json:"doors_details,omitempty"`
 	Occurrences   []*Occurrence          `protobuf:"bytes,12,rep,name=occurrences,proto3" json:"occurrences,omitempty"`
-	StartDate     string                 `protobuf:"bytes,13,opt,name=start_date,json=startDate,proto3" json:"start_date,omitempty"`
-	StartTime     string                 `protobuf:"bytes,14,opt,name=start_time,json=startTime,proto3" json:"start_time,omitempty"`
-	EndDate       string                 `protobuf:"bytes,15,opt,name=end_date,json=endDate,proto3" json:"end_date,omitempty"`
-	EndTime       string                 `protobuf:"bytes,16,opt,name=end_time,json=endTime,proto3" json:"end_time,omitempty"`
+	StartDate     *string                `protobuf:"bytes,13,opt,name=start_date,json=startDate,proto3,oneof" json:"start_date,omitempty"`
+	StartTime     *string                `protobuf:"bytes,14,opt,name=start_time,json=startTime,proto3,oneof" json:"start_time,omitempty"`
+	EndDate       *string                `protobuf:"bytes,15,opt,name=end_date,json=endDate,proto3,oneof" json:"end_date,omitempty"`
+	EndTime       *string                `protobuf:"bytes,16,opt,name=end_time,json=endTime,proto3,oneof" json:"end_time,omitempty"`
 	Pattern       *RecurrencePattern     `protobuf:"bytes,17,opt,name=pattern,proto3,oneof" json:"pattern,omitempty"`
 	Rdates        []string               `protobuf:"bytes,18,rep,name=rdates,proto3" json:"rdates,omitempty"`
 	Exdates       []string               `protobuf:"bytes,19,rep,name=exdates,proto3" json:"exdates,omitempty"`
@@ -1489,29 +1489,29 @@ func (x *CreateReservationRequest) GetOccurrences() []*Occurrence {
 }
 
 func (x *CreateReservationRequest) GetStartDate() string {
-	if x != nil {
-		return x.StartDate
+	if x != nil && x.StartDate != nil {
+		return *x.StartDate
 	}
 	return ""
 }
 
 func (x *CreateReservationRequest) GetStartTime() string {
-	if x != nil {
-		return x.StartTime
+	if x != nil && x.StartTime != nil {
+		return *x.StartTime
 	}
 	return ""
 }
 
 func (x *CreateReservationRequest) GetEndDate() string {
-	if x != nil {
-		return x.EndDate
+	if x != nil && x.EndDate != nil {
+		return *x.EndDate
 	}
 	return ""
 }
 
 func (x *CreateReservationRequest) GetEndTime() string {
-	if x != nil {
-		return x.EndTime
+	if x != nil && x.EndTime != nil {
+		return *x.EndTime
 	}
 	return ""
 }
@@ -2476,7 +2476,7 @@ const file_proto_reservation_reservation_proto_rawDesc = "" +
 	"\x13RequestCountRequest\",\n" +
 	"\x14RequestCountResponse\x12\x14\n" +
 	"\x05count\x18\x01 \x01(\x03R\x05count\"\x1c\n" +
-	"\x1aGetRequestsThisWeekRequest\"\xc5\x05\n" +
+	"\x1aGetRequestsThisWeekRequest\"\x91\x06\n" +
 	"\x18CreateReservationRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x1d\n" +
 	"\n" +
@@ -2494,18 +2494,22 @@ const file_proto_reservation_reservation_proto_rawDesc = "" +
 	" \x01(\bR\n" +
 	"doorAccess\x12(\n" +
 	"\rdoors_details\x18\v \x01(\tH\x01R\fdoorsDetails\x88\x01\x01\x12=\n" +
-	"\voccurrences\x18\f \x03(\v2\x1b.api.reservation.OccurrenceR\voccurrences\x12\x1d\n" +
+	"\voccurrences\x18\f \x03(\v2\x1b.api.reservation.OccurrenceR\voccurrences\x12\"\n" +
 	"\n" +
-	"start_date\x18\r \x01(\tR\tstartDate\x12\x1d\n" +
+	"start_date\x18\r \x01(\tH\x02R\tstartDate\x88\x01\x01\x12\"\n" +
 	"\n" +
-	"start_time\x18\x0e \x01(\tR\tstartTime\x12\x19\n" +
-	"\bend_date\x18\x0f \x01(\tR\aendDate\x12\x19\n" +
-	"\bend_time\x18\x10 \x01(\tR\aendTime\x12A\n" +
-	"\apattern\x18\x11 \x01(\v2\".api.reservation.RecurrencePatternH\x02R\apattern\x88\x01\x01\x12\x16\n" +
+	"start_time\x18\x0e \x01(\tH\x03R\tstartTime\x88\x01\x01\x12\x1e\n" +
+	"\bend_date\x18\x0f \x01(\tH\x04R\aendDate\x88\x01\x01\x12\x1e\n" +
+	"\bend_time\x18\x10 \x01(\tH\x05R\aendTime\x88\x01\x01\x12A\n" +
+	"\apattern\x18\x11 \x01(\v2\".api.reservation.RecurrencePatternH\x06R\apattern\x88\x01\x01\x12\x16\n" +
 	"\x06rdates\x18\x12 \x03(\tR\x06rdates\x12\x18\n" +
 	"\aexdates\x18\x13 \x03(\tR\aexdatesB\x0f\n" +
 	"\r_tech_detailsB\x10\n" +
-	"\x0e_doors_detailsB\n" +
+	"\x0e_doors_detailsB\r\n" +
+	"\v_start_dateB\r\n" +
+	"\v_start_timeB\v\n" +
+	"\t_end_dateB\v\n" +
+	"\t_end_timeB\n" +
 	"\n" +
 	"\b_pattern\"+\n" +
 	"\x19CreateReservationResponse\x12\x0e\n" +

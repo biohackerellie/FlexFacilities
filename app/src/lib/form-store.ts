@@ -1,42 +1,57 @@
-import { create } from "zustand"
-import { persist } from "zustand/middleware"
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import type { OccurrenceType, RecurrencePatternType } from './form-schemas';
 
 export interface FormData {
-  // Step 1: Personal Information
-  firstName: string
-  lastName: string
-  email: string
-  age: string
+  // Step 1
+  userID: string;
+  facilityID: bigint;
 
-  // Step 2: Additional fields (placeholder for expansion)
-  phone: string
-  address: string
+  // Step 2
+  eventName: string;
+  details: string;
+  categoryID: bigint;
+  name: string;
+  phone: string;
 
-  // Step 3: Preferences (placeholder for expansion)
-  preferences: string
-  newsletter: boolean
+  // Step 3
+  startDate?: string;
+  startTime?: string;
+  endDate?: string;
+  endTime?: string;
+  pattern?: RecurrencePatternType;
+  occurrences?: OccurrenceType[];
+
+  // Step 4
+  techSupport: boolean;
+  techDetails?: string;
+  doorAccess: boolean;
+  doorDetails?: string;
 }
 
 interface FormStore {
-  currentStep: number
-  formData: FormData
-  setCurrentStep: (step: number) => void
-  updateFormData: (data: Partial<FormData>) => void
-  resetForm: () => void
-  nextStep: () => void
-  previousStep: () => void
+  currentStep: number;
+  formData: FormData;
+  setCurrentStep: (step: number) => void;
+  updateFormData: (data: Partial<FormData>) => void;
+  resetForm: () => void;
+  nextStep: () => void;
+  previousStep: () => void;
 }
 
 const initialFormData: FormData = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  age: "",
-  phone: "",
-  address: "",
-  preferences: "",
-  newsletter: false,
-}
+  userID: '',
+  facilityID: BigInt(0),
+  eventName: '',
+  details: '',
+  categoryID: BigInt(0),
+  name: '',
+  phone: '',
+  techSupport: false,
+  techDetails: '',
+  doorAccess: false,
+  doorDetails: '',
+};
 
 export const useFormStore = create<FormStore>()(
   persist(
@@ -63,7 +78,7 @@ export const useFormStore = create<FormStore>()(
         })),
     }),
     {
-      name: "multi-step-form-storage",
+      name: 'multi-step-form-storage',
     },
   ),
-)
+);
