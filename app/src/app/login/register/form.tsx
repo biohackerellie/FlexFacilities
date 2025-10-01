@@ -97,6 +97,11 @@ export default function CreateAccount() {
             </CardFooter>
           </div>
         </form>
+        <Dialog open={open} onOpenChange={setOpen(!open)}>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogTitle></DialogTitle>
+          </DialogContent>
+        </Dialog>
       </CardContent>
     </Card>
   );
