@@ -126,7 +126,7 @@ export function groupEvents(dayEvents: IEvent[]) {
     let placed = false;
     for (const group of groups) {
       const lastEventInGroup = group[group.length - 1];
-      const lastEventEnd = parseISO(lastEventInGroup.endDate);
+      const lastEventEnd = parseISO(lastEventInGroup!.endDate);
 
       if (eventStart >= lastEventEnd) {
         group.push(event);
@@ -153,7 +153,7 @@ export function getEventBlockStyle(
   const eventStart = startDate < dayStart ? dayStart : startDate;
   const startMinutes = differenceInMinutes(eventStart, dayStart);
 
-  let top;
+  let top: number;
 
   if (visibleHoursRange) {
     const visibleStartMinutes = visibleHoursRange.from * 60;
@@ -176,7 +176,7 @@ export function isWorkingHour(
   workingHours: TWorkingHours,
 ) {
   const dayIndex = day.getDay() as keyof typeof workingHours;
-  const dayHours = workingHours[dayIndex];
+  const dayHours = workingHours[dayIndex]!;
   return hour >= dayHours.from && hour < dayHours.to;
 }
 
@@ -310,7 +310,7 @@ export function calculateMonthEventPositions(
     if (position !== -1) {
       eventDays.forEach((day) => {
         const dayKey = startOfDay(day).toISOString();
-        occupiedPositions[dayKey][position] = true;
+        occupiedPositions[dayKey]![position] = true;
       });
       eventPositions[event.id] = position;
     }

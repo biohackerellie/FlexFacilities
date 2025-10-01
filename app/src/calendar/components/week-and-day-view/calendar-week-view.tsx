@@ -14,7 +14,6 @@ import {
   getEventBlockStyle,
   getVisibleHours,
   groupEvents,
-  isWorkingHour,
 } from '@/calendar/helpers';
 import type { IEvent } from '@/calendar/interfaces';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -26,7 +25,7 @@ interface IProps {
 }
 
 export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
-  const { selectedDate, workingHours, visibleHours } = useCalendar();
+  const { selectedDate, visibleHours } = useCalendar();
 
   const { hours, earliestEventHour, latestEventHour } = getVisibleHours(
     visibleHours,
@@ -100,19 +99,10 @@ export function CalendarWeekView({ singleDayEvents, multiDayEvents }: IProps) {
                   return (
                     <div key={dayIndex} className="relative">
                       {hours.map((hour, index) => {
-                        const isDisabled = !isWorkingHour(
-                          day,
-                          hour,
-                          workingHours,
-                        );
-
                         return (
                           <div
                             key={hour}
-                            className={cn(
-                              'relative',
-                              isDisabled && 'bg-calendar-disabled-hour',
-                            )}
+                            className={cn('relative')}
                             style={{ height: '96px' }}
                           >
                             {index !== 0 && (

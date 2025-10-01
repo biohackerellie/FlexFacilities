@@ -24,13 +24,13 @@ export type FormState =
 
 const loginSchema = z.object({
   email: z.email('Email is required').trim(),
-  password: z.string().min(8, 'Password must be at least 8 characters').trim(),
+  password: z.string().min(2, 'Password must be at least 8 characters').trim(),
 });
+
 export async function Login(
   _state: any,
   formData: FormData,
 ): Promise<FormState> {
-  'use server';
   const validated = loginSchema.safeParse({
     email: formData.get('email'),
     password: formData.get('password'),
@@ -55,4 +55,68 @@ export async function Login(
   return {
     message: 'Login successful',
   };
+}
+
+export type RegisterFormState =
+  | {
+      errors?:
+        | {
+            name?:
+              | {
+                  errors: string[];
+                }
+              | undefined;
+            email?:
+              | {
+                  errors: string[];
+                }
+              | undefined;
+            password?:
+              | {
+                  errors: string[];
+                }
+              | undefined;
+            confirmPassword?:
+              | {
+                  errors: string[];
+                }
+              | undefined;
+          }
+        | undefined;
+      message?: string;
+    }
+  | undefined;
+
+const passwords = z
+  .object({
+    password: z.string().min(8, 'Password must be 8 characters'),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Passwords must match',
+    path: ['confirmPassword'],
+  });
+const registerSchema = z.object({
+  name: z.string().min(2, 'Name must be at least 2 characters').trim(),
+  email: z.email('Email is required').trim(),
+  passwords: passwords,
+});
+
+export async function CreateUser({
+  name,
+  email,
+  password,
+}: {
+  name: string;
+  email: string;
+  password: string;
+}) {
+  const { error } = await client.auth().register({
+    name,
+    email,
+    password,
+  });
+  if (error) {
+    throw error;
+  }
 }

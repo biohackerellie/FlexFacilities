@@ -78,8 +78,6 @@ export function MonthEventBadge({
   className,
   position: propPosition,
 }: IProps) {
-  const { badgeVariant } = useCalendar();
-
   const itemStart = startOfDay(parseISO(event.startDate));
   const itemEnd = endOfDay(parseISO(event.endDate));
 
@@ -103,9 +101,7 @@ export function MonthEventBadge({
 
   const renderBadgeText = ['first', 'none'].includes(position);
 
-  const color = (
-    badgeVariant === 'dot' ? `${event.color}-dot` : event.color
-  ) as VariantProps<typeof eventBadgeVariants>['color'];
+  const color = event.color as VariantProps<typeof eventBadgeVariants>['color'];
 
   const eventBadgeClasses = cn(
     eventBadgeVariants({ color, multiDayPosition: position, className }),
@@ -127,17 +123,16 @@ export function MonthEventBadge({
         onKeyDown={handleKeyDown}
       >
         <div className="flex items-center gap-1.5 truncate">
-          {!['middle', 'last'].includes(position) &&
-            ['mixed', 'dot'].includes(badgeVariant) && (
-              <svg
-                width="8"
-                height="8"
-                viewBox="0 0 8 8"
-                className="event-dot shrink-0"
-              >
-                <circle cx="4" cy="4" r="4" />
-              </svg>
-            )}
+          {!['middle', 'last'].includes(position) && (
+            <svg
+              width="8"
+              height="8"
+              viewBox="0 0 8 8"
+              className="event-dot shrink-0"
+            >
+              <circle cx="4" cy="4" r="4" />
+            </svg>
+          )}
 
           {renderBadgeText && (
             <p className="flex-1 truncate font-semibold">

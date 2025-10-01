@@ -21,7 +21,11 @@ tasks:
     desc: Generate proto
     cmds:
       - buf generate
-
+  gen:types:
+    desc: Generate next route types
+    dir: "{{.NEXT_ROOT}}"
+    cmds:
+      - bun --bun --env-file=../.env run typegen
   clean:bun:
     desc: clean files
     cmds:
@@ -51,6 +55,7 @@ tasks:
     desc: start dev server
     cmds:
       - cd app && bun --bun --env-file=../.env run dev
+  
   dev:
     desc: start dev go and bun servers
     cmds:

@@ -15,7 +15,7 @@ export default async function reservationPage({
   if (!data) return notFound();
 
   const reservation = data.reservation!;
-  const { name, primaryContact, phone, details } = reservation;
+  const { name, phone, details } = reservation;
   const user = await getUser(reservation.userId);
   const category = await getReservationCategory(String(reservation.categoryId));
 
@@ -26,7 +26,7 @@ export default async function reservationPage({
       </div>
       <div className="hidden flex-col flex-wrap justify-between sm:flex">
         <div className="flex flex-row justify-between border-b-2 text-justify text-lg">
-          Primary Contact: {primaryContact} <div> {name}</div>
+          Primary Contact: <div> {name}</div>
         </div>
         <div className="flex flex-row justify-between border-b-2 text-justify text-lg">
           Contact Number: <div>{phone}</div>

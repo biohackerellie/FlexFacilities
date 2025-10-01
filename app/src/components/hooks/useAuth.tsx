@@ -3,6 +3,10 @@ import * as React from 'react';
 
 import type { Session } from '@/lib/types';
 
+export interface AuthContext {
+  session: Session;
+}
+
 const AuthContext = React.createContext<Session | null>(null);
 
 export function AuthProvider({

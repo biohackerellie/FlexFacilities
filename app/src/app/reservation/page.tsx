@@ -1,8 +1,9 @@
 import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
-import ReservationForm from '@/components/forms/reservationForm2';
+import { MultiStepForm } from '@/components/multi-step-form';
 import { Skeleton } from '@/components/ui/skeleton';
 import { auth } from '@/lib/auth';
+import { getFacilities } from '@/lib/actions/facilities';
 
 const Loading = () => {
   return (
@@ -22,7 +23,10 @@ export default async function ReservationPage() {
   return (
     <section className="my-4 flex flex-col justify-center sm:flex-row">
       <Suspense fallback={<Loading />}>
-        <ReservationForm email={session.userEmail} userId={session.userId} />
+        <MultiStepForm
+          userID={session.userId}
+          facilitiesPromise={getFacilities()}
+        />
       </Suspense>
     </section>
   );

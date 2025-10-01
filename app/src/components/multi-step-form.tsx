@@ -17,7 +17,8 @@ import {
 } from '@/components/ui/card';
 import { getFacilities } from '@/lib/actions/facilities';
 import { useFormStore } from '@/lib/form-store';
-import type { Category } from '@/lib/types';
+import { createReservation } from '@/lib/actions/reservations';
+import { getErrorMessage } from '@/lib/errors';
 
 const FORM_STEPS = [
   {
@@ -40,7 +41,6 @@ const FORM_STEPS = [
 
 interface MultiStepFormProps {
   facilitiesPromise: Promise<Awaited<ReturnType<typeof getFacilities>>>;
-  categoriesPromise: Promise<Category[]>;
   userID: string;
 }
 
@@ -52,7 +52,12 @@ export function MultiStepForm({
     useFormStore();
 
   const handleComplete = () => {
-    toast.promise();
+    toast.promise(createReservation(formData), {
+      success: 'Submitted!',
+      error: (error) => getErrorMessage(error),
+      loading: 'loading...',
+      position: 'top-center',
+    });
     nextStep();
   };
 

@@ -9,7 +9,6 @@ import {
   getEventBlockStyle,
   getVisibleHours,
   groupEvents,
-  isWorkingHour,
 } from '@/calendar/helpers';
 import type { IEvent } from '@/calendar/interfaces';
 import { Calendar as SingleCalendar } from '@/components/ui/calendar';
@@ -22,7 +21,7 @@ interface IProps {
 }
 
 export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
-  const { selectedDate, setSelectedDate, users, visibleHours, workingHours } =
+  const { selectedDate, setSelectedDate, buildings, visibleHours } =
     useCalendar();
 
   const { hours, earliestEventHour, latestEventHour } = getVisibleHours(
@@ -85,19 +84,10 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
             <div className="relative flex-1 border-l">
               <div className="relative">
                 {hours.map((hour, index) => {
-                  const isDisabled = !isWorkingHour(
-                    selectedDate,
-                    hour,
-                    workingHours,
-                  );
-
                   return (
                     <div
                       key={hour}
-                      className={cn(
-                        'relative',
-                        isDisabled && 'bg-calendar-disabled-hour',
-                      )}
+                      className={cn('relative')}
                       style={{ height: '96px' }}
                     >
                       {index !== 0 && (
@@ -191,7 +181,7 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
             </div>
           ) : (
             <p className="p-4 text-center text-sm italic text-muted-foreground">
-              No appointments or consultations at the moment
+              No events at the moment
             </p>
           )}
 
@@ -199,7 +189,9 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
             <ScrollArea className="h-[422px] px-4" type="always">
               <div className="space-y-6 pb-4">
                 {currentEvents.map((event) => {
-                  const user = users.find((user) => user.id === event.user.id);
+                  const building = buildings.find(
+                    (building) => building.id === event.building.id,
+                  );
 
                   return (
                     <div key={event.id} className="space-y-1.5">
@@ -207,10 +199,10 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
                         {event.title}
                       </p>
 
-                      {user && (
+                      {building && (
                         <div className="flex items-center gap-1.5 text-muted-foreground">
                           <User className="size-3.5" />
-                          <span className="text-sm">{user.name}</span>
+                          <span className="text-sm">{building.name}</span>
                         </div>
                       )}
 

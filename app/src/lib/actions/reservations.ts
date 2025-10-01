@@ -3,7 +3,7 @@ import { unstable_cacheTag as cacheTag, revalidateTag } from 'next/cache';
 import { logger } from '@/lib/logger';
 import { client } from '@/lib/rpc';
 import { FormData as CreateReservationSchema } from '../form-store';
-import { Reservation, ReservationStatus } from '../types';
+import { Reservation, ReservationDate, ReservationStatus } from '../types';
 
 export async function createReservation(formData: CreateReservationSchema) {
   const { error } = await client.reservations().createReservation({
@@ -186,4 +186,16 @@ export async function AggregateChartData() {
     throw error;
   }
   return data;
+}
+
+export function range(reservationDates: ReservationDate[]): string {
+  let dateRange = '';
+  if (reservationDates.length > 1) {
+    dateRange = `${reservationDates[0]?.localStart} - ${reservationDates[reservationDates.length - 1]?.localEnd}`;
+  } else if (reservationDates.length === 1) {
+    dateRange = `${reservationDates[0]?.localStart}`;
+  } else {
+    dateRange = 'no upcoming dates';
+  }
+  return dateRange;
 }

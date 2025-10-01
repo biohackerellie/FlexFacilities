@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Spinner } from '@/components/spinner';
 import { Separator } from '@/components/ui/separator';
 import { SidebarNav } from '@/components/ui/sidebar-nav';
-import range from '@/functions/calculations/dateRange';
+import { range } from '@/lib/actions/reservations';
 import { getFacility } from '@/lib/actions/facilities';
 import { getReservation } from '@/lib/actions/reservations';
 import { getUser } from '@/lib/actions/users';

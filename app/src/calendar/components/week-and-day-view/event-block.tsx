@@ -55,16 +55,14 @@ interface IProps
 }
 
 export function EventBlock({ event, className }: IProps) {
-  const { badgeVariant } = useCalendar();
-
   const start = parseISO(event.startDate);
   const end = parseISO(event.endDate);
   const durationInMinutes = differenceInMinutes(end, start);
   const heightInPixels = (durationInMinutes / 60) * 96 - 8;
 
-  const color = (
-    badgeVariant === 'dot' ? `${event.color}-dot` : event.color
-  ) as VariantProps<typeof calendarWeekEventCardVariants>['color'];
+  const color = event.color as VariantProps<
+    typeof calendarWeekEventCardVariants
+  >['color'];
 
   const calendarWeekEventCardClasses = cn(
     calendarWeekEventCardVariants({ color, className }),
@@ -88,17 +86,6 @@ export function EventBlock({ event, className }: IProps) {
         onKeyDown={handleKeyDown}
       >
         <div className="flex items-center gap-1.5 truncate">
-          {['mixed', 'dot'].includes(badgeVariant) && (
-            <svg
-              width="8"
-              height="8"
-              viewBox="0 0 8 8"
-              className="event-dot shrink-0"
-            >
-              <circle cx="4" cy="4" r="4" />
-            </svg>
-          )}
-
           <p className="truncate font-semibold">{event.title}</p>
         </div>
 

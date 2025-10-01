@@ -17,12 +17,14 @@ function parseRole(role: string): UserRole {
 }
 export async function auth() {
   'use cache';
-  cacheTag('session');
   const { data, error } = await client.auth().getSession({});
+
+  cacheTag('session');
   if (error) {
     logger.warn(error.message);
   }
   if (!data) return null;
+
   return {
     userEmail: data?.userEmail,
     userId: data?.userId,

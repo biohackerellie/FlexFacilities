@@ -35,8 +35,7 @@ const categoryPrice = z
   })
   .refine((val) => parseFloat(val) >= 0, {
     message: 'Amount must be zero or positive',
-  })
-  .default('0.00');
+  });
 const schema = z.object({
   name: z.string().min(1, { message: 'Facility name is required' }),
   capacity: z.number().min(1, { message: 'Capacity is required' }),

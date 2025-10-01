@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
-import { ShowPayment } from '@/components/forms';
 import EditPricing from '@/components/forms/paymentModal';
 import { Spinner } from '@/components/spinner';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -112,13 +111,15 @@ export default async function paymentPage({
                     {isAdmin ? (
                       <Paid reservation={reservation} />
                     ) : (
-                      <ShowPayment
-                        fees={
-                          reservation.costOverride
-                            ? parseFloat(reservation.costOverride)
-                            : totalCost
-                        }
-                      />
+                      <>
+                        {/* <ShowPayment */}
+                        {/*   fees={ */}
+                        {/*     reservation.costOverride */}
+                        {/*       ? parseFloat(reservation.costOverride) */}
+                        {/*       : totalCost */}
+                        {/*   } */}
+                        {/* /> */}
+                      </>
                     )}
                   </>
                 )}

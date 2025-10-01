@@ -9,7 +9,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { removeFee } from '@/functions/mutations';
 
 interface TableFees {
   additionalFees: number;
@@ -19,7 +18,7 @@ interface TableFees {
 
 const HandleDelete = async (id: number) => {
   try {
-    await removeFee(id);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
   } catch (error) {
     alert('Error deleting fee');
   }

@@ -13,10 +13,16 @@ interface ICalendarContext {
   buildings: Building[];
   events: IEvent[];
   setLocalEvents: Dispatch<SetStateAction<IEvent[]>>;
+  visibleHours: TVisibleHours;
+  setVisibleHours: Dispatch<SetStateAction<TVisibleHours>>;
+}
+interface TVisibleHours {
+  from: number;
+  to: number;
 }
 
 const CalendarContext = createContext({} as ICalendarContext);
-
+const VISIBLE_HOURS = { from: 5, to: 22 };
 export function CalendarProvider({
   children,
   buildings,
@@ -30,6 +36,9 @@ export function CalendarProvider({
   const [selectedBuildingId, setSelectedBuildingId] = useState<
     Building['id'] | 'all'
   >('all');
+
+  const [visibleHours, setVisibleHours] =
+    useState<TVisibleHours>(VISIBLE_HOURS);
 
   // This localEvents doesn't need to exists in a real scenario.
   // It's used here just to simulate the update of the events.
@@ -53,6 +62,8 @@ export function CalendarProvider({
         // If you go to the refetch approach, you can remove the localEvents and pass the events directly
         events: localEvents,
         setLocalEvents,
+        visibleHours,
+        setVisibleHours,
       }}
     >
       {children}
