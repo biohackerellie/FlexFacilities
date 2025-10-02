@@ -16,9 +16,9 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { getFacilities } from '@/lib/actions/facilities';
-import { useFormStore } from '@/lib/form-store';
 import { createReservation } from '@/lib/actions/reservations';
 import { getErrorMessage } from '@/lib/errors';
+import { useFormStore } from '@/lib/form-store';
 
 const FORM_STEPS = [
   {

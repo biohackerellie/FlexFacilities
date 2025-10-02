@@ -6,19 +6,19 @@ import { DataTable } from '@/components/ui/tables/reservations/reservation/data-
 import { adminColumns } from './adminColumns';
 import { columns } from './columns';
 import { ReservationContext } from './context';
+import AddDateDialog from './addDates';
 export default function DatesTables({ isAdmin }: { isAdmin: boolean }) {
   const data = React.use(ReservationContext);
   if (!data) return <div>no data</div>;
   const reservation = data.reservation!;
   const mappedDates = data.dates;
-  const AddDates = dynamic(() => import('@/components/ui/alerts/addDates'));
 
   if (isAdmin) {
     return (
       <>
         <DataTable columns={adminColumns} data={mappedDates} />
         <div className="float-right">
-          <AddDates id={reservation.id} />
+          <AddDateDialog id={reservation.id} />
         </div>
       </>
     );

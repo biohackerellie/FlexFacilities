@@ -2,8 +2,8 @@ import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 import { MultiStepForm } from '@/components/multi-step-form';
 import { Skeleton } from '@/components/ui/skeleton';
-import { auth } from '@/lib/auth';
 import { getFacilities } from '@/lib/actions/facilities';
+import { auth } from '@/lib/auth';
 
 const Loading = () => {
   return (

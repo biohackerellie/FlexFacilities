@@ -1,6 +1,9 @@
 'use client';
-import { Button } from '@/components/ui/button';
+
 import * as React from 'react';
+import { toast } from 'sonner';
+import { Spinner } from '@/components/spinner';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -8,98 +11,187 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import {
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  Dialog,
+} from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-  Dialog,
-  DialogClose,
-  DialogTitle,
-  DialogContent,
-} from '@/components/ui/dialog';
-import { Spinner } from '@/components/spinner';
-import { CreateUser } from '../actions';
-import { toast } from 'sonner';
 import { getErrorMessage } from '@/lib/errors';
+import { CreateUser } from '../actions';
+
+interface InputState {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
+interface ErrorState {
+  name?: string;
+  email?: string;
+  password?: string;
+  confirmPassword?: string;
+}
 
 export default function CreateAccount() {
+  const [input, setInput] = React.useState<InputState>({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
+
+  const [error, setError] = React.useState<ErrorState>({});
   const [open, setOpen] = React.useState(false);
   const [pending, startTransition] = React.useTransition();
-  const [name, setName] = React.useState('');
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [confirmPassword, setConfirmPassword] = React.useState('');
 
-  const onSubmit = () => {
+  const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setInput((prev) => ({ ...prev, [name]: value }));
+    validateInput(name as keyof InputState, value);
+  };
+
+  const validateInput = (name: keyof InputState, value: string) => {
+    setError((prev) => {
+      const next = { ...prev, [name]: '' };
+
+      switch (name) {
+        case 'name':
+          if (!value) next[name] = 'Please enter your name.';
+          break;
+        case 'email':
+          if (!value) next[name] = 'Please enter Email.';
+          // naive email regex check
+          else if (!/.+@.+\..+/.test(value))
+            next[name] = 'Invalid email address.';
+          break;
+        case 'password':
+          if (!value) next[name] = 'Please enter Password.';
+          else if (input.confirmPassword && value !== input.confirmPassword) {
+            next.confirmPassword = 'Passwords do not match.';
+          }
+          break;
+        case 'confirmPassword':
+          if (!value) next[name] = 'Please confirm Password.';
+          else if (input.password && value !== input.password) {
+            next[name] = 'Passwords do not match.';
+          }
+          break;
+      }
+      return next;
+    });
+  };
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (input.password !== input.confirmPassword) {
+      setError((prev) => ({
+        ...prev,
+        confirmPassword: 'Passwords do not match.',
+      }));
+      return;
+    }
+
     startTransition(() => {
-      toast.promise(CreateUser({ name, email, password }), {
+      toast.promise(CreateUser(input), {
         loading: 'Creating...',
         success: () => {
-          setName('');
-          setEmail('');
-          setPassword('');
-          setConfirmPassword('');
+          setInput({ name: '', email: '', password: '', confirmPassword: '' });
           setOpen(true);
           return 'Account created!';
         },
-        error: (error) => {
-          return getErrorMessage(error);
-        },
+        error: (err) => getErrorMessage(err),
       });
     });
   };
 
   return (
-    <Card className="flex w-full max-w-3xl flex-col items-center justify-center p-2 text-center align-middle">
+    <Card className="flex w-full max-w-3xl flex-col items-center justify-center p-2 text-center">
       <CardHeader>
         <CardTitle>Create an account</CardTitle>
       </CardHeader>
-      <CardContent className="flex gap-4">
-        <form onSubmit={() => onSubmit}>
-          <div className="grid gap-6">
-            <div className="grid gap-3">
-              <Label>Name</Label>
-              <Input
-                type="text"
-                placeholder="First and Last name"
-                id="name"
-                name="name"
-              />
-            </div>
-            <div className="grid gap-3">
-              <Label>Email</Label>
-              <Input type="email" id="email" name="email" placeholder="Email" />
-            </div>
-            <div className="grid gap-3">
-              <Label>Password</Label>
-              <Input
-                type="password"
-                placeholder="Password"
-                id="password"
-                name="password"
-              />
 
-              <p aria-live="polite" className="text-sm text-red-500"></p>
-            </div>
-            <div className="grid gap-3">
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
-              <Input
-                type="password"
-                placeholder="Confirm Password"
-                id="confirmPassword"
-                name="confirmPassword"
-              />
-              <p aria-live="polite" className="text-sm text-red-500"></p>
-            </div>
-            <CardFooter className="flex justify-center align-middle">
-              <Button disabled={pending} type="submit">
-                {pending ? <Spinner /> : 'Create Account'}
-              </Button>
-            </CardFooter>
+      <CardContent className="flex gap-4">
+        <form className="grid gap-6 w-full" onSubmit={onSubmit}>
+          <div className="grid gap-3">
+            <Label htmlFor="name">Name</Label>
+            <Input
+              type="text"
+              id="name"
+              name="name"
+              value={input.name}
+              required
+              placeholder="First and Last name"
+              onChange={onInputChange}
+            />
+            {error.name && <p className="text-sm text-red-500">{error.name}</p>}
           </div>
+
+          <div className="grid gap-3">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              type="email"
+              id="email"
+              name="email"
+              value={input.email}
+              required
+              placeholder="Email"
+              onChange={onInputChange}
+            />
+            {error.email && (
+              <p className="text-sm text-red-500">{error.email}</p>
+            )}
+          </div>
+
+          <div className="grid gap-3">
+            <Label htmlFor="password">Password</Label>
+            <Input
+              type="password"
+              id="password"
+              name="password"
+              value={input.password}
+              required
+              placeholder="Password"
+              onChange={onInputChange}
+            />
+            {error.password && (
+              <p className="text-sm text-red-500">{error.password}</p>
+            )}
+          </div>
+
+          <div className="grid gap-3">
+            <Label htmlFor="confirmPassword">Confirm Password</Label>
+            <Input
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              value={input.confirmPassword}
+              required
+              placeholder="Confirm Password"
+              onChange={onInputChange}
+            />
+            {error.confirmPassword && (
+              <p className="text-sm text-red-500">{error.confirmPassword}</p>
+            )}
+          </div>
+
+          <CardFooter className="flex justify-center">
+            <Button type="submit" disabled={pending}>
+              {pending ? <Spinner /> : 'Create Account'}
+            </Button>
+          </CardFooter>
         </form>
-        <Dialog open={open} onOpenChange={setOpen(!open)}>
+
+        <Dialog open={open} onOpenChange={() => setOpen(!open)}>
           <DialogContent className="sm:max-w-[425px]">
-            <DialogTitle></DialogTitle>
+            <DialogTitle>Account created</DialogTitle>
+            <DialogDescription>
+              You will need to follow the link sent to your email to log in.
+            </DialogDescription>
           </DialogContent>
         </Dialog>
       </CardContent>

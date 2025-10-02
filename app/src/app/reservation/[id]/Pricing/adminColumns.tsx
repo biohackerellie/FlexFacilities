@@ -16,7 +16,7 @@ interface TableFees {
   options: any;
 }
 
-const HandleDelete = async (id: number) => {
+const HandleDelete = async (_id: number) => {
   try {
     await new Promise((resolve) => setTimeout(resolve, 1000));
   } catch (error) {

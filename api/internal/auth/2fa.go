@@ -102,7 +102,6 @@ func (s *Auth) Login(ctx context.Context, req *connect.Request[service.LoginRequ
 
 func (s *Auth) send2FACode(email, host string) error {
 
-	token := uuid.NewString()
 	code := utils.GenerateRandomSixDigitCode()
 
 	s.setTempToken(token, code, email, time.Minute*5)

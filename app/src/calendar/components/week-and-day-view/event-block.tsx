@@ -3,7 +3,6 @@ import { cva } from 'class-variance-authority';
 import { differenceInMinutes, format, parseISO } from 'date-fns';
 import type { HTMLAttributes } from 'react';
 import { EventDetailsDialog } from '@/calendar/components/dialogs/event-details-dialog';
-import { useCalendar } from '@/calendar/contexts/calendar-context';
 import type { IEvent } from '@/calendar/interfaces';
 import { cn } from '@/lib/utils';
 

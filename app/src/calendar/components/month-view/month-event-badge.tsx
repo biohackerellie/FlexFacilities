@@ -3,7 +3,6 @@ import { cva } from 'class-variance-authority';
 import { endOfDay, format, isSameDay, parseISO, startOfDay } from 'date-fns';
 
 import { EventDetailsDialog } from '@/calendar/components/dialogs/event-details-dialog';
-import { useCalendar } from '@/calendar/contexts/calendar-context';
 
 import type { IEvent } from '@/calendar/interfaces';
 import { cn } from '@/lib/utils';
