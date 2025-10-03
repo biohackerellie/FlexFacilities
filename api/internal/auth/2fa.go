@@ -102,10 +102,11 @@ func (s *Auth) Login(ctx context.Context, req *connect.Request[service.LoginRequ
 
 func (s *Auth) send2FACode(email, host string) error {
 
+	token := utils.GenerateRandomID()
 	code := utils.GenerateRandomSixDigitCode()
 
 	s.setTempToken(token, code, email, time.Minute*5)
-	urlString := fmt.Sprintf("%s/login/2fa/verify", host)
+	urlString := fmt.Sprintf("%s/login/verify", host)
 	s.logger.Debug("Sending login code", "email", email, "code", code)
 	url, err := url.Parse(urlString)
 	if err != nil {

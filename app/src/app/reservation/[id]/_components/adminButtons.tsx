@@ -1,8 +1,8 @@
-import { Separator } from '@/components/ui/separator';
-import ReservationOptions from './options';
 import * as React from 'react';
 import { Spinner } from '@/components/spinner';
+import { Separator } from '@/components/ui/separator';
 import { getFacilities } from '@/lib/actions/facilities';
+import ReservationOptions from './options';
 
 export default function AdminPanel() {
   return (
