@@ -36,11 +36,19 @@ const (
 	// UtilityServiceAggregateChartDataProcedure is the fully-qualified name of the UtilityService's
 	// AggregateChartData RPC.
 	UtilityServiceAggregateChartDataProcedure = "/api.utility.UtilityService/AggregateChartData"
+	// UtilityServiceGetBrandingProcedure is the fully-qualified name of the UtilityService's
+	// GetBranding RPC.
+	UtilityServiceGetBrandingProcedure = "/api.utility.UtilityService/GetBranding"
+	// UtilityServiceUpdateBrandingProcedure is the fully-qualified name of the UtilityService's
+	// UpdateBranding RPC.
+	UtilityServiceUpdateBrandingProcedure = "/api.utility.UtilityService/UpdateBranding"
 )
 
 // UtilityServiceClient is a client for the api.utility.UtilityService service.
 type UtilityServiceClient interface {
 	AggregateChartData(context.Context, *connect.Request[utility.AggregateChartDataRequest]) (*connect.Response[utility.AggregateChartDataResponse], error)
+	GetBranding(context.Context, *connect.Request[utility.GetBrandingRequest]) (*connect.Response[utility.Branding], error)
+	UpdateBranding(context.Context, *connect.Request[utility.UpdateBrandingRequest]) (*connect.Response[utility.UpdateBrandingResponse], error)
 }
 
 // NewUtilityServiceClient constructs a client for the api.utility.UtilityService service. By
@@ -61,12 +69,27 @@ func NewUtilityServiceClient(httpClient connect.HTTPClient, baseURL string, opts
 			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 			connect.WithClientOptions(opts...),
 		),
+		getBranding: connect.NewClient[utility.GetBrandingRequest, utility.Branding](
+			httpClient,
+			baseURL+UtilityServiceGetBrandingProcedure,
+			connect.WithSchema(utilityServiceMethods.ByName("GetBranding")),
+			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
+			connect.WithClientOptions(opts...),
+		),
+		updateBranding: connect.NewClient[utility.UpdateBrandingRequest, utility.UpdateBrandingResponse](
+			httpClient,
+			baseURL+UtilityServiceUpdateBrandingProcedure,
+			connect.WithSchema(utilityServiceMethods.ByName("UpdateBranding")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
 // utilityServiceClient implements UtilityServiceClient.
 type utilityServiceClient struct {
 	aggregateChartData *connect.Client[utility.AggregateChartDataRequest, utility.AggregateChartDataResponse]
+	getBranding        *connect.Client[utility.GetBrandingRequest, utility.Branding]
+	updateBranding     *connect.Client[utility.UpdateBrandingRequest, utility.UpdateBrandingResponse]
 }
 
 // AggregateChartData calls api.utility.UtilityService.AggregateChartData.
@@ -74,9 +97,21 @@ func (c *utilityServiceClient) AggregateChartData(ctx context.Context, req *conn
 	return c.aggregateChartData.CallUnary(ctx, req)
 }
 
+// GetBranding calls api.utility.UtilityService.GetBranding.
+func (c *utilityServiceClient) GetBranding(ctx context.Context, req *connect.Request[utility.GetBrandingRequest]) (*connect.Response[utility.Branding], error) {
+	return c.getBranding.CallUnary(ctx, req)
+}
+
+// UpdateBranding calls api.utility.UtilityService.UpdateBranding.
+func (c *utilityServiceClient) UpdateBranding(ctx context.Context, req *connect.Request[utility.UpdateBrandingRequest]) (*connect.Response[utility.UpdateBrandingResponse], error) {
+	return c.updateBranding.CallUnary(ctx, req)
+}
+
 // UtilityServiceHandler is an implementation of the api.utility.UtilityService service.
 type UtilityServiceHandler interface {
 	AggregateChartData(context.Context, *connect.Request[utility.AggregateChartDataRequest]) (*connect.Response[utility.AggregateChartDataResponse], error)
+	GetBranding(context.Context, *connect.Request[utility.GetBrandingRequest]) (*connect.Response[utility.Branding], error)
+	UpdateBranding(context.Context, *connect.Request[utility.UpdateBrandingRequest]) (*connect.Response[utility.UpdateBrandingResponse], error)
 }
 
 // NewUtilityServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -93,10 +128,27 @@ func NewUtilityServiceHandler(svc UtilityServiceHandler, opts ...connect.Handler
 		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 		connect.WithHandlerOptions(opts...),
 	)
+	utilityServiceGetBrandingHandler := connect.NewUnaryHandler(
+		UtilityServiceGetBrandingProcedure,
+		svc.GetBranding,
+		connect.WithSchema(utilityServiceMethods.ByName("GetBranding")),
+		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
+		connect.WithHandlerOptions(opts...),
+	)
+	utilityServiceUpdateBrandingHandler := connect.NewUnaryHandler(
+		UtilityServiceUpdateBrandingProcedure,
+		svc.UpdateBranding,
+		connect.WithSchema(utilityServiceMethods.ByName("UpdateBranding")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/api.utility.UtilityService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case UtilityServiceAggregateChartDataProcedure:
 			utilityServiceAggregateChartDataHandler.ServeHTTP(w, r)
+		case UtilityServiceGetBrandingProcedure:
+			utilityServiceGetBrandingHandler.ServeHTTP(w, r)
+		case UtilityServiceUpdateBrandingProcedure:
+			utilityServiceUpdateBrandingHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -108,4 +160,12 @@ type UnimplementedUtilityServiceHandler struct{}
 
 func (UnimplementedUtilityServiceHandler) AggregateChartData(context.Context, *connect.Request[utility.AggregateChartDataRequest]) (*connect.Response[utility.AggregateChartDataResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.utility.UtilityService.AggregateChartData is not implemented"))
+}
+
+func (UnimplementedUtilityServiceHandler) GetBranding(context.Context, *connect.Request[utility.GetBrandingRequest]) (*connect.Response[utility.Branding], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.utility.UtilityService.GetBranding is not implemented"))
+}
+
+func (UnimplementedUtilityServiceHandler) UpdateBranding(context.Context, *connect.Request[utility.UpdateBrandingRequest]) (*connect.Response[utility.UpdateBrandingResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.utility.UtilityService.UpdateBranding is not implemented"))
 }

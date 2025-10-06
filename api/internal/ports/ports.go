@@ -61,6 +61,11 @@ type ReservationStore interface {
 	Aggregate(ctx context.Context) ([]models.Aggregate, error)
 }
 
+type BrandingStore interface {
+	Get(ctx context.Context) (*models.Branding, error)
+	Update(ctx context.Context, branding *models.Branding) error
+}
+
 type AuthService interface {
 	AuthMiddleware(next http.Handler) http.Handler
 	AuthCallback(w http.ResponseWriter, r *http.Request)

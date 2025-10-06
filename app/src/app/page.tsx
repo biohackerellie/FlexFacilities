@@ -5,9 +5,7 @@ export default function Home() {
     <>
       <main className="z-0 mt-10 flex justify-center gap-10 bg-transparent p-10 text-center align-middle">
         <div className=" ">
-          <h1 className="mb-10 flex justify-center border-b text-3xl font-bold text-black drop-shadow-md dark:text-gold sm:text-5xl">
-            Laurel Public Schools Facility Rentals
-          </h1>
+          <h1 className="mb-10 flex justify-center border-b text-3xl font-bold text-black drop-shadow-md dark:text-gold sm:text-5xl"></h1>
           <div className="block flex-1"> </div>
           <div className="mb-10 hidden max-w-7xl justify-center align-middle sm:flex">
             <p className="mb-10 mt-4 bg-transparent p-3 text-xl text-black drop-shadow-md dark:text-white sm:text-3xl">

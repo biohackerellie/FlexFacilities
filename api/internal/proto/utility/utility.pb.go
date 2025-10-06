@@ -73,6 +73,106 @@ func (x *RPMDataEntry) GetValues() map[string]int32 {
 	return nil
 }
 
+type Branding struct {
+	state                      protoimpl.MessageState `protogen:"open.v1"`
+	Id                         int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	OrganizationName           string                 `protobuf:"bytes,2,opt,name=organization_name,json=organizationName,proto3" json:"organization_name,omitempty"`
+	OrganizationLogoPath       string                 `protobuf:"bytes,3,opt,name=organization_logo_path,json=organizationLogoPath,proto3" json:"organization_logo_path,omitempty"`
+	OrganizationPrimaryColor   string                 `protobuf:"bytes,4,opt,name=organization_primary_color,json=organizationPrimaryColor,proto3" json:"organization_primary_color,omitempty"`
+	OrganizationSecondaryColor string                 `protobuf:"bytes,5,opt,name=organization_secondary_color,json=organizationSecondaryColor,proto3" json:"organization_secondary_color,omitempty"`
+	OrganizationUrl            string                 `protobuf:"bytes,6,opt,name=organization_url,json=organizationUrl,proto3" json:"organization_url,omitempty"`
+	OrganizationDescription    string                 `protobuf:"bytes,7,opt,name=organization_description,json=organizationDescription,proto3" json:"organization_description,omitempty"`
+	OrganizationEmail          string                 `protobuf:"bytes,8,opt,name=organization_email,json=organizationEmail,proto3" json:"organization_email,omitempty"`
+	unknownFields              protoimpl.UnknownFields
+	sizeCache                  protoimpl.SizeCache
+}
+
+func (x *Branding) Reset() {
+	*x = Branding{}
+	mi := &file_proto_utility_utility_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Branding) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Branding) ProtoMessage() {}
+
+func (x *Branding) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_utility_utility_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Branding.ProtoReflect.Descriptor instead.
+func (*Branding) Descriptor() ([]byte, []int) {
+	return file_proto_utility_utility_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *Branding) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *Branding) GetOrganizationName() string {
+	if x != nil {
+		return x.OrganizationName
+	}
+	return ""
+}
+
+func (x *Branding) GetOrganizationLogoPath() string {
+	if x != nil {
+		return x.OrganizationLogoPath
+	}
+	return ""
+}
+
+func (x *Branding) GetOrganizationPrimaryColor() string {
+	if x != nil {
+		return x.OrganizationPrimaryColor
+	}
+	return ""
+}
+
+func (x *Branding) GetOrganizationSecondaryColor() string {
+	if x != nil {
+		return x.OrganizationSecondaryColor
+	}
+	return ""
+}
+
+func (x *Branding) GetOrganizationUrl() string {
+	if x != nil {
+		return x.OrganizationUrl
+	}
+	return ""
+}
+
+func (x *Branding) GetOrganizationDescription() string {
+	if x != nil {
+		return x.OrganizationDescription
+	}
+	return ""
+}
+
+func (x *Branding) GetOrganizationEmail() string {
+	if x != nil {
+		return x.OrganizationEmail
+	}
+	return ""
+}
+
 type AggregateChartDataRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -81,7 +181,7 @@ type AggregateChartDataRequest struct {
 
 func (x *AggregateChartDataRequest) Reset() {
 	*x = AggregateChartDataRequest{}
-	mi := &file_proto_utility_utility_proto_msgTypes[1]
+	mi := &file_proto_utility_utility_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -93,7 +193,7 @@ func (x *AggregateChartDataRequest) String() string {
 func (*AggregateChartDataRequest) ProtoMessage() {}
 
 func (x *AggregateChartDataRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_utility_utility_proto_msgTypes[1]
+	mi := &file_proto_utility_utility_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -106,7 +206,7 @@ func (x *AggregateChartDataRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AggregateChartDataRequest.ProtoReflect.Descriptor instead.
 func (*AggregateChartDataRequest) Descriptor() ([]byte, []int) {
-	return file_proto_utility_utility_proto_rawDescGZIP(), []int{1}
+	return file_proto_utility_utility_proto_rawDescGZIP(), []int{2}
 }
 
 type AggregateChartDataResponse struct {
@@ -118,7 +218,7 @@ type AggregateChartDataResponse struct {
 
 func (x *AggregateChartDataResponse) Reset() {
 	*x = AggregateChartDataResponse{}
-	mi := &file_proto_utility_utility_proto_msgTypes[2]
+	mi := &file_proto_utility_utility_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -130,7 +230,7 @@ func (x *AggregateChartDataResponse) String() string {
 func (*AggregateChartDataResponse) ProtoMessage() {}
 
 func (x *AggregateChartDataResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_utility_utility_proto_msgTypes[2]
+	mi := &file_proto_utility_utility_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -143,7 +243,7 @@ func (x *AggregateChartDataResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AggregateChartDataResponse.ProtoReflect.Descriptor instead.
 func (*AggregateChartDataResponse) Descriptor() ([]byte, []int) {
-	return file_proto_utility_utility_proto_rawDescGZIP(), []int{2}
+	return file_proto_utility_utility_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *AggregateChartDataResponse) GetData() []*RPMDataEntry {
@@ -151,6 +251,178 @@ func (x *AggregateChartDataResponse) GetData() []*RPMDataEntry {
 		return x.Data
 	}
 	return nil
+}
+
+type GetBrandingRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetBrandingRequest) Reset() {
+	*x = GetBrandingRequest{}
+	mi := &file_proto_utility_utility_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetBrandingRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetBrandingRequest) ProtoMessage() {}
+
+func (x *GetBrandingRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_utility_utility_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetBrandingRequest.ProtoReflect.Descriptor instead.
+func (*GetBrandingRequest) Descriptor() ([]byte, []int) {
+	return file_proto_utility_utility_proto_rawDescGZIP(), []int{4}
+}
+
+type UpdateBrandingRequest struct {
+	state                      protoimpl.MessageState `protogen:"open.v1"`
+	OrganizationName           *string                `protobuf:"bytes,1,opt,name=organization_name,json=organizationName,proto3,oneof" json:"organization_name,omitempty"`
+	OrganizationLogoPath       *string                `protobuf:"bytes,2,opt,name=organization_logo_path,json=organizationLogoPath,proto3,oneof" json:"organization_logo_path,omitempty"`
+	OrganizationPrimaryColor   *string                `protobuf:"bytes,3,opt,name=organization_primary_color,json=organizationPrimaryColor,proto3,oneof" json:"organization_primary_color,omitempty"`
+	OrganizationSecondaryColor *string                `protobuf:"bytes,4,opt,name=organization_secondary_color,json=organizationSecondaryColor,proto3,oneof" json:"organization_secondary_color,omitempty"`
+	OrganizationUrl            *string                `protobuf:"bytes,5,opt,name=organization_url,json=organizationUrl,proto3,oneof" json:"organization_url,omitempty"`
+	OrganizationDescription    *string                `protobuf:"bytes,6,opt,name=organization_description,json=organizationDescription,proto3,oneof" json:"organization_description,omitempty"`
+	OrganizationEmail          *string                `protobuf:"bytes,7,opt,name=organization_email,json=organizationEmail,proto3,oneof" json:"organization_email,omitempty"`
+	Id                         int64                  `protobuf:"varint,8,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields              protoimpl.UnknownFields
+	sizeCache                  protoimpl.SizeCache
+}
+
+func (x *UpdateBrandingRequest) Reset() {
+	*x = UpdateBrandingRequest{}
+	mi := &file_proto_utility_utility_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateBrandingRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateBrandingRequest) ProtoMessage() {}
+
+func (x *UpdateBrandingRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_utility_utility_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateBrandingRequest.ProtoReflect.Descriptor instead.
+func (*UpdateBrandingRequest) Descriptor() ([]byte, []int) {
+	return file_proto_utility_utility_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *UpdateBrandingRequest) GetOrganizationName() string {
+	if x != nil && x.OrganizationName != nil {
+		return *x.OrganizationName
+	}
+	return ""
+}
+
+func (x *UpdateBrandingRequest) GetOrganizationLogoPath() string {
+	if x != nil && x.OrganizationLogoPath != nil {
+		return *x.OrganizationLogoPath
+	}
+	return ""
+}
+
+func (x *UpdateBrandingRequest) GetOrganizationPrimaryColor() string {
+	if x != nil && x.OrganizationPrimaryColor != nil {
+		return *x.OrganizationPrimaryColor
+	}
+	return ""
+}
+
+func (x *UpdateBrandingRequest) GetOrganizationSecondaryColor() string {
+	if x != nil && x.OrganizationSecondaryColor != nil {
+		return *x.OrganizationSecondaryColor
+	}
+	return ""
+}
+
+func (x *UpdateBrandingRequest) GetOrganizationUrl() string {
+	if x != nil && x.OrganizationUrl != nil {
+		return *x.OrganizationUrl
+	}
+	return ""
+}
+
+func (x *UpdateBrandingRequest) GetOrganizationDescription() string {
+	if x != nil && x.OrganizationDescription != nil {
+		return *x.OrganizationDescription
+	}
+	return ""
+}
+
+func (x *UpdateBrandingRequest) GetOrganizationEmail() string {
+	if x != nil && x.OrganizationEmail != nil {
+		return *x.OrganizationEmail
+	}
+	return ""
+}
+
+func (x *UpdateBrandingRequest) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+type UpdateBrandingResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateBrandingResponse) Reset() {
+	*x = UpdateBrandingResponse{}
+	mi := &file_proto_utility_utility_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateBrandingResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateBrandingResponse) ProtoMessage() {}
+
+func (x *UpdateBrandingResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_utility_utility_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateBrandingResponse.ProtoReflect.Descriptor instead.
+func (*UpdateBrandingResponse) Descriptor() ([]byte, []int) {
+	return file_proto_utility_utility_proto_rawDescGZIP(), []int{6}
 }
 
 var File_proto_utility_utility_proto protoreflect.FileDescriptor
@@ -163,12 +435,41 @@ const file_proto_utility_utility_proto_rawDesc = "" +
 	"\x06values\x18\x02 \x03(\v2%.api.utility.RPMDataEntry.ValuesEntryR\x06values\x1a9\n" +
 	"\vValuesEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\x05R\x05value:\x028\x01\"\x1b\n" +
+	"\x05value\x18\x02 \x01(\x05R\x05value:\x028\x01\"\x92\x03\n" +
+	"\bBranding\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12+\n" +
+	"\x11organization_name\x18\x02 \x01(\tR\x10organizationName\x124\n" +
+	"\x16organization_logo_path\x18\x03 \x01(\tR\x14organizationLogoPath\x12<\n" +
+	"\x1aorganization_primary_color\x18\x04 \x01(\tR\x18organizationPrimaryColor\x12@\n" +
+	"\x1corganization_secondary_color\x18\x05 \x01(\tR\x1aorganizationSecondaryColor\x12)\n" +
+	"\x10organization_url\x18\x06 \x01(\tR\x0forganizationUrl\x129\n" +
+	"\x18organization_description\x18\a \x01(\tR\x17organizationDescription\x12-\n" +
+	"\x12organization_email\x18\b \x01(\tR\x11organizationEmail\"\x1b\n" +
 	"\x19AggregateChartDataRequest\"K\n" +
 	"\x1aAggregateChartDataResponse\x12-\n" +
-	"\x04data\x18\x01 \x03(\v2\x19.api.utility.RPMDataEntryR\x04data2|\n" +
+	"\x04data\x18\x01 \x03(\v2\x19.api.utility.RPMDataEntryR\x04data\"\x14\n" +
+	"\x12GetBrandingRequest\"\xfc\x04\n" +
+	"\x15UpdateBrandingRequest\x120\n" +
+	"\x11organization_name\x18\x01 \x01(\tH\x00R\x10organizationName\x88\x01\x01\x129\n" +
+	"\x16organization_logo_path\x18\x02 \x01(\tH\x01R\x14organizationLogoPath\x88\x01\x01\x12A\n" +
+	"\x1aorganization_primary_color\x18\x03 \x01(\tH\x02R\x18organizationPrimaryColor\x88\x01\x01\x12E\n" +
+	"\x1corganization_secondary_color\x18\x04 \x01(\tH\x03R\x1aorganizationSecondaryColor\x88\x01\x01\x12.\n" +
+	"\x10organization_url\x18\x05 \x01(\tH\x04R\x0forganizationUrl\x88\x01\x01\x12>\n" +
+	"\x18organization_description\x18\x06 \x01(\tH\x05R\x17organizationDescription\x88\x01\x01\x122\n" +
+	"\x12organization_email\x18\a \x01(\tH\x06R\x11organizationEmail\x88\x01\x01\x12\x0e\n" +
+	"\x02id\x18\b \x01(\x03R\x02idB\x14\n" +
+	"\x12_organization_nameB\x19\n" +
+	"\x17_organization_logo_pathB\x1d\n" +
+	"\x1b_organization_primary_colorB\x1f\n" +
+	"\x1d_organization_secondary_colorB\x13\n" +
+	"\x11_organization_urlB\x1b\n" +
+	"\x19_organization_descriptionB\x15\n" +
+	"\x13_organization_email\"\x18\n" +
+	"\x16UpdateBrandingResponse2\xa3\x02\n" +
 	"\x0eUtilityService\x12j\n" +
-	"\x12AggregateChartData\x12&.api.utility.AggregateChartDataRequest\x1a'.api.utility.AggregateChartDataResponse\"\x03\x90\x02\x01B+Z)api/internal/proto/utility;utilityserviceb\x06proto3"
+	"\x12AggregateChartData\x12&.api.utility.AggregateChartDataRequest\x1a'.api.utility.AggregateChartDataResponse\"\x03\x90\x02\x01\x12J\n" +
+	"\vGetBranding\x12\x1f.api.utility.GetBrandingRequest\x1a\x15.api.utility.Branding\"\x03\x90\x02\x01\x12Y\n" +
+	"\x0eUpdateBranding\x12\".api.utility.UpdateBrandingRequest\x1a#.api.utility.UpdateBrandingResponseB+Z)api/internal/proto/utility;utilityserviceb\x06proto3"
 
 var (
 	file_proto_utility_utility_proto_rawDescOnce sync.Once
@@ -182,20 +483,28 @@ func file_proto_utility_utility_proto_rawDescGZIP() []byte {
 	return file_proto_utility_utility_proto_rawDescData
 }
 
-var file_proto_utility_utility_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_proto_utility_utility_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_proto_utility_utility_proto_goTypes = []any{
 	(*RPMDataEntry)(nil),               // 0: api.utility.RPMDataEntry
-	(*AggregateChartDataRequest)(nil),  // 1: api.utility.AggregateChartDataRequest
-	(*AggregateChartDataResponse)(nil), // 2: api.utility.AggregateChartDataResponse
-	nil,                                // 3: api.utility.RPMDataEntry.ValuesEntry
+	(*Branding)(nil),                   // 1: api.utility.Branding
+	(*AggregateChartDataRequest)(nil),  // 2: api.utility.AggregateChartDataRequest
+	(*AggregateChartDataResponse)(nil), // 3: api.utility.AggregateChartDataResponse
+	(*GetBrandingRequest)(nil),         // 4: api.utility.GetBrandingRequest
+	(*UpdateBrandingRequest)(nil),      // 5: api.utility.UpdateBrandingRequest
+	(*UpdateBrandingResponse)(nil),     // 6: api.utility.UpdateBrandingResponse
+	nil,                                // 7: api.utility.RPMDataEntry.ValuesEntry
 }
 var file_proto_utility_utility_proto_depIdxs = []int32{
-	3, // 0: api.utility.RPMDataEntry.values:type_name -> api.utility.RPMDataEntry.ValuesEntry
+	7, // 0: api.utility.RPMDataEntry.values:type_name -> api.utility.RPMDataEntry.ValuesEntry
 	0, // 1: api.utility.AggregateChartDataResponse.data:type_name -> api.utility.RPMDataEntry
-	1, // 2: api.utility.UtilityService.AggregateChartData:input_type -> api.utility.AggregateChartDataRequest
-	2, // 3: api.utility.UtilityService.AggregateChartData:output_type -> api.utility.AggregateChartDataResponse
-	3, // [3:4] is the sub-list for method output_type
-	2, // [2:3] is the sub-list for method input_type
+	2, // 2: api.utility.UtilityService.AggregateChartData:input_type -> api.utility.AggregateChartDataRequest
+	4, // 3: api.utility.UtilityService.GetBranding:input_type -> api.utility.GetBrandingRequest
+	5, // 4: api.utility.UtilityService.UpdateBranding:input_type -> api.utility.UpdateBrandingRequest
+	3, // 5: api.utility.UtilityService.AggregateChartData:output_type -> api.utility.AggregateChartDataResponse
+	1, // 6: api.utility.UtilityService.GetBranding:output_type -> api.utility.Branding
+	6, // 7: api.utility.UtilityService.UpdateBranding:output_type -> api.utility.UpdateBrandingResponse
+	5, // [5:8] is the sub-list for method output_type
+	2, // [2:5] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name
 	2, // [2:2] is the sub-list for extension extendee
 	0, // [0:2] is the sub-list for field type_name
@@ -206,13 +515,14 @@ func file_proto_utility_utility_proto_init() {
 	if File_proto_utility_utility_proto != nil {
 		return
 	}
+	file_proto_utility_utility_proto_msgTypes[5].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_utility_utility_proto_rawDesc), len(file_proto_utility_utility_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

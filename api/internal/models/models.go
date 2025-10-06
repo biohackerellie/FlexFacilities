@@ -6,6 +6,7 @@ import (
 	pbFacilities "api/internal/proto/facilities"
 	pbReservation "api/internal/proto/reservation"
 	pbUsers "api/internal/proto/users"
+	pbUtility "api/internal/proto/utility"
 	"database/sql/driver"
 	"fmt"
 	"time"
@@ -710,4 +711,28 @@ type Aggregate struct {
 	MonthStart   time.Time `db:"month_start"`
 	BuildingName string    `db:"building_name"`
 	Count        int       `db:"count"`
+}
+
+type Branding struct {
+	ID                         int64  `db:"id" json:"id"`
+	OrganizationName           string `db:"organization_name" json:"organization_name"`
+	OrganizationLogoPath       string `db:"organization_logo_path" json:"organization_logo_path"`
+	OrganizationPrimaryColor   string `db:"organization_primary_color" json:"organization_primary_color"`
+	OrganizationSecondaryColor string `db:"organization_secondary_color" json:"organization_secondary_color"`
+	OrganizationUrl            string `db:"organization_url" json:"organization_url"`
+	OrganizationDescription    string `db:"organization_description" json:"organization_description"`
+	OrganizationEmail          string `db:"organization_email" json:"organization_email"`
+}
+
+func (b *Branding) ToProto() *pbUtility.Branding {
+	return &pbUtility.Branding{
+		Id:                         b.ID,
+		OrganizationName:           b.OrganizationName,
+		OrganizationLogoPath:       b.OrganizationLogoPath,
+		OrganizationPrimaryColor:   b.OrganizationPrimaryColor,
+		OrganizationSecondaryColor: b.OrganizationSecondaryColor,
+		OrganizationUrl:            b.OrganizationUrl,
+		OrganizationDescription:    b.OrganizationDescription,
+		OrganizationEmail:          b.OrganizationEmail,
+	}
 }

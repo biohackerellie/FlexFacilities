@@ -9,13 +9,43 @@ message RPMDataEntry {
   map<string, int32> values = 2; 
 }
 
+message Branding{
+  int64 id = 1;
+  string organization_name = 2;
+  string organization_logo_path = 3;
+  string organization_primary_color = 4;
+  string organization_secondary_color = 5;
+  string organization_url = 6;
+  string organization_description = 7;
+  string organization_email = 8;
+}
+
 service UtilityService {
   rpc AggregateChartData (AggregateChartDataRequest) returns (AggregateChartDataResponse){
     option idempotency_level = NO_SIDE_EFFECTS;
   };
+  rpc GetBranding (GetBrandingRequest) returns (Branding){
+    option idempotency_level = NO_SIDE_EFFECTS;
+  };
+  rpc UpdateBranding (UpdateBrandingRequest) returns (UpdateBrandingResponse);
 }
 
 message AggregateChartDataRequest {}
 message AggregateChartDataResponse {
   repeated RPMDataEntry data = 1;
 }
+
+message GetBrandingRequest {}
+message UpdateBrandingRequest {
+  optional string organization_name = 1;
+  optional string organization_logo_path = 2;
+  optional string organization_primary_color = 3;
+  optional string organization_secondary_color = 4;
+  optional string organization_url = 5;
+  optional string organization_description = 6;
+  optional string organization_email = 7;
+  int64 id = 8;
+}
+message UpdateBrandingResponse {}
+
+
