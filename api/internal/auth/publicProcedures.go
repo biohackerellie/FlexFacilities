@@ -18,4 +18,6 @@ const (
 	AuthLoginProcedure = "/api.auth.Auth/Login"
 	// AuthRegisterProcedure is the fully-qualified name of the Auth's Register RPC.
 	AuthRegisterProcedure = "/api.auth.Auth/Register"
+
+	AuthVerify2FACodeProcedure = "/api.auth.Auth/Verify2FACode"
 )

@@ -5,7 +5,6 @@ import (
 	"api/internal/lib/utils"
 	"api/internal/models"
 	"context"
-	"encoding/json"
 	"fmt"
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
@@ -18,72 +17,161 @@ import (
 	service "api/internal/proto/auth"
 )
 
+const providerType = "email"
+
 type TwoFACode struct {
 	Code      string
 	Email     string
 	ExpiresAt time.Time
+	Attempts  int
 }
 
-func (s *Auth) Verify2FACode(w http.ResponseWriter, r *http.Request) {
-	type request struct {
-		Code  string `json:"code"`
-		Token string `json:"token"`
-	}
-	var req request
+const MAX_ATTEMPTS = 5
 
-	err := json.NewDecoder(r.Body).Decode(&req)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	code, email, ok := s.getTempToken(req.Token)
+func (s *Auth) VerifyResetPassword(ctx context.Context, req *connect.Request[service.VerifyPasswordRequest]) (*connect.Response[service.VerifyResetResponse], error) {
+	token := req.Msg.Token
+	email, _, ok := s.getTempToken(token)
 	if !ok {
-		http.Error(w, "Invalid token", http.StatusBadRequest)
-		return
+		return nil, connect.NewError(connect.CodeUnauthenticated, fmt.Errorf("invalid token"))
 	}
-	if req.Code != code {
-		http.Error(w, "Invalid code", http.StatusUnauthorized)
-		return
-	}
-
-	user, err := s.db.GetByEmail(r.Context(), email)
+	return connect.NewResponse(&service.VerifyResetResponse{
+		Email: email,
+	}), nil
+}
+func (s *Auth) ResetPassword(ctx context.Context, req *connect.Request[service.LoginRequest]) (*connect.Response[service.LoginResponse], error) {
+	user, err := s.db.GetByEmail(ctx, req.Msg.Email)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		return nil, err
 	}
-
-	accessToken, err := createToken(user.ID, user.Name, user.Email, *user.Provider, user.Role, s.key)
+	hash, err := bcrypt.GenerateFromPassword([]byte(req.Msg.Password), bcrypt.DefaultCost)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		return nil, err
 	}
-	http.SetCookie(w, &http.Cookie{
+	user.Password = &hash
+	_, err = s.db.UpdatePassword(ctx, user)
+	if err != nil {
+		return nil, err
+	}
+	accessToken, err := createToken(user.ID, user.Name, user.Email, user.Provider, user.Role, s.key)
+	if err != nil {
+		return nil, err
+	}
+	response := &service.LoginResponse{}
+	w := connect.NewResponse(response)
+	cookie := &http.Cookie{
 		Name:     fmt.Sprintf("%s%s", s.cookiePrefix, jwtCookieName),
 		Value:    accessToken,
 		Path:     "/",
 		HttpOnly: true,
 		Secure:   s.secure,
 		SameSite: http.SameSiteLaxMode,
-	})
+	}
+	w.Header().Set("Set-Cookie", cookie.String())
 
 	sessionID := utils.GenerateRandomID()
 
 	session := &models.Session{
-		ID:           sessionID,
 		RefreshToken: &accessToken,
 		UserID:       user.ID,
-		Provider:     *user.Provider,
+		Provider:     user.Provider,
 		CreatedAt:    utils.TimeToPgTimestamptz(time.Now()),
 		ExpiresAt:    utils.TimeToPgTimestamptz(time.Now().Add(absoluteExpiration)),
 	}
-	_, err = s.db.CreateSession(r.Context(), session)
+
+	_, err = s.db.CreateSession(ctx, session)
 	if err != nil {
-		http.Error(w, "failed to get user info from auth provider", http.StatusBadRequest)
-		return
+		return nil, err
 	}
-	s.SetSessionCookie(w, sessionID)
-	http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+	sessionCookie := &http.Cookie{
+		Name:     fmt.Sprintf("%s%s", s.cookiePrefix, sessionCookieName),
+		Value:    sessionID,
+		Path:     "/",
+		HttpOnly: true,
+		Secure:   s.secure,
+		SameSite: http.SameSiteLaxMode,
+		MaxAge:   int(absoluteExpiration.Seconds()),
+	}
+
+	w.Header().Set("Set-Cookie", sessionCookie.String())
+
+	return w, nil
+}
+func (s *Auth) RequestResetPassword(ctx context.Context, req *connect.Request[service.RequestResetPasswordRequest]) (*connect.Response[service.LoginResponse], error) {
+	email := req.Msg.Email
+	user, err := s.db.GetByEmail(ctx, email)
+	if err != nil {
+		return nil, connect.NewError(connect.CodeNotFound, fmt.Errorf("user not found"))
+	}
+	if user.Provider != "email" {
+		return nil, connect.NewError(connect.CodeAlreadyExists, fmt.Errorf("User registered with %s provider", user.Provider))
+	}
+	err = s.sendResetPasswordToken(ctx, email)
+	if err != nil {
+		return nil, err
+	}
+	return connect.NewResponse(&service.LoginResponse{}), nil
+}
+
+func (s *Auth) Verify2FACode(ctx context.Context, req *connect.Request[service.VerifyRequest]) (*connect.Response[service.VerifyResponse], error) {
+
+	code, email, ok := s.getTempToken(req.Msg.Token)
+	if !ok {
+		return nil, connect.NewError(connect.CodeUnauthenticated, fmt.Errorf("invalid token"))
+	}
+	if req.Msg.Code != code {
+		return nil, connect.NewError(connect.CodeUnauthenticated, fmt.Errorf("invalid code"))
+	}
+
+	user, err := s.db.GetByEmail(ctx, email)
+	if err != nil {
+		return nil, err
+	}
+
+	accessToken, err := createToken(user.ID, user.Name, user.Email, user.Provider, user.Role, s.key)
+	if err != nil {
+		return nil, err
+	}
+	response := &service.VerifyResponse{
+		Authorized: true,
+	}
+	w := connect.NewResponse(response)
+	cookie := &http.Cookie{
+		Name:     fmt.Sprintf("%s%s", s.cookiePrefix, jwtCookieName),
+		Value:    accessToken,
+		Path:     "/",
+		HttpOnly: true,
+		Secure:   s.secure,
+		SameSite: http.SameSiteLaxMode,
+	}
+	w.Header().Set("Set-Cookie", cookie.String())
+
+	sessionID := utils.GenerateRandomID()
+
+	session := &models.Session{
+		RefreshToken: &accessToken,
+		UserID:       user.ID,
+		Provider:     user.Provider,
+		CreatedAt:    utils.TimeToPgTimestamptz(time.Now()),
+		ExpiresAt:    utils.TimeToPgTimestamptz(time.Now().Add(absoluteExpiration)),
+	}
+
+	_, err = s.db.CreateSession(ctx, session)
+	if err != nil {
+		return nil, err
+	}
+	sessionCookie := &http.Cookie{
+		Name:     fmt.Sprintf("%s%s", s.cookiePrefix, sessionCookieName),
+		Value:    sessionID,
+		Path:     "/",
+		HttpOnly: true,
+		Secure:   s.secure,
+		SameSite: http.SameSiteLaxMode,
+		MaxAge:   int(absoluteExpiration.Seconds()),
+	}
+
+	w.Header().Set("Set-Cookie", sessionCookie.String())
+
+	return w, nil
 }
 
 func (s *Auth) Login(ctx context.Context, req *connect.Request[service.LoginRequest]) (*connect.Response[service.LoginResponse], error) {
@@ -126,6 +214,24 @@ func (s *Auth) send2FACode(email, host string) error {
 	})
 	return nil
 }
+func (s *Auth) sendResetPasswordToken(ctx context.Context, email string) error {
+	token := utils.GenerateRandomID()
+	s.setTempToken(token, "", token, time.Minute*5)
+	urlString := fmt.Sprintf("%s/login/reset/%v", s.config.Host, token)
+	url, err := url.Parse(urlString)
+	if err != nil {
+		return err
+	}
+	emails.Send(&emails.EmailData{
+		To:       email,
+		Subject:  "Facilities Reset Password",
+		Template: "resetPassword.html",
+		Data: map[string]any{
+			"URL": url,
+		},
+	})
+	return nil
+}
 
 func (s *Auth) verifyCredentials(ctx context.Context, email, password string) error {
 	user, err := s.db.GetByEmail(ctx, email)
@@ -141,18 +247,25 @@ func (s *Auth) verifyCredentials(ctx context.Context, email, password string) er
 func (s *Auth) setTempToken(token, code, email string, d time.Duration) {
 	s.storeMu.Lock()
 	defer s.storeMu.Unlock()
-	s.tokenStore[token] = TwoFACode{Code: code, Email: email, ExpiresAt: time.Now().Add(d)}
+	s.tokenStore[token] = TwoFACode{Code: code, Email: email, ExpiresAt: time.Now().Add(d), Attempts: 0}
 }
 
 func (s *Auth) getTempToken(token string) (string, string, bool) {
 	s.storeMu.Lock()
 	defer s.storeMu.Unlock()
 	v, ok := s.tokenStore[token]
-	if !ok || time.Now().After(v.ExpiresAt) {
+	if !ok {
+		return "", "", false
+	}
+	if time.Now().After(v.ExpiresAt) {
 		delete(s.tokenStore, token)
 		return "", "", false
 	}
-	delete(s.tokenStore, token)
+	if v.Attempts >= MAX_ATTEMPTS {
+		delete(s.tokenStore, token)
+		return "", "", false
+	}
+	s.tokenStore[token] = TwoFACode{Code: v.Code, Email: v.Email, ExpiresAt: v.ExpiresAt, Attempts: v.Attempts + 1}
 	return v.Code, v.Email, true
 }
 
@@ -170,6 +283,7 @@ func (s *Auth) Register(ctx context.Context, req *connect.Request[service.Regist
 		Email:    email,
 		Password: &hash,
 		Role:     models.UserRoleUSER,
+		Provider: providerType,
 	})
 	if err != nil {
 		return nil, connect.NewError(connect.CodeInternal, err)

@@ -1,4 +1,5 @@
 'use server';
+import { revalidateTag } from 'next/cache';
 import * as z from 'zod';
 import { client } from '@/lib/rpc';
 
@@ -116,6 +117,31 @@ export async function CreateUser({
     email,
     password,
   });
+  if (error) {
+    throw error;
+  }
+}
+
+export async function Email2FA(token: string, code: string) {
+  const { data, error } = await client.auth().verify2FACode({ token, code });
+  if (error) {
+    throw error;
+  }
+  if (!data || !data.authorized) {
+    throw new Error('Invalid code');
+  }
+  revalidateTag('session');
+}
+
+export async function RequestPasswordReset(email: string) {
+  const { error } = await client.auth().requestResetPassword({ email });
+  if (error) {
+    throw error;
+  }
+}
+
+export async function ResetPassword(email: string, password: string) {
+  const { error } = await client.auth().resetPassword({ email, password });
   if (error) {
     throw error;
   }

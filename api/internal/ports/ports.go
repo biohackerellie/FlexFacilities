@@ -10,6 +10,7 @@ type UserStore interface {
 	Create(ctx context.Context, user *models.Users) (*models.Users, error)
 	Get(ctx context.Context, id string) (*models.Users, error)
 	GetByEmail(ctx context.Context, email string) (*models.Users, error)
+	UpdatePassword(ctx context.Context, user *models.Users) (*models.Users, error)
 	Update(ctx context.Context, user *models.Users) (*models.Users, error)
 	UpdateByEmail(ctx context.Context, user *models.Users) (*models.Users, error)
 	Delete(ctx context.Context, id string) error

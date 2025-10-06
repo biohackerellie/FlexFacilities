@@ -15,9 +15,9 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import Reset from '@/functions/mutations/reset';
+import { ResetPassword } from '../../actions';
 
-export default function ResetForm(id: any) {
+export default function ResetForm({ email }: { email: string }) {
   const formSchema = z
     .object({
       password: z.string().min(8, {
@@ -41,10 +41,9 @@ export default function ResetForm(id: any) {
     },
   });
 
-  const userId = id.id;
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      await Reset(userId, values.password);
+      await ResetPassword(email, values.password);
       alert('Password reset successfully');
     } catch (error) {
       alert('something went wrong');

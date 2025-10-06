@@ -637,7 +637,7 @@ type Users struct {
 	Email         string             `db:"email" json:"email"`
 	EmailVerified pgtype.Timestamptz `db:"email_verified" json:"email_verified"`
 	Password      *[]byte            `db:"password" json:"password,omitempty"`
-	Provider      *string            `db:"provider" json:"provider"`
+	Provider      string             `db:"provider" json:"provider"`
 	ExternalUser  bool               `db:"external_user" json:"external_user"`
 	Role          UserRole           `db:"role" json:"role"`
 	CreatedAt     pgtype.Timestamptz `db:"created_at" json:"created_at"`

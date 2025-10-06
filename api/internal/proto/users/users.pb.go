@@ -165,7 +165,7 @@ type Users struct {
 	Email         string                 `protobuf:"bytes,4,opt,name=email,proto3" json:"email,omitempty"`
 	EmailVerified string                 `protobuf:"bytes,5,opt,name=email_verified,json=emailVerified,proto3" json:"email_verified,omitempty"` // RFC3339 string
 	Password      *string                `protobuf:"bytes,6,opt,name=password,proto3,oneof" json:"password,omitempty"`
-	Provider      *string                `protobuf:"bytes,7,opt,name=provider,proto3,oneof" json:"provider,omitempty"`
+	Provider      string                 `protobuf:"bytes,7,opt,name=provider,proto3" json:"provider,omitempty"`
 	ExternalUser  bool                   `protobuf:"varint,8,opt,name=external_user,json=externalUser,proto3" json:"external_user,omitempty"`
 	Role          string                 `protobuf:"bytes,9,opt,name=role,proto3" json:"role,omitempty"`
 	CreatedAt     string                 `protobuf:"bytes,10,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"` // RFC3339 string
@@ -247,8 +247,8 @@ func (x *Users) GetPassword() string {
 }
 
 func (x *Users) GetProvider() string {
-	if x != nil && x.Provider != nil {
-		return *x.Provider
+	if x != nil {
+		return x.Provider
 	}
 	return ""
 }
@@ -1029,15 +1029,15 @@ const file_proto_users_users_proto_rawDesc = "" +
 	"buildingId\x12#\n" +
 	"\rbuilding_name\x18\x03 \x01(\tR\fbuildingName\x12\x17\n" +
 	"\auser_id\x18\x04 \x01(\tR\x06userId\x12\x1b\n" +
-	"\tuser_name\x18\x05 \x01(\tR\buserName\"\xd3\x02\n" +
+	"\tuser_name\x18\x05 \x01(\tR\buserName\"\xc1\x02\n" +
 	"\x05Users\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x19\n" +
 	"\x05image\x18\x03 \x01(\tH\x00R\x05image\x88\x01\x01\x12\x14\n" +
 	"\x05email\x18\x04 \x01(\tR\x05email\x12%\n" +
 	"\x0eemail_verified\x18\x05 \x01(\tR\remailVerified\x12\x1f\n" +
-	"\bpassword\x18\x06 \x01(\tH\x01R\bpassword\x88\x01\x01\x12\x1f\n" +
-	"\bprovider\x18\a \x01(\tH\x02R\bprovider\x88\x01\x01\x12#\n" +
+	"\bpassword\x18\x06 \x01(\tH\x01R\bpassword\x88\x01\x01\x12\x1a\n" +
+	"\bprovider\x18\a \x01(\tR\bprovider\x12#\n" +
 	"\rexternal_user\x18\b \x01(\bR\fexternalUser\x12\x12\n" +
 	"\x04role\x18\t \x01(\tR\x04role\x12\x1d\n" +
 	"\n" +
@@ -1045,8 +1045,7 @@ const file_proto_users_users_proto_rawDesc = "" +
 	" \x01(\tR\tcreatedAt\x12\x10\n" +
 	"\x03tos\x18\v \x01(\bR\x03tosB\b\n" +
 	"\x06_imageB\v\n" +
-	"\t_passwordB\v\n" +
-	"\t_provider\"c\n" +
+	"\t_password\"c\n" +
 	"\x11VerificationToken\x12\x1e\n" +
 	"\n" +
 	"identifier\x18\x01 \x01(\tR\n" +

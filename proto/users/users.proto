@@ -24,7 +24,7 @@ message Users {
   string email = 4;
   string email_verified = 5; // RFC3339 string
   optional string password = 6;
-  optional string provider = 7;
+  string provider = 7;
   bool external_user = 8;
   string role = 9;
   string created_at = 10; // RFC3339 string

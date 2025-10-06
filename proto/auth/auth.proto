@@ -19,8 +19,28 @@ service Auth {
   }; 
   rpc Login (LoginRequest) returns (LoginResponse);
   rpc Register (RegisterRequest) returns (LoginResponse);
+  rpc RequestResetPassword (RequestResetPasswordRequest) returns (LoginResponse);
+  rpc ResetPassword (LoginRequest) returns (LoginResponse);
+  rpc Verify2FACode (VerifyRequest) returns (VerifyResponse);
+  rpc VerifyResetPassword (VerifyPasswordRequest) returns (VerifyResetResponse);
+}
+message VerifyPasswordRequest {
+  string token = 1;
+}
+message VerifyResetResponse {
+  string email = 1;
+}
+message RequestResetPasswordRequest {
+  string email = 1;
+}
+message VerifyRequest {
+  string code = 1;
+  string token = 2;
 }
 
+message VerifyResponse {
+  bool authorized = 1;
+}
 message GetSessionRequest {
 }
 

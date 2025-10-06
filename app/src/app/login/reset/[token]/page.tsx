@@ -1,34 +1,32 @@
-import jwt from 'jsonwebtoken';
-
+import { notFound } from 'next/navigation';
+import * as React from 'react';
+import { client } from '@/lib/rpc';
 import ResetForm from './form';
 
-function decodeToken(token: string) {
-  const publicKey: string = Buffer.from(
-    process.env.RSA_PUBLIC_KEY!,
-    'base64',
-  ).toString('utf-8');
-  const decoded = jwt.verify(token, publicKey, { algorithms: ['RS256'] });
-  if (!decoded) {
-    throw new Error('Invalid token');
+async function VerifyToken(token: string) {
+  'use server';
+  const { data, error } = await client.auth().verifyResetPassword({ token });
+  if (error) {
+    return null;
   }
-
-  return decoded;
+  return data?.email;
 }
 
-export default function ResetPage({ params }: { params: { token: string } }) {
-  const data = decodeToken(params.token);
-
-  if (!data) {
-    return <div>Invalid token</div>;
-  } else {
-    // TODO: improve types
-    // @ts-expect-error - expected error
-    const { id: userID } = data;
-
-    return (
-      <div className="flex min-h-screen flex-col items-center justify-center py-12 sm:px-6 lg:px-8">
-        <ResetForm id={userID} />
-      </div>
-    );
+export default async function ResetPage({
+  params,
+}: {
+  params: { token: string };
+}) {
+  const email = await VerifyToken(params.token);
+  if (!email) {
+    return notFound();
   }
+
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center py-12 sm:px-6 lg:px-8">
+      <React.Suspense fallback={<h1>Loading...</h1>}>
+        <ResetForm email={email} />
+      </React.Suspense>
+    </div>
+  );
 }

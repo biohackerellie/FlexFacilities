@@ -21,7 +21,6 @@ func NewServer(handlers *handlers.Handlers, log *slog.Logger) *http.ServeMux {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/auth/{provider}", handlers.Auth.BeginOauth)
 	mux.HandleFunc("/auth/{provider}/callback", handlers.Auth.AuthCallback)
-	mux.HandleFunc("/auth/{token}/verify", handlers.Auth.Verify2FACode)
 	mux.Handle("/rpc/", http.StripPrefix("/rpc", handlers.Auth.AuthMiddleware(api)))
 	return mux
 }

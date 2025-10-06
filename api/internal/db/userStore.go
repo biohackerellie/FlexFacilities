@@ -77,6 +77,26 @@ func (s *UserStore) Create(ctx context.Context, user *models.Users) (*models.Use
 	return &u, nil
 }
 
+const updateUserPasswordQuery = `UPDATE users SET password = :password WHERE id = :id` // nolint:gosec
+
+func (s *UserStore) UpdatePassword(ctx context.Context, user *models.Users) (*models.Users, error) {
+	params := map[string]any{
+		"id":       user.ID,
+		"password": user.Password,
+	}
+	var u models.Users
+	stmt, err := s.db.PrepareNamedContext(ctx, updateUserPasswordQuery)
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+	err = stmt.QueryRowxContext(ctx, params).StructScan(&u)
+	if err != nil {
+		return nil, err
+	}
+	return &u, nil
+}
+
 const updateUserQuery = `UPDATE users SET name = :name, email = :email, provider = :provider WHERE id = :id RETURNING *`
 
 func (s *UserStore) Update(ctx context.Context, user *models.Users) (*models.Users, error) {

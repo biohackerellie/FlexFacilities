@@ -47,14 +47,12 @@ func (db *DB) getAppliedMigrations(ctx context.Context) (map[int64]bool, error) 
 	return applied, rows.Err()
 }
 
-// This function signature needs to match what's in your build-tagged files
 func (db *DB) runMigrations(ctx context.Context) error {
 	applied, err := db.getAppliedMigrations(ctx)
 	if err != nil {
 		return errors.NewIgnorableError("failed to get applied migrations: " + err.Error())
 	}
 
-	// Call the build-tag specific loadMigrations function
 	migrations, err := loadMigrations()
 	if err != nil {
 		return errors.NewIgnorableError("failed to load migrations: " + err.Error())
@@ -99,33 +97,41 @@ func loadMigrations() ([]Migration, error) {
 		return nil, err
 	}
 
+	slog.Info("Loading migrations")
+	slog.Info("Found migrations", "count", len(entries))
 	migrations := make([]Migration, 0, len(entries))
-	for i, entry := range entries {
+	for _, entry := range entries {
+		slog.Info(entry.Name())
 		if !strings.HasSuffix(entry.Name(), ".sql") {
+			slog.Info("Skipping migration", "name", entry.Name())
 			continue
 		}
 
 		parts := strings.SplitN(entry.Name(), "_", 2)
 		if len(parts) < 2 {
+			slog.Info("Skipping migration", "name", entry.Name())
 			continue
 		}
 
 		version, err := strconv.ParseInt(parts[0], 10, 64)
 		if err != nil {
+			slog.Info("Skipping migration", "name", entry.Name())
 			continue
 		}
 
 		content, err := migrationFiles.ReadFile(filepath.Join("migrations", entry.Name()))
 		if err != nil {
+			slog.Error("Failed to read migration file", "name", entry.Name(), "error", err)
 			return nil, err
 		}
 
 		name := strings.TrimSuffix(parts[1], ".sql")
-		migrations[i] = Migration{
+
+		migrations = append(migrations, Migration{
 			Version: version,
 			Name:    name,
 			SQL:     string(content),
-		}
+		})
 	}
 
 	if len(migrations) == 0 {

@@ -95,6 +95,7 @@ func requiresAuth(procedure string) bool {
 		FacilitiesServiceGetFacilityCategoriesProcedure: true,
 		AuthLoginProcedure:                              true,
 		AuthRegisterProcedure:                           true,
+		AuthVerify2FACodeProcedure:                      true,
 	}
 	if _, ok := publicProcedures[procedure]; ok {
 		return false

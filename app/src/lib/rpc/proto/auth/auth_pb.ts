@@ -20,7 +20,7 @@ import {
 export const file_proto_auth_auth: GenFile =
   /*@__PURE__*/
   fileDesc(
-    'ChVwcm90by9hdXRoL2F1dGgucHJvdG8SCGFwaS5hdXRoIncKB1Nlc3Npb24SCgoCaWQYASABKAkSDwoHdXNlcl9pZBgCIAEoCRIVCg1yZWZyZXNoX3Rva2VuGAMgASgJEhAKCHByb3ZpZGVyGAQgASgJEhIKCmNyZWF0ZWRfYXQYBSABKAkSEgoKZXhwaXJlc19hdBgGIAEoCSITChFHZXRTZXNzaW9uUmVxdWVzdCJzChJHZXRTZXNzaW9uUmVzcG9uc2USEgoKc2Vzc2lvbl9pZBgBIAEoCRIPCgd1c2VyX2lkGAIgASgJEhEKCXVzZXJfbmFtZRgDIAEoCRISCgp1c2VyX2VtYWlsGAQgASgJEhEKCXVzZXJfcm9sZRgFIAEoCSIvCgxMb2dpblJlcXVlc3QSDQoFZW1haWwYASABKAkSEAoIcGFzc3dvcmQYAiABKAkiDwoNTG9naW5SZXNwb25zZSJACg9SZWdpc3RlclJlcXVlc3QSDAoEbmFtZRgBIAEoCRINCgVlbWFpbBgCIAEoCRIQCghwYXNzd29yZBgDIAEoCTLOAQoEQXV0aBJMCgpHZXRTZXNzaW9uEhsuYXBpLmF1dGguR2V0U2Vzc2lvblJlcXVlc3QaHC5hcGkuYXV0aC5HZXRTZXNzaW9uUmVzcG9uc2UiA5ACARI4CgVMb2dpbhIWLmFwaS5hdXRoLkxvZ2luUmVxdWVzdBoXLmFwaS5hdXRoLkxvZ2luUmVzcG9uc2USPgoIUmVnaXN0ZXISGS5hcGkuYXV0aC5SZWdpc3RlclJlcXVlc3QaFy5hcGkuYXV0aC5Mb2dpblJlc3BvbnNlQiVaI2FwaS9pbnRlcm5hbC9wcm90by9hdXRoO2F1dGhzZXJ2aWNlYgZwcm90bzM',
+    'ChVwcm90by9hdXRoL2F1dGgucHJvdG8SCGFwaS5hdXRoIncKB1Nlc3Npb24SCgoCaWQYASABKAkSDwoHdXNlcl9pZBgCIAEoCRIVCg1yZWZyZXNoX3Rva2VuGAMgASgJEhAKCHByb3ZpZGVyGAQgASgJEhIKCmNyZWF0ZWRfYXQYBSABKAkSEgoKZXhwaXJlc19hdBgGIAEoCSImChVWZXJpZnlQYXNzd29yZFJlcXVlc3QSDQoFdG9rZW4YASABKAkiJAoTVmVyaWZ5UmVzZXRSZXNwb25zZRINCgVlbWFpbBgBIAEoCSIsChtSZXF1ZXN0UmVzZXRQYXNzd29yZFJlcXVlc3QSDQoFZW1haWwYASABKAkiLAoNVmVyaWZ5UmVxdWVzdBIMCgRjb2RlGAEgASgJEg0KBXRva2VuGAIgASgJIiQKDlZlcmlmeVJlc3BvbnNlEhIKCmF1dGhvcml6ZWQYASABKAgiEwoRR2V0U2Vzc2lvblJlcXVlc3QicwoSR2V0U2Vzc2lvblJlc3BvbnNlEhIKCnNlc3Npb25faWQYASABKAkSDwoHdXNlcl9pZBgCIAEoCRIRCgl1c2VyX25hbWUYAyABKAkSEgoKdXNlcl9lbWFpbBgEIAEoCRIRCgl1c2VyX3JvbGUYBSABKAkiLwoMTG9naW5SZXF1ZXN0Eg0KBWVtYWlsGAEgASgJEhAKCHBhc3N3b3JkGAIgASgJIg8KDUxvZ2luUmVzcG9uc2UiQAoPUmVnaXN0ZXJSZXF1ZXN0EgwKBG5hbWUYASABKAkSDQoFZW1haWwYAiABKAkSEAoIcGFzc3dvcmQYAyABKAkygwQKBEF1dGgSTAoKR2V0U2Vzc2lvbhIbLmFwaS5hdXRoLkdldFNlc3Npb25SZXF1ZXN0GhwuYXBpLmF1dGguR2V0U2Vzc2lvblJlc3BvbnNlIgOQAgESOAoFTG9naW4SFi5hcGkuYXV0aC5Mb2dpblJlcXVlc3QaFy5hcGkuYXV0aC5Mb2dpblJlc3BvbnNlEj4KCFJlZ2lzdGVyEhkuYXBpLmF1dGguUmVnaXN0ZXJSZXF1ZXN0GhcuYXBpLmF1dGguTG9naW5SZXNwb25zZRJWChRSZXF1ZXN0UmVzZXRQYXNzd29yZBIlLmFwaS5hdXRoLlJlcXVlc3RSZXNldFBhc3N3b3JkUmVxdWVzdBoXLmFwaS5hdXRoLkxvZ2luUmVzcG9uc2USQAoNUmVzZXRQYXNzd29yZBIWLmFwaS5hdXRoLkxvZ2luUmVxdWVzdBoXLmFwaS5hdXRoLkxvZ2luUmVzcG9uc2USQgoNVmVyaWZ5MkZBQ29kZRIXLmFwaS5hdXRoLlZlcmlmeVJlcXVlc3QaGC5hcGkuYXV0aC5WZXJpZnlSZXNwb25zZRJVChNWZXJpZnlSZXNldFBhc3N3b3JkEh8uYXBpLmF1dGguVmVyaWZ5UGFzc3dvcmRSZXF1ZXN0Gh0uYXBpLmF1dGguVmVyaWZ5UmVzZXRSZXNwb25zZUIlWiNhcGkvaW50ZXJuYWwvcHJvdG8vYXV0aDthdXRoc2VydmljZWIGcHJvdG8z',
   );
 
 /**
@@ -67,6 +67,103 @@ export const SessionSchema: GenMessage<Session> =
   messageDesc(file_proto_auth_auth, 0);
 
 /**
+ * @generated from message api.auth.VerifyPasswordRequest
+ */
+export type VerifyPasswordRequest =
+  Message<'api.auth.VerifyPasswordRequest'> & {
+    /**
+     * @generated from field: string token = 1;
+     */
+    token: string;
+  };
+
+/**
+ * Describes the message api.auth.VerifyPasswordRequest.
+ * Use `create(VerifyPasswordRequestSchema)` to create a new message.
+ */
+export const VerifyPasswordRequestSchema: GenMessage<VerifyPasswordRequest> =
+  /*@__PURE__*/
+  messageDesc(file_proto_auth_auth, 1);
+
+/**
+ * @generated from message api.auth.VerifyResetResponse
+ */
+export type VerifyResetResponse = Message<'api.auth.VerifyResetResponse'> & {
+  /**
+   * @generated from field: string email = 1;
+   */
+  email: string;
+};
+
+/**
+ * Describes the message api.auth.VerifyResetResponse.
+ * Use `create(VerifyResetResponseSchema)` to create a new message.
+ */
+export const VerifyResetResponseSchema: GenMessage<VerifyResetResponse> =
+  /*@__PURE__*/
+  messageDesc(file_proto_auth_auth, 2);
+
+/**
+ * @generated from message api.auth.RequestResetPasswordRequest
+ */
+export type RequestResetPasswordRequest =
+  Message<'api.auth.RequestResetPasswordRequest'> & {
+    /**
+     * @generated from field: string email = 1;
+     */
+    email: string;
+  };
+
+/**
+ * Describes the message api.auth.RequestResetPasswordRequest.
+ * Use `create(RequestResetPasswordRequestSchema)` to create a new message.
+ */
+export const RequestResetPasswordRequestSchema: GenMessage<RequestResetPasswordRequest> =
+  /*@__PURE__*/
+  messageDesc(file_proto_auth_auth, 3);
+
+/**
+ * @generated from message api.auth.VerifyRequest
+ */
+export type VerifyRequest = Message<'api.auth.VerifyRequest'> & {
+  /**
+   * @generated from field: string code = 1;
+   */
+  code: string;
+
+  /**
+   * @generated from field: string token = 2;
+   */
+  token: string;
+};
+
+/**
+ * Describes the message api.auth.VerifyRequest.
+ * Use `create(VerifyRequestSchema)` to create a new message.
+ */
+export const VerifyRequestSchema: GenMessage<VerifyRequest> =
+  /*@__PURE__*/
+  messageDesc(file_proto_auth_auth, 4);
+
+/**
+ * @generated from message api.auth.VerifyResponse
+ */
+export type VerifyResponse = Message<'api.auth.VerifyResponse'> & {
+  /**
+   * @generated from field: bool authorized = 1;
+   */
+  authorized: boolean;
+};
+
+/**
+ * Describes the message api.auth.VerifyResponse.
+ * Use `create(VerifyResponseSchema)` to create a new message.
+ */
+export const VerifyResponseSchema: GenMessage<VerifyResponse> =
+  /*@__PURE__*/
+  messageDesc(file_proto_auth_auth, 5);
+
+/**
  * @generated from message api.auth.GetSessionRequest
  */
 export type GetSessionRequest = Message<'api.auth.GetSessionRequest'> & {};
@@ -77,7 +174,7 @@ export type GetSessionRequest = Message<'api.auth.GetSessionRequest'> & {};
  */
 export const GetSessionRequestSchema: GenMessage<GetSessionRequest> =
   /*@__PURE__*/
-  messageDesc(file_proto_auth_auth, 1);
+  messageDesc(file_proto_auth_auth, 6);
 
 /**
  * @generated from message api.auth.GetSessionResponse
@@ -115,7 +212,7 @@ export type GetSessionResponse = Message<'api.auth.GetSessionResponse'> & {
  */
 export const GetSessionResponseSchema: GenMessage<GetSessionResponse> =
   /*@__PURE__*/
-  messageDesc(file_proto_auth_auth, 2);
+  messageDesc(file_proto_auth_auth, 7);
 
 /**
  * @generated from message api.auth.LoginRequest
@@ -138,7 +235,7 @@ export type LoginRequest = Message<'api.auth.LoginRequest'> & {
  */
 export const LoginRequestSchema: GenMessage<LoginRequest> =
   /*@__PURE__*/
-  messageDesc(file_proto_auth_auth, 3);
+  messageDesc(file_proto_auth_auth, 8);
 
 /**
  * @generated from message api.auth.LoginResponse
@@ -151,7 +248,7 @@ export type LoginResponse = Message<'api.auth.LoginResponse'> & {};
  */
 export const LoginResponseSchema: GenMessage<LoginResponse> =
   /*@__PURE__*/
-  messageDesc(file_proto_auth_auth, 4);
+  messageDesc(file_proto_auth_auth, 9);
 
 /**
  * @generated from message api.auth.RegisterRequest
@@ -179,7 +276,7 @@ export type RegisterRequest = Message<'api.auth.RegisterRequest'> & {
  */
 export const RegisterRequestSchema: GenMessage<RegisterRequest> =
   /*@__PURE__*/
-  messageDesc(file_proto_auth_auth, 5);
+  messageDesc(file_proto_auth_auth, 10);
 
 /**
  * @generated from service api.auth.Auth
@@ -208,5 +305,37 @@ export const Auth: GenService<{
     methodKind: 'unary';
     input: typeof RegisterRequestSchema;
     output: typeof LoginResponseSchema;
+  };
+  /**
+   * @generated from rpc api.auth.Auth.RequestResetPassword
+   */
+  requestResetPassword: {
+    methodKind: 'unary';
+    input: typeof RequestResetPasswordRequestSchema;
+    output: typeof LoginResponseSchema;
+  };
+  /**
+   * @generated from rpc api.auth.Auth.ResetPassword
+   */
+  resetPassword: {
+    methodKind: 'unary';
+    input: typeof LoginRequestSchema;
+    output: typeof LoginResponseSchema;
+  };
+  /**
+   * @generated from rpc api.auth.Auth.Verify2FACode
+   */
+  verify2FACode: {
+    methodKind: 'unary';
+    input: typeof VerifyRequestSchema;
+    output: typeof VerifyResponseSchema;
+  };
+  /**
+   * @generated from rpc api.auth.Auth.VerifyResetPassword
+   */
+  verifyResetPassword: {
+    methodKind: 'unary';
+    input: typeof VerifyPasswordRequestSchema;
+    output: typeof VerifyResetResponseSchema;
   };
 }> = /*@__PURE__*/ serviceDesc(file_proto_auth_auth, 0);

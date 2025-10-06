@@ -134,14 +134,14 @@ func (a *Auth) AuthCallback(w http.ResponseWriter, r *http.Request) {
 		ID:       userInfo.ID,
 		Name:     userInfo.Name,
 		Email:    userInfo.Email,
-		Provider: &providerName,
+		Provider: providerName,
 	})
 
 	if err != nil {
 		http.Error(w, "failed to get user info from auth provider", http.StatusBadRequest)
 		return
 	}
-	accessToken, err := createToken(user.ID, user.Name, user.Email, *user.Provider, user.Role, a.key)
+	accessToken, err := createToken(user.ID, user.Name, user.Email, user.Provider, user.Role, a.key)
 	if err != nil {
 		http.Error(w, "failed to get user info from auth provider", http.StatusBadRequest)
 		return
@@ -344,17 +344,17 @@ func (s *Auth) RefreshToken(ctx context.Context, session *models.Session) (*Refr
 		ID:       u.ID,
 		Name:     u.Name,
 		Email:    u.Email,
-		Provider: &providerName,
+		Provider: providerName,
 	}
 	user, err := s.GetOrCreateAuthUser(ctx, authUser)
 	if err != nil {
 		return nil, err
 	}
-	newToken, err := createToken(user.ID, user.Name, user.Email, *user.Provider, user.Role, s.key)
+	newToken, err := createToken(user.ID, user.Name, user.Email, user.Provider, user.Role, s.key)
 	if err != nil {
 		return nil, err
 	}
-	newRefreshToken, err := s.createRefreshToken(user.ID, user.Name, user.Email, newAuthToken.RefreshToken, *user.Provider, absoluteExpiration)
+	newRefreshToken, err := s.createRefreshToken(user.ID, user.Name, user.Email, newAuthToken.RefreshToken, user.Provider, absoluteExpiration)
 	if err != nil {
 		return nil, err
 	}

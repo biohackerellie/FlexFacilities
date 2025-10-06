@@ -39,6 +39,16 @@ const (
 	AuthLoginProcedure = "/api.auth.Auth/Login"
 	// AuthRegisterProcedure is the fully-qualified name of the Auth's Register RPC.
 	AuthRegisterProcedure = "/api.auth.Auth/Register"
+	// AuthRequestResetPasswordProcedure is the fully-qualified name of the Auth's RequestResetPassword
+	// RPC.
+	AuthRequestResetPasswordProcedure = "/api.auth.Auth/RequestResetPassword"
+	// AuthResetPasswordProcedure is the fully-qualified name of the Auth's ResetPassword RPC.
+	AuthResetPasswordProcedure = "/api.auth.Auth/ResetPassword"
+	// AuthVerify2FACodeProcedure is the fully-qualified name of the Auth's Verify2FACode RPC.
+	AuthVerify2FACodeProcedure = "/api.auth.Auth/Verify2FACode"
+	// AuthVerifyResetPasswordProcedure is the fully-qualified name of the Auth's VerifyResetPassword
+	// RPC.
+	AuthVerifyResetPasswordProcedure = "/api.auth.Auth/VerifyResetPassword"
 )
 
 // AuthClient is a client for the api.auth.Auth service.
@@ -46,6 +56,10 @@ type AuthClient interface {
 	GetSession(context.Context, *connect.Request[auth.GetSessionRequest]) (*connect.Response[auth.GetSessionResponse], error)
 	Login(context.Context, *connect.Request[auth.LoginRequest]) (*connect.Response[auth.LoginResponse], error)
 	Register(context.Context, *connect.Request[auth.RegisterRequest]) (*connect.Response[auth.LoginResponse], error)
+	RequestResetPassword(context.Context, *connect.Request[auth.RequestResetPasswordRequest]) (*connect.Response[auth.LoginResponse], error)
+	ResetPassword(context.Context, *connect.Request[auth.LoginRequest]) (*connect.Response[auth.LoginResponse], error)
+	Verify2FACode(context.Context, *connect.Request[auth.VerifyRequest]) (*connect.Response[auth.VerifyResponse], error)
+	VerifyResetPassword(context.Context, *connect.Request[auth.VerifyPasswordRequest]) (*connect.Response[auth.VerifyResetResponse], error)
 }
 
 // NewAuthClient constructs a client for the api.auth.Auth service. By default, it uses the Connect
@@ -78,14 +92,42 @@ func NewAuthClient(httpClient connect.HTTPClient, baseURL string, opts ...connec
 			connect.WithSchema(authMethods.ByName("Register")),
 			connect.WithClientOptions(opts...),
 		),
+		requestResetPassword: connect.NewClient[auth.RequestResetPasswordRequest, auth.LoginResponse](
+			httpClient,
+			baseURL+AuthRequestResetPasswordProcedure,
+			connect.WithSchema(authMethods.ByName("RequestResetPassword")),
+			connect.WithClientOptions(opts...),
+		),
+		resetPassword: connect.NewClient[auth.LoginRequest, auth.LoginResponse](
+			httpClient,
+			baseURL+AuthResetPasswordProcedure,
+			connect.WithSchema(authMethods.ByName("ResetPassword")),
+			connect.WithClientOptions(opts...),
+		),
+		verify2FACode: connect.NewClient[auth.VerifyRequest, auth.VerifyResponse](
+			httpClient,
+			baseURL+AuthVerify2FACodeProcedure,
+			connect.WithSchema(authMethods.ByName("Verify2FACode")),
+			connect.WithClientOptions(opts...),
+		),
+		verifyResetPassword: connect.NewClient[auth.VerifyPasswordRequest, auth.VerifyResetResponse](
+			httpClient,
+			baseURL+AuthVerifyResetPasswordProcedure,
+			connect.WithSchema(authMethods.ByName("VerifyResetPassword")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
 // authClient implements AuthClient.
 type authClient struct {
-	getSession *connect.Client[auth.GetSessionRequest, auth.GetSessionResponse]
-	login      *connect.Client[auth.LoginRequest, auth.LoginResponse]
-	register   *connect.Client[auth.RegisterRequest, auth.LoginResponse]
+	getSession           *connect.Client[auth.GetSessionRequest, auth.GetSessionResponse]
+	login                *connect.Client[auth.LoginRequest, auth.LoginResponse]
+	register             *connect.Client[auth.RegisterRequest, auth.LoginResponse]
+	requestResetPassword *connect.Client[auth.RequestResetPasswordRequest, auth.LoginResponse]
+	resetPassword        *connect.Client[auth.LoginRequest, auth.LoginResponse]
+	verify2FACode        *connect.Client[auth.VerifyRequest, auth.VerifyResponse]
+	verifyResetPassword  *connect.Client[auth.VerifyPasswordRequest, auth.VerifyResetResponse]
 }
 
 // GetSession calls api.auth.Auth.GetSession.
@@ -103,11 +145,35 @@ func (c *authClient) Register(ctx context.Context, req *connect.Request[auth.Reg
 	return c.register.CallUnary(ctx, req)
 }
 
+// RequestResetPassword calls api.auth.Auth.RequestResetPassword.
+func (c *authClient) RequestResetPassword(ctx context.Context, req *connect.Request[auth.RequestResetPasswordRequest]) (*connect.Response[auth.LoginResponse], error) {
+	return c.requestResetPassword.CallUnary(ctx, req)
+}
+
+// ResetPassword calls api.auth.Auth.ResetPassword.
+func (c *authClient) ResetPassword(ctx context.Context, req *connect.Request[auth.LoginRequest]) (*connect.Response[auth.LoginResponse], error) {
+	return c.resetPassword.CallUnary(ctx, req)
+}
+
+// Verify2FACode calls api.auth.Auth.Verify2FACode.
+func (c *authClient) Verify2FACode(ctx context.Context, req *connect.Request[auth.VerifyRequest]) (*connect.Response[auth.VerifyResponse], error) {
+	return c.verify2FACode.CallUnary(ctx, req)
+}
+
+// VerifyResetPassword calls api.auth.Auth.VerifyResetPassword.
+func (c *authClient) VerifyResetPassword(ctx context.Context, req *connect.Request[auth.VerifyPasswordRequest]) (*connect.Response[auth.VerifyResetResponse], error) {
+	return c.verifyResetPassword.CallUnary(ctx, req)
+}
+
 // AuthHandler is an implementation of the api.auth.Auth service.
 type AuthHandler interface {
 	GetSession(context.Context, *connect.Request[auth.GetSessionRequest]) (*connect.Response[auth.GetSessionResponse], error)
 	Login(context.Context, *connect.Request[auth.LoginRequest]) (*connect.Response[auth.LoginResponse], error)
 	Register(context.Context, *connect.Request[auth.RegisterRequest]) (*connect.Response[auth.LoginResponse], error)
+	RequestResetPassword(context.Context, *connect.Request[auth.RequestResetPasswordRequest]) (*connect.Response[auth.LoginResponse], error)
+	ResetPassword(context.Context, *connect.Request[auth.LoginRequest]) (*connect.Response[auth.LoginResponse], error)
+	Verify2FACode(context.Context, *connect.Request[auth.VerifyRequest]) (*connect.Response[auth.VerifyResponse], error)
+	VerifyResetPassword(context.Context, *connect.Request[auth.VerifyPasswordRequest]) (*connect.Response[auth.VerifyResetResponse], error)
 }
 
 // NewAuthHandler builds an HTTP handler from the service implementation. It returns the path on
@@ -136,6 +202,30 @@ func NewAuthHandler(svc AuthHandler, opts ...connect.HandlerOption) (string, htt
 		connect.WithSchema(authMethods.ByName("Register")),
 		connect.WithHandlerOptions(opts...),
 	)
+	authRequestResetPasswordHandler := connect.NewUnaryHandler(
+		AuthRequestResetPasswordProcedure,
+		svc.RequestResetPassword,
+		connect.WithSchema(authMethods.ByName("RequestResetPassword")),
+		connect.WithHandlerOptions(opts...),
+	)
+	authResetPasswordHandler := connect.NewUnaryHandler(
+		AuthResetPasswordProcedure,
+		svc.ResetPassword,
+		connect.WithSchema(authMethods.ByName("ResetPassword")),
+		connect.WithHandlerOptions(opts...),
+	)
+	authVerify2FACodeHandler := connect.NewUnaryHandler(
+		AuthVerify2FACodeProcedure,
+		svc.Verify2FACode,
+		connect.WithSchema(authMethods.ByName("Verify2FACode")),
+		connect.WithHandlerOptions(opts...),
+	)
+	authVerifyResetPasswordHandler := connect.NewUnaryHandler(
+		AuthVerifyResetPasswordProcedure,
+		svc.VerifyResetPassword,
+		connect.WithSchema(authMethods.ByName("VerifyResetPassword")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/api.auth.Auth/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case AuthGetSessionProcedure:
@@ -144,6 +234,14 @@ func NewAuthHandler(svc AuthHandler, opts ...connect.HandlerOption) (string, htt
 			authLoginHandler.ServeHTTP(w, r)
 		case AuthRegisterProcedure:
 			authRegisterHandler.ServeHTTP(w, r)
+		case AuthRequestResetPasswordProcedure:
+			authRequestResetPasswordHandler.ServeHTTP(w, r)
+		case AuthResetPasswordProcedure:
+			authResetPasswordHandler.ServeHTTP(w, r)
+		case AuthVerify2FACodeProcedure:
+			authVerify2FACodeHandler.ServeHTTP(w, r)
+		case AuthVerifyResetPasswordProcedure:
+			authVerifyResetPasswordHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -163,4 +261,20 @@ func (UnimplementedAuthHandler) Login(context.Context, *connect.Request[auth.Log
 
 func (UnimplementedAuthHandler) Register(context.Context, *connect.Request[auth.RegisterRequest]) (*connect.Response[auth.LoginResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.auth.Auth.Register is not implemented"))
+}
+
+func (UnimplementedAuthHandler) RequestResetPassword(context.Context, *connect.Request[auth.RequestResetPasswordRequest]) (*connect.Response[auth.LoginResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.auth.Auth.RequestResetPassword is not implemented"))
+}
+
+func (UnimplementedAuthHandler) ResetPassword(context.Context, *connect.Request[auth.LoginRequest]) (*connect.Response[auth.LoginResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.auth.Auth.ResetPassword is not implemented"))
+}
+
+func (UnimplementedAuthHandler) Verify2FACode(context.Context, *connect.Request[auth.VerifyRequest]) (*connect.Response[auth.VerifyResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.auth.Auth.Verify2FACode is not implemented"))
+}
+
+func (UnimplementedAuthHandler) VerifyResetPassword(context.Context, *connect.Request[auth.VerifyPasswordRequest]) (*connect.Response[auth.VerifyResetResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.auth.Auth.VerifyResetPassword is not implemented"))
 }
