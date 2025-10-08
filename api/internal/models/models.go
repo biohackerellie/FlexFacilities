@@ -736,3 +736,16 @@ func (b *Branding) ToProto() *pbUtility.Branding {
 		OrganizationEmail:          b.OrganizationEmail,
 	}
 }
+
+func ToBranding(br *pbUtility.Branding) *Branding {
+	return &Branding{
+		ID:                         br.Id,
+		OrganizationName:           br.OrganizationName,
+		OrganizationLogoPath:       br.OrganizationLogoPath,
+		OrganizationPrimaryColor:   br.OrganizationPrimaryColor,
+		OrganizationSecondaryColor: br.OrganizationSecondaryColor,
+		OrganizationUrl:            br.OrganizationUrl,
+		OrganizationDescription:    br.OrganizationDescription,
+		OrganizationEmail:          br.OrganizationEmail,
+	}
+}

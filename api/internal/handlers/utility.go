@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"api/internal/models"
 	"api/internal/ports"
 	service "api/internal/proto/utility"
 	"connectrpc.com/connect"
@@ -12,6 +13,7 @@ import (
 type UtilityHandler struct {
 	log              *slog.Logger
 	reservationStore ports.ReservationStore
+	brandingStore    ports.BrandingStore
 	loc              *time.Location
 }
 
@@ -64,4 +66,24 @@ func (u *UtilityHandler) AggregateChartData(ctx context.Context, req *connect.Re
 	return connect.NewResponse(&service.AggregateChartDataResponse{
 		Data: chartData,
 	}), nil
+}
+
+func (u *UtilityHandler) GetBranding(ctx context.Context, req *connect.Request[service.GetBrandingRequest]) (*connect.Response[service.Branding], error) {
+	data, err := u.brandingStore.Get(ctx)
+	if err != nil {
+		u.log.Error("Could not get branding", "error", err)
+		return nil, err
+	}
+	return connect.NewResponse(data.ToProto()), nil
+}
+
+func (u *UtilityHandler) UpdateBranding(ctx context.Context, req *connect.Request[service.Branding]) (*connect.Response[service.UpdateBrandingResponse], error) {
+	data := models.ToBranding(req.Msg)
+	err := u.brandingStore.Update(ctx, data)
+	if err != nil {
+		u.log.Error("Could not update branding", "error", err)
+		return nil, err
+	}
+	return connect.NewResponse(&service.UpdateBrandingResponse{}), nil
+
 }

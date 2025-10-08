@@ -61,8 +61,6 @@ interface NavbarProps {
   };
 }
 
-const BASE_URL = window.location.origin;
-
 const AUTHORIZED_MENU_ITEMS: MenuItem[] = [
   {
     title: 'Account',
@@ -120,7 +118,7 @@ const AUTH_ITEMS: AuthItems = {
   },
   logout: {
     title: 'Logout',
-    href: `${BASE_URL}/api/auth/logout`,
+    href: `/api/auth/logout`,
   },
 };
 

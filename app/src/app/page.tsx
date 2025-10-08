@@ -8,13 +8,7 @@ export default function Home() {
           <h1 className="mb-10 flex justify-center border-b text-3xl font-bold text-black drop-shadow-md dark:text-gold sm:text-5xl"></h1>
           <div className="block flex-1"> </div>
           <div className="mb-10 hidden max-w-7xl justify-center align-middle sm:flex">
-            <p className="mb-10 mt-4 bg-transparent p-3 text-xl text-black drop-shadow-md dark:text-white sm:text-3xl">
-              Welcome! The facilities at Laurel Public Schools are available to
-              the community for educational, civic, cultural, and other
-              noncommercial uses consistent with the public interest, when such
-              use will not interfere with the school program or school-sponsored
-              activities.
-            </p>
+            <p className="mb-10 mt-4 bg-transparent p-3 text-xl text-black drop-shadow-md dark:text-white sm:text-3xl"></p>
           </div>
           <div className="my-10 flex flex-col items-center justify-center gap-y-4 sm:visible sm:flex-row sm:justify-between">
             <div className="hidden h-20 w-60 animate-enter-from-left-one items-center justify-center rounded-full border border-gray-200 bg-white bg-opacity-60 bg-clip-padding text-2xl font-bold shadow-lg shadow-primary backdrop-blur-md ease-in-out hover:scale-105 dark:bg-slate-700 dark:bg-opacity-20 sm:flex">
