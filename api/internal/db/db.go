@@ -23,13 +23,14 @@ CREATE TABLE IF NOT EXISTS schema_migrations (
 
 func NewDB(ctx context.Context, connectionString string) *DB {
 	sqlDB := sqlx.MustOpen("pgx", connectionString)
-
 	sqlDB.SetMaxOpenConns(25)
 	sqlDB.SetMaxIdleConns(5)
 	sqlDB.SetConnMaxLifetime(5 * time.Minute)
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
 
 	if err := sqlDB.PingContext(ctx); err != nil {
-		return nil
+		panic(fmt.Errorf("failed to ping database: %w", err))
 	}
 
 	_ = sqlDB.MustExecContext(ctx, initSQL)
@@ -37,5 +38,6 @@ func NewDB(ctx context.Context, connectionString string) *DB {
 	if err := db.runMigrations(ctx); err != nil {
 		panic(fmt.Errorf("failed to run migrations: %w", err))
 	}
+	fmt.Println("Connected to database")
 	return db
 }

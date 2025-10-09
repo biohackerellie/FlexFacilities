@@ -1,3 +1,4 @@
+'use client';
 import { Grid2x2 } from 'lucide-react';
 import Link from 'next/link';
 import * as React from 'react';

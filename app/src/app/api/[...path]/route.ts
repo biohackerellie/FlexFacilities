@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const API_URL = process.env.API_URL || 'http://localhost:8080';
+const API_URL = 'http://0.0.0.0:8080';
 
 async function handler(
   request: NextRequest,
@@ -8,7 +8,7 @@ async function handler(
 ) {
   const path = await params.then((x) => x.path.join('/'));
 
-  const url = new URL(`/api/${path}`, API_URL);
+  const url = new URL(`/${path}`, API_URL);
   request.nextUrl.searchParams.forEach((value, key) =>
     url.searchParams.append(key, value),
   );
@@ -16,6 +16,7 @@ async function handler(
   const rheaders = new Headers(request.headers);
   rheaders.delete('host');
   try {
+    console.log('Proxying request to', url.toString());
     const response = await fetch(url.toString(), {
       method: request.method,
       headers: rheaders,
@@ -23,6 +24,8 @@ async function handler(
       duplex: 'half',
     } as RequestInit);
 
+    console.log('Received response from', url.toString());
+    console.log(response);
     const responseHeaders = new Headers(response.headers);
     responseHeaders.delete('content-encoding');
     responseHeaders.delete('content-length');

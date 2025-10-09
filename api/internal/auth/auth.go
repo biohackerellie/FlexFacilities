@@ -166,11 +166,13 @@ func (a *Auth) AuthCallback(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *Auth) BeginOauth(w http.ResponseWriter, r *http.Request) {
+	a.logger.Debug("BeginOauth")
 	providerName := r.PathValue("provider")
 	if providerName == "" {
 		http.Error(w, "failed to get user info from auth provider", http.StatusBadRequest)
 		return
 	}
+	a.logger.Debug("BeginOauth", "provider", providerName)
 	a.providerMu.RLock()
 	provider, exists := a.providers[providerName]
 	a.providerMu.RUnlock()
@@ -194,6 +196,7 @@ func (a *Auth) BeginOauth(w http.ResponseWriter, r *http.Request) {
 		SameSite: http.SameSiteLaxMode,
 		MaxAge:   600,
 	})
+	a.logger.Debug("BeginOauth", "auth_url", authURL)
 	http.Redirect(w, r, authURL, http.StatusTemporaryRedirect)
 }
 
