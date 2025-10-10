@@ -22,15 +22,19 @@ async function handler(
       headers: rheaders,
       body: request.body,
       duplex: 'half',
+      redirect: 'manual',
     } as RequestInit);
 
-    console.log('Received response from', url.toString());
-    console.log(response);
     const responseHeaders = new Headers(response.headers);
     responseHeaders.delete('content-encoding');
     responseHeaders.delete('content-length');
     responseHeaders.delete('transfer-encoding');
-
+    if (response.status >= 300 && response.status < 400) {
+      const location = response.headers.get('location');
+      if (location) {
+        return NextResponse.redirect(location, { status: response.status });
+      }
+    }
     return new NextResponse(response.body, {
       status: response.status,
       statusText: response.statusText,

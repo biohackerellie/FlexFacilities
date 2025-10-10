@@ -13,11 +13,11 @@ message Branding{
   int64 id = 1;
   string organization_name = 2;
   string organization_logo_path = 3;
-  string organization_primary_color = 4;
-  string organization_secondary_color = 5;
-  string organization_url = 6;
-  string organization_description = 7;
-  string organization_email = 8;
+  optional string organization_primary_color = 4;
+  optional string organization_secondary_color = 5;
+  optional string organization_url = 6;
+  optional string organization_description = 7;
+  optional string organization_email = 8;
 }
 
 service UtilityService {

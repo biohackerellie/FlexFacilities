@@ -1,4 +1,3 @@
-'use cache';
 import { School } from 'lucide-react';
 import { Suspense } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,11 +6,22 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { AggregateChartData } from '@/lib/actions/reservations';
 import { client } from '@/lib/rpc';
 import ByMonthLine from './charts/byMonth-Line';
+import { notFound } from 'next/navigation';
 
 export default async function DashboardPage() {
-  const { count, weeklyCount } = await getData();
-  const totalCount = count;
-  const weekly = weeklyCount;
+  const { data: totalCount, error: countError } = await client
+    .reservations()
+    .requestCount({});
+  const { data: thisWeekData, error: weeklyCountError } = await client
+    .reservations()
+    .getRequestsThisWeek({});
+
+  if (countError || weeklyCountError || !totalCount || !thisWeekData) {
+    return notFound();
+  }
+
+  const count = totalCount?.count ?? 0;
+  const weeklyCount = thisWeekData?.reservations.length ?? 0;
   return (
     <>
       <div className="flex flex-col">
@@ -36,7 +46,7 @@ export default async function DashboardPage() {
 
                     <CardContent>
                       <div className="text-right text-2xl font-bold">
-                        {weekly}
+                        {weeklyCount}
                       </div>
                       <p className="text-xs text-muted-foreground">
                         Events in the next 7 days
@@ -54,7 +64,7 @@ export default async function DashboardPage() {
                     </CardHeader>
                     <CardContent>
                       <div className="text-right text-2xl font-bold">
-                        {totalCount}
+                        {count}
                       </div>
                     </CardContent>
                   </Card>
@@ -84,18 +94,13 @@ export default async function DashboardPage() {
   );
 }
 
-async function getData() {
-  const { data: totalCount, error: countError } = await client
-    .reservations()
-    .requestCount({});
-  const { data: thisWeekData, error: weeklyCountError } = await client
-    .reservations()
-    .getRequestsThisWeek({});
+// async function getData() {
+//   // TODO: cache
 
-  if (countError || weeklyCountError) {
-    return { count: 0, weeklyCount: 0 };
-  }
-  const count = totalCount?.count ?? 0;
-  const weeklyCount = thisWeekData?.reservations.length ?? 0;
-  return { count, weeklyCount };
-}
+//   if (countError || weeklyCountError) {
+//     return { count: 0, weeklyCount: 0 };
+//   }
+//   const count = totalCount?.count ?? 0;
+//   const weeklyCount = thisWeekData?.reservations.length ?? 0;
+//   return { count, weeklyCount };
+// }

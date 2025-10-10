@@ -1,9 +1,9 @@
 'use server';
-import { unstable_cacheTag as cacheTag, revalidateTag } from 'next/cache';
+import { revalidateTag } from 'next/cache';
 import { logger } from '@/lib/logger';
 import { client } from '@/lib/rpc';
 import { FormData as CreateReservationSchema } from '../form-store';
-import { Reservation, ReservationDate, ReservationStatus } from '../types';
+import { Reservation, ReservationStatus } from '../types';
 
 export async function createReservation(formData: CreateReservationSchema) {
   const { error } = await client.reservations().createReservation({
@@ -56,7 +56,6 @@ export async function addFee(data: IForminput, id: bigint) {
 }
 
 export async function getReservation(id: string) {
-  'use cache';
   const { data, error } = await client
     .reservations()
     .getReservation({ id: BigInt(id) });
@@ -65,13 +64,10 @@ export async function getReservation(id: string) {
     return null;
   }
 
-  cacheTag('reservations', id);
-
   return data;
 }
 
 export async function getReservationCategory(id: string) {
-  'use cache';
   const { data, error } = await client
     .facilities()
     .getCategory({ id: BigInt(id) });
@@ -84,7 +80,6 @@ export async function getReservationCategory(id: string) {
 }
 
 export async function costReducer(id: string) {
-  'use cache';
   const { data, error } = await client
     .reservations()
     .costReducer({ id: BigInt(id) });
@@ -93,7 +88,6 @@ export async function costReducer(id: string) {
     logger.error('Error fetching cost reducer', { 'error ': error });
     return null;
   }
-  cacheTag('r-cost', id);
 
   return data;
 }
@@ -186,16 +180,4 @@ export async function AggregateChartData() {
     throw error;
   }
   return data;
-}
-
-export function range(reservationDates: ReservationDate[]): string {
-  let dateRange = '';
-  if (reservationDates.length > 1) {
-    dateRange = `${reservationDates[0]?.localStart} - ${reservationDates[reservationDates.length - 1]?.localEnd}`;
-  } else if (reservationDates.length === 1) {
-    dateRange = `${reservationDates[0]?.localStart}`;
-  } else {
-    dateRange = 'no upcoming dates';
-  }
-  return dateRange;
 }

@@ -26,10 +26,11 @@ tasks:
     dir: "{{.NEXT_ROOT}}"
     cmds:
       - bun --bun --env-file=../.env run typegen
-  clean:bun:
+  clean:
     desc: clean files
+    dir: "{{.NEXT_ROOT}}"
     cmds:
-      - cd app && bun run clean
+      - bun run clean
   lint:bun:
     desc: lint ts files
     dir: "{{.NEXT_ROOT}}"
@@ -93,3 +94,18 @@ tasks:
     dir: "{{.API_ROOT}}"
     cmds:
       - go {{.CLI_ARGS}}
+  build:bun:
+    desc: build bun app
+    dir: "{{.NEXT_ROOT}}"
+    cmds:
+      - bun --bun run build
+  build:go:
+    desc: build go app
+    dir: "{{.API_ROOT}}"
+    cmds:
+      - go build -o bin/main main.go
+  build:
+    desc: build all apps
+    tasks:
+      - build:bun
+      - build:go

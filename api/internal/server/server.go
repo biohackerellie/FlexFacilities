@@ -7,20 +7,45 @@ import (
 	reservationMux "api/internal/proto/reservation/reservationserviceconnect"
 	userMux "api/internal/proto/users/usersserviceconnect"
 	utilityMux "api/internal/proto/utility/utilityserviceconnect"
+	"connectrpc.com/connect"
+	"context"
+	"errors"
 	"log/slog"
 	"net/http"
 )
 
 func NewServer(handlers *handlers.Handlers, log *slog.Logger) *http.ServeMux {
 	api := http.NewServeMux()
-	api.Handle(facilityMux.NewFacilitiesServiceHandler(handlers.FacilityHandler))
-	api.Handle(reservationMux.NewReservationServiceHandler(handlers.ReservationHandler))
-	api.Handle(userMux.NewUsersServiceHandler(handlers.UserHandler))
-	api.Handle(authMux.NewAuthHandler(handlers.Auth))
-	api.Handle(utilityMux.NewUtilityServiceHandler(handlers.UtilityHandler))
-	mux := http.NewServeMux()
-	mux.HandleFunc("/auth/{provider}", handlers.Auth.BeginOauth)
-	mux.HandleFunc("/auth/{provider}/callback", handlers.Auth.AuthCallback)
-	mux.Handle("/rpc/", http.StripPrefix("/rpc", handlers.Auth.AuthMiddleware(api)))
-	return mux
+	panicInterceptor := connect.WithInterceptors(RecoveryInterceptor())
+
+	facilityPath, facilityHandler := facilityMux.NewFacilitiesServiceHandler(handlers.FacilityHandler)
+	api.Handle(facilityPath, handlers.Auth.AuthMiddleware(facilityHandler))
+
+	reservationPath, reservationHandler := reservationMux.NewReservationServiceHandler(handlers.ReservationHandler, panicInterceptor)
+	api.Handle(reservationPath, handlers.Auth.AuthMiddleware(reservationHandler))
+	userPath, userHandler := userMux.NewUsersServiceHandler(handlers.UserHandler, panicInterceptor)
+	api.Handle(userPath, handlers.Auth.AuthMiddleware(userHandler))
+	authPath, authHandler := authMux.NewAuthHandler(handlers.Auth, panicInterceptor)
+	api.Handle(authPath, handlers.Auth.AuthMiddleware(authHandler))
+	api.Handle(utilityMux.NewUtilityServiceHandler(handlers.UtilityHandler, panicInterceptor))
+	api.HandleFunc("/auth/{provider}", handlers.Auth.BeginOauth)
+	api.HandleFunc("/auth/{provider}/callback", handlers.Auth.AuthCallback)
+	return api
+}
+
+func RecoveryInterceptor() connect.UnaryInterceptorFunc {
+	interceptor := func(next connect.UnaryFunc) connect.UnaryFunc {
+		return connect.UnaryFunc(func(
+			ctx context.Context,
+			req connect.AnyRequest,
+		) (res connect.AnyResponse, err error) {
+			defer func() {
+				if r := recover(); r != nil {
+					err = connect.NewError(connect.CodeInternal, errors.New("recovered from server panic"))
+				}
+			}()
+			return next(ctx, req)
+		})
+	}
+	return connect.UnaryInterceptorFunc(interceptor)
 }

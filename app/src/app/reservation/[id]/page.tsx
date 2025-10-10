@@ -9,9 +9,10 @@ import { getUser } from '@/lib/actions/users';
 export default async function reservationPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const data = await getReservation(params.id);
+  const { id } = await params;
+  const data = await getReservation(id);
   if (!data) return notFound();
 
   const reservation = data.reservation!;

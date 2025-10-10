@@ -1,4 +1,3 @@
-import { unstable_cacheTag as cacheTag } from 'next/cache';
 import * as React from 'react';
 import { DataTable } from '@/components/ui/tables';
 import { logger } from '@/lib/logger';
@@ -8,7 +7,7 @@ import { columns } from './columns';
 import TableSkeleton from './skeleton';
 
 async function getData() {
-  'use cache';
+  // TODO: cache
   const { data, error } = await client.reservations().getAllPending({});
 
   if (error) {
@@ -18,7 +17,6 @@ async function getData() {
   if (!data) {
     return [] as FullResWithFacilityName[];
   }
-  cacheTag('requests');
   return data.data;
 }
 

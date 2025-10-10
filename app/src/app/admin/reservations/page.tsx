@@ -1,17 +1,15 @@
-import { unstable_cacheTag as cacheTag } from 'next/cache';
 import { DataTable } from '@/components/ui/tables';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { client } from '@/lib/rpc';
 import { columns } from './columns';
 
 async function getReservations() {
-  'use cache';
+  // TODO: cache
   const { data, error } = await client.reservations().allSortedReservations({});
   if (error) {
     console.error(error);
     return null;
   }
-  cacheTag('reservations');
   return data;
 }
 

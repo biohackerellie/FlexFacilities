@@ -1,26 +1,26 @@
 {
   "compilerOptions": {
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "target": "esnext",
-    "allowJs": true,
-    "resolveJsonModule": true,
-    "moduleDetection": "force",
-    "isolatedModules": true,
-    "incremental": true,
-    "disableSourceOfProjectReferenceRedirect": true,
-    "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "checkJs": true,
-    "moduleResolution": "Bundler",
-    "noEmit": true,
+    "baseUrl": ".",
     "lib": [
-      "esnext",
+      "ES2022",
       "dom",
       "dom.iterable"
     ],
-    "baseUrl": ".",
-    "jsx": "react-jsx",
+    "jsx": "preserve",
+    "target": "ES2022",
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "moduleResolution": "Bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "incremental": true,
+    "noUncheckedIndexedAccess": true,
+    "disableSourceOfProjectReferenceRedirect": true,
+    "checkJs": true,
     "paths": {
       "@/*": [
         "./src/*"
@@ -31,13 +31,12 @@
         "name": "next"
       }
     ],
-    "tsBuildInfoFile": ".turbo/.cache/tsbuildinfo.json",
     "module": "esnext"
   },
   "include": [
     ".",
     ".next/types/**/*.ts",
-    "vitest.config.ts"
+    ".next/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",

@@ -10,8 +10,8 @@ import { columns } from './columns';
 import NotificationList from './notificationList';
 import TableSkeleton from './skeleton';
 
+// TODO: cache
 async function getReservations(id: string) {
-  'use cache';
   const { data, error } = await client
     .reservations()
     .userReservations({ userId: id });
@@ -22,7 +22,6 @@ async function getReservations(id: string) {
 }
 
 async function getUser(id: string) {
-  'use cache';
   const { data, error } = await client.users().getUser({ id });
   if (error) {
     logger.error(error.message);
@@ -33,9 +32,9 @@ async function getUser(id: string) {
 export default async function accountPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const id = params.id;
+  const { id } = await params;
   const user = await getUser(id);
   if (!user) return notFound();
   const reservations = await getReservations(id);

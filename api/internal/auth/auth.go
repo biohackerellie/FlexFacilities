@@ -112,7 +112,9 @@ func (a *Auth) AuthCallback(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err := a.verifyState(r, providerName, state)
+
 	if err != nil {
+		a.logger.Error("failed to verify state", "error", err)
 		http.Error(w, "failed to verify request", http.StatusBadRequest)
 		return
 	}
@@ -183,6 +185,7 @@ func (a *Auth) BeginOauth(w http.ResponseWriter, r *http.Request) {
 	state := utils.GenerateRandomID()
 	scopes := r.URL.Query()["scope"]
 	authURL, err := provider.GetAuthURL(state, scopes...)
+	a.logger.Debug("BeginOauth", "auth_url", authURL)
 	if err != nil {
 		http.Error(w, "failed to get user info from auth provider", http.StatusBadRequest)
 		return
@@ -194,9 +197,9 @@ func (a *Auth) BeginOauth(w http.ResponseWriter, r *http.Request) {
 		HttpOnly: true,
 		Secure:   a.secure,
 		SameSite: http.SameSiteLaxMode,
+		Domain:   r.Host,
 		MaxAge:   600,
 	})
-	a.logger.Debug("BeginOauth", "auth_url", authURL)
 	http.Redirect(w, r, authURL, http.StatusTemporaryRedirect)
 }
 

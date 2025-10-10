@@ -32,12 +32,15 @@ func New(db *repository.DB, log *slog.Logger, config *config.Config) *Handlers {
 	userStore := repository.NewUserStore(db, log)
 	facilityStore := repository.NewFacilityStore(db, log)
 	reservationStore := repository.NewReservationStore(db, log)
+	brandingStore := repository.NewBrandingStore(db, log)
 
 	entraconfig := flexauth.Config{
 		ClientID:     config.EntraClientID,
 		ClientSecret: config.EntraClientSecret,
 		RedirectURL:  fmt.Sprintf("%s/api/auth/entra/callback", config.Host),
 	}
+	log.Debug("Entra config", "config", entraconfig)
+	log.Debug("Entra tenant", "tenant", config.EntraTenant)
 	entraProvider := entra.NewEntraProvider(entraconfig, config.EntraTenant)
 	authHandler := auth.NewAuth(userStore, log, config)
 	authHandler.RegisterProvider("entra", entraProvider)
@@ -50,7 +53,7 @@ func New(db *repository.DB, log *slog.Logger, config *config.Config) *Handlers {
 	userHandler := NewUserHandler(userStore, log)
 	facilityHandler := NewFacilityHandler(facilityStore, log, cal)
 	reservationHandler := NewReservationHandler(reservationStore, userStore, log, timezone)
-	utilityHandler := NewUtilityHandler(reservationStore, log, timezone)
+	utilityHandler := NewUtilityHandler(reservationStore, brandingStore, log, timezone)
 
 	return &Handlers{
 		UserHandler:        userHandler,

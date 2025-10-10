@@ -17,9 +17,9 @@ type UtilityHandler struct {
 	loc              *time.Location
 }
 
-func NewUtilityHandler(reservationStore ports.ReservationStore, log *slog.Logger, loc *time.Location) *UtilityHandler {
+func NewUtilityHandler(reservationStore ports.ReservationStore, brandingStore ports.BrandingStore, log *slog.Logger, loc *time.Location) *UtilityHandler {
 	log.With(slog.Group("Core_UtilityHandler", slog.String("name", "utility")))
-	return &UtilityHandler{reservationStore: reservationStore, log: log, loc: loc}
+	return &UtilityHandler{reservationStore: reservationStore, brandingStore: brandingStore, log: log, loc: loc}
 }
 
 func (u *UtilityHandler) AggregateChartData(ctx context.Context, req *connect.Request[service.AggregateChartDataRequest]) (*connect.Response[service.AggregateChartDataResponse], error) {
@@ -73,6 +73,9 @@ func (u *UtilityHandler) GetBranding(ctx context.Context, req *connect.Request[s
 	if err != nil {
 		u.log.Error("Could not get branding", "error", err)
 		return nil, err
+	}
+	if data == nil {
+		return connect.NewResponse(&service.Branding{}), nil
 	}
 	return connect.NewResponse(data.ToProto()), nil
 }

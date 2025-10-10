@@ -6,7 +6,7 @@ import { auth } from '@/lib/auth';
 import { client } from '@/lib/rpc';
 
 async function getData(id: string) {
-  'use cache';
+  //TODO: cache
   const { data, error } = await client
     .reservations()
     .userReservations({ userId: id });

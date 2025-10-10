@@ -1,4 +1,3 @@
-import { unstable_cacheTag as cacheTag } from 'next/cache';
 import { Suspense } from 'react';
 import { DataTable } from '@/components/ui/tables';
 import { logger } from '@/lib/logger';
@@ -7,7 +6,7 @@ import TableSkeleton from '../requests/skeleton';
 import { columns, type TableFacility } from './columns';
 
 async function getFacilities() {
-  'use cache';
+  // TODO: cache
   const { data, error } = await client.facilities().getAllFacilities({});
   if (error) {
     logger.error('error fetching facilities', { error: error });
@@ -36,7 +35,6 @@ async function getFacilities() {
       facilities.push(facility);
     }
   }
-  cacheTag('facilities');
   return facilities;
 }
 

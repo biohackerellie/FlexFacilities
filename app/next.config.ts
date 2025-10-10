@@ -8,16 +8,14 @@ import type { NextConfig } from "next";
 
 const nextConfig:NextConfig = {
   reactStrictMode: true,
+  output: "standalone",
   typedRoutes: true,
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: true
   },
-  eslint: { ignoreDuringBuilds: true },
+
   experimental: {
-    ppr: true,
     reactCompiler: true,
-    useCache: true,
-    cacheComponents: true
   },
   pageExtensions: ["js", "jsx", "ts", "tsx", "md", "mdx"],
 };

@@ -32,7 +32,7 @@ func (f *FacilityStore) Get(ctx context.Context, id int64) (*models.FullFacility
 		return nil, err
 	}
 
-	if err := f.db.SelectContext(ctx, &categories, "SELECT * FROM categories WHERE facility_id = $1", id); err != nil {
+	if err := f.db.SelectContext(ctx, &categories, "SELECT * FROM category WHERE facility_id = $1", id); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			categories = []models.Category{}
 		}
@@ -66,7 +66,7 @@ func (f *FacilityStore) Get(ctx context.Context, id int64) (*models.FullFacility
 	return facilityWithCategories, nil
 }
 
-const getAllBuildingsQuery = `SELECT * FROM buildings`
+const getAllBuildingsQuery = `SELECT * FROM building`
 
 func (f *FacilityStore) GetAllBuildings(ctx context.Context) ([]*models.Building, error) {
 	var buildings []*models.Building
@@ -92,7 +92,7 @@ func (f *FacilityStore) GetBuilding(ctx context.Context, id int64) (*models.Buil
 	return &building, nil
 }
 
-const allCategoriesInQuery = `SELECT * FROM categories WHERE facility_id IN (?)`
+const allCategoriesInQuery = `SELECT * FROM category WHERE facility_id IN (?)`
 const getAllFacilitiesQuery = `SELECT * FROM facility`
 
 func (f *FacilityStore) GetAll(ctx context.Context) ([]*models.BuildingWithFacilities, error) {
@@ -226,7 +226,7 @@ const createFacilityQuery = `INSERT INTO facility (
 	google_calendar_id
 	building_id
 ) VALUES (:name, :image_path, :capacity, :google_calendar_id, :building_id) RETURNING *`
-const createCategoryQuery = `INSERT INTO categories (
+const createCategoryQuery = `INSERT INTO category (
 	name,
 	description,
 	price,
@@ -350,7 +350,7 @@ func (f *FacilityStore) GetAllIn(ctx context.Context, ids []int64) ([]*models.Fa
 
 }
 
-const editCategoryQuery = ` UPDATE categories SET
+const editCategoryQuery = ` UPDATE category SET
 	name = :name,
 	description = :description,
 	price = :price
@@ -373,7 +373,7 @@ func (f *FacilityStore) EditCategory(ctx context.Context, category *models.Categ
 	return err
 }
 
-const getCategoryQuery = `SELECT * FROM categories WHERE id = $1 LIMIT 1`
+const getCategoryQuery = `SELECT * FROM category WHERE id = $1 LIMIT 1`
 
 func (f *FacilityStore) GetCategory(ctx context.Context, id int64) (*models.Category, error) {
 	var category models.Category

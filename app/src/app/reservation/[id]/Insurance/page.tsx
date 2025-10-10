@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import * as React from 'react';
 
 import { UploadFile } from '@/components/forms/uploadFile';
 import { Button } from '@/components/ui/button';
@@ -8,9 +9,10 @@ import { getReservation } from '@/lib/actions/reservations';
 export default async function insurancePage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const reservation = await getReservation(params.id);
+  const { id } = await params;
+  const reservation = await getReservation(id);
   if (!reservation) return notFound();
   let link = undefined;
   if (reservation.reservation!.insuranceLink) {
@@ -45,7 +47,9 @@ export default async function insurancePage({
                 )}
               </div>
               <div className="my-3">
-                <UploadFile params={params} />
+                <React.Suspense fallback={<h1>Loading...</h1>}>
+                  <UploadFile id={id} />
+                </React.Suspense>
               </div>
             </div>
           </div>

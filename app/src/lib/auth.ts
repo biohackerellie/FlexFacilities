@@ -1,6 +1,5 @@
 'use server';
 
-import { unstable_cacheTag as cacheTag } from 'next/cache';
 import { logger } from './logger';
 import { client } from './rpc';
 import { Session, UserRole } from './types';
@@ -16,10 +15,9 @@ function parseRole(role: string): UserRole {
   }
 }
 export async function auth() {
-  'use cache';
+  // TODO: cache
   const { data, error } = await client.auth().getSession({});
 
-  cacheTag('session');
   if (error) {
     logger.warn(error.message);
   }

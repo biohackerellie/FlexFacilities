@@ -9,14 +9,15 @@ import { client } from '@/lib/rpc';
 export default async function facilityEditForm({
   params,
 }: {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }) {
   const Forms = dynamic(() => import('./forms'));
+  const { id } = await params;
   const { data, error } = await client
     .facilities()
-    .getFacility({ id: BigInt(params.id) });
+    .getFacility({ id: BigInt(id) });
   if (!data || error) return notFound();
   const facility = data?.facility;
   if (!facility) return notFound();

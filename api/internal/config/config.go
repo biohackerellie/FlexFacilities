@@ -11,7 +11,7 @@ type Config struct {
 	AppEnv             string         `mapstructure:"APP_ENV"`
 	EntraClientID      string         `mapstructure:"ENTRA_CLIENT_ID"`
 	EntraClientSecret  string         `mapstructure:"ENTRA_CLIENT_SECRET"`
-	EntraTenant        string         `mapstructure:"ENTRA_TENANT"`
+	EntraTenant        string         `mapstructure:"ENTRA_TENANT_ID"`
 	GoogleClientID     string         `mapstructure:"GOOGLE_CLIENT_ID"`
 	GoogleClientSecret string         `mapstructure:"GOOGLE_CLIENT_SECRET"`
 	GoogleRefreshToken string         `mapstructure:"GOOGLE_REFRESH_TOKEN"`
@@ -33,7 +33,7 @@ func New(getenv func(string, string) string) (*Config, error) {
 		AppEnv:             getenv("APP_ENV", "development"),
 		EntraClientID:      getenv("ENTRA_CLIENT_ID", ""),
 		EntraClientSecret:  getenv("ENTRA_CLIENT_SECRET", ""),
-		EntraTenant:        getenv("ENTRA_TENANT", ""),
+		EntraTenant:        getenv("ENTRA_TENANT_ID", ""),
 		GoogleClientID:     getenv("GOOGLE_CLIENT_ID", ""),
 		GoogleClientSecret: getenv("GOOGLE_CLIENT_SECRET", ""),
 		GoogleRefreshToken: getenv("GOOGLE_REFRESH_TOKEN", ""),

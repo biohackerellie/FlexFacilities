@@ -11,8 +11,7 @@ interface TableUsers {
 }
 
 async function getUsers() {
-  'use cache';
-
+  // TODO: cache
   const { data, error } = await client.users().getUsers({});
 
   if (error) {

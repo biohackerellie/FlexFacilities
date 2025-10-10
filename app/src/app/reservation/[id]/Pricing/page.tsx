@@ -20,15 +20,15 @@ import { columns } from './columns';
 export default async function paymentPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
   const session = await auth();
   if (!session) {
     return notFound();
   }
   const isAdmin = session.userRole === 'ADMIN';
-
-  const data = await getReservation(params.id);
+  const { id } = await params;
+  const data = await getReservation(id);
   if (!data) return notFound();
   const reservation = data.reservation!;
   const category = await getReservationCategory(String(reservation.categoryId));
@@ -45,7 +45,7 @@ export default async function paymentPage({
     : [];
 
   let totalCost = 0.0;
-  const tcData = await costReducer(params.id);
+  const tcData = await costReducer(id);
   if (tcData) {
     totalCost = parseFloat(tcData.cost);
   }
@@ -67,7 +67,7 @@ export default async function paymentPage({
               <>
                 <div className="mb-2 border-b py-2">
                   <DataTable columns={adminColumns} data={mappedFees} />
-                  <EditPricing id={BigInt(params.id)} />
+                  <EditPricing id={BigInt(id)} />
                 </div>
                 <div className="flex justify-center border-b-2">
                   <Options facilitiesPromise={getFacilities()} />

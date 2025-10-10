@@ -714,14 +714,14 @@ type Aggregate struct {
 }
 
 type Branding struct {
-	ID                         int64  `db:"id" json:"id"`
-	OrganizationName           string `db:"organization_name" json:"organization_name"`
-	OrganizationLogoPath       string `db:"organization_logo_path" json:"organization_logo_path"`
-	OrganizationPrimaryColor   string `db:"organization_primary_color" json:"organization_primary_color"`
-	OrganizationSecondaryColor string `db:"organization_secondary_color" json:"organization_secondary_color"`
-	OrganizationUrl            string `db:"organization_url" json:"organization_url"`
-	OrganizationDescription    string `db:"organization_description" json:"organization_description"`
-	OrganizationEmail          string `db:"organization_email" json:"organization_email"`
+	ID                         int64   `db:"id" json:"id"`
+	OrganizationName           string  `db:"organization_name" json:"organization_name"`
+	OrganizationLogoPath       string  `db:"organization_logo_path" json:"organization_logo_path"`
+	OrganizationPrimaryColor   *string `db:"organization_primary_color" json:"organization_primary_color"`
+	OrganizationSecondaryColor *string `db:"organization_secondary_color" json:"organization_secondary_color"`
+	OrganizationUrl            *string `db:"organization_url" json:"organization_url"`
+	OrganizationDescription    *string `db:"organization_description" json:"organization_description"`
+	OrganizationEmail          *string `db:"organization_email" json:"organization_email"`
 }
 
 func (b *Branding) ToProto() *pbUtility.Branding {

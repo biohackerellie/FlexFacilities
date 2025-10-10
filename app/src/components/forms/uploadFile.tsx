@@ -6,7 +6,7 @@ import { useRef, useState } from 'react';
 
 import { Button } from '../ui/button';
 
-export function UploadFile({ params }: { params: { id: string } }) {
+export function UploadFile({ id }: { id: string }) {
   const inputFileRef = useRef<HTMLInputElement>(null);
 
   const [loading, setLoading] = useState(false);
@@ -22,7 +22,7 @@ export function UploadFile({ params }: { params: { id: string } }) {
     const file = inputFileRef.current.files[0]!;
 
     const response = await fetch(
-      `/api/files/upload?filename=${file.name}&id=${params.id}`,
+      `/api/files/upload?filename=${file.name}&id=${id}`,
       {
         method: 'POST',
         body: file,

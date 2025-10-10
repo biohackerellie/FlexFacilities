@@ -6,8 +6,6 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { auth } from '@/lib/auth';
 import { adminSideBar } from '@/lib/validators/constants';
 
-export const revalidate = 60;
-
 export default async function authLayout({
   children,
 }: {

@@ -1,4 +1,5 @@
 output.sql
+.cache
 www/
 .secrets.baseline
 dump.sql

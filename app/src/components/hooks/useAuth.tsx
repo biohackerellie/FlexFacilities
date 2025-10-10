@@ -14,7 +14,7 @@ export function AuthProvider({
   session,
 }: {
   children: React.ReactNode;
-  session: Session;
+  session: Session | null;
 }) {
   return (
     <AuthContext.Provider value={session}>{children}</AuthContext.Provider>

@@ -15,9 +15,10 @@ async function VerifyToken(token: string) {
 export default async function ResetPage({
   params,
 }: {
-  params: { token: string };
+  params: Promise<{ token: string }>;
 }) {
-  const email = await VerifyToken(params.token);
+  const { token } = await params;
+  const email = await VerifyToken(token);
   if (!email) {
     return notFound();
   }

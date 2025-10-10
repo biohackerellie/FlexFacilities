@@ -9,7 +9,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 // wrap default middleware with withAuth to provide NextAuth Token context to middleware
-export function middleware(req: NextRequest) {
+export function proxy(req: NextRequest) {
   const response = NextResponse.next();
   /**
    * A path was changed during some refactoring, and this

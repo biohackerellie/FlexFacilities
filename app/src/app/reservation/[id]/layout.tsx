@@ -4,26 +4,28 @@ import { Spinner } from '@/components/spinner';
 import { Separator } from '@/components/ui/separator';
 import { SidebarNav } from '@/components/ui/sidebar-nav';
 import { getFacility } from '@/lib/actions/facilities';
-import { getReservation, range } from '@/lib/actions/reservations';
+import { getReservation } from '@/lib/actions/reservations';
 import { getUser } from '@/lib/actions/users';
 import { auth } from '@/lib/auth';
 import type { SideBarType } from '@/lib/validators/constants';
 import AdminPanel from './_components/adminButtons';
 import { ReservationProvider } from './_components/context';
+import { ReservationDate } from '@/lib/types';
 
 export default async function reservationLayout({
   children,
   params,
 }: {
   children: React.ReactNode;
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
   const session = await auth();
   if (!session) {
     return notFound();
   }
   const isAdmin = session.userRole === 'ADMIN';
-  const data = await getReservation(params.id);
+  const { id: paramsId } = await params;
+  const data = await getReservation(paramsId);
   if (!data) return notFound();
   const reservation = data.reservation;
   if (!reservation) return notFound();
@@ -102,4 +104,16 @@ export default async function reservationLayout({
       </div>
     </ReservationProvider>
   );
+}
+
+function range(reservationDates: ReservationDate[]): string {
+  let dateRange = '';
+  if (reservationDates.length > 1) {
+    dateRange = `${reservationDates[0]?.localStart} - ${reservationDates[reservationDates.length - 1]?.localEnd}`;
+  } else if (reservationDates.length === 1) {
+    dateRange = `${reservationDates[0]?.localStart}`;
+  } else {
+    dateRange = 'no upcoming dates';
+  }
+  return dateRange;
 }

@@ -9,7 +9,7 @@ import { FacilityWithCategories } from '@/lib/types';
 import FacilityCard from './facility_card';
 
 async function getData() {
-  'use cache';
+  // TODO: cache
   const { data, error } = await client.facilities().getAllFacilities({});
   if (error) {
     logger.error(error.message);

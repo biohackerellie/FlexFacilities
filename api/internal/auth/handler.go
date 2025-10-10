@@ -107,6 +107,7 @@ func requiresAuth(procedure string) bool {
 func (s *Auth) AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		procedure, ok := InferProcedure(r.URL)
+		s.logger.Debug("AuthMiddleware", "procedure", procedure)
 		if !ok {
 			// Not a grpc request
 			next.ServeHTTP(w, r)
@@ -114,6 +115,7 @@ func (s *Auth) AuthMiddleware(next http.Handler) http.Handler {
 		}
 
 		if !requiresAuth(procedure) {
+			s.logger.Debug("AuthMiddleware", "procedure", procedure, "does not require auth")
 			next.ServeHTTP(w, r)
 			return
 		}
