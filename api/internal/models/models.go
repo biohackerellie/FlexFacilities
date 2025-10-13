@@ -230,11 +230,13 @@ func ToProtoCategories(categories []Category) []*pbFacilities.Category {
 }
 
 type Building struct {
-	ID               int64   `db:"id" json:"id"`
-	Name             string  `db:"name" json:"name"`
-	Address          string  `db:"address" json:"address"`
-	ImagePath        *string `db:"image_path" json:"image_path"`
-	GoogleCalendarID *string `db:"google_calendar_id" json:"google_calendar_id"`
+	ID               int64    `db:"id" json:"id"`
+	Name             string   `db:"name" json:"name"`
+	Address          string   `db:"address" json:"address"`
+	ImagePath        *string  `db:"image_path" json:"image_path"`
+	GoogleCalendarID *string  `db:"google_calendar_id" json:"google_calendar_id"`
+	Latitude         *float64 `db:"latitude" json:"latitude"`
+	Longitude        *float64 `db:"longitude" json:"longitude"`
 }
 
 func (b *Building) ToProto() *pbFacilities.Building {
@@ -244,6 +246,8 @@ func (b *Building) ToProto() *pbFacilities.Building {
 		Address:          b.Address,
 		ImagePath:        b.ImagePath,
 		GoogleCalendarId: b.GoogleCalendarID,
+		Latitude:         b.Latitude,
+		Longitude:        b.Longitude,
 	}
 }
 
@@ -254,12 +258,37 @@ func ToBuilding(building *pbFacilities.Building) Building {
 		Address:          building.Address,
 		ImagePath:        building.ImagePath,
 		GoogleCalendarID: building.GoogleCalendarId,
+		Latitude:         building.Latitude,
+		Longitude:        building.Longitude,
 	}
 }
 
 type BuildingWithFacilities struct {
 	Building
 	Facilities []*FacilityWithCategories `json:"facilities"`
+}
+type BuildingCoords struct {
+	ID        int64   `db:"id" json:"id"`
+	Name      string  `db:"name" json:"name"`
+	Latitude  float64 `db:"latitude" json:"latitude"`
+	Longitude float64 `db:"longitude" json:"longitude"`
+}
+
+func (b *BuildingCoords) ToProto() *pbFacilities.Coords {
+	return &pbFacilities.Coords{
+		Id:        b.ID,
+		Building:  b.Name,
+		Latitude:  b.Latitude,
+		Longitude: b.Longitude,
+	}
+}
+
+func CoordsToProto(buildingCoords []BuildingCoords) []*pbFacilities.Coords {
+	result := make([]*pbFacilities.Coords, 0, len(buildingCoords))
+	for _, buildingCoord := range buildingCoords {
+		result = append(result, buildingCoord.ToProto())
+	}
+	return result
 }
 
 func (b *BuildingWithFacilities) ToProto() *pbFacilities.BuildingWithFacilities {

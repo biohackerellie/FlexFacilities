@@ -232,3 +232,16 @@ func (a *FacilityHandler) GetCategory(ctx context.Context, req *connect.Request[
 	}
 	return connect.NewResponse(category.ToProto()), nil
 }
+
+func (a *FacilityHandler) GetAllCoords(ctx context.Context, req *connect.Request[service.GetAllCoordsRequest]) (*connect.Response[service.GetAllCoordsResponse], error) {
+	coords, err := a.facilityStore.GetBuildingCoordinates(ctx)
+	if err != nil {
+		return nil, err
+	}
+	if len(coords) == 0 {
+		return connect.NewResponse(&service.GetAllCoordsResponse{}), nil
+	}
+	return connect.NewResponse(&service.GetAllCoordsResponse{
+		Data: models.CoordsToProto(coords),
+	}), nil
+}

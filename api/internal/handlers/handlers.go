@@ -37,7 +37,7 @@ func New(db *repository.DB, log *slog.Logger, config *config.Config) *Handlers {
 	entraconfig := flexauth.Config{
 		ClientID:     config.EntraClientID,
 		ClientSecret: config.EntraClientSecret,
-		RedirectURL:  fmt.Sprintf("%s/api/auth/entra/callback", config.Host),
+		RedirectURL:  fmt.Sprintf("%s/api/auth/entra/callback", config.FrontendUrl),
 	}
 	log.Debug("Entra config", "config", entraconfig)
 	log.Debug("Entra tenant", "tenant", config.EntraTenant)

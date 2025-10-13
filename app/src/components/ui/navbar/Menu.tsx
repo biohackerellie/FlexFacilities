@@ -141,20 +141,12 @@ const MENUITEMS: MenuItem[] = [
 
 export default function NavMenu({ logo }: NavbarProps) {
   const session = useAuth();
-  let authorized = false;
-  let admin = false;
-  React.useEffect(() => {
-    if (!session) {
-      return;
-    }
-    authorized = true;
-    if (session.userRole === 'ADMIN') {
-      admin = true;
-    }
-  }, [session]);
+  const authorized = !!session;
+  const admin = session?.userRole === 'ADMIN';
+
   const isMobile = useIsMobile();
   return (
-    <section className="py-4">
+    <section className="p-2  border-b">
       <div className="@container">
         {!isMobile ? (
           <nav className="justify-between flex">

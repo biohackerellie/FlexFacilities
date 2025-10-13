@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"connectrpc.com/connect"
 	"github.com/biohackerellie/flexauth"
@@ -28,6 +29,7 @@ func (a *Auth) SetJWTCookie(w http.ResponseWriter, token string) {
 		HttpOnly: true,
 		Secure:   a.secure,
 		SameSite: http.SameSiteLaxMode,
+		Domain:   "",
 	})
 }
 
@@ -40,6 +42,7 @@ func (s *Auth) SetSessionCookie(w http.ResponseWriter, id string) {
 		Secure:   s.secure,
 		SameSite: http.SameSiteLaxMode,
 		MaxAge:   int(absoluteExpiration.Seconds()),
+		Domain:   "",
 	})
 }
 
@@ -75,6 +78,7 @@ func (s *Auth) SetCSRFCookie(w http.ResponseWriter) {
 		Secure:   s.secure, // true in prod
 		SameSite: http.SameSiteStrictMode,
 		MaxAge:   int(sessionLife.Seconds()),
+		Domain:   s.config.FrontendUrl,
 	}
 	http.SetCookie(w, cookie)
 }
@@ -120,9 +124,22 @@ func (s *Auth) AuthMiddleware(next http.Handler) http.Handler {
 			return
 		}
 		var user *models.Users
-		jwtVal, jwtOk := s.readCookie(r, fmt.Sprintf("%s%s", s.cookiePrefix, jwtCookieName))
-		sessVal, sessOk := s.readCookie(r, fmt.Sprintf("%s%s", s.cookiePrefix, sessionCookieName))
-		if !jwtOk || !sessOk {
+		s.logger.Debug("AuthMiddleware", "headers", r.Header)
+		authHeader := r.Header.Get("Authorization")
+		if authHeader == "" {
+			_ = s.ErrW.Write(w, r, connect.NewError(connect.CodeUnauthenticated, errors.New("unauthenticated")))
+			return
+		}
+		// get jwt token from auth header
+		// Bearer <token>
+		splitToken := strings.Split(authHeader, " ")
+		if len(splitToken) != 2 {
+			_ = s.ErrW.Write(w, r, connect.NewError(connect.CodeUnauthenticated, errors.New("unauthenticated")))
+			return
+		}
+		jwtVal := splitToken[1]
+		sessVal := r.Header.Get("Session")
+		if sessVal == "" {
 			_ = s.ErrW.Write(w, r, connect.NewError(connect.CodeUnauthenticated, errors.New("unauthenticated")))
 			return
 		}
@@ -184,6 +201,7 @@ func issueCookie(w http.ResponseWriter, name, val string, secure bool, maxAge in
 }
 
 func (s *Auth) GetSession(ctx context.Context, req *connect.Request[service.GetSessionRequest]) (*connect.Response[service.GetSessionResponse], error) {
+	s.logger.Debug("GetSession", "ctx", ctx.Value(utils.CtxKey("user")))
 	authCTX, ok := ctx.Value(utils.CtxKey("user")).(*AuthCTX)
 	if !ok || authCTX == nil {
 		return nil, connect.NewError(connect.CodeUnauthenticated, errors.New("unauthenticated"))

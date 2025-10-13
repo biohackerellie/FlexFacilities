@@ -39,6 +39,7 @@ type FacilityStore interface {
 	Delete(ctx context.Context, id int64) error
 	EditCategory(ctx context.Context, category *models.Category) error
 	GetCategory(ctx context.Context, id int64) (*models.Category, error)
+	GetBuildingCoordinates(ctx context.Context) ([]models.BuildingCoords, error)
 }
 
 type ReservationStore interface {

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-
+import { cookies } from 'next/headers';
 const API_URL = 'http://0.0.0.0:8080';
 
 async function handler(
@@ -15,8 +15,13 @@ async function handler(
 
   const rheaders = new Headers(request.headers);
   rheaders.delete('host');
+  const cookieStore = await cookies();
+
+  for (const cookie of cookieStore.getAll()) {
+    console.log('cookie: ', cookie);
+    rheaders.append('Cookie', `${cookie.name}=${cookie.value}`);
+  }
   try {
-    console.log('Proxying request to', url.toString());
     const response = await fetch(url.toString(), {
       method: request.method,
       headers: rheaders,
@@ -25,10 +30,23 @@ async function handler(
       redirect: 'manual',
     } as RequestInit);
 
-    const responseHeaders = new Headers(response.headers);
-    responseHeaders.delete('content-encoding');
-    responseHeaders.delete('content-length');
-    responseHeaders.delete('transfer-encoding');
+    const responseHeaders = new Headers();
+    for (const [key, value] of response.headers.entries()) {
+      if (
+        !['content-encoding', 'content-length', 'transfer-encoding'].includes(
+          key.toLowerCase(),
+        )
+      ) {
+        if (key.toLowerCase() === 'set-cookie') {
+          console.log('cookie: ', value);
+          cookieStore.set(
+            `${value.split(';')[0]?.split('=')[0] ?? ''}`,
+            `${value.split(';')[0]?.split('=')[1] ?? ''}`,
+          );
+        }
+        responseHeaders.append(key, value);
+      }
+    }
     if (response.status >= 300 && response.status < 400) {
       const location = response.headers.get('location');
       if (location) {

@@ -72,6 +72,9 @@ const (
 	// FacilitiesServiceGetCategoryProcedure is the fully-qualified name of the FacilitiesService's
 	// GetCategory RPC.
 	FacilitiesServiceGetCategoryProcedure = "/api.facilities.FacilitiesService/GetCategory"
+	// FacilitiesServiceGetAllCoordsProcedure is the fully-qualified name of the FacilitiesService's
+	// GetAllCoords RPC.
+	FacilitiesServiceGetAllCoordsProcedure = "/api.facilities.FacilitiesService/GetAllCoords"
 )
 
 // FacilitiesServiceClient is a client for the api.facilities.FacilitiesService service.
@@ -89,6 +92,7 @@ type FacilitiesServiceClient interface {
 	DeleteFacility(context.Context, *connect.Request[facilities.DeleteFacilityRequest]) (*connect.Response[facilities.DeleteFacilityResponse], error)
 	UpdateFacilityCategory(context.Context, *connect.Request[facilities.UpdateFacilityCategoryRequest]) (*connect.Response[facilities.Category], error)
 	GetCategory(context.Context, *connect.Request[facilities.GetCategoryRequest]) (*connect.Response[facilities.Category], error)
+	GetAllCoords(context.Context, *connect.Request[facilities.GetAllCoordsRequest]) (*connect.Response[facilities.GetAllCoordsResponse], error)
 }
 
 // NewFacilitiesServiceClient constructs a client for the api.facilities.FacilitiesService service.
@@ -189,6 +193,13 @@ func NewFacilitiesServiceClient(httpClient connect.HTTPClient, baseURL string, o
 			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 			connect.WithClientOptions(opts...),
 		),
+		getAllCoords: connect.NewClient[facilities.GetAllCoordsRequest, facilities.GetAllCoordsResponse](
+			httpClient,
+			baseURL+FacilitiesServiceGetAllCoordsProcedure,
+			connect.WithSchema(facilitiesServiceMethods.ByName("GetAllCoords")),
+			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -207,6 +218,7 @@ type facilitiesServiceClient struct {
 	deleteFacility         *connect.Client[facilities.DeleteFacilityRequest, facilities.DeleteFacilityResponse]
 	updateFacilityCategory *connect.Client[facilities.UpdateFacilityCategoryRequest, facilities.Category]
 	getCategory            *connect.Client[facilities.GetCategoryRequest, facilities.Category]
+	getAllCoords           *connect.Client[facilities.GetAllCoordsRequest, facilities.GetAllCoordsResponse]
 }
 
 // GetAllFacilities calls api.facilities.FacilitiesService.GetAllFacilities.
@@ -274,6 +286,11 @@ func (c *facilitiesServiceClient) GetCategory(ctx context.Context, req *connect.
 	return c.getCategory.CallUnary(ctx, req)
 }
 
+// GetAllCoords calls api.facilities.FacilitiesService.GetAllCoords.
+func (c *facilitiesServiceClient) GetAllCoords(ctx context.Context, req *connect.Request[facilities.GetAllCoordsRequest]) (*connect.Response[facilities.GetAllCoordsResponse], error) {
+	return c.getAllCoords.CallUnary(ctx, req)
+}
+
 // FacilitiesServiceHandler is an implementation of the api.facilities.FacilitiesService service.
 type FacilitiesServiceHandler interface {
 	GetAllFacilities(context.Context, *connect.Request[facilities.GetAllFacilitiesRequest]) (*connect.Response[facilities.GetAllFacilitiesResponse], error)
@@ -289,6 +306,7 @@ type FacilitiesServiceHandler interface {
 	DeleteFacility(context.Context, *connect.Request[facilities.DeleteFacilityRequest]) (*connect.Response[facilities.DeleteFacilityResponse], error)
 	UpdateFacilityCategory(context.Context, *connect.Request[facilities.UpdateFacilityCategoryRequest]) (*connect.Response[facilities.Category], error)
 	GetCategory(context.Context, *connect.Request[facilities.GetCategoryRequest]) (*connect.Response[facilities.Category], error)
+	GetAllCoords(context.Context, *connect.Request[facilities.GetAllCoordsRequest]) (*connect.Response[facilities.GetAllCoordsResponse], error)
 }
 
 // NewFacilitiesServiceHandler builds an HTTP handler from the service implementation. It returns
@@ -385,6 +403,13 @@ func NewFacilitiesServiceHandler(svc FacilitiesServiceHandler, opts ...connect.H
 		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 		connect.WithHandlerOptions(opts...),
 	)
+	facilitiesServiceGetAllCoordsHandler := connect.NewUnaryHandler(
+		FacilitiesServiceGetAllCoordsProcedure,
+		svc.GetAllCoords,
+		connect.WithSchema(facilitiesServiceMethods.ByName("GetAllCoords")),
+		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/api.facilities.FacilitiesService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case FacilitiesServiceGetAllFacilitiesProcedure:
@@ -413,6 +438,8 @@ func NewFacilitiesServiceHandler(svc FacilitiesServiceHandler, opts ...connect.H
 			facilitiesServiceUpdateFacilityCategoryHandler.ServeHTTP(w, r)
 		case FacilitiesServiceGetCategoryProcedure:
 			facilitiesServiceGetCategoryHandler.ServeHTTP(w, r)
+		case FacilitiesServiceGetAllCoordsProcedure:
+			facilitiesServiceGetAllCoordsHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -472,4 +499,8 @@ func (UnimplementedFacilitiesServiceHandler) UpdateFacilityCategory(context.Cont
 
 func (UnimplementedFacilitiesServiceHandler) GetCategory(context.Context, *connect.Request[facilities.GetCategoryRequest]) (*connect.Response[facilities.Category], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.facilities.FacilitiesService.GetCategory is not implemented"))
+}
+
+func (UnimplementedFacilitiesServiceHandler) GetAllCoords(context.Context, *connect.Request[facilities.GetAllCoordsRequest]) (*connect.Response[facilities.GetAllCoordsResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.facilities.FacilitiesService.GetAllCoords is not implemented"))
 }

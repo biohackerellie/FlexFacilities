@@ -55,8 +55,8 @@ const (
 	absoluteExpiration = 24 * 14 * time.Hour // 2 weeks
 	sessionLife        = 8 * time.Hour
 
-	jwtCookieName     = "%sflexauth_token"
-	sessionCookieName = "%sflexauth_session"
+	jwtCookieName     = "flexauth_token"
+	sessionCookieName = "flexauth_session"
 	TwoProviderName   = "email"
 )
 
@@ -121,13 +121,16 @@ func (a *Auth) AuthCallback(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
+	a.logger.Debug("exchange code for token", "code", code)
 	tokens, err := provider.ExchangeCodeForToken(ctx, code)
 	if err != nil {
-		http.Error(w, "failed to get user info from auth provider", http.StatusBadRequest)
+		a.logger.Error("failed to exchange code for token", "error", err)
+		http.Error(w, "failed to exchange code for token", http.StatusBadRequest)
 		return
 	}
 	userInfo, err := provider.GetUserInfo(ctx, tokens.AccessToken)
 	if err != nil {
+		a.logger.Error("failed to get user info from auth provider", "error", err)
 		http.Error(w, "failed to get user info from auth provider", http.StatusBadRequest)
 		return
 	}
@@ -140,12 +143,14 @@ func (a *Auth) AuthCallback(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if err != nil {
-		http.Error(w, "failed to get user info from auth provider", http.StatusBadRequest)
+		a.logger.Error("failed to get or create user from database", "error", err)
+		http.Error(w, "failed to get or create user from database", http.StatusBadRequest)
 		return
 	}
 	accessToken, err := createToken(user.ID, user.Name, user.Email, user.Provider, user.Role, a.key)
 	if err != nil {
-		http.Error(w, "failed to get user info from auth provider", http.StatusBadRequest)
+		a.logger.Error("failed to create token", "error", err)
+		http.Error(w, "failed to create token", http.StatusBadRequest)
 		return
 	}
 	a.SetJWTCookie(w, accessToken)
@@ -159,12 +164,12 @@ func (a *Auth) AuthCallback(w http.ResponseWriter, r *http.Request) {
 	}
 	_, err = a.db.CreateSession(r.Context(), session)
 	if err != nil {
-		http.Error(w, "failed to get user info from auth provider", http.StatusBadRequest)
+		http.Error(w, "failed to creaet session", http.StatusBadRequest)
 		return
 	}
 	a.SetSessionCookie(w, sessionID)
 
-	http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+	http.Redirect(w, r, a.config.FrontendUrl, http.StatusTemporaryRedirect)
 }
 
 func (a *Auth) BeginOauth(w http.ResponseWriter, r *http.Request) {
@@ -174,7 +179,6 @@ func (a *Auth) BeginOauth(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "failed to get user info from auth provider", http.StatusBadRequest)
 		return
 	}
-	a.logger.Debug("BeginOauth", "provider", providerName)
 	a.providerMu.RLock()
 	provider, exists := a.providers[providerName]
 	a.providerMu.RUnlock()
@@ -185,7 +189,6 @@ func (a *Auth) BeginOauth(w http.ResponseWriter, r *http.Request) {
 	state := utils.GenerateRandomID()
 	scopes := r.URL.Query()["scope"]
 	authURL, err := provider.GetAuthURL(state, scopes...)
-	a.logger.Debug("BeginOauth", "auth_url", authURL)
 	if err != nil {
 		http.Error(w, "failed to get user info from auth provider", http.StatusBadRequest)
 		return
@@ -197,7 +200,7 @@ func (a *Auth) BeginOauth(w http.ResponseWriter, r *http.Request) {
 		HttpOnly: true,
 		Secure:   a.secure,
 		SameSite: http.SameSiteLaxMode,
-		Domain:   r.Host,
+		Domain:   "",
 		MaxAge:   600,
 	})
 	http.Redirect(w, r, authURL, http.StatusTemporaryRedirect)
@@ -250,6 +253,7 @@ func generateEncryptionKey(secret, salt []byte) []byte {
 }
 func (a *Auth) verifyState(r *http.Request, providerName, receivedState string) error {
 	cookie, err := r.Cookie(fmt.Sprintf("oauth_state_%s", providerName))
+	a.logger.Debug("verifyState", "cookie", cookie, "receivedState", receivedState)
 	if err != nil {
 		return fmt.Errorf("state cookie not found")
 	}
@@ -263,9 +267,10 @@ func (a *Auth) verifyState(r *http.Request, providerName, receivedState string) 
 
 func (s *Auth) GetOrCreateAuthUser(ctx context.Context, authUser *models.Users) (*models.Users, error) {
 	var user *models.Users
-
+	s.logger.Debug("GetOrCreateAuthUser", "authUser", authUser)
 	user, err := s.db.Get(ctx, authUser.ID)
 	if err != nil {
+		s.logger.Error("couldnt find user by ID", "error", err)
 		return nil, err
 	}
 	if user == nil {

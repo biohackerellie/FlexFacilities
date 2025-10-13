@@ -8,7 +8,7 @@ import { Building, FacilityWithCategories } from '@/lib/types';
 
 export default function FacilityCard(
   facility: FacilityWithCategories,
-  building: Building,
+  building?: Building,
 ) {
   const idString = facility.facility?.id?.toString()!;
   if (!facility.facility) return null;
@@ -46,8 +46,10 @@ export default function FacilityCard(
           <p className="text-lg font-bold leading-none">
             {facility.facility?.name}
           </p>
-          <p className="text-lg font-medium leading-none">{building.address}</p>
-          <p className="text-lg font-medium leading-none">{building.name}</p>
+          <p className="text-lg font-medium leading-none">
+            {building?.address ?? ''}
+          </p>
+          <p className="text-lg font-medium leading-none">{building?.name}</p>
         </CardContent>
       </Link>
     </Card>

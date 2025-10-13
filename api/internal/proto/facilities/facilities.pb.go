@@ -128,6 +128,8 @@ type Building struct {
 	Address          string                 `protobuf:"bytes,3,opt,name=address,proto3" json:"address,omitempty"`
 	ImagePath        *string                `protobuf:"bytes,4,opt,name=image_path,json=imagePath,proto3,oneof" json:"image_path,omitempty"`
 	GoogleCalendarId *string                `protobuf:"bytes,5,opt,name=google_calendar_id,json=googleCalendarId,proto3,oneof" json:"google_calendar_id,omitempty"`
+	Latitude         *float64               `protobuf:"fixed64,6,opt,name=latitude,proto3,oneof" json:"latitude,omitempty"`
+	Longitude        *float64               `protobuf:"fixed64,7,opt,name=longitude,proto3,oneof" json:"longitude,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -195,6 +197,20 @@ func (x *Building) GetGoogleCalendarId() string {
 		return *x.GoogleCalendarId
 	}
 	return ""
+}
+
+func (x *Building) GetLatitude() float64 {
+	if x != nil && x.Latitude != nil {
+		return *x.Latitude
+	}
+	return 0
+}
+
+func (x *Building) GetLongitude() float64 {
+	if x != nil && x.Longitude != nil {
+		return *x.Longitude
+	}
+	return 0
 }
 
 type BuildingWithFacilities struct {
@@ -521,6 +537,154 @@ func (x *Event) GetTitle() string {
 	return ""
 }
 
+type Coords struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Building      string                 `protobuf:"bytes,2,opt,name=building,proto3" json:"building,omitempty"`
+	Latitude      float64                `protobuf:"fixed64,3,opt,name=latitude,proto3" json:"latitude,omitempty"`
+	Longitude     float64                `protobuf:"fixed64,4,opt,name=longitude,proto3" json:"longitude,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Coords) Reset() {
+	*x = Coords{}
+	mi := &file_proto_facilities_facilities_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Coords) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Coords) ProtoMessage() {}
+
+func (x *Coords) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_facilities_facilities_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Coords.ProtoReflect.Descriptor instead.
+func (*Coords) Descriptor() ([]byte, []int) {
+	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *Coords) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *Coords) GetBuilding() string {
+	if x != nil {
+		return x.Building
+	}
+	return ""
+}
+
+func (x *Coords) GetLatitude() float64 {
+	if x != nil {
+		return x.Latitude
+	}
+	return 0
+}
+
+func (x *Coords) GetLongitude() float64 {
+	if x != nil {
+		return x.Longitude
+	}
+	return 0
+}
+
+type GetAllCoordsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetAllCoordsRequest) Reset() {
+	*x = GetAllCoordsRequest{}
+	mi := &file_proto_facilities_facilities_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetAllCoordsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetAllCoordsRequest) ProtoMessage() {}
+
+func (x *GetAllCoordsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_facilities_facilities_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetAllCoordsRequest.ProtoReflect.Descriptor instead.
+func (*GetAllCoordsRequest) Descriptor() ([]byte, []int) {
+	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{8}
+}
+
+type GetAllCoordsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Data          []*Coords              `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetAllCoordsResponse) Reset() {
+	*x = GetAllCoordsResponse{}
+	mi := &file_proto_facilities_facilities_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetAllCoordsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetAllCoordsResponse) ProtoMessage() {}
+
+func (x *GetAllCoordsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_facilities_facilities_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetAllCoordsResponse.ProtoReflect.Descriptor instead.
+func (*GetAllCoordsResponse) Descriptor() ([]byte, []int) {
+	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *GetAllCoordsResponse) GetData() []*Coords {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
 type GetCategoryRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -530,7 +694,7 @@ type GetCategoryRequest struct {
 
 func (x *GetCategoryRequest) Reset() {
 	*x = GetCategoryRequest{}
-	mi := &file_proto_facilities_facilities_proto_msgTypes[7]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -542,7 +706,7 @@ func (x *GetCategoryRequest) String() string {
 func (*GetCategoryRequest) ProtoMessage() {}
 
 func (x *GetCategoryRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_facilities_facilities_proto_msgTypes[7]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -555,7 +719,7 @@ func (x *GetCategoryRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCategoryRequest.ProtoReflect.Descriptor instead.
 func (*GetCategoryRequest) Descriptor() ([]byte, []int) {
-	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{7}
+	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *GetCategoryRequest) GetId() int64 {
@@ -574,7 +738,7 @@ type GetEventsByFacilityRequest struct {
 
 func (x *GetEventsByFacilityRequest) Reset() {
 	*x = GetEventsByFacilityRequest{}
-	mi := &file_proto_facilities_facilities_proto_msgTypes[8]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -586,7 +750,7 @@ func (x *GetEventsByFacilityRequest) String() string {
 func (*GetEventsByFacilityRequest) ProtoMessage() {}
 
 func (x *GetEventsByFacilityRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_facilities_facilities_proto_msgTypes[8]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -599,7 +763,7 @@ func (x *GetEventsByFacilityRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetEventsByFacilityRequest.ProtoReflect.Descriptor instead.
 func (*GetEventsByFacilityRequest) Descriptor() ([]byte, []int) {
-	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{8}
+	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *GetEventsByFacilityRequest) GetId() int64 {
@@ -618,7 +782,7 @@ type GetEventsByFacilityResponse struct {
 
 func (x *GetEventsByFacilityResponse) Reset() {
 	*x = GetEventsByFacilityResponse{}
-	mi := &file_proto_facilities_facilities_proto_msgTypes[9]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -630,7 +794,7 @@ func (x *GetEventsByFacilityResponse) String() string {
 func (*GetEventsByFacilityResponse) ProtoMessage() {}
 
 func (x *GetEventsByFacilityResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_facilities_facilities_proto_msgTypes[9]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -643,7 +807,7 @@ func (x *GetEventsByFacilityResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetEventsByFacilityResponse.ProtoReflect.Descriptor instead.
 func (*GetEventsByFacilityResponse) Descriptor() ([]byte, []int) {
-	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{9}
+	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *GetEventsByFacilityResponse) GetEvents() []*Event {
@@ -662,7 +826,7 @@ type GetEventsByBuildingRequest struct {
 
 func (x *GetEventsByBuildingRequest) Reset() {
 	*x = GetEventsByBuildingRequest{}
-	mi := &file_proto_facilities_facilities_proto_msgTypes[10]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -674,7 +838,7 @@ func (x *GetEventsByBuildingRequest) String() string {
 func (*GetEventsByBuildingRequest) ProtoMessage() {}
 
 func (x *GetEventsByBuildingRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_facilities_facilities_proto_msgTypes[10]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -687,7 +851,7 @@ func (x *GetEventsByBuildingRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetEventsByBuildingRequest.ProtoReflect.Descriptor instead.
 func (*GetEventsByBuildingRequest) Descriptor() ([]byte, []int) {
-	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{10}
+	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *GetEventsByBuildingRequest) GetId() int64 {
@@ -706,7 +870,7 @@ type GetEventsByBuildingResponse struct {
 
 func (x *GetEventsByBuildingResponse) Reset() {
 	*x = GetEventsByBuildingResponse{}
-	mi := &file_proto_facilities_facilities_proto_msgTypes[11]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -718,7 +882,7 @@ func (x *GetEventsByBuildingResponse) String() string {
 func (*GetEventsByBuildingResponse) ProtoMessage() {}
 
 func (x *GetEventsByBuildingResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_facilities_facilities_proto_msgTypes[11]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -731,7 +895,7 @@ func (x *GetEventsByBuildingResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetEventsByBuildingResponse.ProtoReflect.Descriptor instead.
 func (*GetEventsByBuildingResponse) Descriptor() ([]byte, []int) {
-	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{11}
+	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *GetEventsByBuildingResponse) GetEvents() []*Event {
@@ -749,7 +913,7 @@ type GetAllEventsRequest struct {
 
 func (x *GetAllEventsRequest) Reset() {
 	*x = GetAllEventsRequest{}
-	mi := &file_proto_facilities_facilities_proto_msgTypes[12]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -761,7 +925,7 @@ func (x *GetAllEventsRequest) String() string {
 func (*GetAllEventsRequest) ProtoMessage() {}
 
 func (x *GetAllEventsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_facilities_facilities_proto_msgTypes[12]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -774,7 +938,7 @@ func (x *GetAllEventsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetAllEventsRequest.ProtoReflect.Descriptor instead.
 func (*GetAllEventsRequest) Descriptor() ([]byte, []int) {
-	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{12}
+	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{15}
 }
 
 type GetAllEventsResponse struct {
@@ -786,7 +950,7 @@ type GetAllEventsResponse struct {
 
 func (x *GetAllEventsResponse) Reset() {
 	*x = GetAllEventsResponse{}
-	mi := &file_proto_facilities_facilities_proto_msgTypes[13]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -798,7 +962,7 @@ func (x *GetAllEventsResponse) String() string {
 func (*GetAllEventsResponse) ProtoMessage() {}
 
 func (x *GetAllEventsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_facilities_facilities_proto_msgTypes[13]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -811,7 +975,7 @@ func (x *GetAllEventsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetAllEventsResponse.ProtoReflect.Descriptor instead.
 func (*GetAllEventsResponse) Descriptor() ([]byte, []int) {
-	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{13}
+	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *GetAllEventsResponse) GetData() []*BuildingWithEvents {
@@ -829,7 +993,7 @@ type GetAllBuildingsRequest struct {
 
 func (x *GetAllBuildingsRequest) Reset() {
 	*x = GetAllBuildingsRequest{}
-	mi := &file_proto_facilities_facilities_proto_msgTypes[14]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -841,7 +1005,7 @@ func (x *GetAllBuildingsRequest) String() string {
 func (*GetAllBuildingsRequest) ProtoMessage() {}
 
 func (x *GetAllBuildingsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_facilities_facilities_proto_msgTypes[14]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -854,7 +1018,7 @@ func (x *GetAllBuildingsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetAllBuildingsRequest.ProtoReflect.Descriptor instead.
 func (*GetAllBuildingsRequest) Descriptor() ([]byte, []int) {
-	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{14}
+	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{17}
 }
 
 type GetAllBuildingsResponse struct {
@@ -866,7 +1030,7 @@ type GetAllBuildingsResponse struct {
 
 func (x *GetAllBuildingsResponse) Reset() {
 	*x = GetAllBuildingsResponse{}
-	mi := &file_proto_facilities_facilities_proto_msgTypes[15]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -878,7 +1042,7 @@ func (x *GetAllBuildingsResponse) String() string {
 func (*GetAllBuildingsResponse) ProtoMessage() {}
 
 func (x *GetAllBuildingsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_facilities_facilities_proto_msgTypes[15]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -891,7 +1055,7 @@ func (x *GetAllBuildingsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetAllBuildingsResponse.ProtoReflect.Descriptor instead.
 func (*GetAllBuildingsResponse) Descriptor() ([]byte, []int) {
-	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{15}
+	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *GetAllBuildingsResponse) GetBuildings() []*Building {
@@ -909,7 +1073,7 @@ type GetAllFacilitiesRequest struct {
 
 func (x *GetAllFacilitiesRequest) Reset() {
 	*x = GetAllFacilitiesRequest{}
-	mi := &file_proto_facilities_facilities_proto_msgTypes[16]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -921,7 +1085,7 @@ func (x *GetAllFacilitiesRequest) String() string {
 func (*GetAllFacilitiesRequest) ProtoMessage() {}
 
 func (x *GetAllFacilitiesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_facilities_facilities_proto_msgTypes[16]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -934,7 +1098,7 @@ func (x *GetAllFacilitiesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetAllFacilitiesRequest.ProtoReflect.Descriptor instead.
 func (*GetAllFacilitiesRequest) Descriptor() ([]byte, []int) {
-	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{16}
+	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{19}
 }
 
 type GetFacilityRequest struct {
@@ -946,7 +1110,7 @@ type GetFacilityRequest struct {
 
 func (x *GetFacilityRequest) Reset() {
 	*x = GetFacilityRequest{}
-	mi := &file_proto_facilities_facilities_proto_msgTypes[17]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -958,7 +1122,7 @@ func (x *GetFacilityRequest) String() string {
 func (*GetFacilityRequest) ProtoMessage() {}
 
 func (x *GetFacilityRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_facilities_facilities_proto_msgTypes[17]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -971,7 +1135,7 @@ func (x *GetFacilityRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetFacilityRequest.ProtoReflect.Descriptor instead.
 func (*GetFacilityRequest) Descriptor() ([]byte, []int) {
-	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{17}
+	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *GetFacilityRequest) GetId() int64 {
@@ -990,7 +1154,7 @@ type GetFacilityCategoriesRequest struct {
 
 func (x *GetFacilityCategoriesRequest) Reset() {
 	*x = GetFacilityCategoriesRequest{}
-	mi := &file_proto_facilities_facilities_proto_msgTypes[18]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1002,7 +1166,7 @@ func (x *GetFacilityCategoriesRequest) String() string {
 func (*GetFacilityCategoriesRequest) ProtoMessage() {}
 
 func (x *GetFacilityCategoriesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_facilities_facilities_proto_msgTypes[18]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1015,7 +1179,7 @@ func (x *GetFacilityCategoriesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetFacilityCategoriesRequest.ProtoReflect.Descriptor instead.
 func (*GetFacilityCategoriesRequest) Descriptor() ([]byte, []int) {
-	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{18}
+	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *GetFacilityCategoriesRequest) GetId() int64 {
@@ -1034,7 +1198,7 @@ type GetBuildingFacilitiesRequest struct {
 
 func (x *GetBuildingFacilitiesRequest) Reset() {
 	*x = GetBuildingFacilitiesRequest{}
-	mi := &file_proto_facilities_facilities_proto_msgTypes[19]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1046,7 +1210,7 @@ func (x *GetBuildingFacilitiesRequest) String() string {
 func (*GetBuildingFacilitiesRequest) ProtoMessage() {}
 
 func (x *GetBuildingFacilitiesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_facilities_facilities_proto_msgTypes[19]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1059,7 +1223,7 @@ func (x *GetBuildingFacilitiesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetBuildingFacilitiesRequest.ProtoReflect.Descriptor instead.
 func (*GetBuildingFacilitiesRequest) Descriptor() ([]byte, []int) {
-	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{19}
+	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *GetBuildingFacilitiesRequest) GetBuildingId() int64 {
@@ -1078,7 +1242,7 @@ type GetAllFacilitiesResponse struct {
 
 func (x *GetAllFacilitiesResponse) Reset() {
 	*x = GetAllFacilitiesResponse{}
-	mi := &file_proto_facilities_facilities_proto_msgTypes[20]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1090,7 +1254,7 @@ func (x *GetAllFacilitiesResponse) String() string {
 func (*GetAllFacilitiesResponse) ProtoMessage() {}
 
 func (x *GetAllFacilitiesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_facilities_facilities_proto_msgTypes[20]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1103,7 +1267,7 @@ func (x *GetAllFacilitiesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetAllFacilitiesResponse.ProtoReflect.Descriptor instead.
 func (*GetAllFacilitiesResponse) Descriptor() ([]byte, []int) {
-	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{20}
+	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *GetAllFacilitiesResponse) GetBuildings() []*BuildingWithFacilities {
@@ -1122,7 +1286,7 @@ type GetFacilityCategoriesResponse struct {
 
 func (x *GetFacilityCategoriesResponse) Reset() {
 	*x = GetFacilityCategoriesResponse{}
-	mi := &file_proto_facilities_facilities_proto_msgTypes[21]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1134,7 +1298,7 @@ func (x *GetFacilityCategoriesResponse) String() string {
 func (*GetFacilityCategoriesResponse) ProtoMessage() {}
 
 func (x *GetFacilityCategoriesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_facilities_facilities_proto_msgTypes[21]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1147,7 +1311,7 @@ func (x *GetFacilityCategoriesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetFacilityCategoriesResponse.ProtoReflect.Descriptor instead.
 func (*GetFacilityCategoriesResponse) Descriptor() ([]byte, []int) {
-	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{21}
+	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *GetFacilityCategoriesResponse) GetCategories() []*Category {
@@ -1166,7 +1330,7 @@ type GetBuildingFacilitiesResponse struct {
 
 func (x *GetBuildingFacilitiesResponse) Reset() {
 	*x = GetBuildingFacilitiesResponse{}
-	mi := &file_proto_facilities_facilities_proto_msgTypes[22]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1178,7 +1342,7 @@ func (x *GetBuildingFacilitiesResponse) String() string {
 func (*GetBuildingFacilitiesResponse) ProtoMessage() {}
 
 func (x *GetBuildingFacilitiesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_facilities_facilities_proto_msgTypes[22]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1191,7 +1355,7 @@ func (x *GetBuildingFacilitiesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetBuildingFacilitiesResponse.ProtoReflect.Descriptor instead.
 func (*GetBuildingFacilitiesResponse) Descriptor() ([]byte, []int) {
-	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{22}
+	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *GetBuildingFacilitiesResponse) GetBuilding() *BuildingWithFacilities {
@@ -1211,7 +1375,7 @@ type CreateFacilityRequest struct {
 
 func (x *CreateFacilityRequest) Reset() {
 	*x = CreateFacilityRequest{}
-	mi := &file_proto_facilities_facilities_proto_msgTypes[23]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1223,7 +1387,7 @@ func (x *CreateFacilityRequest) String() string {
 func (*CreateFacilityRequest) ProtoMessage() {}
 
 func (x *CreateFacilityRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_facilities_facilities_proto_msgTypes[23]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1236,7 +1400,7 @@ func (x *CreateFacilityRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateFacilityRequest.ProtoReflect.Descriptor instead.
 func (*CreateFacilityRequest) Descriptor() ([]byte, []int) {
-	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{23}
+	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *CreateFacilityRequest) GetFacility() *Facility {
@@ -1263,7 +1427,7 @@ type UpdateFacilityRequest struct {
 
 func (x *UpdateFacilityRequest) Reset() {
 	*x = UpdateFacilityRequest{}
-	mi := &file_proto_facilities_facilities_proto_msgTypes[24]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1275,7 +1439,7 @@ func (x *UpdateFacilityRequest) String() string {
 func (*UpdateFacilityRequest) ProtoMessage() {}
 
 func (x *UpdateFacilityRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_facilities_facilities_proto_msgTypes[24]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1288,7 +1452,7 @@ func (x *UpdateFacilityRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateFacilityRequest.ProtoReflect.Descriptor instead.
 func (*UpdateFacilityRequest) Descriptor() ([]byte, []int) {
-	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{24}
+	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *UpdateFacilityRequest) GetFacility() *Facility {
@@ -1314,7 +1478,7 @@ type DeleteFacilityRequest struct {
 
 func (x *DeleteFacilityRequest) Reset() {
 	*x = DeleteFacilityRequest{}
-	mi := &file_proto_facilities_facilities_proto_msgTypes[25]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1326,7 +1490,7 @@ func (x *DeleteFacilityRequest) String() string {
 func (*DeleteFacilityRequest) ProtoMessage() {}
 
 func (x *DeleteFacilityRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_facilities_facilities_proto_msgTypes[25]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1339,7 +1503,7 @@ func (x *DeleteFacilityRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteFacilityRequest.ProtoReflect.Descriptor instead.
 func (*DeleteFacilityRequest) Descriptor() ([]byte, []int) {
-	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{25}
+	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{28}
 }
 
 func (x *DeleteFacilityRequest) GetId() int64 {
@@ -1357,7 +1521,7 @@ type DeleteFacilityResponse struct {
 
 func (x *DeleteFacilityResponse) Reset() {
 	*x = DeleteFacilityResponse{}
-	mi := &file_proto_facilities_facilities_proto_msgTypes[26]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[29]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1369,7 +1533,7 @@ func (x *DeleteFacilityResponse) String() string {
 func (*DeleteFacilityResponse) ProtoMessage() {}
 
 func (x *DeleteFacilityResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_facilities_facilities_proto_msgTypes[26]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[29]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1382,7 +1546,7 @@ func (x *DeleteFacilityResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteFacilityResponse.ProtoReflect.Descriptor instead.
 func (*DeleteFacilityResponse) Descriptor() ([]byte, []int) {
-	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{26}
+	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{29}
 }
 
 type UpdateFacilityCategoryRequest struct {
@@ -1394,7 +1558,7 @@ type UpdateFacilityCategoryRequest struct {
 
 func (x *UpdateFacilityCategoryRequest) Reset() {
 	*x = UpdateFacilityCategoryRequest{}
-	mi := &file_proto_facilities_facilities_proto_msgTypes[27]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[30]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1406,7 +1570,7 @@ func (x *UpdateFacilityCategoryRequest) String() string {
 func (*UpdateFacilityCategoryRequest) ProtoMessage() {}
 
 func (x *UpdateFacilityCategoryRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_facilities_facilities_proto_msgTypes[27]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[30]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1419,7 +1583,7 @@ func (x *UpdateFacilityCategoryRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateFacilityCategoryRequest.ProtoReflect.Descriptor instead.
 func (*UpdateFacilityCategoryRequest) Descriptor() ([]byte, []int) {
-	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{27}
+	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{30}
 }
 
 func (x *UpdateFacilityCategoryRequest) GetCategory() *Category {
@@ -1437,7 +1601,7 @@ type CreateFacilityResponse struct {
 
 func (x *CreateFacilityResponse) Reset() {
 	*x = CreateFacilityResponse{}
-	mi := &file_proto_facilities_facilities_proto_msgTypes[28]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[31]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1449,7 +1613,7 @@ func (x *CreateFacilityResponse) String() string {
 func (*CreateFacilityResponse) ProtoMessage() {}
 
 func (x *CreateFacilityResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_facilities_facilities_proto_msgTypes[28]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[31]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1462,7 +1626,7 @@ func (x *CreateFacilityResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateFacilityResponse.ProtoReflect.Descriptor instead.
 func (*CreateFacilityResponse) Descriptor() ([]byte, []int) {
-	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{28}
+	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{31}
 }
 
 type UpdateFacilityResponse struct {
@@ -1473,7 +1637,7 @@ type UpdateFacilityResponse struct {
 
 func (x *UpdateFacilityResponse) Reset() {
 	*x = UpdateFacilityResponse{}
-	mi := &file_proto_facilities_facilities_proto_msgTypes[29]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[32]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1485,7 +1649,7 @@ func (x *UpdateFacilityResponse) String() string {
 func (*UpdateFacilityResponse) ProtoMessage() {}
 
 func (x *UpdateFacilityResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_facilities_facilities_proto_msgTypes[29]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[32]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1498,7 +1662,7 @@ func (x *UpdateFacilityResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateFacilityResponse.ProtoReflect.Descriptor instead.
 func (*UpdateFacilityResponse) Descriptor() ([]byte, []int) {
-	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{29}
+	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{32}
 }
 
 type FullFacility struct {
@@ -1513,7 +1677,7 @@ type FullFacility struct {
 
 func (x *FullFacility) Reset() {
 	*x = FullFacility{}
-	mi := &file_proto_facilities_facilities_proto_msgTypes[30]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[33]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1525,7 +1689,7 @@ func (x *FullFacility) String() string {
 func (*FullFacility) ProtoMessage() {}
 
 func (x *FullFacility) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_facilities_facilities_proto_msgTypes[30]
+	mi := &file_proto_facilities_facilities_proto_msgTypes[33]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1538,7 +1702,7 @@ func (x *FullFacility) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FullFacility.ProtoReflect.Descriptor instead.
 func (*FullFacility) Descriptor() ([]byte, []int) {
-	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{30}
+	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{33}
 }
 
 func (x *FullFacility) GetFacility() *Facility {
@@ -1589,16 +1753,21 @@ const file_proto_facilities_facilities_proto_rawDesc = "" +
 	"buildingId\x88\x01\x01B\r\n" +
 	"\v_image_pathB\v\n" +
 	"\t_capacityB\x0e\n" +
-	"\f_building_id\"\xc5\x01\n" +
+	"\f_building_id\"\xa4\x02\n" +
 	"\bBuilding\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x18\n" +
 	"\aaddress\x18\x03 \x01(\tR\aaddress\x12\"\n" +
 	"\n" +
 	"image_path\x18\x04 \x01(\tH\x00R\timagePath\x88\x01\x01\x121\n" +
-	"\x12google_calendar_id\x18\x05 \x01(\tH\x01R\x10googleCalendarId\x88\x01\x01B\r\n" +
+	"\x12google_calendar_id\x18\x05 \x01(\tH\x01R\x10googleCalendarId\x88\x01\x01\x12\x1f\n" +
+	"\blatitude\x18\x06 \x01(\x01H\x02R\blatitude\x88\x01\x01\x12!\n" +
+	"\tlongitude\x18\a \x01(\x01H\x03R\tlongitude\x88\x01\x01B\r\n" +
 	"\v_image_pathB\x15\n" +
-	"\x13_google_calendar_id\"\x96\x01\n" +
+	"\x13_google_calendar_idB\v\n" +
+	"\t_latitudeB\f\n" +
+	"\n" +
+	"_longitude\"\x96\x01\n" +
 	"\x16BuildingWithFacilities\x124\n" +
 	"\bbuilding\x18\x01 \x01(\v2\x18.api.facilities.BuildingR\bbuilding\x12F\n" +
 	"\n" +
@@ -1626,7 +1795,15 @@ const file_proto_facilities_facilities_proto_rawDesc = "" +
 	"\x05start\x18\x04 \x01(\tR\x05start\x12\x10\n" +
 	"\x03end\x18\x05 \x01(\tR\x03end\x12\x1b\n" +
 	"\thtml_link\x18\a \x01(\tR\bhtmlLink\x12\x14\n" +
-	"\x05title\x18\b \x01(\tR\x05title\"$\n" +
+	"\x05title\x18\b \x01(\tR\x05title\"n\n" +
+	"\x06coords\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1a\n" +
+	"\bbuilding\x18\x02 \x01(\tR\bbuilding\x12\x1a\n" +
+	"\blatitude\x18\x03 \x01(\x01R\blatitude\x12\x1c\n" +
+	"\tlongitude\x18\x04 \x01(\x01R\tlongitude\"\x15\n" +
+	"\x13GetAllCoordsRequest\"B\n" +
+	"\x14GetAllCoordsResponse\x12*\n" +
+	"\x04data\x18\x01 \x03(\v2\x16.api.facilities.coordsR\x04data\"$\n" +
 	"\x12GetCategoryRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x03R\x02id\",\n" +
 	"\x1aGetEventsByFacilityRequest\x12\x0e\n" +
@@ -1682,8 +1859,7 @@ const file_proto_facilities_facilities_proto_rawDesc = "" +
 	"categories\x18\x02 \x03(\v2\x18.api.facilities.CategoryR\n" +
 	"categories\x12%\n" +
 	"\x0ereservation_id\x18\x03 \x03(\x03R\rreservationId\x124\n" +
-	"\bbuilding\x18\x04 \x01(\v2\x18.api.facilities.BuildingR\bbuilding2\xd6\n" +
-	"\n" +
+	"\bbuilding\x18\x04 \x01(\v2\x18.api.facilities.BuildingR\bbuilding2\xb6\v\n" +
 	"\x11FacilitiesService\x12j\n" +
 	"\x10GetAllFacilities\x12'.api.facilities.GetAllFacilitiesRequest\x1a(.api.facilities.GetAllFacilitiesResponse\"\x03\x90\x02\x01\x12g\n" +
 	"\x0fGetAllBuildings\x12&.api.facilities.GetAllBuildingsRequest\x1a'.api.facilities.GetAllBuildingsResponse\"\x03\x90\x02\x01\x12T\n" +
@@ -1697,7 +1873,8 @@ const file_proto_facilities_facilities_proto_rawDesc = "" +
 	"\x0eUpdateFacility\x12%.api.facilities.UpdateFacilityRequest\x1a&.api.facilities.UpdateFacilityResponse\x12_\n" +
 	"\x0eDeleteFacility\x12%.api.facilities.DeleteFacilityRequest\x1a&.api.facilities.DeleteFacilityResponse\x12a\n" +
 	"\x16UpdateFacilityCategory\x12-.api.facilities.UpdateFacilityCategoryRequest\x1a\x18.api.facilities.Category\x12P\n" +
-	"\vGetCategory\x12\".api.facilities.GetCategoryRequest\x1a\x18.api.facilities.Category\"\x03\x90\x02\x01B1Z/api/internal/proto/facilities;facilitiesserviceb\x06proto3"
+	"\vGetCategory\x12\".api.facilities.GetCategoryRequest\x1a\x18.api.facilities.Category\"\x03\x90\x02\x01\x12^\n" +
+	"\fGetAllCoords\x12#.api.facilities.GetAllCoordsRequest\x1a$.api.facilities.GetAllCoordsResponse\"\x03\x90\x02\x01B1Z/api/internal/proto/facilities;facilitiesserviceb\x06proto3"
 
 var (
 	file_proto_facilities_facilities_proto_rawDescOnce sync.Once
@@ -1711,7 +1888,7 @@ func file_proto_facilities_facilities_proto_rawDescGZIP() []byte {
 	return file_proto_facilities_facilities_proto_rawDescData
 }
 
-var file_proto_facilities_facilities_proto_msgTypes = make([]protoimpl.MessageInfo, 31)
+var file_proto_facilities_facilities_proto_msgTypes = make([]protoimpl.MessageInfo, 34)
 var file_proto_facilities_facilities_proto_goTypes = []any{
 	(*Facility)(nil),                      // 0: api.facilities.Facility
 	(*Building)(nil),                      // 1: api.facilities.Building
@@ -1720,30 +1897,33 @@ var file_proto_facilities_facilities_proto_goTypes = []any{
 	(*Category)(nil),                      // 4: api.facilities.Category
 	(*FacilityWithCategories)(nil),        // 5: api.facilities.FacilityWithCategories
 	(*Event)(nil),                         // 6: api.facilities.Event
-	(*GetCategoryRequest)(nil),            // 7: api.facilities.GetCategoryRequest
-	(*GetEventsByFacilityRequest)(nil),    // 8: api.facilities.GetEventsByFacilityRequest
-	(*GetEventsByFacilityResponse)(nil),   // 9: api.facilities.GetEventsByFacilityResponse
-	(*GetEventsByBuildingRequest)(nil),    // 10: api.facilities.GetEventsByBuildingRequest
-	(*GetEventsByBuildingResponse)(nil),   // 11: api.facilities.GetEventsByBuildingResponse
-	(*GetAllEventsRequest)(nil),           // 12: api.facilities.GetAllEventsRequest
-	(*GetAllEventsResponse)(nil),          // 13: api.facilities.GetAllEventsResponse
-	(*GetAllBuildingsRequest)(nil),        // 14: api.facilities.GetAllBuildingsRequest
-	(*GetAllBuildingsResponse)(nil),       // 15: api.facilities.GetAllBuildingsResponse
-	(*GetAllFacilitiesRequest)(nil),       // 16: api.facilities.GetAllFacilitiesRequest
-	(*GetFacilityRequest)(nil),            // 17: api.facilities.GetFacilityRequest
-	(*GetFacilityCategoriesRequest)(nil),  // 18: api.facilities.GetFacilityCategoriesRequest
-	(*GetBuildingFacilitiesRequest)(nil),  // 19: api.facilities.GetBuildingFacilitiesRequest
-	(*GetAllFacilitiesResponse)(nil),      // 20: api.facilities.GetAllFacilitiesResponse
-	(*GetFacilityCategoriesResponse)(nil), // 21: api.facilities.GetFacilityCategoriesResponse
-	(*GetBuildingFacilitiesResponse)(nil), // 22: api.facilities.GetBuildingFacilitiesResponse
-	(*CreateFacilityRequest)(nil),         // 23: api.facilities.CreateFacilityRequest
-	(*UpdateFacilityRequest)(nil),         // 24: api.facilities.UpdateFacilityRequest
-	(*DeleteFacilityRequest)(nil),         // 25: api.facilities.DeleteFacilityRequest
-	(*DeleteFacilityResponse)(nil),        // 26: api.facilities.DeleteFacilityResponse
-	(*UpdateFacilityCategoryRequest)(nil), // 27: api.facilities.UpdateFacilityCategoryRequest
-	(*CreateFacilityResponse)(nil),        // 28: api.facilities.CreateFacilityResponse
-	(*UpdateFacilityResponse)(nil),        // 29: api.facilities.UpdateFacilityResponse
-	(*FullFacility)(nil),                  // 30: api.facilities.FullFacility
+	(*Coords)(nil),                        // 7: api.facilities.coords
+	(*GetAllCoordsRequest)(nil),           // 8: api.facilities.GetAllCoordsRequest
+	(*GetAllCoordsResponse)(nil),          // 9: api.facilities.GetAllCoordsResponse
+	(*GetCategoryRequest)(nil),            // 10: api.facilities.GetCategoryRequest
+	(*GetEventsByFacilityRequest)(nil),    // 11: api.facilities.GetEventsByFacilityRequest
+	(*GetEventsByFacilityResponse)(nil),   // 12: api.facilities.GetEventsByFacilityResponse
+	(*GetEventsByBuildingRequest)(nil),    // 13: api.facilities.GetEventsByBuildingRequest
+	(*GetEventsByBuildingResponse)(nil),   // 14: api.facilities.GetEventsByBuildingResponse
+	(*GetAllEventsRequest)(nil),           // 15: api.facilities.GetAllEventsRequest
+	(*GetAllEventsResponse)(nil),          // 16: api.facilities.GetAllEventsResponse
+	(*GetAllBuildingsRequest)(nil),        // 17: api.facilities.GetAllBuildingsRequest
+	(*GetAllBuildingsResponse)(nil),       // 18: api.facilities.GetAllBuildingsResponse
+	(*GetAllFacilitiesRequest)(nil),       // 19: api.facilities.GetAllFacilitiesRequest
+	(*GetFacilityRequest)(nil),            // 20: api.facilities.GetFacilityRequest
+	(*GetFacilityCategoriesRequest)(nil),  // 21: api.facilities.GetFacilityCategoriesRequest
+	(*GetBuildingFacilitiesRequest)(nil),  // 22: api.facilities.GetBuildingFacilitiesRequest
+	(*GetAllFacilitiesResponse)(nil),      // 23: api.facilities.GetAllFacilitiesResponse
+	(*GetFacilityCategoriesResponse)(nil), // 24: api.facilities.GetFacilityCategoriesResponse
+	(*GetBuildingFacilitiesResponse)(nil), // 25: api.facilities.GetBuildingFacilitiesResponse
+	(*CreateFacilityRequest)(nil),         // 26: api.facilities.CreateFacilityRequest
+	(*UpdateFacilityRequest)(nil),         // 27: api.facilities.UpdateFacilityRequest
+	(*DeleteFacilityRequest)(nil),         // 28: api.facilities.DeleteFacilityRequest
+	(*DeleteFacilityResponse)(nil),        // 29: api.facilities.DeleteFacilityResponse
+	(*UpdateFacilityCategoryRequest)(nil), // 30: api.facilities.UpdateFacilityCategoryRequest
+	(*CreateFacilityResponse)(nil),        // 31: api.facilities.CreateFacilityResponse
+	(*UpdateFacilityResponse)(nil),        // 32: api.facilities.UpdateFacilityResponse
+	(*FullFacility)(nil),                  // 33: api.facilities.FullFacility
 }
 var file_proto_facilities_facilities_proto_depIdxs = []int32{
 	1,  // 0: api.facilities.BuildingWithFacilities.building:type_name -> api.facilities.Building
@@ -1752,52 +1932,55 @@ var file_proto_facilities_facilities_proto_depIdxs = []int32{
 	6,  // 3: api.facilities.BuildingWithEvents.events:type_name -> api.facilities.Event
 	0,  // 4: api.facilities.FacilityWithCategories.facility:type_name -> api.facilities.Facility
 	4,  // 5: api.facilities.FacilityWithCategories.categories:type_name -> api.facilities.Category
-	6,  // 6: api.facilities.GetEventsByFacilityResponse.events:type_name -> api.facilities.Event
-	6,  // 7: api.facilities.GetEventsByBuildingResponse.events:type_name -> api.facilities.Event
-	3,  // 8: api.facilities.GetAllEventsResponse.data:type_name -> api.facilities.BuildingWithEvents
-	1,  // 9: api.facilities.GetAllBuildingsResponse.buildings:type_name -> api.facilities.Building
-	2,  // 10: api.facilities.GetAllFacilitiesResponse.buildings:type_name -> api.facilities.BuildingWithFacilities
-	4,  // 11: api.facilities.GetFacilityCategoriesResponse.categories:type_name -> api.facilities.Category
-	2,  // 12: api.facilities.GetBuildingFacilitiesResponse.building:type_name -> api.facilities.BuildingWithFacilities
-	0,  // 13: api.facilities.CreateFacilityRequest.facility:type_name -> api.facilities.Facility
-	4,  // 14: api.facilities.CreateFacilityRequest.categories:type_name -> api.facilities.Category
-	0,  // 15: api.facilities.UpdateFacilityRequest.facility:type_name -> api.facilities.Facility
-	4,  // 16: api.facilities.UpdateFacilityRequest.categories:type_name -> api.facilities.Category
-	4,  // 17: api.facilities.UpdateFacilityCategoryRequest.category:type_name -> api.facilities.Category
-	0,  // 18: api.facilities.FullFacility.facility:type_name -> api.facilities.Facility
-	4,  // 19: api.facilities.FullFacility.categories:type_name -> api.facilities.Category
-	1,  // 20: api.facilities.FullFacility.building:type_name -> api.facilities.Building
-	16, // 21: api.facilities.FacilitiesService.GetAllFacilities:input_type -> api.facilities.GetAllFacilitiesRequest
-	14, // 22: api.facilities.FacilitiesService.GetAllBuildings:input_type -> api.facilities.GetAllBuildingsRequest
-	17, // 23: api.facilities.FacilitiesService.GetFacility:input_type -> api.facilities.GetFacilityRequest
-	8,  // 24: api.facilities.FacilitiesService.GetEventsByFacility:input_type -> api.facilities.GetEventsByFacilityRequest
-	10, // 25: api.facilities.FacilitiesService.GetEventsByBuilding:input_type -> api.facilities.GetEventsByBuildingRequest
-	12, // 26: api.facilities.FacilitiesService.GetAllEvents:input_type -> api.facilities.GetAllEventsRequest
-	18, // 27: api.facilities.FacilitiesService.GetFacilityCategories:input_type -> api.facilities.GetFacilityCategoriesRequest
-	19, // 28: api.facilities.FacilitiesService.GetBuildingFacilities:input_type -> api.facilities.GetBuildingFacilitiesRequest
-	23, // 29: api.facilities.FacilitiesService.CreateFacility:input_type -> api.facilities.CreateFacilityRequest
-	24, // 30: api.facilities.FacilitiesService.UpdateFacility:input_type -> api.facilities.UpdateFacilityRequest
-	25, // 31: api.facilities.FacilitiesService.DeleteFacility:input_type -> api.facilities.DeleteFacilityRequest
-	27, // 32: api.facilities.FacilitiesService.UpdateFacilityCategory:input_type -> api.facilities.UpdateFacilityCategoryRequest
-	7,  // 33: api.facilities.FacilitiesService.GetCategory:input_type -> api.facilities.GetCategoryRequest
-	20, // 34: api.facilities.FacilitiesService.GetAllFacilities:output_type -> api.facilities.GetAllFacilitiesResponse
-	15, // 35: api.facilities.FacilitiesService.GetAllBuildings:output_type -> api.facilities.GetAllBuildingsResponse
-	30, // 36: api.facilities.FacilitiesService.GetFacility:output_type -> api.facilities.FullFacility
-	9,  // 37: api.facilities.FacilitiesService.GetEventsByFacility:output_type -> api.facilities.GetEventsByFacilityResponse
-	11, // 38: api.facilities.FacilitiesService.GetEventsByBuilding:output_type -> api.facilities.GetEventsByBuildingResponse
-	13, // 39: api.facilities.FacilitiesService.GetAllEvents:output_type -> api.facilities.GetAllEventsResponse
-	21, // 40: api.facilities.FacilitiesService.GetFacilityCategories:output_type -> api.facilities.GetFacilityCategoriesResponse
-	22, // 41: api.facilities.FacilitiesService.GetBuildingFacilities:output_type -> api.facilities.GetBuildingFacilitiesResponse
-	28, // 42: api.facilities.FacilitiesService.CreateFacility:output_type -> api.facilities.CreateFacilityResponse
-	29, // 43: api.facilities.FacilitiesService.UpdateFacility:output_type -> api.facilities.UpdateFacilityResponse
-	26, // 44: api.facilities.FacilitiesService.DeleteFacility:output_type -> api.facilities.DeleteFacilityResponse
-	4,  // 45: api.facilities.FacilitiesService.UpdateFacilityCategory:output_type -> api.facilities.Category
-	4,  // 46: api.facilities.FacilitiesService.GetCategory:output_type -> api.facilities.Category
-	34, // [34:47] is the sub-list for method output_type
-	21, // [21:34] is the sub-list for method input_type
-	21, // [21:21] is the sub-list for extension type_name
-	21, // [21:21] is the sub-list for extension extendee
-	0,  // [0:21] is the sub-list for field type_name
+	7,  // 6: api.facilities.GetAllCoordsResponse.data:type_name -> api.facilities.coords
+	6,  // 7: api.facilities.GetEventsByFacilityResponse.events:type_name -> api.facilities.Event
+	6,  // 8: api.facilities.GetEventsByBuildingResponse.events:type_name -> api.facilities.Event
+	3,  // 9: api.facilities.GetAllEventsResponse.data:type_name -> api.facilities.BuildingWithEvents
+	1,  // 10: api.facilities.GetAllBuildingsResponse.buildings:type_name -> api.facilities.Building
+	2,  // 11: api.facilities.GetAllFacilitiesResponse.buildings:type_name -> api.facilities.BuildingWithFacilities
+	4,  // 12: api.facilities.GetFacilityCategoriesResponse.categories:type_name -> api.facilities.Category
+	2,  // 13: api.facilities.GetBuildingFacilitiesResponse.building:type_name -> api.facilities.BuildingWithFacilities
+	0,  // 14: api.facilities.CreateFacilityRequest.facility:type_name -> api.facilities.Facility
+	4,  // 15: api.facilities.CreateFacilityRequest.categories:type_name -> api.facilities.Category
+	0,  // 16: api.facilities.UpdateFacilityRequest.facility:type_name -> api.facilities.Facility
+	4,  // 17: api.facilities.UpdateFacilityRequest.categories:type_name -> api.facilities.Category
+	4,  // 18: api.facilities.UpdateFacilityCategoryRequest.category:type_name -> api.facilities.Category
+	0,  // 19: api.facilities.FullFacility.facility:type_name -> api.facilities.Facility
+	4,  // 20: api.facilities.FullFacility.categories:type_name -> api.facilities.Category
+	1,  // 21: api.facilities.FullFacility.building:type_name -> api.facilities.Building
+	19, // 22: api.facilities.FacilitiesService.GetAllFacilities:input_type -> api.facilities.GetAllFacilitiesRequest
+	17, // 23: api.facilities.FacilitiesService.GetAllBuildings:input_type -> api.facilities.GetAllBuildingsRequest
+	20, // 24: api.facilities.FacilitiesService.GetFacility:input_type -> api.facilities.GetFacilityRequest
+	11, // 25: api.facilities.FacilitiesService.GetEventsByFacility:input_type -> api.facilities.GetEventsByFacilityRequest
+	13, // 26: api.facilities.FacilitiesService.GetEventsByBuilding:input_type -> api.facilities.GetEventsByBuildingRequest
+	15, // 27: api.facilities.FacilitiesService.GetAllEvents:input_type -> api.facilities.GetAllEventsRequest
+	21, // 28: api.facilities.FacilitiesService.GetFacilityCategories:input_type -> api.facilities.GetFacilityCategoriesRequest
+	22, // 29: api.facilities.FacilitiesService.GetBuildingFacilities:input_type -> api.facilities.GetBuildingFacilitiesRequest
+	26, // 30: api.facilities.FacilitiesService.CreateFacility:input_type -> api.facilities.CreateFacilityRequest
+	27, // 31: api.facilities.FacilitiesService.UpdateFacility:input_type -> api.facilities.UpdateFacilityRequest
+	28, // 32: api.facilities.FacilitiesService.DeleteFacility:input_type -> api.facilities.DeleteFacilityRequest
+	30, // 33: api.facilities.FacilitiesService.UpdateFacilityCategory:input_type -> api.facilities.UpdateFacilityCategoryRequest
+	10, // 34: api.facilities.FacilitiesService.GetCategory:input_type -> api.facilities.GetCategoryRequest
+	8,  // 35: api.facilities.FacilitiesService.GetAllCoords:input_type -> api.facilities.GetAllCoordsRequest
+	23, // 36: api.facilities.FacilitiesService.GetAllFacilities:output_type -> api.facilities.GetAllFacilitiesResponse
+	18, // 37: api.facilities.FacilitiesService.GetAllBuildings:output_type -> api.facilities.GetAllBuildingsResponse
+	33, // 38: api.facilities.FacilitiesService.GetFacility:output_type -> api.facilities.FullFacility
+	12, // 39: api.facilities.FacilitiesService.GetEventsByFacility:output_type -> api.facilities.GetEventsByFacilityResponse
+	14, // 40: api.facilities.FacilitiesService.GetEventsByBuilding:output_type -> api.facilities.GetEventsByBuildingResponse
+	16, // 41: api.facilities.FacilitiesService.GetAllEvents:output_type -> api.facilities.GetAllEventsResponse
+	24, // 42: api.facilities.FacilitiesService.GetFacilityCategories:output_type -> api.facilities.GetFacilityCategoriesResponse
+	25, // 43: api.facilities.FacilitiesService.GetBuildingFacilities:output_type -> api.facilities.GetBuildingFacilitiesResponse
+	31, // 44: api.facilities.FacilitiesService.CreateFacility:output_type -> api.facilities.CreateFacilityResponse
+	32, // 45: api.facilities.FacilitiesService.UpdateFacility:output_type -> api.facilities.UpdateFacilityResponse
+	29, // 46: api.facilities.FacilitiesService.DeleteFacility:output_type -> api.facilities.DeleteFacilityResponse
+	4,  // 47: api.facilities.FacilitiesService.UpdateFacilityCategory:output_type -> api.facilities.Category
+	4,  // 48: api.facilities.FacilitiesService.GetCategory:output_type -> api.facilities.Category
+	9,  // 49: api.facilities.FacilitiesService.GetAllCoords:output_type -> api.facilities.GetAllCoordsResponse
+	36, // [36:50] is the sub-list for method output_type
+	22, // [22:36] is the sub-list for method input_type
+	22, // [22:22] is the sub-list for extension type_name
+	22, // [22:22] is the sub-list for extension extendee
+	0,  // [0:22] is the sub-list for field type_name
 }
 
 func init() { file_proto_facilities_facilities_proto_init() }
@@ -1813,7 +1996,7 @@ func file_proto_facilities_facilities_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_facilities_facilities_proto_rawDesc), len(file_proto_facilities_facilities_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   31,
+			NumMessages:   34,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

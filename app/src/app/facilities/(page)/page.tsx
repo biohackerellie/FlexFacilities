@@ -60,24 +60,22 @@ export default async function FacilitiesPage({
               <SidebarSearchParamsNav items={buildingSideBar} />
             </React.Suspense>
           </aside>
-          <div className="flex-1 lg:max-w-4xl">
+          <div className="flex-1 lg:max-w-4xl overflow-y-scroll max-h-[80vh]">
             <div className="space-y-7">
               <React.Suspense fallback={<LoadingScreen />}>
-                <div className="mt-0 flex flex-col gap-4 p-0 pb-px sm:grid sm:grid-cols-2 sm:pb-[150px]">
-                  {facilities?.map((facility) => (
-                    <div
-                      key={facility.facility?.id}
-                      className="show m-2 flex-1 gap-3"
-                    >
-                      <FacilityCard
-                        {...facility}
-                        {...buildings.find(
-                          (building) =>
-                            building.building?.name === selectedBuilding,
-                        )}
-                      />
-                    </div>
-                  ))}
+                <div className="mt-0 flex flex-col gap-4 p-0 pb-px sm:grid sm:grid-cols-2 sm:pb-[150px] overflow-y-scroll">
+                  {facilities &&
+                    facilities?.map((facility, i) => (
+                      <div key={i} className="show m-2 flex-1 gap-3">
+                        <FacilityCard
+                          {...facility}
+                          {...buildings.find(
+                            (building) =>
+                              building.building?.name === selectedBuilding,
+                          )}
+                        />
+                      </div>
+                    ))}
                 </div>
               </React.Suspense>
             </div>

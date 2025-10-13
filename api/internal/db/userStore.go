@@ -25,7 +25,7 @@ const getUserQuery = `SELECT id, name, email, provider, role FROM users WHERE id
 func (s *UserStore) Get(ctx context.Context, id string) (*models.Users, error) {
 	stmt, _ := s.db.PreparexContext(ctx, getUserQuery)
 	defer func() { _ = stmt.Close() }()
-	var user *models.Users
+	var user models.Users
 
 	if err := stmt.GetContext(ctx, &user, id); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -33,7 +33,7 @@ func (s *UserStore) Get(ctx context.Context, id string) (*models.Users, error) {
 		}
 		return nil, err
 	}
-	return user, nil
+	return &user, nil
 }
 
 const getUserByEmailQuery = `SELECT * FROM users WHERE email = $1 LIMIT 1`
@@ -41,7 +41,7 @@ const getUserByEmailQuery = `SELECT * FROM users WHERE email = $1 LIMIT 1`
 func (s *UserStore) GetByEmail(ctx context.Context, email string) (*models.Users, error) {
 	stmt, _ := s.db.PreparexContext(ctx, getUserByEmailQuery)
 	defer func() { _ = stmt.Close() }()
-	var user *models.Users
+	var user models.Users
 
 	if err := stmt.GetContext(ctx, &user, email); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -49,7 +49,7 @@ func (s *UserStore) GetByEmail(ctx context.Context, email string) (*models.Users
 		}
 		return nil, err
 	}
-	return user, nil
+	return &user, nil
 }
 
 const createUserQuery = `INSERT INTO users (id, name, email, password, provider, role, tos) VALUES (:id, :name, :email, :password, :provider, :role, :tos) RETURNING *`

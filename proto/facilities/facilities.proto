@@ -21,6 +21,8 @@ message Building {
   string address = 3;
   optional string image_path = 4;
   optional string google_calendar_id = 5;
+  optional double latitude = 6;
+  optional double longitude = 7;
 }
 
 message BuildingWithFacilities {
@@ -89,7 +91,25 @@ service FacilitiesService {
   rpc GetCategory (GetCategoryRequest) returns (Category){
     option idempotency_level = NO_SIDE_EFFECTS;
   };
+
+  rpc GetAllCoords (GetAllCoordsRequest) returns (GetAllCoordsResponse){
+    option idempotency_level = NO_SIDE_EFFECTS;
+  };
   
+}
+
+
+message coords {
+  int64 id = 1;
+  string building = 2;
+  double latitude = 3;
+  double longitude = 4;
+}
+
+message GetAllCoordsRequest {}
+
+message GetAllCoordsResponse {
+  repeated coords data = 1;
 }
 
 message GetCategoryRequest {

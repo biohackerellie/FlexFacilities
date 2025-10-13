@@ -380,3 +380,16 @@ func (f *FacilityStore) GetCategory(ctx context.Context, id int64) (*models.Cate
 	err := f.db.GetContext(ctx, &category, getCategoryQuery, id)
 	return &category, err
 }
+
+const getBuildingCoordinatesQuery = `SELECT id, name, latitude, longitude FROM building WHERE latitude IS NOT NULL AND longitude IS NOT NULL`
+
+func (f *FacilityStore) GetBuildingCoordinates(ctx context.Context) ([]models.BuildingCoords, error) {
+	var coords []models.BuildingCoords
+	if err := f.db.SelectContext(ctx, &coords, getBuildingCoordinatesQuery); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return coords, nil
+}

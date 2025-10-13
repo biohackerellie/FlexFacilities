@@ -21,7 +21,8 @@ type Config struct {
 	EmailHost          string         `mapstructure:"EMAIL_HOST"`
 	EmailPassword      string         `mapstructure:"EMAIL_PASSWORD"`
 	EmailUser          string         `mapstructure:"EMAIL_USER"`
-	Host               string         `mapstructure:"HOST"`
+	ApiHost            string         `mapstructure:"API_HOST"`
+	FrontendUrl        string         `mapstructure:"FRONTEND_URL"`
 	Timezone           string         `mapstructure:"TIMEZONE"`
 	Location           *time.Location `mapstructure:"-"`
 }
@@ -43,7 +44,8 @@ func New(getenv func(string, string) string) (*Config, error) {
 		EmailHost:          getenv("EMAIL_HOST", "smtp.gmail.com"),
 		EmailPassword:      getenv("EMAIL_PASSWORD", ""),
 		EmailUser:          getenv("EMAIL_USER", ""),
-		Host:               getenv("HOST", "http://localhost:3000"),
+		ApiHost:            getenv("HOST", "http://localhost:8080"),
+		FrontendUrl:        getenv("FRONTEND_URL", "http://localhost:3000"),
 		Timezone:           getenv("TIMEZONE", "America/Denver"),
 	}
 	loc, err := time.LoadLocation(cfg.Timezone)

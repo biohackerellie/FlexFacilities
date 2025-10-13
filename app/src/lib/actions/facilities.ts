@@ -111,3 +111,60 @@ export async function getAllCalEvents(): Promise<ReturnType | null> {
   });
   return result;
 }
+type LatLngTuple = [number, number, number?];
+interface ICoords {
+  latlng: LatLngTuple;
+  building: string;
+}
+interface mapCoords {
+  coords: ICoords[];
+  center: LatLngTuple;
+}
+export async function getAllMapCoords(): Promise<mapCoords | null> {
+  const { data, error } = await client.facilities().getAllCoords({});
+  if (error) {
+    logger.error('error fetching events', { error: error.message });
+    return null;
+  }
+  if (!data) return null;
+  const coords = data.data.map((d) => {
+    return {
+      latlng: [d.latitude, d.longitude],
+      building: d.building,
+    } as ICoords;
+  });
+
+  const center = calculateCenter(coords);
+  return { coords, center };
+}
+
+function calculateCenter(coords: ICoords[]): LatLngTuple {
+  if (coords.length < 2) {
+    return [coords[0]?.latlng[0] ?? 0, coords[0]?.latlng[1] ?? 0];
+  }
+  const toRadians = (deg: number) => (deg * Math.PI) / 180;
+  const toDegrees = (rad: number) => (rad * 180) / Math.PI;
+
+  let x = 0,
+    y = 0,
+    z = 0;
+
+  for (const { latlng } of coords) {
+    const lat = toRadians(latlng[0]);
+    const lng = toRadians(latlng[1]);
+    x += Math.cos(lat) * Math.cos(lng);
+    y += Math.cos(lat) * Math.sin(lng);
+    z += Math.sin(lat);
+  }
+
+  const total = coords.length;
+  x /= total;
+  y /= total;
+  z /= total;
+
+  const lng = Math.atan2(y, x);
+  const hyp = Math.sqrt(x * x + y * y);
+  const lat = Math.atan2(z, hyp);
+
+  return [toDegrees(lat), toDegrees(lng)];
+}

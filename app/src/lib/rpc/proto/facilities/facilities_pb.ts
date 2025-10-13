@@ -10,7 +10,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file proto/facilities/facilities.proto.
  */
 export const file_proto_facilities_facilities: GenFile = /*@__PURE__*/
-  fileDesc("CiFwcm90by9mYWNpbGl0aWVzL2ZhY2lsaXRpZXMucHJvdG8SDmFwaS5mYWNpbGl0aWVzIt4BCghGYWNpbGl0eRIKCgJpZBgBIAEoAxIMCgRuYW1lGAIgASgJEhcKCmltYWdlX3BhdGgYAyABKAlIAIgBARIVCghjYXBhY2l0eRgEIAEoA0gBiAEBEhIKCmNyZWF0ZWRfYXQYBSABKAkSEgoKdXBkYXRlZF9hdBgGIAEoCRIaChJnb29nbGVfY2FsZW5kYXJfaWQYByABKAkSGAoLYnVpbGRpbmdfaWQYCCABKANIAogBAUINCgtfaW1hZ2VfcGF0aEILCglfY2FwYWNpdHlCDgoMX2J1aWxkaW5nX2lkIpUBCghCdWlsZGluZxIKCgJpZBgBIAEoAxIMCgRuYW1lGAIgASgJEg8KB2FkZHJlc3MYAyABKAkSFwoKaW1hZ2VfcGF0aBgEIAEoCUgAiAEBEh8KEmdvb2dsZV9jYWxlbmRhcl9pZBgFIAEoCUgBiAEBQg0KC19pbWFnZV9wYXRoQhUKE19nb29nbGVfY2FsZW5kYXJfaWQigAEKFkJ1aWxkaW5nV2l0aEZhY2lsaXRpZXMSKgoIYnVpbGRpbmcYASABKAsyGC5hcGkuZmFjaWxpdGllcy5CdWlsZGluZxI6CgpmYWNpbGl0aWVzGAIgAygLMiYuYXBpLmZhY2lsaXRpZXMuRmFjaWxpdHlXaXRoQ2F0ZWdvcmllcyJnChJCdWlsZGluZ1dpdGhFdmVudHMSKgoIYnVpbGRpbmcYASABKAsyGC5hcGkuZmFjaWxpdGllcy5CdWlsZGluZxIlCgZldmVudHMYAiADKAsyFS5hcGkuZmFjaWxpdGllcy5FdmVudCJdCghDYXRlZ29yeRIKCgJpZBgBIAEoAxIMCgRuYW1lGAIgASgJEhMKC2Rlc2NyaXB0aW9uGAMgASgJEg0KBXByaWNlGAQgASgBEhMKC2ZhY2lsaXR5X2lkGAUgASgDInIKFkZhY2lsaXR5V2l0aENhdGVnb3JpZXMSKgoIZmFjaWxpdHkYASABKAsyGC5hcGkuZmFjaWxpdGllcy5GYWNpbGl0eRIsCgpjYXRlZ29yaWVzGAIgAygLMhguYXBpLmZhY2lsaXRpZXMuQ2F0ZWdvcnkifQoFRXZlbnQSDwoHc3VtbWFyeRgBIAEoCRIQCghsb2NhdGlvbhgCIAEoCRITCgtkZXNjcmlwdGlvbhgDIAEoCRINCgVzdGFydBgEIAEoCRILCgNlbmQYBSABKAkSEQoJaHRtbF9saW5rGAcgASgJEg0KBXRpdGxlGAggASgJIiAKEkdldENhdGVnb3J5UmVxdWVzdBIKCgJpZBgBIAEoAyIoChpHZXRFdmVudHNCeUZhY2lsaXR5UmVxdWVzdBIKCgJpZBgBIAEoAyJEChtHZXRFdmVudHNCeUZhY2lsaXR5UmVzcG9uc2USJQoGZXZlbnRzGAEgAygLMhUuYXBpLmZhY2lsaXRpZXMuRXZlbnQiKAoaR2V0RXZlbnRzQnlCdWlsZGluZ1JlcXVlc3QSCgoCaWQYASABKAMiRAobR2V0RXZlbnRzQnlCdWlsZGluZ1Jlc3BvbnNlEiUKBmV2ZW50cxgBIAMoCzIVLmFwaS5mYWNpbGl0aWVzLkV2ZW50IhUKE0dldEFsbEV2ZW50c1JlcXVlc3QiSAoUR2V0QWxsRXZlbnRzUmVzcG9uc2USMAoEZGF0YRgBIAMoCzIiLmFwaS5mYWNpbGl0aWVzLkJ1aWxkaW5nV2l0aEV2ZW50cyIYChZHZXRBbGxCdWlsZGluZ3NSZXF1ZXN0IkYKF0dldEFsbEJ1aWxkaW5nc1Jlc3BvbnNlEisKCWJ1aWxkaW5ncxgBIAMoCzIYLmFwaS5mYWNpbGl0aWVzLkJ1aWxkaW5nIhkKF0dldEFsbEZhY2lsaXRpZXNSZXF1ZXN0IiAKEkdldEZhY2lsaXR5UmVxdWVzdBIKCgJpZBgBIAEoAyIqChxHZXRGYWNpbGl0eUNhdGVnb3JpZXNSZXF1ZXN0EgoKAmlkGAEgASgDIjMKHEdldEJ1aWxkaW5nRmFjaWxpdGllc1JlcXVlc3QSEwoLYnVpbGRpbmdfaWQYASABKAMiVQoYR2V0QWxsRmFjaWxpdGllc1Jlc3BvbnNlEjkKCWJ1aWxkaW5ncxgBIAMoCzImLmFwaS5mYWNpbGl0aWVzLkJ1aWxkaW5nV2l0aEZhY2lsaXRpZXMiTQodR2V0RmFjaWxpdHlDYXRlZ29yaWVzUmVzcG9uc2USLAoKY2F0ZWdvcmllcxgBIAMoCzIYLmFwaS5mYWNpbGl0aWVzLkNhdGVnb3J5IlkKHUdldEJ1aWxkaW5nRmFjaWxpdGllc1Jlc3BvbnNlEjgKCGJ1aWxkaW5nGAEgASgLMiYuYXBpLmZhY2lsaXRpZXMuQnVpbGRpbmdXaXRoRmFjaWxpdGllcyJxChVDcmVhdGVGYWNpbGl0eVJlcXVlc3QSKgoIZmFjaWxpdHkYASABKAsyGC5hcGkuZmFjaWxpdGllcy5GYWNpbGl0eRIsCgpjYXRlZ29yaWVzGAIgAygLMhguYXBpLmZhY2lsaXRpZXMuQ2F0ZWdvcnkicQoVVXBkYXRlRmFjaWxpdHlSZXF1ZXN0EioKCGZhY2lsaXR5GAEgASgLMhguYXBpLmZhY2lsaXRpZXMuRmFjaWxpdHkSLAoKY2F0ZWdvcmllcxgCIAMoCzIYLmFwaS5mYWNpbGl0aWVzLkNhdGVnb3J5IiMKFURlbGV0ZUZhY2lsaXR5UmVxdWVzdBIKCgJpZBgBIAEoAyIYChZEZWxldGVGYWNpbGl0eVJlc3BvbnNlIksKHVVwZGF0ZUZhY2lsaXR5Q2F0ZWdvcnlSZXF1ZXN0EioKCGNhdGVnb3J5GAEgASgLMhguYXBpLmZhY2lsaXRpZXMuQ2F0ZWdvcnkiGAoWQ3JlYXRlRmFjaWxpdHlSZXNwb25zZSIYChZVcGRhdGVGYWNpbGl0eVJlc3BvbnNlIqwBCgxGdWxsRmFjaWxpdHkSKgoIZmFjaWxpdHkYASABKAsyGC5hcGkuZmFjaWxpdGllcy5GYWNpbGl0eRIsCgpjYXRlZ29yaWVzGAIgAygLMhguYXBpLmZhY2lsaXRpZXMuQ2F0ZWdvcnkSFgoOcmVzZXJ2YXRpb25faWQYAyADKAMSKgoIYnVpbGRpbmcYBCABKAsyGC5hcGkuZmFjaWxpdGllcy5CdWlsZGluZzLWCgoRRmFjaWxpdGllc1NlcnZpY2USagoQR2V0QWxsRmFjaWxpdGllcxInLmFwaS5mYWNpbGl0aWVzLkdldEFsbEZhY2lsaXRpZXNSZXF1ZXN0GiguYXBpLmZhY2lsaXRpZXMuR2V0QWxsRmFjaWxpdGllc1Jlc3BvbnNlIgOQAgESZwoPR2V0QWxsQnVpbGRpbmdzEiYuYXBpLmZhY2lsaXRpZXMuR2V0QWxsQnVpbGRpbmdzUmVxdWVzdBonLmFwaS5mYWNpbGl0aWVzLkdldEFsbEJ1aWxkaW5nc1Jlc3BvbnNlIgOQAgESVAoLR2V0RmFjaWxpdHkSIi5hcGkuZmFjaWxpdGllcy5HZXRGYWNpbGl0eVJlcXVlc3QaHC5hcGkuZmFjaWxpdGllcy5GdWxsRmFjaWxpdHkiA5ACARJzChNHZXRFdmVudHNCeUZhY2lsaXR5EiouYXBpLmZhY2lsaXRpZXMuR2V0RXZlbnRzQnlGYWNpbGl0eVJlcXVlc3QaKy5hcGkuZmFjaWxpdGllcy5HZXRFdmVudHNCeUZhY2lsaXR5UmVzcG9uc2UiA5ACARJzChNHZXRFdmVudHNCeUJ1aWxkaW5nEiouYXBpLmZhY2lsaXRpZXMuR2V0RXZlbnRzQnlCdWlsZGluZ1JlcXVlc3QaKy5hcGkuZmFjaWxpdGllcy5HZXRFdmVudHNCeUJ1aWxkaW5nUmVzcG9uc2UiA5ACARJeCgxHZXRBbGxFdmVudHMSIy5hcGkuZmFjaWxpdGllcy5HZXRBbGxFdmVudHNSZXF1ZXN0GiQuYXBpLmZhY2lsaXRpZXMuR2V0QWxsRXZlbnRzUmVzcG9uc2UiA5ACARJ5ChVHZXRGYWNpbGl0eUNhdGVnb3JpZXMSLC5hcGkuZmFjaWxpdGllcy5HZXRGYWNpbGl0eUNhdGVnb3JpZXNSZXF1ZXN0Gi0uYXBpLmZhY2lsaXRpZXMuR2V0RmFjaWxpdHlDYXRlZ29yaWVzUmVzcG9uc2UiA5ACARJ5ChVHZXRCdWlsZGluZ0ZhY2lsaXRpZXMSLC5hcGkuZmFjaWxpdGllcy5HZXRCdWlsZGluZ0ZhY2lsaXRpZXNSZXF1ZXN0Gi0uYXBpLmZhY2lsaXRpZXMuR2V0QnVpbGRpbmdGYWNpbGl0aWVzUmVzcG9uc2UiA5ACARJfCg5DcmVhdGVGYWNpbGl0eRIlLmFwaS5mYWNpbGl0aWVzLkNyZWF0ZUZhY2lsaXR5UmVxdWVzdBomLmFwaS5mYWNpbGl0aWVzLkNyZWF0ZUZhY2lsaXR5UmVzcG9uc2USXwoOVXBkYXRlRmFjaWxpdHkSJS5hcGkuZmFjaWxpdGllcy5VcGRhdGVGYWNpbGl0eVJlcXVlc3QaJi5hcGkuZmFjaWxpdGllcy5VcGRhdGVGYWNpbGl0eVJlc3BvbnNlEl8KDkRlbGV0ZUZhY2lsaXR5EiUuYXBpLmZhY2lsaXRpZXMuRGVsZXRlRmFjaWxpdHlSZXF1ZXN0GiYuYXBpLmZhY2lsaXRpZXMuRGVsZXRlRmFjaWxpdHlSZXNwb25zZRJhChZVcGRhdGVGYWNpbGl0eUNhdGVnb3J5Ei0uYXBpLmZhY2lsaXRpZXMuVXBkYXRlRmFjaWxpdHlDYXRlZ29yeVJlcXVlc3QaGC5hcGkuZmFjaWxpdGllcy5DYXRlZ29yeRJQCgtHZXRDYXRlZ29yeRIiLmFwaS5mYWNpbGl0aWVzLkdldENhdGVnb3J5UmVxdWVzdBoYLmFwaS5mYWNpbGl0aWVzLkNhdGVnb3J5IgOQAgFCMVovYXBpL2ludGVybmFsL3Byb3RvL2ZhY2lsaXRpZXM7ZmFjaWxpdGllc3NlcnZpY2ViBnByb3RvMw");
+  fileDesc("CiFwcm90by9mYWNpbGl0aWVzL2ZhY2lsaXRpZXMucHJvdG8SDmFwaS5mYWNpbGl0aWVzIt4BCghGYWNpbGl0eRIKCgJpZBgBIAEoAxIMCgRuYW1lGAIgASgJEhcKCmltYWdlX3BhdGgYAyABKAlIAIgBARIVCghjYXBhY2l0eRgEIAEoA0gBiAEBEhIKCmNyZWF0ZWRfYXQYBSABKAkSEgoKdXBkYXRlZF9hdBgGIAEoCRIaChJnb29nbGVfY2FsZW5kYXJfaWQYByABKAkSGAoLYnVpbGRpbmdfaWQYCCABKANIAogBAUINCgtfaW1hZ2VfcGF0aEILCglfY2FwYWNpdHlCDgoMX2J1aWxkaW5nX2lkIt8BCghCdWlsZGluZxIKCgJpZBgBIAEoAxIMCgRuYW1lGAIgASgJEg8KB2FkZHJlc3MYAyABKAkSFwoKaW1hZ2VfcGF0aBgEIAEoCUgAiAEBEh8KEmdvb2dsZV9jYWxlbmRhcl9pZBgFIAEoCUgBiAEBEhUKCGxhdGl0dWRlGAYgASgBSAKIAQESFgoJbG9uZ2l0dWRlGAcgASgBSAOIAQFCDQoLX2ltYWdlX3BhdGhCFQoTX2dvb2dsZV9jYWxlbmRhcl9pZEILCglfbGF0aXR1ZGVCDAoKX2xvbmdpdHVkZSKAAQoWQnVpbGRpbmdXaXRoRmFjaWxpdGllcxIqCghidWlsZGluZxgBIAEoCzIYLmFwaS5mYWNpbGl0aWVzLkJ1aWxkaW5nEjoKCmZhY2lsaXRpZXMYAiADKAsyJi5hcGkuZmFjaWxpdGllcy5GYWNpbGl0eVdpdGhDYXRlZ29yaWVzImcKEkJ1aWxkaW5nV2l0aEV2ZW50cxIqCghidWlsZGluZxgBIAEoCzIYLmFwaS5mYWNpbGl0aWVzLkJ1aWxkaW5nEiUKBmV2ZW50cxgCIAMoCzIVLmFwaS5mYWNpbGl0aWVzLkV2ZW50Il0KCENhdGVnb3J5EgoKAmlkGAEgASgDEgwKBG5hbWUYAiABKAkSEwoLZGVzY3JpcHRpb24YAyABKAkSDQoFcHJpY2UYBCABKAESEwoLZmFjaWxpdHlfaWQYBSABKAMicgoWRmFjaWxpdHlXaXRoQ2F0ZWdvcmllcxIqCghmYWNpbGl0eRgBIAEoCzIYLmFwaS5mYWNpbGl0aWVzLkZhY2lsaXR5EiwKCmNhdGVnb3JpZXMYAiADKAsyGC5hcGkuZmFjaWxpdGllcy5DYXRlZ29yeSJ9CgVFdmVudBIPCgdzdW1tYXJ5GAEgASgJEhAKCGxvY2F0aW9uGAIgASgJEhMKC2Rlc2NyaXB0aW9uGAMgASgJEg0KBXN0YXJ0GAQgASgJEgsKA2VuZBgFIAEoCRIRCglodG1sX2xpbmsYByABKAkSDQoFdGl0bGUYCCABKAkiSwoGY29vcmRzEgoKAmlkGAEgASgDEhAKCGJ1aWxkaW5nGAIgASgJEhAKCGxhdGl0dWRlGAMgASgBEhEKCWxvbmdpdHVkZRgEIAEoASIVChNHZXRBbGxDb29yZHNSZXF1ZXN0IjwKFEdldEFsbENvb3Jkc1Jlc3BvbnNlEiQKBGRhdGEYASADKAsyFi5hcGkuZmFjaWxpdGllcy5jb29yZHMiIAoSR2V0Q2F0ZWdvcnlSZXF1ZXN0EgoKAmlkGAEgASgDIigKGkdldEV2ZW50c0J5RmFjaWxpdHlSZXF1ZXN0EgoKAmlkGAEgASgDIkQKG0dldEV2ZW50c0J5RmFjaWxpdHlSZXNwb25zZRIlCgZldmVudHMYASADKAsyFS5hcGkuZmFjaWxpdGllcy5FdmVudCIoChpHZXRFdmVudHNCeUJ1aWxkaW5nUmVxdWVzdBIKCgJpZBgBIAEoAyJEChtHZXRFdmVudHNCeUJ1aWxkaW5nUmVzcG9uc2USJQoGZXZlbnRzGAEgAygLMhUuYXBpLmZhY2lsaXRpZXMuRXZlbnQiFQoTR2V0QWxsRXZlbnRzUmVxdWVzdCJIChRHZXRBbGxFdmVudHNSZXNwb25zZRIwCgRkYXRhGAEgAygLMiIuYXBpLmZhY2lsaXRpZXMuQnVpbGRpbmdXaXRoRXZlbnRzIhgKFkdldEFsbEJ1aWxkaW5nc1JlcXVlc3QiRgoXR2V0QWxsQnVpbGRpbmdzUmVzcG9uc2USKwoJYnVpbGRpbmdzGAEgAygLMhguYXBpLmZhY2lsaXRpZXMuQnVpbGRpbmciGQoXR2V0QWxsRmFjaWxpdGllc1JlcXVlc3QiIAoSR2V0RmFjaWxpdHlSZXF1ZXN0EgoKAmlkGAEgASgDIioKHEdldEZhY2lsaXR5Q2F0ZWdvcmllc1JlcXVlc3QSCgoCaWQYASABKAMiMwocR2V0QnVpbGRpbmdGYWNpbGl0aWVzUmVxdWVzdBITCgtidWlsZGluZ19pZBgBIAEoAyJVChhHZXRBbGxGYWNpbGl0aWVzUmVzcG9uc2USOQoJYnVpbGRpbmdzGAEgAygLMiYuYXBpLmZhY2lsaXRpZXMuQnVpbGRpbmdXaXRoRmFjaWxpdGllcyJNCh1HZXRGYWNpbGl0eUNhdGVnb3JpZXNSZXNwb25zZRIsCgpjYXRlZ29yaWVzGAEgAygLMhguYXBpLmZhY2lsaXRpZXMuQ2F0ZWdvcnkiWQodR2V0QnVpbGRpbmdGYWNpbGl0aWVzUmVzcG9uc2USOAoIYnVpbGRpbmcYASABKAsyJi5hcGkuZmFjaWxpdGllcy5CdWlsZGluZ1dpdGhGYWNpbGl0aWVzInEKFUNyZWF0ZUZhY2lsaXR5UmVxdWVzdBIqCghmYWNpbGl0eRgBIAEoCzIYLmFwaS5mYWNpbGl0aWVzLkZhY2lsaXR5EiwKCmNhdGVnb3JpZXMYAiADKAsyGC5hcGkuZmFjaWxpdGllcy5DYXRlZ29yeSJxChVVcGRhdGVGYWNpbGl0eVJlcXVlc3QSKgoIZmFjaWxpdHkYASABKAsyGC5hcGkuZmFjaWxpdGllcy5GYWNpbGl0eRIsCgpjYXRlZ29yaWVzGAIgAygLMhguYXBpLmZhY2lsaXRpZXMuQ2F0ZWdvcnkiIwoVRGVsZXRlRmFjaWxpdHlSZXF1ZXN0EgoKAmlkGAEgASgDIhgKFkRlbGV0ZUZhY2lsaXR5UmVzcG9uc2UiSwodVXBkYXRlRmFjaWxpdHlDYXRlZ29yeVJlcXVlc3QSKgoIY2F0ZWdvcnkYASABKAsyGC5hcGkuZmFjaWxpdGllcy5DYXRlZ29yeSIYChZDcmVhdGVGYWNpbGl0eVJlc3BvbnNlIhgKFlVwZGF0ZUZhY2lsaXR5UmVzcG9uc2UirAEKDEZ1bGxGYWNpbGl0eRIqCghmYWNpbGl0eRgBIAEoCzIYLmFwaS5mYWNpbGl0aWVzLkZhY2lsaXR5EiwKCmNhdGVnb3JpZXMYAiADKAsyGC5hcGkuZmFjaWxpdGllcy5DYXRlZ29yeRIWCg5yZXNlcnZhdGlvbl9pZBgDIAMoAxIqCghidWlsZGluZxgEIAEoCzIYLmFwaS5mYWNpbGl0aWVzLkJ1aWxkaW5nMrYLChFGYWNpbGl0aWVzU2VydmljZRJqChBHZXRBbGxGYWNpbGl0aWVzEicuYXBpLmZhY2lsaXRpZXMuR2V0QWxsRmFjaWxpdGllc1JlcXVlc3QaKC5hcGkuZmFjaWxpdGllcy5HZXRBbGxGYWNpbGl0aWVzUmVzcG9uc2UiA5ACARJnCg9HZXRBbGxCdWlsZGluZ3MSJi5hcGkuZmFjaWxpdGllcy5HZXRBbGxCdWlsZGluZ3NSZXF1ZXN0GicuYXBpLmZhY2lsaXRpZXMuR2V0QWxsQnVpbGRpbmdzUmVzcG9uc2UiA5ACARJUCgtHZXRGYWNpbGl0eRIiLmFwaS5mYWNpbGl0aWVzLkdldEZhY2lsaXR5UmVxdWVzdBocLmFwaS5mYWNpbGl0aWVzLkZ1bGxGYWNpbGl0eSIDkAIBEnMKE0dldEV2ZW50c0J5RmFjaWxpdHkSKi5hcGkuZmFjaWxpdGllcy5HZXRFdmVudHNCeUZhY2lsaXR5UmVxdWVzdBorLmFwaS5mYWNpbGl0aWVzLkdldEV2ZW50c0J5RmFjaWxpdHlSZXNwb25zZSIDkAIBEnMKE0dldEV2ZW50c0J5QnVpbGRpbmcSKi5hcGkuZmFjaWxpdGllcy5HZXRFdmVudHNCeUJ1aWxkaW5nUmVxdWVzdBorLmFwaS5mYWNpbGl0aWVzLkdldEV2ZW50c0J5QnVpbGRpbmdSZXNwb25zZSIDkAIBEl4KDEdldEFsbEV2ZW50cxIjLmFwaS5mYWNpbGl0aWVzLkdldEFsbEV2ZW50c1JlcXVlc3QaJC5hcGkuZmFjaWxpdGllcy5HZXRBbGxFdmVudHNSZXNwb25zZSIDkAIBEnkKFUdldEZhY2lsaXR5Q2F0ZWdvcmllcxIsLmFwaS5mYWNpbGl0aWVzLkdldEZhY2lsaXR5Q2F0ZWdvcmllc1JlcXVlc3QaLS5hcGkuZmFjaWxpdGllcy5HZXRGYWNpbGl0eUNhdGVnb3JpZXNSZXNwb25zZSIDkAIBEnkKFUdldEJ1aWxkaW5nRmFjaWxpdGllcxIsLmFwaS5mYWNpbGl0aWVzLkdldEJ1aWxkaW5nRmFjaWxpdGllc1JlcXVlc3QaLS5hcGkuZmFjaWxpdGllcy5HZXRCdWlsZGluZ0ZhY2lsaXRpZXNSZXNwb25zZSIDkAIBEl8KDkNyZWF0ZUZhY2lsaXR5EiUuYXBpLmZhY2lsaXRpZXMuQ3JlYXRlRmFjaWxpdHlSZXF1ZXN0GiYuYXBpLmZhY2lsaXRpZXMuQ3JlYXRlRmFjaWxpdHlSZXNwb25zZRJfCg5VcGRhdGVGYWNpbGl0eRIlLmFwaS5mYWNpbGl0aWVzLlVwZGF0ZUZhY2lsaXR5UmVxdWVzdBomLmFwaS5mYWNpbGl0aWVzLlVwZGF0ZUZhY2lsaXR5UmVzcG9uc2USXwoORGVsZXRlRmFjaWxpdHkSJS5hcGkuZmFjaWxpdGllcy5EZWxldGVGYWNpbGl0eVJlcXVlc3QaJi5hcGkuZmFjaWxpdGllcy5EZWxldGVGYWNpbGl0eVJlc3BvbnNlEmEKFlVwZGF0ZUZhY2lsaXR5Q2F0ZWdvcnkSLS5hcGkuZmFjaWxpdGllcy5VcGRhdGVGYWNpbGl0eUNhdGVnb3J5UmVxdWVzdBoYLmFwaS5mYWNpbGl0aWVzLkNhdGVnb3J5ElAKC0dldENhdGVnb3J5EiIuYXBpLmZhY2lsaXRpZXMuR2V0Q2F0ZWdvcnlSZXF1ZXN0GhguYXBpLmZhY2lsaXRpZXMuQ2F0ZWdvcnkiA5ACARJeCgxHZXRBbGxDb29yZHMSIy5hcGkuZmFjaWxpdGllcy5HZXRBbGxDb29yZHNSZXF1ZXN0GiQuYXBpLmZhY2lsaXRpZXMuR2V0QWxsQ29vcmRzUmVzcG9uc2UiA5ACAUIxWi9hcGkvaW50ZXJuYWwvcHJvdG8vZmFjaWxpdGllcztmYWNpbGl0aWVzc2VydmljZWIGcHJvdG8z");
 
 /**
  * @generated from message api.facilities.Facility
@@ -96,6 +96,16 @@ export type Building = Message<"api.facilities.Building"> & {
    * @generated from field: optional string google_calendar_id = 5;
    */
   googleCalendarId?: string;
+
+  /**
+   * @generated from field: optional double latitude = 6;
+   */
+  latitude?: number;
+
+  /**
+   * @generated from field: optional double longitude = 7;
+   */
+  longitude?: number;
 };
 
 /**
@@ -256,6 +266,68 @@ export const EventSchema: GenMessage<Event> = /*@__PURE__*/
   messageDesc(file_proto_facilities_facilities, 6);
 
 /**
+ * @generated from message api.facilities.coords
+ */
+export type coords = Message<"api.facilities.coords"> & {
+  /**
+   * @generated from field: int64 id = 1;
+   */
+  id: bigint;
+
+  /**
+   * @generated from field: string building = 2;
+   */
+  building: string;
+
+  /**
+   * @generated from field: double latitude = 3;
+   */
+  latitude: number;
+
+  /**
+   * @generated from field: double longitude = 4;
+   */
+  longitude: number;
+};
+
+/**
+ * Describes the message api.facilities.coords.
+ * Use `create(coordsSchema)` to create a new message.
+ */
+export const coordsSchema: GenMessage<coords> = /*@__PURE__*/
+  messageDesc(file_proto_facilities_facilities, 7);
+
+/**
+ * @generated from message api.facilities.GetAllCoordsRequest
+ */
+export type GetAllCoordsRequest = Message<"api.facilities.GetAllCoordsRequest"> & {
+};
+
+/**
+ * Describes the message api.facilities.GetAllCoordsRequest.
+ * Use `create(GetAllCoordsRequestSchema)` to create a new message.
+ */
+export const GetAllCoordsRequestSchema: GenMessage<GetAllCoordsRequest> = /*@__PURE__*/
+  messageDesc(file_proto_facilities_facilities, 8);
+
+/**
+ * @generated from message api.facilities.GetAllCoordsResponse
+ */
+export type GetAllCoordsResponse = Message<"api.facilities.GetAllCoordsResponse"> & {
+  /**
+   * @generated from field: repeated api.facilities.coords data = 1;
+   */
+  data: coords[];
+};
+
+/**
+ * Describes the message api.facilities.GetAllCoordsResponse.
+ * Use `create(GetAllCoordsResponseSchema)` to create a new message.
+ */
+export const GetAllCoordsResponseSchema: GenMessage<GetAllCoordsResponse> = /*@__PURE__*/
+  messageDesc(file_proto_facilities_facilities, 9);
+
+/**
  * @generated from message api.facilities.GetCategoryRequest
  */
 export type GetCategoryRequest = Message<"api.facilities.GetCategoryRequest"> & {
@@ -270,7 +342,7 @@ export type GetCategoryRequest = Message<"api.facilities.GetCategoryRequest"> & 
  * Use `create(GetCategoryRequestSchema)` to create a new message.
  */
 export const GetCategoryRequestSchema: GenMessage<GetCategoryRequest> = /*@__PURE__*/
-  messageDesc(file_proto_facilities_facilities, 7);
+  messageDesc(file_proto_facilities_facilities, 10);
 
 /**
  * @generated from message api.facilities.GetEventsByFacilityRequest
@@ -287,7 +359,7 @@ export type GetEventsByFacilityRequest = Message<"api.facilities.GetEventsByFaci
  * Use `create(GetEventsByFacilityRequestSchema)` to create a new message.
  */
 export const GetEventsByFacilityRequestSchema: GenMessage<GetEventsByFacilityRequest> = /*@__PURE__*/
-  messageDesc(file_proto_facilities_facilities, 8);
+  messageDesc(file_proto_facilities_facilities, 11);
 
 /**
  * @generated from message api.facilities.GetEventsByFacilityResponse
@@ -304,7 +376,7 @@ export type GetEventsByFacilityResponse = Message<"api.facilities.GetEventsByFac
  * Use `create(GetEventsByFacilityResponseSchema)` to create a new message.
  */
 export const GetEventsByFacilityResponseSchema: GenMessage<GetEventsByFacilityResponse> = /*@__PURE__*/
-  messageDesc(file_proto_facilities_facilities, 9);
+  messageDesc(file_proto_facilities_facilities, 12);
 
 /**
  * @generated from message api.facilities.GetEventsByBuildingRequest
@@ -321,7 +393,7 @@ export type GetEventsByBuildingRequest = Message<"api.facilities.GetEventsByBuil
  * Use `create(GetEventsByBuildingRequestSchema)` to create a new message.
  */
 export const GetEventsByBuildingRequestSchema: GenMessage<GetEventsByBuildingRequest> = /*@__PURE__*/
-  messageDesc(file_proto_facilities_facilities, 10);
+  messageDesc(file_proto_facilities_facilities, 13);
 
 /**
  * @generated from message api.facilities.GetEventsByBuildingResponse
@@ -338,7 +410,7 @@ export type GetEventsByBuildingResponse = Message<"api.facilities.GetEventsByBui
  * Use `create(GetEventsByBuildingResponseSchema)` to create a new message.
  */
 export const GetEventsByBuildingResponseSchema: GenMessage<GetEventsByBuildingResponse> = /*@__PURE__*/
-  messageDesc(file_proto_facilities_facilities, 11);
+  messageDesc(file_proto_facilities_facilities, 14);
 
 /**
  * @generated from message api.facilities.GetAllEventsRequest
@@ -351,7 +423,7 @@ export type GetAllEventsRequest = Message<"api.facilities.GetAllEventsRequest"> 
  * Use `create(GetAllEventsRequestSchema)` to create a new message.
  */
 export const GetAllEventsRequestSchema: GenMessage<GetAllEventsRequest> = /*@__PURE__*/
-  messageDesc(file_proto_facilities_facilities, 12);
+  messageDesc(file_proto_facilities_facilities, 15);
 
 /**
  * @generated from message api.facilities.GetAllEventsResponse
@@ -368,7 +440,7 @@ export type GetAllEventsResponse = Message<"api.facilities.GetAllEventsResponse"
  * Use `create(GetAllEventsResponseSchema)` to create a new message.
  */
 export const GetAllEventsResponseSchema: GenMessage<GetAllEventsResponse> = /*@__PURE__*/
-  messageDesc(file_proto_facilities_facilities, 13);
+  messageDesc(file_proto_facilities_facilities, 16);
 
 /**
  * @generated from message api.facilities.GetAllBuildingsRequest
@@ -381,7 +453,7 @@ export type GetAllBuildingsRequest = Message<"api.facilities.GetAllBuildingsRequ
  * Use `create(GetAllBuildingsRequestSchema)` to create a new message.
  */
 export const GetAllBuildingsRequestSchema: GenMessage<GetAllBuildingsRequest> = /*@__PURE__*/
-  messageDesc(file_proto_facilities_facilities, 14);
+  messageDesc(file_proto_facilities_facilities, 17);
 
 /**
  * @generated from message api.facilities.GetAllBuildingsResponse
@@ -398,7 +470,7 @@ export type GetAllBuildingsResponse = Message<"api.facilities.GetAllBuildingsRes
  * Use `create(GetAllBuildingsResponseSchema)` to create a new message.
  */
 export const GetAllBuildingsResponseSchema: GenMessage<GetAllBuildingsResponse> = /*@__PURE__*/
-  messageDesc(file_proto_facilities_facilities, 15);
+  messageDesc(file_proto_facilities_facilities, 18);
 
 /**
  * @generated from message api.facilities.GetAllFacilitiesRequest
@@ -411,7 +483,7 @@ export type GetAllFacilitiesRequest = Message<"api.facilities.GetAllFacilitiesRe
  * Use `create(GetAllFacilitiesRequestSchema)` to create a new message.
  */
 export const GetAllFacilitiesRequestSchema: GenMessage<GetAllFacilitiesRequest> = /*@__PURE__*/
-  messageDesc(file_proto_facilities_facilities, 16);
+  messageDesc(file_proto_facilities_facilities, 19);
 
 /**
  * @generated from message api.facilities.GetFacilityRequest
@@ -428,7 +500,7 @@ export type GetFacilityRequest = Message<"api.facilities.GetFacilityRequest"> & 
  * Use `create(GetFacilityRequestSchema)` to create a new message.
  */
 export const GetFacilityRequestSchema: GenMessage<GetFacilityRequest> = /*@__PURE__*/
-  messageDesc(file_proto_facilities_facilities, 17);
+  messageDesc(file_proto_facilities_facilities, 20);
 
 /**
  * @generated from message api.facilities.GetFacilityCategoriesRequest
@@ -445,7 +517,7 @@ export type GetFacilityCategoriesRequest = Message<"api.facilities.GetFacilityCa
  * Use `create(GetFacilityCategoriesRequestSchema)` to create a new message.
  */
 export const GetFacilityCategoriesRequestSchema: GenMessage<GetFacilityCategoriesRequest> = /*@__PURE__*/
-  messageDesc(file_proto_facilities_facilities, 18);
+  messageDesc(file_proto_facilities_facilities, 21);
 
 /**
  * @generated from message api.facilities.GetBuildingFacilitiesRequest
@@ -462,7 +534,7 @@ export type GetBuildingFacilitiesRequest = Message<"api.facilities.GetBuildingFa
  * Use `create(GetBuildingFacilitiesRequestSchema)` to create a new message.
  */
 export const GetBuildingFacilitiesRequestSchema: GenMessage<GetBuildingFacilitiesRequest> = /*@__PURE__*/
-  messageDesc(file_proto_facilities_facilities, 19);
+  messageDesc(file_proto_facilities_facilities, 22);
 
 /**
  * @generated from message api.facilities.GetAllFacilitiesResponse
@@ -479,7 +551,7 @@ export type GetAllFacilitiesResponse = Message<"api.facilities.GetAllFacilitiesR
  * Use `create(GetAllFacilitiesResponseSchema)` to create a new message.
  */
 export const GetAllFacilitiesResponseSchema: GenMessage<GetAllFacilitiesResponse> = /*@__PURE__*/
-  messageDesc(file_proto_facilities_facilities, 20);
+  messageDesc(file_proto_facilities_facilities, 23);
 
 /**
  * @generated from message api.facilities.GetFacilityCategoriesResponse
@@ -496,7 +568,7 @@ export type GetFacilityCategoriesResponse = Message<"api.facilities.GetFacilityC
  * Use `create(GetFacilityCategoriesResponseSchema)` to create a new message.
  */
 export const GetFacilityCategoriesResponseSchema: GenMessage<GetFacilityCategoriesResponse> = /*@__PURE__*/
-  messageDesc(file_proto_facilities_facilities, 21);
+  messageDesc(file_proto_facilities_facilities, 24);
 
 /**
  * @generated from message api.facilities.GetBuildingFacilitiesResponse
@@ -513,7 +585,7 @@ export type GetBuildingFacilitiesResponse = Message<"api.facilities.GetBuildingF
  * Use `create(GetBuildingFacilitiesResponseSchema)` to create a new message.
  */
 export const GetBuildingFacilitiesResponseSchema: GenMessage<GetBuildingFacilitiesResponse> = /*@__PURE__*/
-  messageDesc(file_proto_facilities_facilities, 22);
+  messageDesc(file_proto_facilities_facilities, 25);
 
 /**
  * @generated from message api.facilities.CreateFacilityRequest
@@ -535,7 +607,7 @@ export type CreateFacilityRequest = Message<"api.facilities.CreateFacilityReques
  * Use `create(CreateFacilityRequestSchema)` to create a new message.
  */
 export const CreateFacilityRequestSchema: GenMessage<CreateFacilityRequest> = /*@__PURE__*/
-  messageDesc(file_proto_facilities_facilities, 23);
+  messageDesc(file_proto_facilities_facilities, 26);
 
 /**
  * @generated from message api.facilities.UpdateFacilityRequest
@@ -557,7 +629,7 @@ export type UpdateFacilityRequest = Message<"api.facilities.UpdateFacilityReques
  * Use `create(UpdateFacilityRequestSchema)` to create a new message.
  */
 export const UpdateFacilityRequestSchema: GenMessage<UpdateFacilityRequest> = /*@__PURE__*/
-  messageDesc(file_proto_facilities_facilities, 24);
+  messageDesc(file_proto_facilities_facilities, 27);
 
 /**
  * @generated from message api.facilities.DeleteFacilityRequest
@@ -574,7 +646,7 @@ export type DeleteFacilityRequest = Message<"api.facilities.DeleteFacilityReques
  * Use `create(DeleteFacilityRequestSchema)` to create a new message.
  */
 export const DeleteFacilityRequestSchema: GenMessage<DeleteFacilityRequest> = /*@__PURE__*/
-  messageDesc(file_proto_facilities_facilities, 25);
+  messageDesc(file_proto_facilities_facilities, 28);
 
 /**
  * @generated from message api.facilities.DeleteFacilityResponse
@@ -587,7 +659,7 @@ export type DeleteFacilityResponse = Message<"api.facilities.DeleteFacilityRespo
  * Use `create(DeleteFacilityResponseSchema)` to create a new message.
  */
 export const DeleteFacilityResponseSchema: GenMessage<DeleteFacilityResponse> = /*@__PURE__*/
-  messageDesc(file_proto_facilities_facilities, 26);
+  messageDesc(file_proto_facilities_facilities, 29);
 
 /**
  * @generated from message api.facilities.UpdateFacilityCategoryRequest
@@ -604,7 +676,7 @@ export type UpdateFacilityCategoryRequest = Message<"api.facilities.UpdateFacili
  * Use `create(UpdateFacilityCategoryRequestSchema)` to create a new message.
  */
 export const UpdateFacilityCategoryRequestSchema: GenMessage<UpdateFacilityCategoryRequest> = /*@__PURE__*/
-  messageDesc(file_proto_facilities_facilities, 27);
+  messageDesc(file_proto_facilities_facilities, 30);
 
 /**
  * @generated from message api.facilities.CreateFacilityResponse
@@ -617,7 +689,7 @@ export type CreateFacilityResponse = Message<"api.facilities.CreateFacilityRespo
  * Use `create(CreateFacilityResponseSchema)` to create a new message.
  */
 export const CreateFacilityResponseSchema: GenMessage<CreateFacilityResponse> = /*@__PURE__*/
-  messageDesc(file_proto_facilities_facilities, 28);
+  messageDesc(file_proto_facilities_facilities, 31);
 
 /**
  * @generated from message api.facilities.UpdateFacilityResponse
@@ -630,7 +702,7 @@ export type UpdateFacilityResponse = Message<"api.facilities.UpdateFacilityRespo
  * Use `create(UpdateFacilityResponseSchema)` to create a new message.
  */
 export const UpdateFacilityResponseSchema: GenMessage<UpdateFacilityResponse> = /*@__PURE__*/
-  messageDesc(file_proto_facilities_facilities, 29);
+  messageDesc(file_proto_facilities_facilities, 32);
 
 /**
  * @generated from message api.facilities.FullFacility
@@ -662,7 +734,7 @@ export type FullFacility = Message<"api.facilities.FullFacility"> & {
  * Use `create(FullFacilitySchema)` to create a new message.
  */
 export const FullFacilitySchema: GenMessage<FullFacility> = /*@__PURE__*/
-  messageDesc(file_proto_facilities_facilities, 30);
+  messageDesc(file_proto_facilities_facilities, 33);
 
 /**
  * @generated from service api.facilities.FacilitiesService
@@ -771,6 +843,14 @@ export const FacilitiesService: GenService<{
     methodKind: "unary";
     input: typeof GetCategoryRequestSchema;
     output: typeof CategorySchema;
+  },
+  /**
+   * @generated from rpc api.facilities.FacilitiesService.GetAllCoords
+   */
+  getAllCoords: {
+    methodKind: "unary";
+    input: typeof GetAllCoordsRequestSchema;
+    output: typeof GetAllCoordsResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_proto_facilities_facilities, 0);

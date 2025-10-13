@@ -65,9 +65,11 @@ export default async function RootLayout({
             <Navbar />
 
             {children}
-            <React.Suspense fallback={footerSkeleton()}>
-              <Footer />
-            </React.Suspense>
+            <div className="absolute bottom-0 w-full">
+              <React.Suspense fallback={footerSkeleton()}>
+                <Footer />
+              </React.Suspense>
+            </div>
             <Toaster />
           </ThemeProviders>
         </body>

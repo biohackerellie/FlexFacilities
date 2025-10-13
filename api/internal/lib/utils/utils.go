@@ -11,7 +11,7 @@ func GenerateRandomID() string {
 	if err != nil {
 		panic(err)
 	}
-	return base64.URLEncoding.EncodeToString(b)
+	return base64.RawURLEncoding.EncodeToString(b)
 }
 
 func GenerateRandomSixDigitCode() string {

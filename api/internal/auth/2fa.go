@@ -65,6 +65,8 @@ func (s *Auth) ResetPassword(ctx context.Context, req *connect.Request[service.L
 		HttpOnly: true,
 		Secure:   s.secure,
 		SameSite: http.SameSiteLaxMode,
+		MaxAge:   int(absoluteExpiration.Seconds()),
+		Domain:   s.config.FrontendUrl,
 	}
 	w.Header().Set("Set-Cookie", cookie.String())
 
@@ -90,6 +92,7 @@ func (s *Auth) ResetPassword(ctx context.Context, req *connect.Request[service.L
 		Secure:   s.secure,
 		SameSite: http.SameSiteLaxMode,
 		MaxAge:   int(absoluteExpiration.Seconds()),
+		Domain:   s.config.FrontendUrl,
 	}
 
 	w.Header().Set("Set-Cookie", sessionCookie.String())
@@ -181,7 +184,7 @@ func (s *Auth) Login(ctx context.Context, req *connect.Request[service.LoginRequ
 	if err != nil {
 		return nil, connect.NewError(connect.CodeUnauthenticated, err)
 	}
-	if err := s.send2FACode(email, s.config.Host); err != nil {
+	if err := s.send2FACode(email, s.config.FrontendUrl); err != nil {
 		return nil, connect.NewError(connect.CodeInternal, err)
 	}
 
@@ -217,7 +220,7 @@ func (s *Auth) send2FACode(email, host string) error {
 func (s *Auth) sendResetPasswordToken(ctx context.Context, email string) error {
 	token := utils.GenerateRandomID()
 	s.setTempToken(token, "", token, time.Minute*5)
-	urlString := fmt.Sprintf("%s/login/reset/%v", s.config.Host, token)
+	urlString := fmt.Sprintf("%s/login/reset/%v", s.config.FrontendUrl, token)
 	url, err := url.Parse(urlString)
 	if err != nil {
 		return err
@@ -289,7 +292,7 @@ func (s *Auth) Register(ctx context.Context, req *connect.Request[service.Regist
 		return nil, connect.NewError(connect.CodeInternal, err)
 	}
 
-	if err := s.send2FACode(email, s.config.Host); err != nil {
+	if err := s.send2FACode(email, s.config.FrontendUrl); err != nil {
 		return nil, connect.NewError(connect.CodeInternal, err)
 	}
 	return connect.NewResponse(&service.LoginResponse{}), nil
