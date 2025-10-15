@@ -9,6 +9,7 @@ export default function ErrorComponent({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  'use no memo';
   useEffect(() => {
     console.error(error);
   }, [error]);

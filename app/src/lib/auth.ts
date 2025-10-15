@@ -3,7 +3,6 @@
 import { logger } from './logger';
 import { client } from './rpc';
 import { Session, UserRole } from './types';
-
 function parseRole(role: string): UserRole {
   switch (role) {
     case 'ADMIN':
@@ -15,7 +14,6 @@ function parseRole(role: string): UserRole {
   }
 }
 export async function auth() {
-  // TODO: cache
   const { data, error } = await client.auth().getSession({});
 
   if (error) {

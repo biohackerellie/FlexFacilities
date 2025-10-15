@@ -23,5 +23,8 @@ base.port = String(process.env.API_PORT ?? 8080);
 const transport = createConnectTransport({
   baseUrl: base.toString(),
   interceptors: [cookiesInterceptor],
+  useBinaryFormat: true,
+  useHttpGet: true,
+  fetch: (input, init) => fetch(input, { ...init, credentials: 'include' }),
 });
 export const client = new RPC(transport);

@@ -36,9 +36,7 @@ const LargeMap = (MapProps: MapProps) => {
       {coords &&
         coords.map((coord, i) => (
           <Marker position={coord.latlng} key={i}>
-            <Popup>
-              A pretty CSS3 popup. <br /> Easily customizable.
-            </Popup>
+            <Popup>{coord.building}</Popup>
           </Marker>
         ))}
     </MapContainer>

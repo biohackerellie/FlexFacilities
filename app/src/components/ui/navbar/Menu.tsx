@@ -146,147 +146,142 @@ export default function NavMenu({ logo }: NavbarProps) {
 
   const isMobile = useIsMobile();
   return (
-    <section className="p-2  border-b">
-      <div className="@container">
-        {!isMobile ? (
-          <nav className="justify-between flex">
-            <div className="flex items-center gap-6">
-              <a href={logo?.url ?? '/'} className="flex items-center gap-2">
-                <Image
-                  src={logo?.src ?? '/logo.png'}
-                  width={50}
-                  height={50}
-                  alt={logo?.alt ?? 'Logo'}
-                />
-                <span className="text-lg font-semibold tracking-tighter">
-                  {logo?.title ?? 'FlexFacilities'}
-                </span>
-              </a>
-              <div className="flex items-center">
-                <NavigationMenu>
-                  <NavigationMenuList>
-                    {MENUITEMS.map((item) => renderMenuItem(item))}
+    <section className="p-2 mb-2  border-b">
+      {!isMobile ? (
+        <nav className="justify-between flex">
+          <div className="flex items-center gap-6">
+            <a href={logo?.url ?? '/'} className="flex items-center gap-2">
+              <Image
+                src={logo?.src ?? '/logo.png'}
+                width={50}
+                height={50}
+                alt={logo?.alt ?? 'Logo'}
+              />
+              <span className="text-lg font-semibold tracking-tighter">
+                {logo?.title ?? 'FlexFacilities'}
+              </span>
+            </a>
+            <div className="flex items-center">
+              <NavigationMenu>
+                <NavigationMenuList>
+                  {MENUITEMS.map((item) => renderMenuItem(item))}
+                  {authorized
+                    ? AUTHORIZED_MENU_ITEMS.map((item) => renderMenuItem(item))
+                    : null}
+                  {admin
+                    ? ADMIN_MENU_ITEMS.map((item) => renderMenuItem(item))
+                    : null}
+                </NavigationMenuList>
+              </NavigationMenu>
+            </div>
+          </div>
+          <div className="flex gap-2">
+            {authorized ? (
+              <Button asChild>
+                <Link href={AUTH_ITEMS.logout.href}>
+                  {AUTH_ITEMS.logout.title}
+                </Link>
+              </Button>
+            ) : (
+              <>
+                <Button asChild variant="outline" size="sm">
+                  <Link href={AUTH_ITEMS.login.href}>
+                    {AUTH_ITEMS.login.title}
+                  </Link>
+                </Button>
+                <Button asChild variant="default" size="sm">
+                  <Link href={AUTH_ITEMS.signup.href}>
+                    {AUTH_ITEMS.signup.title}
+                  </Link>
+                </Button>
+              </>
+            )}
+            <ModeToggle />
+          </div>
+        </nav>
+      ) : (
+        <div className="block">
+          <div className="flex items-center justify-between">
+            <a
+              href={
+                logo?.url ?? 'https://github.com/biohackerellie/FlexFacilities'
+              }
+              className="flex items-center gap-2"
+            >
+              <Image
+                src={logo?.src ?? '/logo.png'}
+                width={50}
+                height={50}
+                alt={logo?.alt ?? 'Logo'}
+              />
+            </a>
+
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="outline" size="icon">
+                  <Menu className="size-4" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent className="overflow-y-auto">
+                <SheetHeader>
+                  <SheetTitle>
+                    <a href={logo?.url} className="flex items-center gap-2">
+                      <img
+                        src={logo?.src}
+                        className="max-h-8 dark:invert"
+                        alt={logo?.alt}
+                      />
+                    </a>
+                  </SheetTitle>
+                </SheetHeader>
+                <div className="flex flex-col gap-6 p-4">
+                  <Accordion
+                    type="single"
+                    collapsible
+                    className="flex w-full flex-col gap-4"
+                  >
+                    {MENUITEMS.map((item) => renderMobileMenuItem(item))}
                     {authorized
                       ? AUTHORIZED_MENU_ITEMS.map((item) =>
-                          renderMenuItem(item),
+                          renderMobileMenuItem(item),
                         )
                       : null}
                     {admin
-                      ? ADMIN_MENU_ITEMS.map((item) => renderMenuItem(item))
+                      ? ADMIN_MENU_ITEMS.map((item) =>
+                          renderMobileMenuItem(item),
+                        )
                       : null}
-                  </NavigationMenuList>
-                </NavigationMenu>
-              </div>
-            </div>
-            <div className="flex gap-2">
-              {authorized ? (
-                <Button asChild>
-                  <Link href={AUTH_ITEMS.logout.href}>
-                    {AUTH_ITEMS.logout.title}
-                  </Link>
-                </Button>
-              ) : (
-                <>
-                  <Button asChild variant="outline" size="sm">
-                    <Link href={AUTH_ITEMS.login.href}>
-                      {AUTH_ITEMS.login.title}
-                    </Link>
-                  </Button>
-                  <Button asChild variant="default" size="sm">
-                    <Link href={AUTH_ITEMS.signup.href}>
-                      {AUTH_ITEMS.signup.title}
-                    </Link>
-                  </Button>
-                </>
-              )}
-              <ModeToggle />
-            </div>
-          </nav>
-        ) : (
-          <div className="block">
-            <div className="flex items-center justify-between">
-              <a
-                href={
-                  logo?.url ??
-                  'https://github.com/biohackerellie/FlexFacilities'
-                }
-                className="flex items-center gap-2"
-              >
-                <Image
-                  src={logo?.src ?? '/logo.png'}
-                  width={50}
-                  height={50}
-                  alt={logo?.alt ?? 'Logo'}
-                />
-              </a>
+                  </Accordion>
 
-              <Sheet>
-                <SheetTrigger asChild>
-                  <Button variant="outline" size="icon">
-                    <Menu className="size-4" />
-                  </Button>
-                </SheetTrigger>
-                <SheetContent className="overflow-y-auto">
-                  <SheetHeader>
-                    <SheetTitle>
-                      <a href={logo?.url} className="flex items-center gap-2">
-                        <img
-                          src={logo?.src}
-                          className="max-h-8 dark:invert"
-                          alt={logo?.alt}
-                        />
-                      </a>
-                    </SheetTitle>
-                  </SheetHeader>
-                  <div className="flex flex-col gap-6 p-4">
-                    <Accordion
-                      type="single"
-                      collapsible
-                      className="flex w-full flex-col gap-4"
-                    >
-                      {MENUITEMS.map((item) => renderMobileMenuItem(item))}
-                      {authorized
-                        ? AUTHORIZED_MENU_ITEMS.map((item) =>
-                            renderMobileMenuItem(item),
-                          )
-                        : null}
-                      {admin
-                        ? ADMIN_MENU_ITEMS.map((item) =>
-                            renderMobileMenuItem(item),
-                          )
-                        : null}
-                    </Accordion>
-
-                    <div className="flex flex-col gap-3">
-                      {authorized ? (
+                  <div className="flex flex-col gap-3">
+                    {authorized ? (
+                      <Button asChild variant="outline">
+                        <Link href={AUTH_ITEMS.logout.href}>
+                          {AUTH_ITEMS.logout.title}
+                        </Link>
+                      </Button>
+                    ) : (
+                      <>
                         <Button asChild variant="outline">
-                          <Link href={AUTH_ITEMS.logout.href}>
-                            {AUTH_ITEMS.logout.title}
+                          <Link href={AUTH_ITEMS.login.href}>
+                            {AUTH_ITEMS.login.title}
                           </Link>
                         </Button>
-                      ) : (
-                        <>
-                          <Button asChild variant="outline">
-                            <Link href={AUTH_ITEMS.login.href}>
-                              {AUTH_ITEMS.login.title}
-                            </Link>
-                          </Button>
-                          <Button asChild>
-                            <Link href={AUTH_ITEMS.signup.href}>
-                              {AUTH_ITEMS.signup.title}
-                            </Link>
-                          </Button>
-                        </>
-                      )}
-                    </div>
+                        <Button asChild>
+                          <Link href={AUTH_ITEMS.signup.href}>
+                            {AUTH_ITEMS.signup.title}
+                          </Link>
+                        </Button>
+                      </>
+                    )}
                   </div>
-                </SheetContent>
-              </Sheet>
-              <ModeToggle />
-            </div>
+                </div>
+              </SheetContent>
+            </Sheet>
+            <ModeToggle />
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </section>
   );
 }

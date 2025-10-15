@@ -3,19 +3,19 @@ import * as React from 'react';
 
 import { ThemeProviders } from '@/components/contexts/providers/ThemeProvider';
 import Footer from '@/components/ui/footer';
-import Navbar from '@/components/ui/navbar/Navbar';
+import NavMenu from '@/components/ui/navbar/Menu';
 import { Toaster } from '@/components/ui/sonner';
 import { getBranding } from '@/lib/actions/utility';
 import { cn } from '@/lib/utils';
 
 import './styles/globals.css';
-import { AuthProvider } from '@/components/hooks/useAuth';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export { meta as metadata } from './metadata';
 
 import { Metadata, ResolvingMetadata } from 'next';
 import { auth } from '@/lib/auth';
+import { AuthProvider } from '@/components/hooks/useAuth';
 
 export async function generateMetadata(
   parent: ResolvingMetadata,
@@ -54,27 +54,27 @@ export default async function RootLayout({
   const session = await auth();
   return (
     <html lang="en" suppressHydrationWarning={true}>
-      <AuthProvider session={session}>
-        <body
-          className={cn(
-            'min-h-screen font-sans antialiased',
-            fontSans.variable,
-            fontMono.variable,
-          )}
-        >
-          <ThemeProviders attribute="class" defaultTheme="system" enableSystem>
-            <Navbar />
+      <body
+        className={cn(
+          'h-screen font-sans antialiased',
+          fontSans.variable,
+          fontMono.variable,
+        )}
+      >
+        <ThemeProviders attribute="class" defaultTheme="system" enableSystem>
+          <AuthProvider session={session}>
+            <NavMenu />
 
-            {children}
-            <div className="relative align-bottom bottom-0 w-full">
+            <div className="container py-8">{children}</div>
+            <div className="fixed  align-bottom bottom-0 w-full">
               <React.Suspense fallback={footerSkeleton()}>
                 <Footer />
               </React.Suspense>
             </div>
             <Toaster />
-          </ThemeProviders>
-        </body>
-      </AuthProvider>
+          </AuthProvider>
+        </ThemeProviders>
+      </body>
     </html>
   );
 }

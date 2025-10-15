@@ -6,7 +6,7 @@
   "scripts": {
     "clean": "git clean -xdf .next node_modules",
     "dev": "next dev --turbopack",
-    "build": "next build --debug-prerender",
+    "build": "next build ",
     "start": "next start --turbo",
     "check": "biome check .",
     "check:fix": "biome check . --write --unsafe",
@@ -65,7 +65,7 @@
     "leaflet": "^1.9.4",
     "leaflet-defaulticon-compatibility": "^0.1.2",
     "lucide-react": "^0.540.0",
-    "next": "^16.0.0-beta.0",
+    "next": "^16.0.0-canary.6",
     "next-superjson-plugin": "^0.6.3",
     "next-themes": "^0.3.0",
     "postcss": "^8.5.6",

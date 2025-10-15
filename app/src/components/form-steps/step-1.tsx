@@ -12,6 +12,7 @@ import { type Step1Data, step1Schema } from '@/lib/form-schemas';
 import { useFormStore } from '@/lib/form-store';
 import { Spinner } from '../spinner';
 import { logger } from '@/lib/logger';
+import { BuildingWithFacilities, FacilityWithCategories } from '@/lib/types';
 
 interface Step1Props {
   onNext: () => void;
@@ -22,6 +23,9 @@ interface Step1Props {
 export function Step1({ onNext, facilitiesPromise, userID }: Step1Props) {
   const { formData, updateFormData } = useFormStore();
   const [selectedBuilding, setSelectedBuilding] = useState<string | null>(null);
+  const [selectedBuildingData, setSelectedBuildingData] = useState<
+    FacilityWithCategories[] | null
+  >(null);
   const [selectedFacility, setSelectedFacility] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [view, setView] = useState<'buildings' | 'facilities' | 'categories'>(
@@ -56,8 +60,14 @@ export function Step1({ onNext, facilitiesPromise, userID }: Step1Props) {
   }, [userID, formData.userID, setValue, updateFormData]);
 
   const handleBuildingSelect = (buildingId: string) => {
-    logger.debug('handleBuildingSelect', { 'buidling id: ': buildingId });
+    console.log('buildings', { buildingsData });
     setSelectedBuilding(buildingId);
+
+    setSelectedBuildingData(() => {
+      const flat = buildingsData.flatMap((f) => f.facilities);
+      return flat.filter((f) => f.facility!.id === buildingId);
+    });
+    console.log('selectedBuildingData', selectedBuildingData);
     setView('facilities');
   };
 
@@ -78,14 +88,6 @@ export function Step1({ onNext, facilitiesPromise, userID }: Step1Props) {
     updateFormData(data);
     onNext();
   };
-
-  const selectedBuildingData = useMemo(
-    () =>
-      (selectedBuilding &&
-        buildingsData.find((b) => b.building!.id === selectedBuilding)) ||
-      null,
-    [selectedBuilding],
-  );
 
   const selectedFacilityData =
     (selectedFacility &&
