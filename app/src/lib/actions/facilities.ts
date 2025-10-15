@@ -8,7 +8,7 @@ import { Building } from '../types';
 export async function getFacility(id: string) {
   const { data: facility, error } = await client
     .facilities()
-    .getFacility({ id: BigInt(id) });
+    .getFacility({ id: id });
 
   if (error) {
     logger.error('Error fetching facilities', { 'error ': error });
@@ -20,7 +20,7 @@ export async function getFacility(id: string) {
 export async function getEventsByFacility(id: string) {
   const { data: events, error } = await client
     .facilities()
-    .getEventsByFacility({ id: BigInt(id) });
+    .getEventsByFacility({ id: id });
   if (error) {
     logger.error('Error fetching facilities', { 'error ': error });
     return null;

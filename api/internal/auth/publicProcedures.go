@@ -20,4 +20,5 @@ const (
 	AuthRegisterProcedure = "/api.auth.Auth/Register"
 
 	AuthVerify2FACodeProcedure = "/api.auth.Auth/Verify2FACode"
+	GetAllCoordsProcedure      = "/api.facilities.FacilitiesService/GetAllCoords"
 )

@@ -2,29 +2,40 @@
 // @generated from file proto/users/users.proto (package api.users, syntax proto3)
 /* eslint-disable */
 
-import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
-import { fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
-import type { Message } from "@bufbuild/protobuf";
+import type { Message } from '@bufbuild/protobuf';
+import type {
+  GenFile,
+  GenMessage,
+  GenService,
+} from '@bufbuild/protobuf/codegenv2';
+import {
+  fileDesc,
+  messageDesc,
+  serviceDesc,
+} from '@bufbuild/protobuf/codegenv2';
 
 /**
  * Describes the file proto/users/users.proto.
  */
-export const file_proto_users_users: GenFile = /*@__PURE__*/
-  fileDesc("Chdwcm90by91c2Vycy91c2Vycy5wcm90bxIJYXBpLnVzZXJzIkEKDU5vdGlmaWNhdGlvbnMSCgoCaWQYASABKAMSEwoLYnVpbGRpbmdfaWQYAiABKAMSDwoHdXNlcl9pZBgDIAEoCSJzChVOb3RpZmljYXRpb25zUmVhZGFibGUSCgoCaWQYASABKAMSEwoLYnVpbGRpbmdfaWQYAiABKAMSFQoNYnVpbGRpbmdfbmFtZRgDIAEoCRIPCgd1c2VyX2lkGAQgASgJEhEKCXVzZXJfbmFtZRgFIAEoCSLiAQoFVXNlcnMSCgoCaWQYASABKAkSDAoEbmFtZRgCIAEoCRISCgVpbWFnZRgDIAEoCUgAiAEBEg0KBWVtYWlsGAQgASgJEhYKDmVtYWlsX3ZlcmlmaWVkGAUgASgJEhUKCHBhc3N3b3JkGAYgASgJSAGIAQESEAoIcHJvdmlkZXIYByABKAkSFQoNZXh0ZXJuYWxfdXNlchgIIAEoCBIMCgRyb2xlGAkgASgJEhIKCmNyZWF0ZWRfYXQYCiABKAkSCwoDdG9zGAsgASgIQggKBl9pbWFnZUILCglfcGFzc3dvcmQiRwoRVmVyaWZpY2F0aW9uVG9rZW4SEgoKaWRlbnRpZmllchgBIAEoCRINCgV0b2tlbhgCIAEoCRIPCgdleHBpcmVzGAMgASgJIlcKHEdldFVzZXJOb3RpZmljYXRpb25zUmVzcG9uc2USNwoNbm90aWZpY2F0aW9ucxgBIAMoCzIgLmFwaS51c2Vycy5Ob3RpZmljYXRpb25zUmVhZGFibGUiSwoYR2V0Tm90aWZpY2F0aW9uc1Jlc3BvbnNlEi8KDW5vdGlmaWNhdGlvbnMYASADKAsyGC5hcGkudXNlcnMuTm90aWZpY2F0aW9ucyIzChBHZXRVc2Vyc1Jlc3BvbnNlEh8KBXVzZXJzGAEgAygLMhAuYXBpLnVzZXJzLlVzZXJzIiMKElVzZXJCeUVtYWlsUmVxdWVzdBINCgVlbWFpbBgBIAEoCSIcCg5HZXRVc2VyUmVxdWVzdBIKCgJpZBgBIAEoCSIRCg9HZXRVc2Vyc1JlcXVlc3QiMwoRQ3JlYXRlVXNlclJlcXVlc3QSHgoEdXNlchgBIAEoCzIQLmFwaS51c2Vycy5Vc2VycyIzChFVcGRhdGVVc2VyUmVxdWVzdBIeCgR1c2VyGAEgASgLMhAuYXBpLnVzZXJzLlVzZXJzIh8KEURlbGV0ZVVzZXJSZXF1ZXN0EgoKAmlkGAEgASgJIhQKEkRlbGV0ZVVzZXJSZXNwb25zZSIZChdHZXROb3RpZmljYXRpb25zUmVxdWVzdCIuChtHZXRVc2VyTm90aWZpY2F0aW9uc1JlcXVlc3QSDwoHdXNlcl9pZBgBIAEoCSJLChlDcmVhdGVOb3RpZmljYXRpb25SZXF1ZXN0Ei4KDG5vdGlmaWNhdGlvbhgBIAEoCzIYLmFwaS51c2Vycy5Ob3RpZmljYXRpb25zIkkKF0VkaXROb3RpZmljYXRpb25SZXF1ZXN0Ei4KDG5vdGlmaWNhdGlvbhgBIAEoCzIYLmFwaS51c2Vycy5Ob3RpZmljYXRpb25zIicKGURlbGV0ZU5vdGlmaWNhdGlvblJlcXVlc3QSCgoCaWQYASABKAMiHAoaRGVsZXRlTm90aWZpY2F0aW9uUmVzcG9uc2Uy9QYKDFVzZXJzU2VydmljZRJBCg5HZXRVc2VyQnlFbWFpbBIdLmFwaS51c2Vycy5Vc2VyQnlFbWFpbFJlcXVlc3QaEC5hcGkudXNlcnMuVXNlcnMSNgoHR2V0VXNlchIZLmFwaS51c2Vycy5HZXRVc2VyUmVxdWVzdBoQLmFwaS51c2Vycy5Vc2VycxJICghHZXRVc2VycxIaLmFwaS51c2Vycy5HZXRVc2Vyc1JlcXVlc3QaGy5hcGkudXNlcnMuR2V0VXNlcnNSZXNwb25zZSIDkAIBEjwKCkNyZWF0ZVVzZXISHC5hcGkudXNlcnMuQ3JlYXRlVXNlclJlcXVlc3QaEC5hcGkudXNlcnMuVXNlcnMSPAoKVXBkYXRlVXNlchIcLmFwaS51c2Vycy5VcGRhdGVVc2VyUmVxdWVzdBoQLmFwaS51c2Vycy5Vc2VycxJJCgpEZWxldGVVc2VyEhwuYXBpLnVzZXJzLkRlbGV0ZVVzZXJSZXF1ZXN0Gh0uYXBpLnVzZXJzLkRlbGV0ZVVzZXJSZXNwb25zZRJgChBHZXROb3RpZmljYXRpb25zEiIuYXBpLnVzZXJzLkdldE5vdGlmaWNhdGlvbnNSZXF1ZXN0GiMuYXBpLnVzZXJzLkdldE5vdGlmaWNhdGlvbnNSZXNwb25zZSIDkAIBEmwKFEdldFVzZXJOb3RpZmljYXRpb25zEiYuYXBpLnVzZXJzLkdldFVzZXJOb3RpZmljYXRpb25zUmVxdWVzdBonLmFwaS51c2Vycy5HZXRVc2VyTm90aWZpY2F0aW9uc1Jlc3BvbnNlIgOQAgESVAoSQ3JlYXRlTm90aWZpY2F0aW9uEiQuYXBpLnVzZXJzLkNyZWF0ZU5vdGlmaWNhdGlvblJlcXVlc3QaGC5hcGkudXNlcnMuTm90aWZpY2F0aW9ucxJQChBFZGl0Tm90aWZpY2F0aW9uEiIuYXBpLnVzZXJzLkVkaXROb3RpZmljYXRpb25SZXF1ZXN0GhguYXBpLnVzZXJzLk5vdGlmaWNhdGlvbnMSYQoSRGVsZXRlTm90aWZpY2F0aW9uEiQuYXBpLnVzZXJzLkRlbGV0ZU5vdGlmaWNhdGlvblJlcXVlc3QaJS5hcGkudXNlcnMuRGVsZXRlTm90aWZpY2F0aW9uUmVzcG9uc2VCJ1olYXBpL2ludGVybmFsL3Byb3RvL3VzZXJzO3VzZXJzc2VydmljZWIGcHJvdG8z");
+export const file_proto_users_users: GenFile =
+  /*@__PURE__*/
+  fileDesc(
+    'Chdwcm90by91c2Vycy91c2Vycy5wcm90bxIJYXBpLnVzZXJzIkkKDU5vdGlmaWNhdGlvbnMSDgoCaWQYASABKANCAjABEhcKC2J1aWxkaW5nX2lkGAIgASgDQgIwARIPCgd1c2VyX2lkGAMgASgJInsKFU5vdGlmaWNhdGlvbnNSZWFkYWJsZRIOCgJpZBgBIAEoA0ICMAESFwoLYnVpbGRpbmdfaWQYAiABKANCAjABEhUKDWJ1aWxkaW5nX25hbWUYAyABKAkSDwoHdXNlcl9pZBgEIAEoCRIRCgl1c2VyX25hbWUYBSABKAki4gEKBVVzZXJzEgoKAmlkGAEgASgJEgwKBG5hbWUYAiABKAkSEgoFaW1hZ2UYAyABKAlIAIgBARINCgVlbWFpbBgEIAEoCRIWCg5lbWFpbF92ZXJpZmllZBgFIAEoCRIVCghwYXNzd29yZBgGIAEoCUgBiAEBEhAKCHByb3ZpZGVyGAcgASgJEhUKDWV4dGVybmFsX3VzZXIYCCABKAgSDAoEcm9sZRgJIAEoCRISCgpjcmVhdGVkX2F0GAogASgJEgsKA3RvcxgLIAEoCEIICgZfaW1hZ2VCCwoJX3Bhc3N3b3JkIkcKEVZlcmlmaWNhdGlvblRva2VuEhIKCmlkZW50aWZpZXIYASABKAkSDQoFdG9rZW4YAiABKAkSDwoHZXhwaXJlcxgDIAEoCSJXChxHZXRVc2VyTm90aWZpY2F0aW9uc1Jlc3BvbnNlEjcKDW5vdGlmaWNhdGlvbnMYASADKAsyIC5hcGkudXNlcnMuTm90aWZpY2F0aW9uc1JlYWRhYmxlIksKGEdldE5vdGlmaWNhdGlvbnNSZXNwb25zZRIvCg1ub3RpZmljYXRpb25zGAEgAygLMhguYXBpLnVzZXJzLk5vdGlmaWNhdGlvbnMiMwoQR2V0VXNlcnNSZXNwb25zZRIfCgV1c2VycxgBIAMoCzIQLmFwaS51c2Vycy5Vc2VycyIjChJVc2VyQnlFbWFpbFJlcXVlc3QSDQoFZW1haWwYASABKAkiHAoOR2V0VXNlclJlcXVlc3QSCgoCaWQYASABKAkiEQoPR2V0VXNlcnNSZXF1ZXN0IjMKEUNyZWF0ZVVzZXJSZXF1ZXN0Eh4KBHVzZXIYASABKAsyEC5hcGkudXNlcnMuVXNlcnMiMwoRVXBkYXRlVXNlclJlcXVlc3QSHgoEdXNlchgBIAEoCzIQLmFwaS51c2Vycy5Vc2VycyIfChFEZWxldGVVc2VyUmVxdWVzdBIKCgJpZBgBIAEoCSIUChJEZWxldGVVc2VyUmVzcG9uc2UiGQoXR2V0Tm90aWZpY2F0aW9uc1JlcXVlc3QiLgobR2V0VXNlck5vdGlmaWNhdGlvbnNSZXF1ZXN0Eg8KB3VzZXJfaWQYASABKAkiSwoZQ3JlYXRlTm90aWZpY2F0aW9uUmVxdWVzdBIuCgxub3RpZmljYXRpb24YASABKAsyGC5hcGkudXNlcnMuTm90aWZpY2F0aW9ucyJJChdFZGl0Tm90aWZpY2F0aW9uUmVxdWVzdBIuCgxub3RpZmljYXRpb24YASABKAsyGC5hcGkudXNlcnMuTm90aWZpY2F0aW9ucyIrChlEZWxldGVOb3RpZmljYXRpb25SZXF1ZXN0Eg4KAmlkGAEgASgDQgIwASIcChpEZWxldGVOb3RpZmljYXRpb25SZXNwb25zZTL1BgoMVXNlcnNTZXJ2aWNlEkEKDkdldFVzZXJCeUVtYWlsEh0uYXBpLnVzZXJzLlVzZXJCeUVtYWlsUmVxdWVzdBoQLmFwaS51c2Vycy5Vc2VycxI2CgdHZXRVc2VyEhkuYXBpLnVzZXJzLkdldFVzZXJSZXF1ZXN0GhAuYXBpLnVzZXJzLlVzZXJzEkgKCEdldFVzZXJzEhouYXBpLnVzZXJzLkdldFVzZXJzUmVxdWVzdBobLmFwaS51c2Vycy5HZXRVc2Vyc1Jlc3BvbnNlIgOQAgESPAoKQ3JlYXRlVXNlchIcLmFwaS51c2Vycy5DcmVhdGVVc2VyUmVxdWVzdBoQLmFwaS51c2Vycy5Vc2VycxI8CgpVcGRhdGVVc2VyEhwuYXBpLnVzZXJzLlVwZGF0ZVVzZXJSZXF1ZXN0GhAuYXBpLnVzZXJzLlVzZXJzEkkKCkRlbGV0ZVVzZXISHC5hcGkudXNlcnMuRGVsZXRlVXNlclJlcXVlc3QaHS5hcGkudXNlcnMuRGVsZXRlVXNlclJlc3BvbnNlEmAKEEdldE5vdGlmaWNhdGlvbnMSIi5hcGkudXNlcnMuR2V0Tm90aWZpY2F0aW9uc1JlcXVlc3QaIy5hcGkudXNlcnMuR2V0Tm90aWZpY2F0aW9uc1Jlc3BvbnNlIgOQAgESbAoUR2V0VXNlck5vdGlmaWNhdGlvbnMSJi5hcGkudXNlcnMuR2V0VXNlck5vdGlmaWNhdGlvbnNSZXF1ZXN0GicuYXBpLnVzZXJzLkdldFVzZXJOb3RpZmljYXRpb25zUmVzcG9uc2UiA5ACARJUChJDcmVhdGVOb3RpZmljYXRpb24SJC5hcGkudXNlcnMuQ3JlYXRlTm90aWZpY2F0aW9uUmVxdWVzdBoYLmFwaS51c2Vycy5Ob3RpZmljYXRpb25zElAKEEVkaXROb3RpZmljYXRpb24SIi5hcGkudXNlcnMuRWRpdE5vdGlmaWNhdGlvblJlcXVlc3QaGC5hcGkudXNlcnMuTm90aWZpY2F0aW9ucxJhChJEZWxldGVOb3RpZmljYXRpb24SJC5hcGkudXNlcnMuRGVsZXRlTm90aWZpY2F0aW9uUmVxdWVzdBolLmFwaS51c2Vycy5EZWxldGVOb3RpZmljYXRpb25SZXNwb25zZUKHAQoNY29tLmFwaS51c2Vyc0IKVXNlcnNQcm90b1ABWiVhcGkvaW50ZXJuYWwvcHJvdG8vdXNlcnM7dXNlcnNzZXJ2aWNlogIDQVVYqgIJQXBpLlVzZXJzygIJQXBpXFVzZXJz4gIVQXBpXFVzZXJzXEdQQk1ldGFkYXRh6gIKQXBpOjpVc2Vyc2IGcHJvdG8z',
+  );
 
 /**
  * @generated from message api.users.Notifications
  */
-export type Notifications = Message<"api.users.Notifications"> & {
+export type Notifications = Message<'api.users.Notifications'> & {
   /**
-   * @generated from field: int64 id = 1;
+   * @generated from field: int64 id = 1 [jstype = JS_STRING];
    */
-  id: bigint;
+  id: string;
 
   /**
-   * @generated from field: int64 building_id = 2;
+   * @generated from field: int64 building_id = 2 [jstype = JS_STRING];
    */
-  buildingId: bigint;
+  buildingId: string;
 
   /**
    * @generated from field: string user_id = 3;
@@ -36,50 +47,53 @@ export type Notifications = Message<"api.users.Notifications"> & {
  * Describes the message api.users.Notifications.
  * Use `create(NotificationsSchema)` to create a new message.
  */
-export const NotificationsSchema: GenMessage<Notifications> = /*@__PURE__*/
+export const NotificationsSchema: GenMessage<Notifications> =
+  /*@__PURE__*/
   messageDesc(file_proto_users_users, 0);
 
 /**
  * @generated from message api.users.NotificationsReadable
  */
-export type NotificationsReadable = Message<"api.users.NotificationsReadable"> & {
-  /**
-   * @generated from field: int64 id = 1;
-   */
-  id: bigint;
+export type NotificationsReadable =
+  Message<'api.users.NotificationsReadable'> & {
+    /**
+     * @generated from field: int64 id = 1 [jstype = JS_STRING];
+     */
+    id: string;
 
-  /**
-   * @generated from field: int64 building_id = 2;
-   */
-  buildingId: bigint;
+    /**
+     * @generated from field: int64 building_id = 2 [jstype = JS_STRING];
+     */
+    buildingId: string;
 
-  /**
-   * @generated from field: string building_name = 3;
-   */
-  buildingName: string;
+    /**
+     * @generated from field: string building_name = 3;
+     */
+    buildingName: string;
 
-  /**
-   * @generated from field: string user_id = 4;
-   */
-  userId: string;
+    /**
+     * @generated from field: string user_id = 4;
+     */
+    userId: string;
 
-  /**
-   * @generated from field: string user_name = 5;
-   */
-  userName: string;
-};
+    /**
+     * @generated from field: string user_name = 5;
+     */
+    userName: string;
+  };
 
 /**
  * Describes the message api.users.NotificationsReadable.
  * Use `create(NotificationsReadableSchema)` to create a new message.
  */
-export const NotificationsReadableSchema: GenMessage<NotificationsReadable> = /*@__PURE__*/
+export const NotificationsReadableSchema: GenMessage<NotificationsReadable> =
+  /*@__PURE__*/
   messageDesc(file_proto_users_users, 1);
 
 /**
  * @generated from message api.users.Users
  */
-export type Users = Message<"api.users.Users"> & {
+export type Users = Message<'api.users.Users'> & {
   /**
    * @generated from field: string id = 1;
    */
@@ -144,13 +158,14 @@ export type Users = Message<"api.users.Users"> & {
  * Describes the message api.users.Users.
  * Use `create(UsersSchema)` to create a new message.
  */
-export const UsersSchema: GenMessage<Users> = /*@__PURE__*/
+export const UsersSchema: GenMessage<Users> =
+  /*@__PURE__*/
   messageDesc(file_proto_users_users, 2);
 
 /**
  * @generated from message api.users.VerificationToken
  */
-export type VerificationToken = Message<"api.users.VerificationToken"> & {
+export type VerificationToken = Message<'api.users.VerificationToken'> & {
   /**
    * @generated from field: string identifier = 1;
    */
@@ -173,47 +188,52 @@ export type VerificationToken = Message<"api.users.VerificationToken"> & {
  * Describes the message api.users.VerificationToken.
  * Use `create(VerificationTokenSchema)` to create a new message.
  */
-export const VerificationTokenSchema: GenMessage<VerificationToken> = /*@__PURE__*/
+export const VerificationTokenSchema: GenMessage<VerificationToken> =
+  /*@__PURE__*/
   messageDesc(file_proto_users_users, 3);
 
 /**
  * @generated from message api.users.GetUserNotificationsResponse
  */
-export type GetUserNotificationsResponse = Message<"api.users.GetUserNotificationsResponse"> & {
-  /**
-   * @generated from field: repeated api.users.NotificationsReadable notifications = 1;
-   */
-  notifications: NotificationsReadable[];
-};
+export type GetUserNotificationsResponse =
+  Message<'api.users.GetUserNotificationsResponse'> & {
+    /**
+     * @generated from field: repeated api.users.NotificationsReadable notifications = 1;
+     */
+    notifications: NotificationsReadable[];
+  };
 
 /**
  * Describes the message api.users.GetUserNotificationsResponse.
  * Use `create(GetUserNotificationsResponseSchema)` to create a new message.
  */
-export const GetUserNotificationsResponseSchema: GenMessage<GetUserNotificationsResponse> = /*@__PURE__*/
+export const GetUserNotificationsResponseSchema: GenMessage<GetUserNotificationsResponse> =
+  /*@__PURE__*/
   messageDesc(file_proto_users_users, 4);
 
 /**
  * @generated from message api.users.GetNotificationsResponse
  */
-export type GetNotificationsResponse = Message<"api.users.GetNotificationsResponse"> & {
-  /**
-   * @generated from field: repeated api.users.Notifications notifications = 1;
-   */
-  notifications: Notifications[];
-};
+export type GetNotificationsResponse =
+  Message<'api.users.GetNotificationsResponse'> & {
+    /**
+     * @generated from field: repeated api.users.Notifications notifications = 1;
+     */
+    notifications: Notifications[];
+  };
 
 /**
  * Describes the message api.users.GetNotificationsResponse.
  * Use `create(GetNotificationsResponseSchema)` to create a new message.
  */
-export const GetNotificationsResponseSchema: GenMessage<GetNotificationsResponse> = /*@__PURE__*/
+export const GetNotificationsResponseSchema: GenMessage<GetNotificationsResponse> =
+  /*@__PURE__*/
   messageDesc(file_proto_users_users, 5);
 
 /**
  * @generated from message api.users.GetUsersResponse
  */
-export type GetUsersResponse = Message<"api.users.GetUsersResponse"> & {
+export type GetUsersResponse = Message<'api.users.GetUsersResponse'> & {
   /**
    * @generated from field: repeated api.users.Users users = 1;
    */
@@ -224,13 +244,14 @@ export type GetUsersResponse = Message<"api.users.GetUsersResponse"> & {
  * Describes the message api.users.GetUsersResponse.
  * Use `create(GetUsersResponseSchema)` to create a new message.
  */
-export const GetUsersResponseSchema: GenMessage<GetUsersResponse> = /*@__PURE__*/
+export const GetUsersResponseSchema: GenMessage<GetUsersResponse> =
+  /*@__PURE__*/
   messageDesc(file_proto_users_users, 6);
 
 /**
  * @generated from message api.users.UserByEmailRequest
  */
-export type UserByEmailRequest = Message<"api.users.UserByEmailRequest"> & {
+export type UserByEmailRequest = Message<'api.users.UserByEmailRequest'> & {
   /**
    * @generated from field: string email = 1;
    */
@@ -241,13 +262,14 @@ export type UserByEmailRequest = Message<"api.users.UserByEmailRequest"> & {
  * Describes the message api.users.UserByEmailRequest.
  * Use `create(UserByEmailRequestSchema)` to create a new message.
  */
-export const UserByEmailRequestSchema: GenMessage<UserByEmailRequest> = /*@__PURE__*/
+export const UserByEmailRequestSchema: GenMessage<UserByEmailRequest> =
+  /*@__PURE__*/
   messageDesc(file_proto_users_users, 7);
 
 /**
  * @generated from message api.users.GetUserRequest
  */
-export type GetUserRequest = Message<"api.users.GetUserRequest"> & {
+export type GetUserRequest = Message<'api.users.GetUserRequest'> & {
   /**
    * @generated from field: string id = 1;
    */
@@ -258,26 +280,27 @@ export type GetUserRequest = Message<"api.users.GetUserRequest"> & {
  * Describes the message api.users.GetUserRequest.
  * Use `create(GetUserRequestSchema)` to create a new message.
  */
-export const GetUserRequestSchema: GenMessage<GetUserRequest> = /*@__PURE__*/
+export const GetUserRequestSchema: GenMessage<GetUserRequest> =
+  /*@__PURE__*/
   messageDesc(file_proto_users_users, 8);
 
 /**
  * @generated from message api.users.GetUsersRequest
  */
-export type GetUsersRequest = Message<"api.users.GetUsersRequest"> & {
-};
+export type GetUsersRequest = Message<'api.users.GetUsersRequest'> & {};
 
 /**
  * Describes the message api.users.GetUsersRequest.
  * Use `create(GetUsersRequestSchema)` to create a new message.
  */
-export const GetUsersRequestSchema: GenMessage<GetUsersRequest> = /*@__PURE__*/
+export const GetUsersRequestSchema: GenMessage<GetUsersRequest> =
+  /*@__PURE__*/
   messageDesc(file_proto_users_users, 9);
 
 /**
  * @generated from message api.users.CreateUserRequest
  */
-export type CreateUserRequest = Message<"api.users.CreateUserRequest"> & {
+export type CreateUserRequest = Message<'api.users.CreateUserRequest'> & {
   /**
    * @generated from field: api.users.Users user = 1;
    */
@@ -288,13 +311,14 @@ export type CreateUserRequest = Message<"api.users.CreateUserRequest"> & {
  * Describes the message api.users.CreateUserRequest.
  * Use `create(CreateUserRequestSchema)` to create a new message.
  */
-export const CreateUserRequestSchema: GenMessage<CreateUserRequest> = /*@__PURE__*/
+export const CreateUserRequestSchema: GenMessage<CreateUserRequest> =
+  /*@__PURE__*/
   messageDesc(file_proto_users_users, 10);
 
 /**
  * @generated from message api.users.UpdateUserRequest
  */
-export type UpdateUserRequest = Message<"api.users.UpdateUserRequest"> & {
+export type UpdateUserRequest = Message<'api.users.UpdateUserRequest'> & {
   /**
    * @generated from field: api.users.Users user = 1;
    */
@@ -305,13 +329,14 @@ export type UpdateUserRequest = Message<"api.users.UpdateUserRequest"> & {
  * Describes the message api.users.UpdateUserRequest.
  * Use `create(UpdateUserRequestSchema)` to create a new message.
  */
-export const UpdateUserRequestSchema: GenMessage<UpdateUserRequest> = /*@__PURE__*/
+export const UpdateUserRequestSchema: GenMessage<UpdateUserRequest> =
+  /*@__PURE__*/
   messageDesc(file_proto_users_users, 11);
 
 /**
  * @generated from message api.users.DeleteUserRequest
  */
-export type DeleteUserRequest = Message<"api.users.DeleteUserRequest"> & {
+export type DeleteUserRequest = Message<'api.users.DeleteUserRequest'> & {
   /**
    * @generated from field: string id = 1;
    */
@@ -322,114 +347,125 @@ export type DeleteUserRequest = Message<"api.users.DeleteUserRequest"> & {
  * Describes the message api.users.DeleteUserRequest.
  * Use `create(DeleteUserRequestSchema)` to create a new message.
  */
-export const DeleteUserRequestSchema: GenMessage<DeleteUserRequest> = /*@__PURE__*/
+export const DeleteUserRequestSchema: GenMessage<DeleteUserRequest> =
+  /*@__PURE__*/
   messageDesc(file_proto_users_users, 12);
 
 /**
  * @generated from message api.users.DeleteUserResponse
  */
-export type DeleteUserResponse = Message<"api.users.DeleteUserResponse"> & {
-};
+export type DeleteUserResponse = Message<'api.users.DeleteUserResponse'> & {};
 
 /**
  * Describes the message api.users.DeleteUserResponse.
  * Use `create(DeleteUserResponseSchema)` to create a new message.
  */
-export const DeleteUserResponseSchema: GenMessage<DeleteUserResponse> = /*@__PURE__*/
+export const DeleteUserResponseSchema: GenMessage<DeleteUserResponse> =
+  /*@__PURE__*/
   messageDesc(file_proto_users_users, 13);
 
 /**
  * @generated from message api.users.GetNotificationsRequest
  */
-export type GetNotificationsRequest = Message<"api.users.GetNotificationsRequest"> & {
-};
+export type GetNotificationsRequest =
+  Message<'api.users.GetNotificationsRequest'> & {};
 
 /**
  * Describes the message api.users.GetNotificationsRequest.
  * Use `create(GetNotificationsRequestSchema)` to create a new message.
  */
-export const GetNotificationsRequestSchema: GenMessage<GetNotificationsRequest> = /*@__PURE__*/
+export const GetNotificationsRequestSchema: GenMessage<GetNotificationsRequest> =
+  /*@__PURE__*/
   messageDesc(file_proto_users_users, 14);
 
 /**
  * @generated from message api.users.GetUserNotificationsRequest
  */
-export type GetUserNotificationsRequest = Message<"api.users.GetUserNotificationsRequest"> & {
-  /**
-   * @generated from field: string user_id = 1;
-   */
-  userId: string;
-};
+export type GetUserNotificationsRequest =
+  Message<'api.users.GetUserNotificationsRequest'> & {
+    /**
+     * @generated from field: string user_id = 1;
+     */
+    userId: string;
+  };
 
 /**
  * Describes the message api.users.GetUserNotificationsRequest.
  * Use `create(GetUserNotificationsRequestSchema)` to create a new message.
  */
-export const GetUserNotificationsRequestSchema: GenMessage<GetUserNotificationsRequest> = /*@__PURE__*/
+export const GetUserNotificationsRequestSchema: GenMessage<GetUserNotificationsRequest> =
+  /*@__PURE__*/
   messageDesc(file_proto_users_users, 15);
 
 /**
  * @generated from message api.users.CreateNotificationRequest
  */
-export type CreateNotificationRequest = Message<"api.users.CreateNotificationRequest"> & {
-  /**
-   * @generated from field: api.users.Notifications notification = 1;
-   */
-  notification?: Notifications;
-};
+export type CreateNotificationRequest =
+  Message<'api.users.CreateNotificationRequest'> & {
+    /**
+     * @generated from field: api.users.Notifications notification = 1;
+     */
+    notification?: Notifications;
+  };
 
 /**
  * Describes the message api.users.CreateNotificationRequest.
  * Use `create(CreateNotificationRequestSchema)` to create a new message.
  */
-export const CreateNotificationRequestSchema: GenMessage<CreateNotificationRequest> = /*@__PURE__*/
+export const CreateNotificationRequestSchema: GenMessage<CreateNotificationRequest> =
+  /*@__PURE__*/
   messageDesc(file_proto_users_users, 16);
 
 /**
  * @generated from message api.users.EditNotificationRequest
  */
-export type EditNotificationRequest = Message<"api.users.EditNotificationRequest"> & {
-  /**
-   * @generated from field: api.users.Notifications notification = 1;
-   */
-  notification?: Notifications;
-};
+export type EditNotificationRequest =
+  Message<'api.users.EditNotificationRequest'> & {
+    /**
+     * @generated from field: api.users.Notifications notification = 1;
+     */
+    notification?: Notifications;
+  };
 
 /**
  * Describes the message api.users.EditNotificationRequest.
  * Use `create(EditNotificationRequestSchema)` to create a new message.
  */
-export const EditNotificationRequestSchema: GenMessage<EditNotificationRequest> = /*@__PURE__*/
+export const EditNotificationRequestSchema: GenMessage<EditNotificationRequest> =
+  /*@__PURE__*/
   messageDesc(file_proto_users_users, 17);
 
 /**
  * @generated from message api.users.DeleteNotificationRequest
  */
-export type DeleteNotificationRequest = Message<"api.users.DeleteNotificationRequest"> & {
-  /**
-   * @generated from field: int64 id = 1;
-   */
-  id: bigint;
-};
+export type DeleteNotificationRequest =
+  Message<'api.users.DeleteNotificationRequest'> & {
+    /**
+     * @generated from field: int64 id = 1 [jstype = JS_STRING];
+     */
+    id: string;
+  };
 
 /**
  * Describes the message api.users.DeleteNotificationRequest.
  * Use `create(DeleteNotificationRequestSchema)` to create a new message.
  */
-export const DeleteNotificationRequestSchema: GenMessage<DeleteNotificationRequest> = /*@__PURE__*/
+export const DeleteNotificationRequestSchema: GenMessage<DeleteNotificationRequest> =
+  /*@__PURE__*/
   messageDesc(file_proto_users_users, 18);
 
 /**
  * @generated from message api.users.DeleteNotificationResponse
  */
-export type DeleteNotificationResponse = Message<"api.users.DeleteNotificationResponse"> & {
-};
+export type DeleteNotificationResponse =
+  Message<'api.users.DeleteNotificationResponse'> & {};
 
 /**
  * Describes the message api.users.DeleteNotificationResponse.
  * Use `create(DeleteNotificationResponseSchema)` to create a new message.
  */
-export const DeleteNotificationResponseSchema: GenMessage<DeleteNotificationResponse> = /*@__PURE__*/
+export const DeleteNotificationResponseSchema: GenMessage<DeleteNotificationResponse> =
+  /*@__PURE__*/
   messageDesc(file_proto_users_users, 19);
 
 /**
@@ -440,90 +476,88 @@ export const UsersService: GenService<{
    * @generated from rpc api.users.UsersService.GetUserByEmail
    */
   getUserByEmail: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof UserByEmailRequestSchema;
     output: typeof UsersSchema;
-  },
+  };
   /**
    * @generated from rpc api.users.UsersService.GetUser
    */
   getUser: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof GetUserRequestSchema;
     output: typeof UsersSchema;
-  },
+  };
   /**
    * @generated from rpc api.users.UsersService.GetUsers
    */
   getUsers: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof GetUsersRequestSchema;
     output: typeof GetUsersResponseSchema;
-  },
+  };
   /**
    * @generated from rpc api.users.UsersService.CreateUser
    */
   createUser: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof CreateUserRequestSchema;
     output: typeof UsersSchema;
-  },
+  };
   /**
    * @generated from rpc api.users.UsersService.UpdateUser
    */
   updateUser: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof UpdateUserRequestSchema;
     output: typeof UsersSchema;
-  },
+  };
   /**
    * @generated from rpc api.users.UsersService.DeleteUser
    */
   deleteUser: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof DeleteUserRequestSchema;
     output: typeof DeleteUserResponseSchema;
-  },
+  };
   /**
    * @generated from rpc api.users.UsersService.GetNotifications
    */
   getNotifications: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof GetNotificationsRequestSchema;
     output: typeof GetNotificationsResponseSchema;
-  },
+  };
   /**
    * @generated from rpc api.users.UsersService.GetUserNotifications
    */
   getUserNotifications: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof GetUserNotificationsRequestSchema;
     output: typeof GetUserNotificationsResponseSchema;
-  },
+  };
   /**
    * @generated from rpc api.users.UsersService.CreateNotification
    */
   createNotification: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof CreateNotificationRequestSchema;
     output: typeof NotificationsSchema;
-  },
+  };
   /**
    * @generated from rpc api.users.UsersService.EditNotification
    */
   editNotification: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof EditNotificationRequestSchema;
     output: typeof NotificationsSchema;
-  },
+  };
   /**
    * @generated from rpc api.users.UsersService.DeleteNotification
    */
   deleteNotification: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof DeleteNotificationRequestSchema;
     output: typeof DeleteNotificationResponseSchema;
-  },
-}> = /*@__PURE__*/
-  serviceDesc(file_proto_users_users, 0);
-
+  };
+}> = /*@__PURE__*/ serviceDesc(file_proto_users_users, 0);

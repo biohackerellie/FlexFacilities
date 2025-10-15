@@ -2357,13 +2357,13 @@ var File_proto_reservation_reservation_proto protoreflect.FileDescriptor
 
 const file_proto_reservation_reservation_proto_rawDesc = "" +
 	"\n" +
-	"#proto/reservation/reservation.proto\x12\x0fapi.reservation\"\xbd\b\n" +
-	"\vReservation\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x17\n" +
+	"#proto/reservation/reservation.proto\x12\x0fapi.reservation\"\xc9\b\n" +
+	"\vReservation\x12\x12\n" +
+	"\x02id\x18\x01 \x01(\x03B\x020\x01R\x02id\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x1d\n" +
 	"\n" +
-	"event_name\x18\x03 \x01(\tR\teventName\x12\x1f\n" +
-	"\vfacility_id\x18\x04 \x01(\x03R\n" +
+	"event_name\x18\x03 \x01(\tR\teventName\x12#\n" +
+	"\vfacility_id\x18\x04 \x01(\x03B\x020\x01R\n" +
 	"facilityId\x12\x1a\n" +
 	"\bapproved\x18\x05 \x01(\tR\bapproved\x12\x1d\n" +
 	"\n" +
@@ -2380,8 +2380,8 @@ const file_proto_reservation_reservation_proto_rawDesc = "" +
 	"\x04name\x18\r \x01(\tR\x04name\x12&\n" +
 	"\ftech_details\x18\x0e \x01(\tH\x03R\vtechDetails\x88\x01\x01\x12&\n" +
 	"\ftech_support\x18\x0f \x01(\bH\x04R\vtechSupport\x88\x01\x01\x12\x19\n" +
-	"\x05phone\x18\x10 \x01(\tH\x05R\x05phone\x88\x01\x01\x12\x1f\n" +
-	"\vcategory_id\x18\x11 \x01(\x03R\n" +
+	"\x05phone\x18\x10 \x01(\tH\x05R\x05phone\x88\x01\x01\x12#\n" +
+	"\vcategory_id\x18\x11 \x01(\x03B\x020\x01R\n" +
 	"categoryId\x12$\n" +
 	"\vtotal_hours\x18\x12 \x01(\x01H\x06R\n" +
 	"totalHours\x88\x01\x01\x12\x1b\n" +
@@ -2409,10 +2409,10 @@ const file_proto_reservation_reservation_proto_rawDesc = "" +
 	"\x10_payment_link_idB\x11\n" +
 	"\x0f_insurance_linkB\b\n" +
 	"\x06_rruleB\x0f\n" +
-	"\r_gcal_eventid\"\xdb\x01\n" +
-	"\x0fReservationDate\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\x12%\n" +
-	"\x0ereservation_id\x18\x02 \x01(\x03R\rreservationId\x12\x1a\n" +
+	"\r_gcal_eventid\"\xe3\x01\n" +
+	"\x0fReservationDate\x12\x12\n" +
+	"\x02id\x18\x01 \x01(\x03B\x020\x01R\x02id\x12)\n" +
+	"\x0ereservation_id\x18\x02 \x01(\x03B\x020\x01R\rreservationId\x12\x1a\n" +
 	"\bapproved\x18\x03 \x01(\tR\bapproved\x12&\n" +
 	"\fgcal_eventid\x18\x04 \x01(\tH\x00R\vgcalEventid\x88\x01\x01\x12\x1f\n" +
 	"\vlocal_start\x18\x05 \x01(\tR\n" +
@@ -2428,36 +2428,36 @@ const file_proto_reservation_reservation_proto_rawDesc = "" +
 	"\n" +
 	"Occurrence\x12\x14\n" +
 	"\x05start\x18\x01 \x01(\tR\x05start\x12\x10\n" +
-	"\x03end\x18\x02 \x01(\tR\x03end\"\xa0\x01\n" +
-	"\x0eReservationFee\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\x12'\n" +
+	"\x03end\x18\x02 \x01(\tR\x03end\"\xa8\x01\n" +
+	"\x0eReservationFee\x12\x12\n" +
+	"\x02id\x18\x01 \x01(\x03B\x020\x01R\x02id\x12'\n" +
 	"\x0fadditional_fees\x18\x02 \x01(\tR\x0eadditionalFees\x12 \n" +
-	"\tfees_type\x18\x03 \x01(\tH\x00R\bfeesType\x88\x01\x01\x12%\n" +
-	"\x0ereservation_id\x18\x04 \x01(\x03R\rreservationIdB\f\n" +
+	"\tfees_type\x18\x03 \x01(\tH\x00R\bfeesType\x88\x01\x01\x12)\n" +
+	"\x0ereservation_id\x18\x04 \x01(\x03B\x020\x01R\rreservationIdB\f\n" +
 	"\n" +
 	"_fees_type\"\xbe\x01\n" +
 	"\x0fFullReservation\x12>\n" +
 	"\vreservation\x18\x01 \x01(\v2\x1c.api.reservation.ReservationR\vreservation\x126\n" +
 	"\x05dates\x18\x02 \x03(\v2 .api.reservation.ReservationDateR\x05dates\x123\n" +
-	"\x04fees\x18\x03 \x03(\v2\x1f.api.reservation.ReservationFeeR\x04fees\"\xe8\x01\n" +
+	"\x04fees\x18\x03 \x03(\v2\x1f.api.reservation.ReservationFeeR\x04fees\"\xec\x01\n" +
 	"\x17FullResWithFacilityName\x12\x1d\n" +
 	"\n" +
 	"event_name\x18\x01 \x01(\tR\teventName\x12#\n" +
 	"\rfacility_name\x18\x02 \x01(\tR\ffacilityName\x12)\n" +
 	"\x10reservation_date\x18\x03 \x01(\tR\x0freservationDate\x12\x1a\n" +
 	"\bapproved\x18\x04 \x01(\tR\bapproved\x12\x1b\n" +
-	"\tuser_name\x18\x05 \x01(\tR\buserName\x12%\n" +
-	"\x0ereservation_id\x18\x06 \x01(\x03R\rreservationId\"R\n" +
+	"\tuser_name\x18\x05 \x01(\tR\buserName\x12)\n" +
+	"\x0ereservation_id\x18\x06 \x01(\x03B\x020\x01R\rreservationId\"R\n" +
 	"\x12AllPendingResponse\x12<\n" +
 	"\x04data\x18\x01 \x03(\v2(.api.reservation.FullResWithFacilityNameR\x04data\"\x93\x01\n" +
 	"\x11AllSortedResponse\x12<\n" +
 	"\x04past\x18\x01 \x03(\v2(.api.reservation.FullResWithFacilityNameR\x04past\x12@\n" +
-	"\x06future\x18\x02 \x03(\v2(.api.reservation.FullResWithFacilityNameR\x06future\"H\n" +
-	"\x1eUpdateReservationStatusRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x16\n" +
-	"\x06status\x18\x02 \x01(\tR\x06status\"O\n" +
-	"#UpdateReservationDatesStatusRequest\x12\x10\n" +
-	"\x03ids\x18\x01 \x03(\x03R\x03ids\x12\x16\n" +
+	"\x06future\x18\x02 \x03(\v2(.api.reservation.FullResWithFacilityNameR\x06future\"L\n" +
+	"\x1eUpdateReservationStatusRequest\x12\x12\n" +
+	"\x02id\x18\x01 \x01(\x03B\x020\x01R\x02id\x12\x16\n" +
+	"\x06status\x18\x02 \x01(\tR\x06status\"S\n" +
+	"#UpdateReservationDatesStatusRequest\x12\x14\n" +
+	"\x03ids\x18\x01 \x03(\x03B\x020\x01R\x03ids\x12\x16\n" +
 	"\x06status\x18\x02 \x01(\tR\x06status\"&\n" +
 	"$UpdateReservationDatesStatusResponse\"_\n" +
 	"\x17AllReservationsResponse\x12D\n" +
@@ -2470,21 +2470,21 @@ const file_proto_reservation_reservation_proto_rawDesc = "" +
 	"\freservations\x18\x01 \x03(\v2 .api.reservation.FullReservationR\freservations\"h\n" +
 	"\x18UserReservationsResponse\x12L\n" +
 	"\freservations\x18\x01 \x03(\v2(.api.reservation.FullResWithFacilityNameR\freservations\"\x1b\n" +
-	"\x19GetAllReservationsRequest\"'\n" +
-	"\x15GetReservationRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\"\x15\n" +
-	"\x13RequestCountRequest\",\n" +
-	"\x14RequestCountResponse\x12\x14\n" +
-	"\x05count\x18\x01 \x01(\x03R\x05count\"\x1c\n" +
-	"\x1aGetRequestsThisWeekRequest\"\x91\x06\n" +
+	"\x19GetAllReservationsRequest\"+\n" +
+	"\x15GetReservationRequest\x12\x12\n" +
+	"\x02id\x18\x01 \x01(\x03B\x020\x01R\x02id\"\x15\n" +
+	"\x13RequestCountRequest\"0\n" +
+	"\x14RequestCountResponse\x12\x18\n" +
+	"\x05count\x18\x01 \x01(\x03B\x020\x01R\x05count\"\x1c\n" +
+	"\x1aGetRequestsThisWeekRequest\"\x99\x06\n" +
 	"\x18CreateReservationRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x1d\n" +
 	"\n" +
-	"event_name\x18\x02 \x01(\tR\teventName\x12\x1f\n" +
-	"\vfacility_id\x18\x03 \x01(\x03R\n" +
+	"event_name\x18\x02 \x01(\tR\teventName\x12#\n" +
+	"\vfacility_id\x18\x03 \x01(\x03B\x020\x01R\n" +
 	"facilityId\x12\x18\n" +
-	"\adetails\x18\x04 \x01(\tR\adetails\x12\x1f\n" +
-	"\vcategory_id\x18\x05 \x01(\x03R\n" +
+	"\adetails\x18\x04 \x01(\tR\adetails\x12#\n" +
+	"\vcategory_id\x18\x05 \x01(\x03B\x020\x01R\n" +
 	"categoryId\x12\x12\n" +
 	"\x04name\x18\x06 \x01(\tR\x04name\x12\x14\n" +
 	"\x05phone\x18\a \x01(\tR\x05phone\x12!\n" +
@@ -2511,14 +2511,14 @@ const file_proto_reservation_reservation_proto_rawDesc = "" +
 	"\t_end_dateB\v\n" +
 	"\t_end_timeB\n" +
 	"\n" +
-	"\b_pattern\"+\n" +
-	"\x19CreateReservationResponse\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\"Z\n" +
+	"\b_pattern\"/\n" +
+	"\x19CreateReservationResponse\x12\x12\n" +
+	"\x02id\x18\x01 \x01(\x03B\x020\x01R\x02id\"Z\n" +
 	"\x18UpdateReservationRequest\x12>\n" +
 	"\vreservation\x18\x01 \x01(\v2\x1c.api.reservation.ReservationR\vreservation\"\x1b\n" +
-	"\x19UpdateReservationResponse\"*\n" +
-	"\x18DeleteReservationRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\"\x1b\n" +
+	"\x19UpdateReservationResponse\".\n" +
+	"\x18DeleteReservationRequest\x12\x12\n" +
+	"\x02id\x18\x01 \x01(\x03B\x020\x01R\x02id\"\x1b\n" +
 	"\x19DeleteReservationResponse\"2\n" +
 	"\x17UserReservationsRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\"U\n" +
@@ -2531,17 +2531,17 @@ const file_proto_reservation_reservation_proto_rawDesc = "" +
 	"\x1cUpdateReservationFeeResponse\"\x1e\n" +
 	"\x1cDeleteReservationFeeResponse\"U\n" +
 	"\x1dUpdateReservationDatesRequest\x124\n" +
-	"\x04date\x18\x01 \x03(\v2 .api.reservation.ReservationDateR\x04date\"/\n" +
-	"\x1dDeleteReservationDatesRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x03(\x03R\x02id\"P\n" +
+	"\x04date\x18\x01 \x03(\v2 .api.reservation.ReservationDateR\x04date\"3\n" +
+	"\x1dDeleteReservationDatesRequest\x12\x12\n" +
+	"\x02id\x18\x01 \x03(\x03B\x020\x01R\x02id\"P\n" +
 	"\x1bCreateReservationFeeRequest\x121\n" +
 	"\x03fee\x18\x01 \x03(\v2\x1f.api.reservation.ReservationFeeR\x03fee\"P\n" +
 	"\x1bUpdateReservationFeeRequest\x121\n" +
-	"\x03fee\x18\x01 \x01(\v2\x1f.api.reservation.ReservationFeeR\x03fee\"-\n" +
-	"\x1bDeleteReservationFeeRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\"$\n" +
-	"\x12CostReducerRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\")\n" +
+	"\x03fee\x18\x01 \x01(\v2\x1f.api.reservation.ReservationFeeR\x03fee\"1\n" +
+	"\x1bDeleteReservationFeeRequest\x12\x12\n" +
+	"\x02id\x18\x01 \x01(\x03B\x020\x01R\x02id\"(\n" +
+	"\x12CostReducerRequest\x12\x12\n" +
+	"\x02id\x18\x01 \x01(\x03B\x020\x01R\x02id\")\n" +
 	"\x13CostReducerResponse\x12\x12\n" +
 	"\x04cost\x18\x01 \x01(\tR\x04cost2\xf2\x10\n" +
 	"\x12ReservationService\x12o\n" +
@@ -2563,7 +2563,8 @@ const file_proto_reservation_reservation_proto_rawDesc = "" +
 	"\x14DeleteReservationFee\x12,.api.reservation.DeleteReservationFeeRequest\x1a-.api.reservation.DeleteReservationFeeResponse\x12X\n" +
 	"\vCostReducer\x12#.api.reservation.CostReducerRequest\x1a$.api.reservation.CostReducerResponse\x12e\n" +
 	"\rGetAllPending\x12*.api.reservation.GetAllReservationsRequest\x1a#.api.reservation.AllPendingResponse\"\x03\x90\x02\x01\x12l\n" +
-	"\x15AllSortedReservations\x12*.api.reservation.GetAllReservationsRequest\x1a\".api.reservation.AllSortedResponse\"\x03\x90\x02\x01B3Z1api/internal/proto/reservation;reservationserviceb\x06proto3"
+	"\x15AllSortedReservations\x12*.api.reservation.GetAllReservationsRequest\x1a\".api.reservation.AllSortedResponse\"\x03\x90\x02\x01B\xb7\x01\n" +
+	"\x13com.api.reservationB\x10ReservationProtoP\x01Z1api/internal/proto/reservation;reservationservice\xa2\x02\x03ARX\xaa\x02\x0fApi.Reservation\xca\x02\x0fApi\\Reservation\xe2\x02\x1bApi\\Reservation\\GPBMetadata\xea\x02\x10Api::Reservationb\x06proto3"
 
 var (
 	file_proto_reservation_reservation_proto_rawDescOnce sync.Once

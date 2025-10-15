@@ -1017,15 +1017,15 @@ var File_proto_users_users_proto protoreflect.FileDescriptor
 
 const file_proto_users_users_proto_rawDesc = "" +
 	"\n" +
-	"\x17proto/users/users.proto\x12\tapi.users\"Y\n" +
-	"\rNotifications\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1f\n" +
-	"\vbuilding_id\x18\x02 \x01(\x03R\n" +
+	"\x17proto/users/users.proto\x12\tapi.users\"a\n" +
+	"\rNotifications\x12\x12\n" +
+	"\x02id\x18\x01 \x01(\x03B\x020\x01R\x02id\x12#\n" +
+	"\vbuilding_id\x18\x02 \x01(\x03B\x020\x01R\n" +
 	"buildingId\x12\x17\n" +
-	"\auser_id\x18\x03 \x01(\tR\x06userId\"\xa3\x01\n" +
-	"\x15NotificationsReadable\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1f\n" +
-	"\vbuilding_id\x18\x02 \x01(\x03R\n" +
+	"\auser_id\x18\x03 \x01(\tR\x06userId\"\xab\x01\n" +
+	"\x15NotificationsReadable\x12\x12\n" +
+	"\x02id\x18\x01 \x01(\x03B\x020\x01R\x02id\x12#\n" +
+	"\vbuilding_id\x18\x02 \x01(\x03B\x020\x01R\n" +
 	"buildingId\x12#\n" +
 	"\rbuilding_name\x18\x03 \x01(\tR\fbuildingName\x12\x17\n" +
 	"\auser_id\x18\x04 \x01(\tR\x06userId\x12\x1b\n" +
@@ -1076,9 +1076,9 @@ const file_proto_users_users_proto_rawDesc = "" +
 	"\x19CreateNotificationRequest\x12<\n" +
 	"\fnotification\x18\x01 \x01(\v2\x18.api.users.NotificationsR\fnotification\"W\n" +
 	"\x17EditNotificationRequest\x12<\n" +
-	"\fnotification\x18\x01 \x01(\v2\x18.api.users.NotificationsR\fnotification\"+\n" +
-	"\x19DeleteNotificationRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\"\x1c\n" +
+	"\fnotification\x18\x01 \x01(\v2\x18.api.users.NotificationsR\fnotification\"/\n" +
+	"\x19DeleteNotificationRequest\x12\x12\n" +
+	"\x02id\x18\x01 \x01(\x03B\x020\x01R\x02id\"\x1c\n" +
 	"\x1aDeleteNotificationResponse2\xf5\x06\n" +
 	"\fUsersService\x12A\n" +
 	"\x0eGetUserByEmail\x12\x1d.api.users.UserByEmailRequest\x1a\x10.api.users.Users\x126\n" +
@@ -1094,7 +1094,10 @@ const file_proto_users_users_proto_rawDesc = "" +
 	"\x14GetUserNotifications\x12&.api.users.GetUserNotificationsRequest\x1a'.api.users.GetUserNotificationsResponse\"\x03\x90\x02\x01\x12T\n" +
 	"\x12CreateNotification\x12$.api.users.CreateNotificationRequest\x1a\x18.api.users.Notifications\x12P\n" +
 	"\x10EditNotification\x12\".api.users.EditNotificationRequest\x1a\x18.api.users.Notifications\x12a\n" +
-	"\x12DeleteNotification\x12$.api.users.DeleteNotificationRequest\x1a%.api.users.DeleteNotificationResponseB'Z%api/internal/proto/users;usersserviceb\x06proto3"
+	"\x12DeleteNotification\x12$.api.users.DeleteNotificationRequest\x1a%.api.users.DeleteNotificationResponseB\x87\x01\n" +
+	"\rcom.api.usersB\n" +
+	"UsersProtoP\x01Z%api/internal/proto/users;usersservice\xa2\x02\x03AUX\xaa\x02\tApi.Users\xca\x02\tApi\\Users\xe2\x02\x15Api\\Users\\GPBMetadata\xea\x02\n" +
+	"Api::Usersb\x06proto3"
 
 var (
 	file_proto_users_users_proto_rawDescOnce sync.Once

@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import * as React from 'react';
-
+import { Spinner } from '@/components/spinner';
 import { Button } from '@/components/ui/button';
 import LoadingScreen from '@/components/ui/loadingScreen';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -14,7 +14,6 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { getEventsByFacility, getFacility } from '@/lib/actions/facilities';
-import { Spinner } from '@/components/spinner';
 
 export default async function FacilityPage({
   params,
@@ -104,8 +103,8 @@ export default async function FacilityPage({
 
             <div className="my-3 mr-4 max-w-sm items-end justify-center border-4 p-4 sm:max-w-md sm:justify-between">
               <h1 className="border-b-2 text-2xl font-bold">Pricing</h1>
-              {fac.categories.map((category) => (
-                <div key={category.id} className="grid grid-cols-3 p-4">
+              {fac.categories.map((category, i) => (
+                <div key={i} className="grid grid-cols-3 p-4">
                   <Tooltip>
                     <TooltipTrigger className="col-span-2 col-start-1 truncate text-left text-lg font-semibold">
                       {category.name}

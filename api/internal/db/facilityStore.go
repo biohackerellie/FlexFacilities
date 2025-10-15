@@ -39,7 +39,7 @@ func (f *FacilityStore) Get(ctx context.Context, id int64) (*models.FullFacility
 		return nil, err
 	}
 	var reservations []models.Reservation
-	if err := f.db.SelectContext(ctx, &reservations, "SELECT * FROM reservations WHERE facility_id = $1", id); err != nil {
+	if err := f.db.SelectContext(ctx, &reservations, "SELECT * FROM reservation WHERE facility_id = $1", id); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			reservations = []models.Reservation{}
 		}
@@ -51,7 +51,7 @@ func (f *FacilityStore) Get(ctx context.Context, id int64) (*models.FullFacility
 	}
 
 	var building models.Building
-	if err := f.db.GetContext(ctx, &building, "SELECT * FROM buildings WHERE id = $1", facility.BuildingID); err != nil {
+	if err := f.db.GetContext(ctx, &building, "SELECT * FROM building WHERE id = $1", facility.BuildingID); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			building = models.Building{}
 		}

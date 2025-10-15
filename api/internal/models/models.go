@@ -472,8 +472,8 @@ type Reservation struct {
 	InsuranceLink *string             `db:"insurance_link" json:"insurance_link"`
 	CostOverride  pgtype.Numeric      `db:"cost_override" json:"cost_override"`
 	RRule         *string             `db:"rrule" json:"rrule"`
-	RDates        []time.Time         `db:"rdates" json:"rdates"`
-	EXDates       []time.Time         `db:"exdates" json:"exdates"`
+	RDates        *[]time.Time        `db:"rdates" json:"rdates"`
+	EXDates       *[]time.Time        `db:"exdates" json:"exdates"`
 	GCalEventID   *string             `db:"gcal_eventid" json:"gcal_eventid"`
 }
 
@@ -504,8 +504,8 @@ func (r *Reservation) ToProto() *pbReservation.Reservation {
 		InsuranceLink: r.InsuranceLink,
 		CostOverride:  utils.PgNumericToString(r.CostOverride),
 		Rrule:         r.RRule,
-		Rdates:        utils.DatesArrayToString(r.RDates),
-		Exdates:       utils.DatesArrayToString(r.EXDates),
+		Rdates:        utils.DatesArrayToString(*r.RDates),
+		Exdates:       utils.DatesArrayToString(*r.EXDates),
 		GcalEventid:   r.GCalEventID,
 	}
 }
@@ -513,6 +513,8 @@ func (r *Reservation) ToProto() *pbReservation.Reservation {
 const RFC5545 = "20060102T150405Z"
 
 func ToReservation(reservation *pbReservation.Reservation) *Reservation {
+	rdates := utils.StringArrayToDates(reservation.Rdates)
+	exdates := utils.StringArrayToDates(reservation.Exdates)
 	return &Reservation{
 		ID:            reservation.Id,
 		UserID:        reservation.UserId,
@@ -539,8 +541,8 @@ func ToReservation(reservation *pbReservation.Reservation) *Reservation {
 		InsuranceLink: reservation.InsuranceLink,
 		CostOverride:  utils.StringToPgNumeric(reservation.CostOverride),
 		RRule:         reservation.Rrule,
-		RDates:        utils.StringArrayToDates(reservation.Rdates),
-		EXDates:       utils.StringArrayToDates(reservation.Exdates),
+		RDates:        &rdates,
+		EXDates:       &exdates,
 		GCalEventID:   reservation.GcalEventid,
 	}
 }

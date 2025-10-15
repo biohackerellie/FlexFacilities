@@ -29,7 +29,7 @@ export default function NotificationList({
   const notifications = React.use(getNotificationsPromise);
   const buildings = React.use(getBuildingsPromise);
   const [selectedBuilding, setSelectedBuilding] = React.useState<
-    { name: string; id: bigint } | undefined
+    { name: string; id: string } | undefined
   >(undefined);
   const onChange = (value: string) => {
     setSelectedBuilding(buildings?.find((building) => building.name === value));

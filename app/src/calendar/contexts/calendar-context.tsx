@@ -11,7 +11,7 @@ interface ICalendarContext {
   selectedBuildingId: Building['id'] | 'all';
   setSelectedBuildingId: (buildingId: Building['id'] | 'all') => void;
   buildings: Building[];
-  events: IEvent[];
+  events: IEvent[] | null;
   setLocalEvents: Dispatch<SetStateAction<IEvent[]>>;
   visibleHours: TVisibleHours;
   setVisibleHours: Dispatch<SetStateAction<TVisibleHours>>;

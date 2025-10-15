@@ -23,7 +23,7 @@ interface IForminput {
   reservationId: any;
 }
 
-export default function EditPricing({ id }: { id: bigint }) {
+export default function EditPricing({ id }: { id: string }) {
   const { register, handleSubmit } = useForm<IForminput>();
   const router = useRouter();
   const reservationID = id;

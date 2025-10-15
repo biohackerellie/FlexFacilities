@@ -38,7 +38,7 @@ const categoryPrice = z
   });
 const schema = z.object({
   name: z.string().min(1, { message: 'Facility name is required' }),
-  capacity: z.number().min(1, { message: 'Capacity is required' }),
+  capacity: z.string().min(1, { message: 'Capacity is required' }),
   googleCalendarId: z
     .string()
     .min(1, { message: 'Google Calendar ID is required' }),

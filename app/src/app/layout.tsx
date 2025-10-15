@@ -5,12 +5,13 @@ import { ThemeProviders } from '@/components/contexts/providers/ThemeProvider';
 import Footer from '@/components/ui/footer';
 import Navbar from '@/components/ui/navbar/Navbar';
 import { Toaster } from '@/components/ui/sonner';
-import { cn } from '@/lib/utils';
 import { getBranding } from '@/lib/actions/utility';
+import { cn } from '@/lib/utils';
 
 import './styles/globals.css';
-import { Skeleton } from '@/components/ui/skeleton';
 import { AuthProvider } from '@/components/hooks/useAuth';
+import { Skeleton } from '@/components/ui/skeleton';
+
 export { meta as metadata } from './metadata';
 
 import { Metadata, ResolvingMetadata } from 'next';
@@ -65,7 +66,7 @@ export default async function RootLayout({
             <Navbar />
 
             {children}
-            <div className="absolute bottom-0 w-full">
+            <div className="relative align-bottom bottom-0 w-full">
               <React.Suspense fallback={footerSkeleton()}>
                 <Footer />
               </React.Suspense>

@@ -11,6 +11,7 @@ import { getFacilities } from '@/lib/actions/facilities';
 import { type Step1Data, step1Schema } from '@/lib/form-schemas';
 import { useFormStore } from '@/lib/form-store';
 import { Spinner } from '../spinner';
+import { logger } from '@/lib/logger';
 
 interface Step1Props {
   onNext: () => void;
@@ -20,9 +21,9 @@ interface Step1Props {
 
 export function Step1({ onNext, facilitiesPromise, userID }: Step1Props) {
   const { formData, updateFormData } = useFormStore();
-  const [selectedBuilding, setSelectedBuilding] = useState<bigint | null>(null);
-  const [selectedFacility, setSelectedFacility] = useState<bigint | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState<bigint | null>(null);
+  const [selectedBuilding, setSelectedBuilding] = useState<string | null>(null);
+  const [selectedFacility, setSelectedFacility] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [view, setView] = useState<'buildings' | 'facilities' | 'categories'>(
     'buildings',
   );
@@ -54,19 +55,20 @@ export function Step1({ onNext, facilitiesPromise, userID }: Step1Props) {
     }
   }, [userID, formData.userID, setValue, updateFormData]);
 
-  const handleBuildingSelect = (buildingId: bigint) => {
+  const handleBuildingSelect = (buildingId: string) => {
+    logger.debug('handleBuildingSelect', { 'buidling id: ': buildingId });
     setSelectedBuilding(buildingId);
     setView('facilities');
   };
 
-  const handleFacilitySelect = (facilityId: bigint) => {
+  const handleFacilitySelect = (facilityId: string) => {
     setValue('facilityID', facilityId);
     updateFormData({ facilityID: facilityId }); // Declare facilityID variable here
     setSelectedFacility(facilityId);
     setView('categories');
   };
 
-  const handleCategorySelect = (categoryId: bigint) => {
+  const handleCategorySelect = (categoryId: string) => {
     setValue('categoryID', categoryId);
     updateFormData({ categoryID: categoryId });
     setSelectedCategory(categoryId);
@@ -80,9 +82,7 @@ export function Step1({ onNext, facilitiesPromise, userID }: Step1Props) {
   const selectedBuildingData = useMemo(
     () =>
       (selectedBuilding &&
-        buildingsData.find(
-          (b) => b.building!.id === BigInt(selectedBuilding),
-        )) ||
+        buildingsData.find((b) => b.building!.id === selectedBuilding)) ||
       null,
     [selectedBuilding],
   );
@@ -90,7 +90,7 @@ export function Step1({ onNext, facilitiesPromise, userID }: Step1Props) {
   const selectedFacilityData =
     (selectedFacility &&
       selectedBuildingData?.facilities.find(
-        (f) => f.facility!.id === BigInt(selectedFacility),
+        (f) => f.facility!.id === selectedFacility,
       )) ||
     null;
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { InputOTPForm } from './form';
 import { Spinner } from '@/components/spinner';
+import { InputOTPForm } from './form';
 
 export default function verifyPage() {
   return (

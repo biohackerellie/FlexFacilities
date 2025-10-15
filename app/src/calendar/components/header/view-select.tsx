@@ -22,13 +22,13 @@ export default function ViewSelect() {
   );
 
   return (
-    <div className="inline-flex first:rounded-r-none last:rounded-l-none [&:not(:first-child):not(:last-child)]:rounded-none">
+    <div className="inline-flex ">
       <Button
         asChild
         aria-label="View by day"
         size="icon"
+        className="size-8"
         variant={view === 'day' ? 'default' : 'outline'}
-        className="rounded-r-none [&_svg]:size-5"
         onClick={() => {
           router.push(`${pathname}?${createQueryString('view', 'day')}`);
         }}
@@ -40,8 +40,8 @@ export default function ViewSelect() {
         asChild
         aria-label="View by week"
         size="icon"
+        className="size-8"
         variant={view === 'week' ? 'default' : 'outline'}
-        className="-ml-px rounded-none [&_svg]:size-5"
         onClick={() => {
           router.push(`${pathname}?${createQueryString('view', 'week')}`);
         }}
@@ -53,8 +53,8 @@ export default function ViewSelect() {
         asChild
         aria-label="View by month"
         size="icon"
+        className="size-8"
         variant={view === 'month' ? 'default' : 'outline'}
-        className="-ml-px rounded-none [&_svg]:size-5"
         onClick={() => {
           router.push(`${pathname}?${createQueryString('view', 'month')}`);
         }}
@@ -66,8 +66,8 @@ export default function ViewSelect() {
         asChild
         aria-label="View by year"
         size="icon"
+        className="size-8"
         variant={view === 'year' ? 'default' : 'outline'}
-        className="-ml-px rounded-none [&_svg]:size-5"
         onClick={() => {
           router.push(`${pathname}?${createQueryString('view', 'year')}`);
         }}
@@ -79,8 +79,8 @@ export default function ViewSelect() {
         asChild
         aria-label="View by agenda"
         size="icon"
+        className="size-8"
         variant={view === 'agenda' ? 'default' : 'outline'}
-        className="-ml-px rounded-l-none [&_svg]:size-5"
         onClick={() => {
           router.push(`${pathname}?${createQueryString('view', 'agenda')}`);
         }}

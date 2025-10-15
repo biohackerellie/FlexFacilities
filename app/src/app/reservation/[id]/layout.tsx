@@ -7,10 +7,10 @@ import { getFacility } from '@/lib/actions/facilities';
 import { getReservation } from '@/lib/actions/reservations';
 import { getUser } from '@/lib/actions/users';
 import { auth } from '@/lib/auth';
+import { ReservationDate } from '@/lib/types';
 import type { SideBarType } from '@/lib/validators/constants';
 import AdminPanel from './_components/adminButtons';
 import { ReservationProvider } from './_components/context';
-import { ReservationDate } from '@/lib/types';
 
 export default async function reservationLayout({
   children,

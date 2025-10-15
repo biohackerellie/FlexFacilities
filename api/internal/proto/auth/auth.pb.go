@@ -645,7 +645,8 @@ const file_proto_auth_auth_proto_rawDesc = "" +
 	"\x14RequestResetPassword\x12%.api.auth.RequestResetPasswordRequest\x1a\x17.api.auth.LoginResponse\x12@\n" +
 	"\rResetPassword\x12\x16.api.auth.LoginRequest\x1a\x17.api.auth.LoginResponse\x12B\n" +
 	"\rVerify2FACode\x12\x17.api.auth.VerifyRequest\x1a\x18.api.auth.VerifyResponse\x12U\n" +
-	"\x13VerifyResetPassword\x12\x1f.api.auth.VerifyPasswordRequest\x1a\x1d.api.auth.VerifyResetResponseB%Z#api/internal/proto/auth;authserviceb\x06proto3"
+	"\x13VerifyResetPassword\x12\x1f.api.auth.VerifyPasswordRequest\x1a\x1d.api.auth.VerifyResetResponseB\x7f\n" +
+	"\fcom.api.authB\tAuthProtoP\x01Z#api/internal/proto/auth;authservice\xa2\x02\x03AAX\xaa\x02\bApi.Auth\xca\x02\bApi\\Auth\xe2\x02\x14Api\\Auth\\GPBMetadata\xea\x02\tApi::Authb\x06proto3"
 
 var (
 	file_proto_auth_auth_proto_rawDescOnce sync.Once

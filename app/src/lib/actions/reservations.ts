@@ -39,7 +39,7 @@ interface IForminput {
   reservationId: any;
 }
 
-export async function addFee(data: IForminput, id: bigint) {
+export async function addFee(data: IForminput, id: string) {
   const { error } = await client.reservations().updateReservationFee({
     fee: {
       additionalFees: String(data.additionalFees),
@@ -58,7 +58,7 @@ export async function addFee(data: IForminput, id: bigint) {
 export async function getReservation(id: string) {
   const { data, error } = await client
     .reservations()
-    .getReservation({ id: BigInt(id) });
+    .getReservation({ id: id });
   if (error) {
     logger.error('Error fetching reservation', { 'error ': error });
     return null;
@@ -68,9 +68,7 @@ export async function getReservation(id: string) {
 }
 
 export async function getReservationCategory(id: string) {
-  const { data, error } = await client
-    .facilities()
-    .getCategory({ id: BigInt(id) });
+  const { data, error } = await client.facilities().getCategory({ id: id });
   if (error) {
     logger.error('Error fetching reservation', { 'error ': error });
     return null;
@@ -80,9 +78,7 @@ export async function getReservationCategory(id: string) {
 }
 
 export async function costReducer(id: string) {
-  const { data, error } = await client
-    .reservations()
-    .costReducer({ id: BigInt(id) });
+  const { data, error } = await client.reservations().costReducer({ id: id });
 
   if (error) {
     logger.error('Error fetching cost reducer', { 'error ': error });
@@ -110,7 +106,7 @@ export async function AddDates({
   localStart,
   localEnd,
 }: {
-  reservationID: bigint;
+  reservationID: string;
   localStart: string;
   localEnd: string;
 }) {
@@ -132,7 +128,7 @@ export async function AddDates({
 }
 
 export async function ApproveReservation(
-  id: bigint,
+  id: string,
   status: ReservationStatus,
 ) {
   const { error } = await client
@@ -147,7 +143,7 @@ export async function ApproveReservation(
   revalidateTag('requests');
 }
 export async function UpdateDateStatus(
-  ids: bigint[],
+  ids: string[],
   status: ReservationStatus,
 ) {
   const { error } = await client
@@ -160,7 +156,7 @@ export async function UpdateDateStatus(
   revalidateTag('reservations');
 }
 
-export async function DeleteDates(ids: bigint[]) {
+export async function DeleteDates(ids: string[]) {
   const { error } = await client
     .reservations()
     .deleteReservationDates({ id: ids });

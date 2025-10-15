@@ -15,9 +15,7 @@ export default async function facilityEditForm({
 }) {
   const Forms = dynamic(() => import('./forms'));
   const { id } = await params;
-  const { data, error } = await client
-    .facilities()
-    .getFacility({ id: BigInt(id) });
+  const { data, error } = await client.facilities().getFacility({ id: id });
   if (!data || error) return notFound();
   const facility = data?.facility;
   if (!facility) return notFound();

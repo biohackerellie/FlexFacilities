@@ -100,6 +100,7 @@ func requiresAuth(procedure string) bool {
 		AuthLoginProcedure:                              true,
 		AuthRegisterProcedure:                           true,
 		AuthVerify2FACodeProcedure:                      true,
+		GetAllCoordsProcedure:                           true,
 	}
 	if _, ok := publicProcedures[procedure]; ok {
 		return false
@@ -119,19 +120,16 @@ func (s *Auth) AuthMiddleware(next http.Handler) http.Handler {
 		}
 
 		if !requiresAuth(procedure) {
-			s.logger.Debug("AuthMiddleware", "procedure", procedure, "does not require auth")
+			s.logger.Debug("AuthMiddleware", "procedure", procedure, "reason", "does not require auth")
 			next.ServeHTTP(w, r)
 			return
 		}
 		var user *models.Users
-		s.logger.Debug("AuthMiddleware", "headers", r.Header)
 		authHeader := r.Header.Get("Authorization")
 		if authHeader == "" {
 			_ = s.ErrW.Write(w, r, connect.NewError(connect.CodeUnauthenticated, errors.New("unauthenticated")))
 			return
 		}
-		// get jwt token from auth header
-		// Bearer <token>
 		splitToken := strings.Split(authHeader, " ")
 		if len(splitToken) != 2 {
 			_ = s.ErrW.Write(w, r, connect.NewError(connect.CodeUnauthenticated, errors.New("unauthenticated")))
@@ -157,8 +155,8 @@ func (s *Auth) AuthMiddleware(next http.Handler) http.Handler {
 					_ = s.ErrW.Write(w, r, connect.NewError(connect.CodeUnauthenticated, errors.New("unauthenticated")))
 					return
 				}
-				issueCookie(w, fmt.Sprintf(jwtCookieName, s.cookiePrefix), res.NewToken, s.secure, 0)
-				issueCookie(w, fmt.Sprintf(sessionCookieName, s.cookiePrefix), res.Session, s.secure, 0)
+				issueCookie(w, fmt.Sprintf("%s%s", s.cookiePrefix, jwtCookieName), res.NewToken, s.secure, 0)
+				issueCookie(w, fmt.Sprintf("%s%s", s.cookiePrefix, sessionCookieName), res.Session, s.secure, 0)
 				token, err = VerifyToken(res.NewToken, &Claims{}, s.key)
 				if err != nil {
 					_ = s.ErrW.Write(w, r, connect.NewError(connect.CodeUnauthenticated, errors.New("unauthenticated")))
@@ -178,14 +176,6 @@ func (s *Auth) AuthMiddleware(next http.Handler) http.Handler {
 		ctx := WithAuthCTX(r.Context(), user, session.ID)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
-}
-
-func (s *Auth) readCookie(r *http.Request, name string) (string, bool) {
-	c, err := r.Cookie(name)
-	if err != nil || c == nil || c.Value == "" {
-		return "", false
-	}
-	return c.Value, true
 }
 
 func issueCookie(w http.ResponseWriter, name, val string, secure bool, maxAge int) {

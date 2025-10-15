@@ -1,3 +1,4 @@
+'use client';
 import { formatDate } from 'date-fns';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useMemo } from 'react';
@@ -17,18 +18,18 @@ interface IProps {
 export function DateNavigator({ view, events }: IProps) {
   const { selectedDate, setSelectedDate } = useCalendar();
 
-  const month = formatDate(selectedDate, 'MMMM');
-  const year = selectedDate.getFullYear();
+  const month = formatDate(selectedDate || new Date(), 'MMMM');
+  const year = selectedDate?.getFullYear() ?? new Date().getFullYear();
 
   const eventCount = useMemo(
-    () => getEventsCount(events, selectedDate, view),
+    () => getEventsCount(events, selectedDate ?? new Date(), view),
     [events, selectedDate, view],
   );
 
   const handlePrevious = () =>
-    setSelectedDate(navigateDate(selectedDate, view, 'previous'));
+    setSelectedDate(navigateDate(selectedDate!, view, 'previous'));
   const handleNext = () =>
-    setSelectedDate(navigateDate(selectedDate, view, 'next'));
+    setSelectedDate(navigateDate(selectedDate!, view, 'next'));
 
   return (
     <div className="space-y-0.5">
@@ -51,7 +52,7 @@ export function DateNavigator({ view, events }: IProps) {
         </Button>
 
         <p className="text-sm text-muted-foreground">
-          {rangeText(view, selectedDate)}
+          {rangeText(view, selectedDate!)}
         </p>
 
         <Button

@@ -94,7 +94,7 @@ export default function Forms({ data }: FormProps) {
               id="capacity"
               placeholder={facility.capacity?.toString() ?? ''}
               onChange={(e) => {
-                setFac({ ...fac, capacity: BigInt(e.target.value) });
+                setFac({ ...fac, capacity: e.target.value });
               }}
             />
             <Button onClick={() => handleUpdateFacility()} variant="outline">

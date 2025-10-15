@@ -130,7 +130,7 @@ export interface Events {
   end: string | number | Date;
   location: string | null;
   recurringEventId: string | null;
-  facilityId: bigint | number;
+  facilityId: string | null;
   Facility: Facility;
   placeholder: boolean;
 }

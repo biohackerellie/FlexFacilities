@@ -67,7 +67,7 @@ export default async function paymentPage({
               <>
                 <div className="mb-2 border-b py-2">
                   <DataTable columns={adminColumns} data={mappedFees} />
-                  <EditPricing id={BigInt(id)} />
+                  <EditPricing id={id} />
                 </div>
                 <div className="flex justify-center border-b-2">
                   <Options facilitiesPromise={getFacilities()} />

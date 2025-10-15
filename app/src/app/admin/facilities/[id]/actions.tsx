@@ -34,7 +34,7 @@ export async function updateFacility(facility: Facility) {
   revalidateTag('facilities');
 }
 
-export async function deleteFacility(id: bigint) {
+export async function deleteFacility(id: string) {
   await client.facilities().deleteFacility({ id });
   revalidateTag('facilities');
 }

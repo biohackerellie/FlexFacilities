@@ -335,9 +335,9 @@ const file_proto_utility_utility_proto_rawDesc = "" +
 	"\x06values\x18\x02 \x03(\v2%.api.utility.RPMDataEntry.ValuesEntryR\x06values\x1a9\n" +
 	"\vValuesEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\x05R\x05value:\x028\x01\"\xb4\x04\n" +
-	"\bBranding\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\x12+\n" +
+	"\x05value\x18\x02 \x01(\x05R\x05value:\x028\x01\"\xb8\x04\n" +
+	"\bBranding\x12\x12\n" +
+	"\x02id\x18\x01 \x01(\x03B\x020\x01R\x02id\x12+\n" +
 	"\x11organization_name\x18\x02 \x01(\tR\x10organizationName\x124\n" +
 	"\x16organization_logo_path\x18\x03 \x01(\tR\x14organizationLogoPath\x12A\n" +
 	"\x1aorganization_primary_color\x18\x04 \x01(\tH\x00R\x18organizationPrimaryColor\x88\x01\x01\x12E\n" +
@@ -358,7 +358,8 @@ const file_proto_utility_utility_proto_rawDesc = "" +
 	"\x0eUtilityService\x12j\n" +
 	"\x12AggregateChartData\x12&.api.utility.AggregateChartDataRequest\x1a'.api.utility.AggregateChartDataResponse\"\x03\x90\x02\x01\x12J\n" +
 	"\vGetBranding\x12\x1f.api.utility.GetBrandingRequest\x1a\x15.api.utility.Branding\"\x03\x90\x02\x01\x12L\n" +
-	"\x0eUpdateBranding\x12\x15.api.utility.Branding\x1a#.api.utility.UpdateBrandingResponseB+Z)api/internal/proto/utility;utilityserviceb\x06proto3"
+	"\x0eUpdateBranding\x12\x15.api.utility.Branding\x1a#.api.utility.UpdateBrandingResponseB\x97\x01\n" +
+	"\x0fcom.api.utilityB\fUtilityProtoP\x01Z)api/internal/proto/utility;utilityservice\xa2\x02\x03AUX\xaa\x02\vApi.Utility\xca\x02\vApi\\Utility\xe2\x02\x17Api\\Utility\\GPBMetadata\xea\x02\fApi::Utilityb\x06proto3"
 
 var (
 	file_proto_utility_utility_proto_rawDescOnce sync.Once

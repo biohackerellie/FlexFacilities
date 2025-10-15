@@ -1,5 +1,5 @@
-import { createConnectTransport } from '@connectrpc/connect-web';
 import { Interceptor } from '@connectrpc/connect';
+import { createConnectTransport } from '@connectrpc/connect-web';
 import { cookies } from 'next/headers';
 import { RPC } from './rpc';
 

@@ -22,7 +22,7 @@ export default function ShowPayment({ fees }: feeProps) {
   const email = user?.email || '';
 
   const description = `${reservation.eventName} at ${facility?.building} ${facility.name} by ${user?.name}`;
-  function PayOnline(id: bigint, fees: number, email: string) {
+  function PayOnline(id: string, fees: number, email: string) {
     startTransition(() => {
       toast.promise(GeneratePaymentLink(id, fees, description, email), {
         loading: 'Creating payment link...',

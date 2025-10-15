@@ -15,9 +15,9 @@ const RecurrencePattern = z.object({
 });
 export const step1Schema = z.object({
   userID: z.string().min(2, 'You must be logged in to create a reservation'),
-  facilityID: z.bigint().min(BigInt(0), 'You must select a facility'),
+  facilityID: z.string().min(1, 'You must select a facility'),
 
-  categoryID: z.bigint().min(BigInt(0), 'You must select a category'),
+  categoryID: z.string().min(1, 'You must select a category'),
 });
 
 export const step2Schema = z.object({

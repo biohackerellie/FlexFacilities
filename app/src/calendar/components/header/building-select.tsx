@@ -13,7 +13,7 @@ export function BuildingSelect() {
   const { buildings, selectedBuildingId, setSelectedBuildingId } =
     useCalendar();
   const handleSelectBuilding = (buildingId: string) => {
-    setSelectedBuildingId(BigInt(buildingId));
+    setSelectedBuildingId(buildingId);
   };
 
   return (

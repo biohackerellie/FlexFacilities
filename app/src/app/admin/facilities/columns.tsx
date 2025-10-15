@@ -8,14 +8,14 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
 export type TableFacility = {
-  id: bigint;
+  id: string;
   name: string;
   building: string;
   address: string;
   imagePath: string | undefined;
-  capacity: bigint | undefined;
+  capacity: string | undefined;
   googleCalendarId: string;
-  Category: bigint[];
+  Category: string[];
 };
 export const columns: ColumnDef<TableFacility>[] = [
   {

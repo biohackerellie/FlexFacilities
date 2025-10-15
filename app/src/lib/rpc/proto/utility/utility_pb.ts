@@ -2,20 +2,31 @@
 // @generated from file proto/utility/utility.proto (package api.utility, syntax proto3)
 /* eslint-disable */
 
-import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
-import { fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
-import type { Message } from "@bufbuild/protobuf";
+import type { Message } from '@bufbuild/protobuf';
+import type {
+  GenFile,
+  GenMessage,
+  GenService,
+} from '@bufbuild/protobuf/codegenv2';
+import {
+  fileDesc,
+  messageDesc,
+  serviceDesc,
+} from '@bufbuild/protobuf/codegenv2';
 
 /**
  * Describes the file proto/utility/utility.proto.
  */
-export const file_proto_utility_utility: GenFile = /*@__PURE__*/
-  fileDesc("Chtwcm90by91dGlsaXR5L3V0aWxpdHkucHJvdG8SC2FwaS51dGlsaXR5IoMBCgxSUE1EYXRhRW50cnkSDQoFbW9udGgYASABKAkSNQoGdmFsdWVzGAIgAygLMiUuYXBpLnV0aWxpdHkuUlBNRGF0YUVudHJ5LlZhbHVlc0VudHJ5Gi0KC1ZhbHVlc0VudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoBToCOAEilQMKCEJyYW5kaW5nEgoKAmlkGAEgASgDEhkKEW9yZ2FuaXphdGlvbl9uYW1lGAIgASgJEh4KFm9yZ2FuaXphdGlvbl9sb2dvX3BhdGgYAyABKAkSJwoab3JnYW5pemF0aW9uX3ByaW1hcnlfY29sb3IYBCABKAlIAIgBARIpChxvcmdhbml6YXRpb25fc2Vjb25kYXJ5X2NvbG9yGAUgASgJSAGIAQESHQoQb3JnYW5pemF0aW9uX3VybBgGIAEoCUgCiAEBEiUKGG9yZ2FuaXphdGlvbl9kZXNjcmlwdGlvbhgHIAEoCUgDiAEBEh8KEm9yZ2FuaXphdGlvbl9lbWFpbBgIIAEoCUgEiAEBQh0KG19vcmdhbml6YXRpb25fcHJpbWFyeV9jb2xvckIfCh1fb3JnYW5pemF0aW9uX3NlY29uZGFyeV9jb2xvckITChFfb3JnYW5pemF0aW9uX3VybEIbChlfb3JnYW5pemF0aW9uX2Rlc2NyaXB0aW9uQhUKE19vcmdhbml6YXRpb25fZW1haWwiGwoZQWdncmVnYXRlQ2hhcnREYXRhUmVxdWVzdCJFChpBZ2dyZWdhdGVDaGFydERhdGFSZXNwb25zZRInCgRkYXRhGAEgAygLMhkuYXBpLnV0aWxpdHkuUlBNRGF0YUVudHJ5IhQKEkdldEJyYW5kaW5nUmVxdWVzdCIYChZVcGRhdGVCcmFuZGluZ1Jlc3BvbnNlMpYCCg5VdGlsaXR5U2VydmljZRJqChJBZ2dyZWdhdGVDaGFydERhdGESJi5hcGkudXRpbGl0eS5BZ2dyZWdhdGVDaGFydERhdGFSZXF1ZXN0GicuYXBpLnV0aWxpdHkuQWdncmVnYXRlQ2hhcnREYXRhUmVzcG9uc2UiA5ACARJKCgtHZXRCcmFuZGluZxIfLmFwaS51dGlsaXR5LkdldEJyYW5kaW5nUmVxdWVzdBoVLmFwaS51dGlsaXR5LkJyYW5kaW5nIgOQAgESTAoOVXBkYXRlQnJhbmRpbmcSFS5hcGkudXRpbGl0eS5CcmFuZGluZxojLmFwaS51dGlsaXR5LlVwZGF0ZUJyYW5kaW5nUmVzcG9uc2VCK1opYXBpL2ludGVybmFsL3Byb3RvL3V0aWxpdHk7dXRpbGl0eXNlcnZpY2ViBnByb3RvMw");
+export const file_proto_utility_utility: GenFile =
+  /*@__PURE__*/
+  fileDesc(
+    'Chtwcm90by91dGlsaXR5L3V0aWxpdHkucHJvdG8SC2FwaS51dGlsaXR5IoMBCgxSUE1EYXRhRW50cnkSDQoFbW9udGgYASABKAkSNQoGdmFsdWVzGAIgAygLMiUuYXBpLnV0aWxpdHkuUlBNRGF0YUVudHJ5LlZhbHVlc0VudHJ5Gi0KC1ZhbHVlc0VudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoBToCOAEimQMKCEJyYW5kaW5nEg4KAmlkGAEgASgDQgIwARIZChFvcmdhbml6YXRpb25fbmFtZRgCIAEoCRIeChZvcmdhbml6YXRpb25fbG9nb19wYXRoGAMgASgJEicKGm9yZ2FuaXphdGlvbl9wcmltYXJ5X2NvbG9yGAQgASgJSACIAQESKQocb3JnYW5pemF0aW9uX3NlY29uZGFyeV9jb2xvchgFIAEoCUgBiAEBEh0KEG9yZ2FuaXphdGlvbl91cmwYBiABKAlIAogBARIlChhvcmdhbml6YXRpb25fZGVzY3JpcHRpb24YByABKAlIA4gBARIfChJvcmdhbml6YXRpb25fZW1haWwYCCABKAlIBIgBAUIdChtfb3JnYW5pemF0aW9uX3ByaW1hcnlfY29sb3JCHwodX29yZ2FuaXphdGlvbl9zZWNvbmRhcnlfY29sb3JCEwoRX29yZ2FuaXphdGlvbl91cmxCGwoZX29yZ2FuaXphdGlvbl9kZXNjcmlwdGlvbkIVChNfb3JnYW5pemF0aW9uX2VtYWlsIhsKGUFnZ3JlZ2F0ZUNoYXJ0RGF0YVJlcXVlc3QiRQoaQWdncmVnYXRlQ2hhcnREYXRhUmVzcG9uc2USJwoEZGF0YRgBIAMoCzIZLmFwaS51dGlsaXR5LlJQTURhdGFFbnRyeSIUChJHZXRCcmFuZGluZ1JlcXVlc3QiGAoWVXBkYXRlQnJhbmRpbmdSZXNwb25zZTKWAgoOVXRpbGl0eVNlcnZpY2USagoSQWdncmVnYXRlQ2hhcnREYXRhEiYuYXBpLnV0aWxpdHkuQWdncmVnYXRlQ2hhcnREYXRhUmVxdWVzdBonLmFwaS51dGlsaXR5LkFnZ3JlZ2F0ZUNoYXJ0RGF0YVJlc3BvbnNlIgOQAgESSgoLR2V0QnJhbmRpbmcSHy5hcGkudXRpbGl0eS5HZXRCcmFuZGluZ1JlcXVlc3QaFS5hcGkudXRpbGl0eS5CcmFuZGluZyIDkAIBEkwKDlVwZGF0ZUJyYW5kaW5nEhUuYXBpLnV0aWxpdHkuQnJhbmRpbmcaIy5hcGkudXRpbGl0eS5VcGRhdGVCcmFuZGluZ1Jlc3BvbnNlQpcBCg9jb20uYXBpLnV0aWxpdHlCDFV0aWxpdHlQcm90b1ABWilhcGkvaW50ZXJuYWwvcHJvdG8vdXRpbGl0eTt1dGlsaXR5c2VydmljZaICA0FVWKoCC0FwaS5VdGlsaXR5ygILQXBpXFV0aWxpdHniAhdBcGlcVXRpbGl0eVxHUEJNZXRhZGF0YeoCDEFwaTo6VXRpbGl0eWIGcHJvdG8z',
+  );
 
 /**
  * @generated from message api.utility.RPMDataEntry
  */
-export type RPMDataEntry = Message<"api.utility.RPMDataEntry"> & {
+export type RPMDataEntry = Message<'api.utility.RPMDataEntry'> & {
   /**
    * @generated from field: string month = 1;
    */
@@ -31,17 +42,18 @@ export type RPMDataEntry = Message<"api.utility.RPMDataEntry"> & {
  * Describes the message api.utility.RPMDataEntry.
  * Use `create(RPMDataEntrySchema)` to create a new message.
  */
-export const RPMDataEntrySchema: GenMessage<RPMDataEntry> = /*@__PURE__*/
+export const RPMDataEntrySchema: GenMessage<RPMDataEntry> =
+  /*@__PURE__*/
   messageDesc(file_proto_utility_utility, 0);
 
 /**
  * @generated from message api.utility.Branding
  */
-export type Branding = Message<"api.utility.Branding"> & {
+export type Branding = Message<'api.utility.Branding'> & {
   /**
-   * @generated from field: int64 id = 1;
+   * @generated from field: int64 id = 1 [jstype = JS_STRING];
    */
-  id: bigint;
+  id: string;
 
   /**
    * @generated from field: string organization_name = 2;
@@ -83,63 +95,68 @@ export type Branding = Message<"api.utility.Branding"> & {
  * Describes the message api.utility.Branding.
  * Use `create(BrandingSchema)` to create a new message.
  */
-export const BrandingSchema: GenMessage<Branding> = /*@__PURE__*/
+export const BrandingSchema: GenMessage<Branding> =
+  /*@__PURE__*/
   messageDesc(file_proto_utility_utility, 1);
 
 /**
  * @generated from message api.utility.AggregateChartDataRequest
  */
-export type AggregateChartDataRequest = Message<"api.utility.AggregateChartDataRequest"> & {
-};
+export type AggregateChartDataRequest =
+  Message<'api.utility.AggregateChartDataRequest'> & {};
 
 /**
  * Describes the message api.utility.AggregateChartDataRequest.
  * Use `create(AggregateChartDataRequestSchema)` to create a new message.
  */
-export const AggregateChartDataRequestSchema: GenMessage<AggregateChartDataRequest> = /*@__PURE__*/
+export const AggregateChartDataRequestSchema: GenMessage<AggregateChartDataRequest> =
+  /*@__PURE__*/
   messageDesc(file_proto_utility_utility, 2);
 
 /**
  * @generated from message api.utility.AggregateChartDataResponse
  */
-export type AggregateChartDataResponse = Message<"api.utility.AggregateChartDataResponse"> & {
-  /**
-   * @generated from field: repeated api.utility.RPMDataEntry data = 1;
-   */
-  data: RPMDataEntry[];
-};
+export type AggregateChartDataResponse =
+  Message<'api.utility.AggregateChartDataResponse'> & {
+    /**
+     * @generated from field: repeated api.utility.RPMDataEntry data = 1;
+     */
+    data: RPMDataEntry[];
+  };
 
 /**
  * Describes the message api.utility.AggregateChartDataResponse.
  * Use `create(AggregateChartDataResponseSchema)` to create a new message.
  */
-export const AggregateChartDataResponseSchema: GenMessage<AggregateChartDataResponse> = /*@__PURE__*/
+export const AggregateChartDataResponseSchema: GenMessage<AggregateChartDataResponse> =
+  /*@__PURE__*/
   messageDesc(file_proto_utility_utility, 3);
 
 /**
  * @generated from message api.utility.GetBrandingRequest
  */
-export type GetBrandingRequest = Message<"api.utility.GetBrandingRequest"> & {
-};
+export type GetBrandingRequest = Message<'api.utility.GetBrandingRequest'> & {};
 
 /**
  * Describes the message api.utility.GetBrandingRequest.
  * Use `create(GetBrandingRequestSchema)` to create a new message.
  */
-export const GetBrandingRequestSchema: GenMessage<GetBrandingRequest> = /*@__PURE__*/
+export const GetBrandingRequestSchema: GenMessage<GetBrandingRequest> =
+  /*@__PURE__*/
   messageDesc(file_proto_utility_utility, 4);
 
 /**
  * @generated from message api.utility.UpdateBrandingResponse
  */
-export type UpdateBrandingResponse = Message<"api.utility.UpdateBrandingResponse"> & {
-};
+export type UpdateBrandingResponse =
+  Message<'api.utility.UpdateBrandingResponse'> & {};
 
 /**
  * Describes the message api.utility.UpdateBrandingResponse.
  * Use `create(UpdateBrandingResponseSchema)` to create a new message.
  */
-export const UpdateBrandingResponseSchema: GenMessage<UpdateBrandingResponse> = /*@__PURE__*/
+export const UpdateBrandingResponseSchema: GenMessage<UpdateBrandingResponse> =
+  /*@__PURE__*/
   messageDesc(file_proto_utility_utility, 5);
 
 /**
@@ -150,26 +167,24 @@ export const UtilityService: GenService<{
    * @generated from rpc api.utility.UtilityService.AggregateChartData
    */
   aggregateChartData: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof AggregateChartDataRequestSchema;
     output: typeof AggregateChartDataResponseSchema;
-  },
+  };
   /**
    * @generated from rpc api.utility.UtilityService.GetBranding
    */
   getBranding: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof GetBrandingRequestSchema;
     output: typeof BrandingSchema;
-  },
+  };
   /**
    * @generated from rpc api.utility.UtilityService.UpdateBranding
    */
   updateBranding: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof BrandingSchema;
     output: typeof UpdateBrandingResponseSchema;
-  },
-}> = /*@__PURE__*/
-  serviceDesc(file_proto_utility_utility, 0);
-
+  };
+}> = /*@__PURE__*/ serviceDesc(file_proto_utility_utility, 0);

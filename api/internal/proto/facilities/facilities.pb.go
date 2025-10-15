@@ -1737,25 +1737,25 @@ var File_proto_facilities_facilities_proto protoreflect.FileDescriptor
 
 const file_proto_facilities_facilities_proto_rawDesc = "" +
 	"\n" +
-	"!proto/facilities/facilities.proto\x12\x0eapi.facilities\"\xb1\x02\n" +
-	"\bFacility\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
+	"!proto/facilities/facilities.proto\x12\x0eapi.facilities\"\xbd\x02\n" +
+	"\bFacility\x12\x12\n" +
+	"\x02id\x18\x01 \x01(\x03B\x020\x01R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\"\n" +
 	"\n" +
-	"image_path\x18\x03 \x01(\tH\x00R\timagePath\x88\x01\x01\x12\x1f\n" +
-	"\bcapacity\x18\x04 \x01(\x03H\x01R\bcapacity\x88\x01\x01\x12\x1d\n" +
+	"image_path\x18\x03 \x01(\tH\x00R\timagePath\x88\x01\x01\x12#\n" +
+	"\bcapacity\x18\x04 \x01(\x03B\x020\x01H\x01R\bcapacity\x88\x01\x01\x12\x1d\n" +
 	"\n" +
 	"created_at\x18\x05 \x01(\tR\tcreatedAt\x12\x1d\n" +
 	"\n" +
 	"updated_at\x18\x06 \x01(\tR\tupdatedAt\x12,\n" +
-	"\x12google_calendar_id\x18\a \x01(\tR\x10googleCalendarId\x12$\n" +
-	"\vbuilding_id\x18\b \x01(\x03H\x02R\n" +
+	"\x12google_calendar_id\x18\a \x01(\tR\x10googleCalendarId\x12(\n" +
+	"\vbuilding_id\x18\b \x01(\x03B\x020\x01H\x02R\n" +
 	"buildingId\x88\x01\x01B\r\n" +
 	"\v_image_pathB\v\n" +
 	"\t_capacityB\x0e\n" +
-	"\f_building_id\"\xa4\x02\n" +
-	"\bBuilding\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
+	"\f_building_id\"\xa8\x02\n" +
+	"\bBuilding\x12\x12\n" +
+	"\x02id\x18\x01 \x01(\x03B\x020\x01R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x18\n" +
 	"\aaddress\x18\x03 \x01(\tR\aaddress\x12\"\n" +
 	"\n" +
@@ -1775,13 +1775,13 @@ const file_proto_facilities_facilities_proto_rawDesc = "" +
 	"facilities\"y\n" +
 	"\x12BuildingWithEvents\x124\n" +
 	"\bbuilding\x18\x01 \x01(\v2\x18.api.facilities.BuildingR\bbuilding\x12-\n" +
-	"\x06events\x18\x02 \x03(\v2\x15.api.facilities.EventR\x06events\"\x87\x01\n" +
-	"\bCategory\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x12\n" +
+	"\x06events\x18\x02 \x03(\v2\x15.api.facilities.EventR\x06events\"\x8f\x01\n" +
+	"\bCategory\x12\x12\n" +
+	"\x02id\x18\x01 \x01(\x03B\x020\x01R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
 	"\vdescription\x18\x03 \x01(\tR\vdescription\x12\x14\n" +
-	"\x05price\x18\x04 \x01(\x01R\x05price\x12\x1f\n" +
-	"\vfacility_id\x18\x05 \x01(\x03R\n" +
+	"\x05price\x18\x04 \x01(\x01R\x05price\x12#\n" +
+	"\vfacility_id\x18\x05 \x01(\x03B\x020\x01R\n" +
 	"facilityId\"\x88\x01\n" +
 	"\x16FacilityWithCategories\x124\n" +
 	"\bfacility\x18\x01 \x01(\v2\x18.api.facilities.FacilityR\bfacility\x128\n" +
@@ -1795,23 +1795,23 @@ const file_proto_facilities_facilities_proto_rawDesc = "" +
 	"\x05start\x18\x04 \x01(\tR\x05start\x12\x10\n" +
 	"\x03end\x18\x05 \x01(\tR\x03end\x12\x1b\n" +
 	"\thtml_link\x18\a \x01(\tR\bhtmlLink\x12\x14\n" +
-	"\x05title\x18\b \x01(\tR\x05title\"n\n" +
-	"\x06coords\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x1a\n" +
+	"\x05title\x18\b \x01(\tR\x05title\"r\n" +
+	"\x06coords\x12\x12\n" +
+	"\x02id\x18\x01 \x01(\x03B\x020\x01R\x02id\x12\x1a\n" +
 	"\bbuilding\x18\x02 \x01(\tR\bbuilding\x12\x1a\n" +
 	"\blatitude\x18\x03 \x01(\x01R\blatitude\x12\x1c\n" +
 	"\tlongitude\x18\x04 \x01(\x01R\tlongitude\"\x15\n" +
 	"\x13GetAllCoordsRequest\"B\n" +
 	"\x14GetAllCoordsResponse\x12*\n" +
-	"\x04data\x18\x01 \x03(\v2\x16.api.facilities.coordsR\x04data\"$\n" +
-	"\x12GetCategoryRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\",\n" +
-	"\x1aGetEventsByFacilityRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\"L\n" +
+	"\x04data\x18\x01 \x03(\v2\x16.api.facilities.coordsR\x04data\"(\n" +
+	"\x12GetCategoryRequest\x12\x12\n" +
+	"\x02id\x18\x01 \x01(\x03B\x020\x01R\x02id\"0\n" +
+	"\x1aGetEventsByFacilityRequest\x12\x12\n" +
+	"\x02id\x18\x01 \x01(\x03B\x020\x01R\x02id\"L\n" +
 	"\x1bGetEventsByFacilityResponse\x12-\n" +
-	"\x06events\x18\x01 \x03(\v2\x15.api.facilities.EventR\x06events\",\n" +
-	"\x1aGetEventsByBuildingRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\"L\n" +
+	"\x06events\x18\x01 \x03(\v2\x15.api.facilities.EventR\x06events\"0\n" +
+	"\x1aGetEventsByBuildingRequest\x12\x12\n" +
+	"\x02id\x18\x01 \x01(\x03B\x020\x01R\x02id\"L\n" +
 	"\x1bGetEventsByBuildingResponse\x12-\n" +
 	"\x06events\x18\x01 \x03(\v2\x15.api.facilities.EventR\x06events\"\x15\n" +
 	"\x13GetAllEventsRequest\"N\n" +
@@ -1820,13 +1820,13 @@ const file_proto_facilities_facilities_proto_rawDesc = "" +
 	"\x16GetAllBuildingsRequest\"Q\n" +
 	"\x17GetAllBuildingsResponse\x126\n" +
 	"\tbuildings\x18\x01 \x03(\v2\x18.api.facilities.BuildingR\tbuildings\"\x19\n" +
-	"\x17GetAllFacilitiesRequest\"$\n" +
-	"\x12GetFacilityRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\".\n" +
-	"\x1cGetFacilityCategoriesRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\"?\n" +
-	"\x1cGetBuildingFacilitiesRequest\x12\x1f\n" +
-	"\vbuilding_id\x18\x01 \x01(\x03R\n" +
+	"\x17GetAllFacilitiesRequest\"(\n" +
+	"\x12GetFacilityRequest\x12\x12\n" +
+	"\x02id\x18\x01 \x01(\x03B\x020\x01R\x02id\"2\n" +
+	"\x1cGetFacilityCategoriesRequest\x12\x12\n" +
+	"\x02id\x18\x01 \x01(\x03B\x020\x01R\x02id\"C\n" +
+	"\x1cGetBuildingFacilitiesRequest\x12#\n" +
+	"\vbuilding_id\x18\x01 \x01(\x03B\x020\x01R\n" +
 	"buildingId\"`\n" +
 	"\x18GetAllFacilitiesResponse\x12D\n" +
 	"\tbuildings\x18\x01 \x03(\v2&.api.facilities.BuildingWithFacilitiesR\tbuildings\"Y\n" +
@@ -1845,20 +1845,20 @@ const file_proto_facilities_facilities_proto_rawDesc = "" +
 	"\bfacility\x18\x01 \x01(\v2\x18.api.facilities.FacilityR\bfacility\x128\n" +
 	"\n" +
 	"categories\x18\x02 \x03(\v2\x18.api.facilities.CategoryR\n" +
-	"categories\"'\n" +
-	"\x15DeleteFacilityRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x03R\x02id\"\x18\n" +
+	"categories\"+\n" +
+	"\x15DeleteFacilityRequest\x12\x12\n" +
+	"\x02id\x18\x01 \x01(\x03B\x020\x01R\x02id\"\x18\n" +
 	"\x16DeleteFacilityResponse\"U\n" +
 	"\x1dUpdateFacilityCategoryRequest\x124\n" +
 	"\bcategory\x18\x01 \x01(\v2\x18.api.facilities.CategoryR\bcategory\"\x18\n" +
 	"\x16CreateFacilityResponse\"\x18\n" +
-	"\x16UpdateFacilityResponse\"\xdb\x01\n" +
+	"\x16UpdateFacilityResponse\"\xdf\x01\n" +
 	"\fFullFacility\x124\n" +
 	"\bfacility\x18\x01 \x01(\v2\x18.api.facilities.FacilityR\bfacility\x128\n" +
 	"\n" +
 	"categories\x18\x02 \x03(\v2\x18.api.facilities.CategoryR\n" +
-	"categories\x12%\n" +
-	"\x0ereservation_id\x18\x03 \x03(\x03R\rreservationId\x124\n" +
+	"categories\x12)\n" +
+	"\x0ereservation_id\x18\x03 \x03(\x03B\x020\x01R\rreservationId\x124\n" +
 	"\bbuilding\x18\x04 \x01(\v2\x18.api.facilities.BuildingR\bbuilding2\xb6\v\n" +
 	"\x11FacilitiesService\x12j\n" +
 	"\x10GetAllFacilities\x12'.api.facilities.GetAllFacilitiesRequest\x1a(.api.facilities.GetAllFacilitiesResponse\"\x03\x90\x02\x01\x12g\n" +
@@ -1874,7 +1874,8 @@ const file_proto_facilities_facilities_proto_rawDesc = "" +
 	"\x0eDeleteFacility\x12%.api.facilities.DeleteFacilityRequest\x1a&.api.facilities.DeleteFacilityResponse\x12a\n" +
 	"\x16UpdateFacilityCategory\x12-.api.facilities.UpdateFacilityCategoryRequest\x1a\x18.api.facilities.Category\x12P\n" +
 	"\vGetCategory\x12\".api.facilities.GetCategoryRequest\x1a\x18.api.facilities.Category\"\x03\x90\x02\x01\x12^\n" +
-	"\fGetAllCoords\x12#.api.facilities.GetAllCoordsRequest\x1a$.api.facilities.GetAllCoordsResponse\"\x03\x90\x02\x01B1Z/api/internal/proto/facilities;facilitiesserviceb\x06proto3"
+	"\fGetAllCoords\x12#.api.facilities.GetAllCoordsRequest\x1a$.api.facilities.GetAllCoordsResponse\"\x03\x90\x02\x01B\xaf\x01\n" +
+	"\x12com.api.facilitiesB\x0fFacilitiesProtoP\x01Z/api/internal/proto/facilities;facilitiesservice\xa2\x02\x03AFX\xaa\x02\x0eApi.Facilities\xca\x02\x0eApi\\Facilities\xe2\x02\x1aApi\\Facilities\\GPBMetadata\xea\x02\x0fApi::Facilitiesb\x06proto3"
 
 var (
 	file_proto_facilities_facilities_proto_rawDescOnce sync.Once

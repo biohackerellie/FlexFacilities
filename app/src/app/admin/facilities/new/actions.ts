@@ -7,8 +7,8 @@ import type { CreateFacilitySchema } from './form';
 export async function createFacility(facility: CreateFacilitySchema) {
   const fac: Partial<Facility> = {
     name: facility.name,
-    buildingId: BigInt(facility.buildingId),
-    capacity: BigInt(facility.capacity),
+    buildingId: facility.buildingId,
+    capacity: facility.capacity,
     googleCalendarId: facility.googleCalendarId,
   };
 

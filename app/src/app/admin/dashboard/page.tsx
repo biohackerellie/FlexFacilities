@@ -1,4 +1,5 @@
 import { School } from 'lucide-react';
+import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -6,7 +7,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { AggregateChartData } from '@/lib/actions/reservations';
 import { client } from '@/lib/rpc';
 import ByMonthLine from './charts/byMonth-Line';
-import { notFound } from 'next/navigation';
 
 export default async function DashboardPage() {
   const { data: totalCount, error: countError } = await client

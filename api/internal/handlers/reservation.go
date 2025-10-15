@@ -194,8 +194,8 @@ func (a *ReservationHandler) CreateReservation(ctx context.Context, req *connect
 		DoorAccess:   &req.Msg.DoorAccess,
 		DoorsDetails: req.Msg.DoorsDetails,
 		RRule:        rruleStr,
-		RDates:       rdatesLocal,
-		EXDates:      exdatesLocal,
+		RDates:       &rdatesLocal,
+		EXDates:      &exdatesLocal,
 	})
 
 	if err != nil {
@@ -389,10 +389,12 @@ func (a *ReservationHandler) CreateReservationDates(ctx context.Context, req *co
 		return nil, err
 	}
 	reservation := resWrap.Reservation
+	rdates := *reservation.RDates
 	if reservation.RRule == nil || *reservation.RRule == "" {
 		for _, d := range dates {
-			reservation.RDates = append(reservation.RDates, d.LocalStart.Time)
+			rdates = append(rdates, d.LocalStart.Time)
 		}
+		reservation.RDates = &rdates
 		err = a.reservationStore.Update(ctx, reservation)
 		if err != nil {
 			return nil, err
@@ -581,7 +583,8 @@ func (a *ReservationHandler) DeleteReservationDates(ctx context.Context, req *co
 	}
 
 	datesToDelete := make([]models.ReservationDate, 0)
-	exDates := reservation.EXDates
+	exDates := *reservation.EXDates
+
 	for _, d := range dates {
 
 		if reservation.RRule != nil && *reservation.RRule != "" {

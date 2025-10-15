@@ -1,7 +1,7 @@
 'use server';
 import * as React from 'react';
-import { client } from '../rpc';
 import { logger } from '../logger';
+import { client } from '../rpc';
 
 export const getBranding = React.cache(async () => {
   const { data, error } = await client.utility().getBranding({});

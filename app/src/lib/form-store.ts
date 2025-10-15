@@ -5,12 +5,12 @@ import type { OccurrenceType, RecurrencePatternType } from './form-schemas';
 export interface FormData {
   // Step 1
   userID: string;
-  facilityID: bigint;
+  facilityID: string;
 
   // Step 2
   eventName: string;
   details: string;
-  categoryID: bigint;
+  categoryID: string;
   name: string;
   phone: string;
 
@@ -41,10 +41,10 @@ interface FormStore {
 
 const initialFormData: FormData = {
   userID: '',
-  facilityID: BigInt(0),
+  facilityID: '',
   eventName: '',
   details: '',
-  categoryID: BigInt(0),
+  categoryID: '',
   name: '',
   phone: '',
   techSupport: false,

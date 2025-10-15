@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic';
-import { Spinner } from '@/components/spinner';
 import * as React from 'react';
+import { Spinner } from '@/components/spinner';
 import { getAllMapCoords } from '@/lib/actions/facilities';
 
 export default function Home() {

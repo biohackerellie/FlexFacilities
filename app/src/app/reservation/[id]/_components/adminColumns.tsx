@@ -144,10 +144,10 @@ export const adminColumns: ColumnDef<ReservationDate>[] = [
 ];
 
 const handleUpdate = (
-  ids: bigint[],
+  ids: string[],
   status: ReservationStatus,
   totalRows: number,
-  reservationID: bigint,
+  reservationID: string,
 ) => {
   if (ids.length === totalRows) {
     toast.promise(ApproveReservation(reservationID, status), {
@@ -168,7 +168,7 @@ const handleUpdate = (
   }
 };
 
-const handleDelete = (ids: bigint[]) => {
+const handleDelete = (ids: string[]) => {
   toast.promise(DeleteDates(ids), {
     loading: 'Deleting selected Dates...',
     success: 'Success',

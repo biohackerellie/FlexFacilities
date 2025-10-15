@@ -39,10 +39,10 @@ export default function Options({
     reservation.categoryId,
   );
   const onSelectChange = (facilityId: string) => {
-    setSelectedFacility(facilities?.find((f) => f.id === BigInt(facilityId))!);
+    setSelectedFacility(facilities?.find((f) => f.id === facilityId)!);
   };
   const onSelectCategoryChange = (categoryId: string) => {
-    setSelectedCategory(BigInt(categoryId));
+    setSelectedCategory(categoryId);
   };
   const overrideCost = async () => {
     await updateReservation({

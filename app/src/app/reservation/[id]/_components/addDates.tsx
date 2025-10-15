@@ -17,7 +17,7 @@ import { logger } from '@/lib/logger';
 
 // form action to add dates to reservation
 
-const AddDateDialog = ({ id }: { id: bigint }) => {
+const AddDateDialog = ({ id }: { id: string }) => {
   const [open, setOpen] = React.useState(false);
   const [date, setDate] = React.useState<Date | undefined>(
     new Date(2025, 9, 10),
