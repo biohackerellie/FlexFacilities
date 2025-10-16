@@ -478,6 +478,14 @@ type Reservation struct {
 }
 
 func (r *Reservation) ToProto() *pbReservation.Reservation {
+	var rdates []string
+	if r.RDates != nil {
+		rdates = utils.DatesArrayToString(*r.RDates)
+	}
+	var exdates []string
+	if r.EXDates != nil {
+		exdates = utils.DatesArrayToString(*r.EXDates)
+	}
 	return &pbReservation.Reservation{
 		Id:            r.ID,
 		UserId:        r.UserID,
@@ -504,8 +512,8 @@ func (r *Reservation) ToProto() *pbReservation.Reservation {
 		InsuranceLink: r.InsuranceLink,
 		CostOverride:  utils.PgNumericToString(r.CostOverride),
 		Rrule:         r.RRule,
-		Rdates:        utils.DatesArrayToString(*r.RDates),
-		Exdates:       utils.DatesArrayToString(*r.EXDates),
+		Rdates:        rdates,
+		Exdates:       exdates,
 		GcalEventid:   r.GCalEventID,
 	}
 }
@@ -548,7 +556,7 @@ func ToReservation(reservation *pbReservation.Reservation) *Reservation {
 }
 
 type FullReservation struct {
-	Reservation *Reservation
+	Reservation Reservation
 	Dates       []ReservationDate
 	Fees        []ReservationFee
 }
@@ -558,7 +566,6 @@ func (r *FullReservation) ToProto() *pbReservation.FullReservation {
 	for i, date := range r.Dates {
 		dates[i] = date.ToProto()
 	}
-
 	fees := make([]*pbReservation.ReservationFee, len(r.Fees))
 	for i, fee := range r.Fees {
 		fees[i] = fee.ToProto()

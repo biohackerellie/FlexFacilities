@@ -324,3 +324,30 @@ func (s *UserStore) EditNotification(ctx context.Context, notification *models.N
 	_, err := s.db.NamedExecContext(ctx, editNotificationQuery, notification)
 	return err
 }
+
+const notificationUsersByBuildingQuery = `SELECT user_id FROM notifications WHERE building_id = $1`
+const toEmailsInQuery = `SELECT email FROM users WHERE id IN (?)`
+
+func (s *UserStore) NotificationUsersByBuilding(ctx context.Context, buildingID int64) ([]string, error) {
+	var ids []int64
+	if err := s.db.SelectContext(ctx, &ids, notificationUsersByBuildingQuery, buildingID); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return []string{}, nil
+		}
+		s.log.Error("error getting notificaiton users", "error", err)
+		return nil, err
+	}
+	if len(ids) == 0 {
+		return []string{}, nil
+	}
+	query, args, err := sqlx.In(toEmailsInQuery, ids)
+	if err != nil {
+		return nil, err
+	}
+	query = s.db.Rebind(query)
+	var emails []string
+	if err := s.db.SelectContext(ctx, &emails, query, args...); err != nil {
+		return nil, err
+	}
+	return emails, nil
+}

@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"api/internal/config"
+	"api/internal/lib/emails"
 	"api/internal/lib/recur"
 	"api/internal/lib/utils"
 	"api/internal/models"
@@ -13,6 +15,7 @@ import (
 	"log/slog"
 	"math"
 	"sort"
+	"strings"
 	"sync"
 	"time"
 
@@ -27,11 +30,26 @@ type ReservationHandler struct {
 	log              *slog.Logger
 	timezone         *time.Location
 	calendar         *calendar.Calendar
+	config           *config.Config
 }
 
-func NewReservationHandler(reservationStore ports.ReservationStore, userStore ports.UserStore, log *slog.Logger, timezone *time.Location) *ReservationHandler {
+func NewReservationHandler(
+	reservationStore ports.ReservationStore,
+	userStore ports.UserStore,
+	facilityStore ports.FacilityStore,
+	log *slog.Logger,
+	timezone *time.Location,
+	config *config.Config,
+) *ReservationHandler {
 	log.With(slog.Group("Core_ReservationHandler", slog.String("name", "reservation")))
-	return &ReservationHandler{reservationStore: reservationStore, userStore: userStore, log: log, timezone: timezone}
+	return &ReservationHandler{
+		reservationStore: reservationStore,
+		userStore:        userStore,
+		facilityStore:    facilityStore,
+		log:              log,
+		timezone:         timezone,
+		config:           config,
+	}
 }
 func (a *ReservationHandler) GetAllReservations(ctx context.Context, req *connect.Request[service.GetAllReservationsRequest]) (*connect.Response[service.AllReservationsResponse], error) {
 	res, err := a.reservationStore.GetAll(ctx)
@@ -98,6 +116,7 @@ func (a *ReservationHandler) GetRequestsThisWeek(ctx context.Context, req *conne
 }
 
 func (a *ReservationHandler) CreateReservation(ctx context.Context, req *connect.Request[service.CreateReservationRequest]) (*connect.Response[service.CreateReservationResponse], error) {
+
 	loc := a.timezone
 	hasOcc := len(req.Msg.Occurrences) > 0
 	hasRec := (req.Msg.Pattern != nil && req.Msg.Pattern.Freq != "") ||
@@ -139,7 +158,6 @@ func (a *ReservationHandler) CreateReservation(ctx context.Context, req *connect
 			RDates:    req.Msg.Rdates,
 			EXDates:   req.Msg.Exdates,
 		}
-
 		rule, dstart, dur, err := recur.BuildRRule(loc, p)
 		if err != nil {
 			return nil, err
@@ -197,7 +215,6 @@ func (a *ReservationHandler) CreateReservation(ctx context.Context, req *connect
 		RDates:       &rdatesLocal,
 		EXDates:      &exdatesLocal,
 	})
-
 	if err != nil {
 		return nil, err
 	}
@@ -211,11 +228,45 @@ func (a *ReservationHandler) CreateReservation(ctx context.Context, req *connect
 			Approved:      models.ReservationDateApprovedPending,
 		}
 	}
+
 	err = a.reservationStore.CreateDates(ctx, dates)
 
 	if err != nil {
+		a.log.Error("Reservation date not created", "id", id)
 		return nil, err
 	}
+
+	facilityID := req.Msg.GetFacilityId()
+	facility, err := a.facilityStore.Get(ctx, facilityID)
+	if err != nil {
+		a.log.Error("Facility not found", "id", req.Msg.FacilityId)
+		return nil, err
+	}
+	toEmails, err := a.userStore.NotificationUsersByBuilding(ctx, facility.Building.ID)
+	if err != nil {
+		return nil, err
+	}
+	if len(toEmails) == 0 {
+		toEmails = []string{"ellie@epklabs.com"}
+	}
+	toEmailsString := strings.Join(toEmails, ",")
+	var datesStr []string
+	for _, o := range occ {
+		datesStr = append(datesStr, o.Start.Format("2006-01-02"))
+	}
+	emailData := &emails.EmailData{
+		To:       toEmailsString,
+		Template: "newReservation.html",
+		Subject:  "New Reservation",
+		Data: map[string]any{
+			"Building": facility.Building.Name,
+			"Facility": facility.Facility.Name,
+			"Dates":    datesStr,
+			"URL":      fmt.Sprintf("%s/reservation/%v", a.config.FrontendUrl, id),
+		},
+	}
+	go emails.Send(emailData)
+
 	return connect.NewResponse(&service.CreateReservationResponse{
 		Id: id,
 	}), nil
@@ -242,10 +293,9 @@ func (a *ReservationHandler) UpdateReservationStatus(ctx context.Context, req *c
 	if res.Approved == status && status != models.ReservationApprovedApproved {
 		return connect.NewResponse(&service.UpdateReservationResponse{}), nil
 	}
-
 	res.Approved = status
 	if status != models.ReservationApprovedApproved {
-		if err := a.reservationStore.Update(ctx, res); err != nil {
+		if err := a.reservationStore.Update(ctx, &res); err != nil {
 			return nil, err
 		}
 		return connect.NewResponse(&service.UpdateReservationResponse{}), nil
@@ -258,7 +308,7 @@ func (a *ReservationHandler) UpdateReservationStatus(ctx context.Context, req *c
 		a.log.Error("Facility not found", "id", res.FacilityID)
 		return nil, err
 	}
-	plan := buildPublishPlan(*res, resWrap.Dates, true)
+	plan := buildPublishPlan(res, resWrap.Dates, true)
 	if plan.Mode == calendar.ModeSeries && res.GCalEventID != nil && *res.GCalEventID != "" {
 		a.log.Warn("Reservation already published", "id", id)
 		for i := range resWrap.Dates {
@@ -269,7 +319,7 @@ func (a *ReservationHandler) UpdateReservationStatus(ctx context.Context, req *c
 				}
 			}
 		}
-		if err := a.reservationStore.Update(ctx, res); err != nil {
+		if err := a.reservationStore.Update(ctx, &res); err != nil {
 			return nil, err
 		}
 		return connect.NewResponse(&service.UpdateReservationResponse{}), nil
@@ -323,7 +373,7 @@ func (a *ReservationHandler) UpdateReservationStatus(ctx context.Context, req *c
 		}
 	}
 
-	if err := a.reservationStore.Update(ctx, res); err != nil {
+	if err := a.reservationStore.Update(ctx, &res); err != nil {
 		a.log.Error("Failed to update reservation after publish", "id", id, "err", err)
 		return nil, err
 	}
@@ -343,13 +393,18 @@ func (a *ReservationHandler) UserReservations(ctx context.Context, req *connect.
 	if err != nil {
 		return nil, err
 	}
-	filtered := make([]*service.FullReservation, 0)
+	var filtered []*service.FullReservation
 	for _, r := range reservations {
-		if r.Reservation.Approved == models.ReservationApprovedPending {
-			filtered = append(filtered, r.ToProto())
+		if r.Reservation.Approved.String() != models.ReservationApprovedCanceled.String() {
+			proto := r.ToProto()
+			if proto == nil {
+				a.log.Error("failed to convert reservation to proto", "id", r.Reservation.ID)
+				continue
+			}
+			filtered = append(filtered, proto)
 		}
 	}
-
+	a.log.Debug("filtered!", "len", len(filtered))
 	facilities, err := a.facilityStore.GetAllFacilities(ctx)
 	if err != nil {
 		return nil, err
@@ -358,22 +413,31 @@ func (a *ReservationHandler) UserReservations(ctx context.Context, req *connect.
 	for _, f := range facilities {
 		facMap[f.ID] = f.Name
 	}
-	withFacName := make([]*service.FullResWithFacilityName, len(filtered))
+	var withFacName []*service.FullResWithFacilityName
 	for i, res := range filtered {
 		fac, ok := facMap[res.Reservation.FacilityId]
 		if !ok {
 			return nil, fmt.Errorf("facility not found for reservation id %d", res.Reservation.Id)
 		}
+		a.log.Debug("fac", "id", res.Reservation.FacilityId, "name", fac, "i", i)
+		var firstDate string
+		if len(res.Dates) > 0 {
+			firstDate = res.Dates[0].LocalStart
+		} else {
+			firstDate = ""
+		}
 
-		withFacName[i] = &service.FullResWithFacilityName{
+		withFacName = append(withFacName, &service.FullResWithFacilityName{
 			EventName:       res.Reservation.EventName,
-			ReservationDate: res.Dates[0].LocalStart,
+			ReservationDate: firstDate,
 			Approved:        res.Reservation.Approved,
 			FacilityName:    fac,
 			UserName:        res.Reservation.Name,
 			ReservationId:   res.Reservation.Id,
-		}
+		},
+		)
 	}
+
 	return connect.NewResponse(&service.UserReservationsResponse{
 		Reservations: withFacName,
 	}), nil
@@ -395,7 +459,7 @@ func (a *ReservationHandler) CreateReservationDates(ctx context.Context, req *co
 			rdates = append(rdates, d.LocalStart.Time)
 		}
 		reservation.RDates = &rdates
-		err = a.reservationStore.Update(ctx, reservation)
+		err = a.reservationStore.Update(ctx, &reservation)
 		if err != nil {
 			return nil, err
 		}
@@ -531,7 +595,7 @@ func (a *ReservationHandler) UpdateReservationDatesStatus(
 		// Optionally mark reservation itself approved if all dates are approved
 		if res.Approved == models.ReservationApprovedPending {
 			res.Approved = models.ReservationApprovedApproved
-			if err = a.reservationStore.Update(ctx, res); err != nil {
+			if err = a.reservationStore.Update(ctx, &res); err != nil {
 				return nil, err
 			}
 		}

@@ -5,9 +5,8 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"log/slog"
-
 	"github.com/jmoiron/sqlx"
+	"log/slog"
 )
 
 type FacilityStore struct {
@@ -23,6 +22,7 @@ func NewFacilityStore(db *DB, log *slog.Logger) *FacilityStore {
 const getFacilityQuery = `SELECT * FROM facility WHERE id = $1`
 
 func (f *FacilityStore) Get(ctx context.Context, id int64) (*models.FullFacility, error) {
+
 	var facility models.Facility
 	var categories []models.Category
 	if err := f.db.GetContext(ctx, &facility, getFacilityQuery, id); err != nil {
@@ -38,16 +38,12 @@ func (f *FacilityStore) Get(ctx context.Context, id int64) (*models.FullFacility
 		}
 		return nil, err
 	}
-	var reservations []models.Reservation
-	if err := f.db.SelectContext(ctx, &reservations, "SELECT * FROM reservation WHERE facility_id = $1", id); err != nil {
+	var reservationIds []int64
+	if err := f.db.SelectContext(ctx, &reservationIds, "SELECT id FROM reservation WHERE facility_id = $1", id); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			reservations = []models.Reservation{}
+			reservationIds = []int64{}
 		}
 		return nil, err
-	}
-	reservationIds := make([]int64, len(reservations))
-	for i, res := range reservations {
-		reservationIds[i] = res.ID
 	}
 
 	var building models.Building
@@ -63,6 +59,7 @@ func (f *FacilityStore) Get(ctx context.Context, id int64) (*models.FullFacility
 		Categories:     categories,
 		ReservationIDs: reservationIds,
 	}
+	f.log.Debug("got facility", "facility", facilityWithCategories)
 	return facilityWithCategories, nil
 }
 

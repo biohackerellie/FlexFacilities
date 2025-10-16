@@ -7,11 +7,13 @@ import (
 	reservationMux "api/internal/proto/reservation/reservationserviceconnect"
 	userMux "api/internal/proto/users/usersserviceconnect"
 	utilityMux "api/internal/proto/utility/utilityserviceconnect"
-	"connectrpc.com/connect"
 	"context"
 	"errors"
 	"log/slog"
 	"net/http"
+	"runtime/debug"
+
+	"connectrpc.com/connect"
 )
 
 func NewServer(handlers *handlers.Handlers, log *slog.Logger) *http.ServeMux {
@@ -41,6 +43,7 @@ func RecoveryInterceptor() connect.UnaryInterceptorFunc {
 		) (res connect.AnyResponse, err error) {
 			defer func() {
 				if r := recover(); r != nil {
+					slog.Error("recovered from server panic", "error", r, "stack", string(debug.Stack()))
 					err = connect.NewError(connect.CodeInternal, errors.New("recovered from server panic"))
 				}
 			}()

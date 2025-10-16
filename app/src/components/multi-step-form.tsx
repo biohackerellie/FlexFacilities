@@ -1,5 +1,5 @@
 'use client';
-
+import * as React from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner';
 import { FormProgress } from '@/components/form-progress';
@@ -37,6 +37,10 @@ const FORM_STEPS = [
     title: 'Additional Services',
     description: 'Optional support',
   },
+  {
+    title: 'Complete',
+    description: 'Your reservation has been submitted',
+  },
 ];
 
 interface MultiStepFormProps {
@@ -51,14 +55,19 @@ export function MultiStepForm({
   const { currentStep, nextStep, previousStep, resetForm, formData } =
     useFormStore();
 
+  React.useEffect(() => {
+    console.log(currentStep);
+  }, [currentStep]);
   const handleComplete = () => {
+    nextStep();
     toast.promise(createReservation(formData), {
-      success: 'Submitted!',
+      success: () => {
+        return 'Submitted!';
+      },
       error: (error) => getErrorMessage(error),
       loading: 'loading...',
       position: 'top-center',
     });
-    nextStep();
   };
 
   const handleReset = () => {
@@ -109,6 +118,7 @@ export function MultiStepForm({
                 key="step-4"
                 onSubmit={handleComplete}
                 onBack={previousStep}
+                onNext={nextStep}
               />
             )}
             {currentStep === 4 && (

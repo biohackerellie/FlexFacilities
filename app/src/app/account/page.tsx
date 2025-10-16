@@ -4,9 +4,10 @@ import { Suspense } from 'react';
 import { Separator } from '@/components/ui/separator';
 import { auth } from '@/lib/auth';
 import { client } from '@/lib/rpc';
+import { columns } from './columns';
 
 async function getData(id: string) {
-  //TODO: cache
+  'use server';
   const { data, error } = await client
     .reservations()
     .userReservations({ userId: id });
@@ -15,6 +16,7 @@ async function getData(id: string) {
     console.error(error);
     return null;
   }
+  console.log(data);
   return data;
 }
 
@@ -25,17 +27,6 @@ export default async function Account() {
   if (!data) {
     return <div>loading ...</div>;
   }
-  // const mappedData = data.reservations.map((r) => {
-  //   return {
-  //     eventName: r.reservation?.eventName ?? 'N/A',
-  //     Facility: 'N/A',
-  //     ReservationDate:
-  //       r.dates.find((d) => new Date(d.localStart) >= new Date())?.localStart ??
-  //       'N/A',
-  //     approved: r.reservation?.approved ?? 'N/A',
-  //     id: r.reservation?.id ?? 'N/A',
-  //   };
-  // });
   return (
     <div className="space-y-7">
       <div>
@@ -44,7 +35,7 @@ export default async function Account() {
       <Separator />
 
       <Suspense fallback={<LoadingComponent />}>
-        {/* <DataTable columns={columns} data={mappedData} /> */}
+        <DataTable columns={columns} data={mappedData} />
       </Suspense>
     </div>
   );

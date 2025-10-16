@@ -44,7 +44,7 @@ func (s *ReservationStore) Get(ctx context.Context, id int64) (*models.FullReser
 		return nil, err
 	}
 	return &models.FullReservation{
-		Reservation: &reservation,
+		Reservation: reservation,
 		Dates:       dates,
 		Fees:        fees,
 	}, nil
@@ -52,7 +52,7 @@ func (s *ReservationStore) Get(ctx context.Context, id int64) (*models.FullReser
 
 const getAllReservationsQuery = "SELECT * FROM reservation"
 
-func (s *ReservationStore) GetAll(ctx context.Context) ([]*models.FullReservation, error) {
+func (s *ReservationStore) GetAll(ctx context.Context) ([]models.FullReservation, error) {
 	var reservations []models.Reservation
 	stmt, err := s.db.PreparexContext(ctx, getAllReservationsQuery)
 	if err != nil {
@@ -83,7 +83,7 @@ func (s *ReservationStore) GetAll(ctx context.Context) ([]*models.FullReservatio
 
 const getAllReservationsInQuery = "SELECT * FROM reservation WHERE id IN (?)"
 
-func (s *ReservationStore) GetAllIn(ctx context.Context, ids []int64) ([]*models.FullReservation, error) {
+func (s *ReservationStore) GetAllIn(ctx context.Context, ids []int64) ([]models.FullReservation, error) {
 	var reservations []models.Reservation
 	query, args, err := sqlx.In(getAllReservationsInQuery, ids)
 	if err != nil {
@@ -110,23 +110,21 @@ func (s *ReservationStore) GetAllIn(ctx context.Context, ids []int64) ([]*models
 
 const getUserReservationsQuery = "SELECT * FROM reservation WHERE user_id = $1"
 
-func (s *ReservationStore) GetUserReservations(ctx context.Context, userID string) ([]*models.FullReservation, error) {
+func (s *ReservationStore) GetUserReservations(ctx context.Context, userID string) ([]models.FullReservation, error) {
 	var reservations []models.Reservation
-	stmt, err := s.db.PreparexContext(ctx, getUserReservationsQuery)
+	err := s.db.SelectContext(ctx, &reservations, getUserReservationsQuery, userID)
 	if err != nil {
-		return nil, err
-	}
-	defer stmt.Close()
-	if err := stmt.SelectContext(ctx, &reservations, userID); err != nil {
+		s.log.Error("failed to get user reservations", "error", err)
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, nil
 		}
 		return nil, err
 	}
-	reservationIds := make([]int64, len(reservations))
+	var reservationIds []int64
 	for _, res := range reservations {
 		reservationIds = append(reservationIds, res.ID)
 	}
+
 	dates, err := s.GetDates(ctx, reservationIds)
 	if err != nil {
 		return nil, err
@@ -135,7 +133,10 @@ func (s *ReservationStore) GetUserReservations(ctx context.Context, userID strin
 	if err != nil {
 		return nil, err
 	}
-	return toFullReservations(reservations, dates, fees), nil
+	s.log.Debug("got user reservations", "count", len(reservations), "dates", len(dates), "fees", len(fees))
+
+	result := toFullReservations(reservations, dates, fees)
+	return result, nil
 }
 
 const createReservationQuery = `
@@ -198,10 +199,10 @@ const createReservationDatesQuery = `INSERT INTO reservation_date (
 	local_start,
 	local_end
 ) VALUES (
-	:reservationId,
-	:approved,
-	:local_start,
-	:local_end
+	$1,
+	$2,
+	$3,
+	$4
 )`
 
 func (s *ReservationStore) CreateDates(ctx context.Context, dates []models.ReservationDate) error {
@@ -210,25 +211,18 @@ func (s *ReservationStore) CreateDates(ctx context.Context, dates []models.Reser
 		return err
 	}
 	for _, date := range dates {
-		params := map[string]any{
-			"reservationId": date.ReservationID,
-			"approved":      date.Approved,
-			"local_start":   date.LocalStart,
-			"local_end":     date.LocalEnd,
-		}
-		query, args, err := sqlx.Named(createReservationDatesQuery, params)
-		if err != nil {
-			s.log.Error("failed to create named query", "error", err)
-			tx.Rollback() //nolint:errcheck
-			return err
-		}
-		if _, err := tx.ExecContext(ctx, query, args...); err != nil {
+		if _, err := tx.ExecContext(ctx, createReservationDatesQuery, date.ReservationID, date.Approved, date.LocalStart, date.LocalEnd); err != nil {
+			s.log.Error("failed to insert reservation date into db", "error", err, "date", date)
 			err = tx.Rollback()
 			if err != nil {
 				return err
 			}
 			return err
 		}
+	}
+	err = tx.Commit()
+	if err != nil {
+		return err
 	}
 	return nil
 }
@@ -413,7 +407,7 @@ func (s *ReservationStore) GetFees(ctx context.Context, ids []int64) ([]models.R
 	return fees, nil
 }
 
-func toFullReservations(reservations []models.Reservation, dates []models.ReservationDate, fees []models.ReservationFee) []*models.FullReservation {
+func toFullReservations(reservations []models.Reservation, dates []models.ReservationDate, fees []models.ReservationFee) []models.FullReservation {
 
 	datesByReservation := make(map[int64][]models.ReservationDate)
 	feesByReservation := make(map[int64][]models.ReservationFee)
@@ -423,15 +417,14 @@ func toFullReservations(reservations []models.Reservation, dates []models.Reserv
 	for _, fee := range fees {
 		feesByReservation[fee.ReservationID] = append(feesByReservation[fee.ReservationID], fee)
 	}
-	fullReservations := make([]*models.FullReservation, len(reservations))
+	var fullReservations []models.FullReservation
 	for i, res := range reservations {
-		fr := &models.FullReservation{
-			Reservation: &reservations[i],
+		fr := models.FullReservation{
+			Reservation: reservations[i],
 			Dates:       datesByReservation[res.ID],
 			Fees:        feesByReservation[res.ID],
 		}
 		fullReservations = append(fullReservations, fr)
-
 	}
 	return fullReservations
 }

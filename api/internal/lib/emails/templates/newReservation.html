@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>A new reservation form has been submitted</title>
+	</head>
+	<body>
+    <h1>A new reservation has been requested for {{.Building}} {{.Facility}}</h1>
+    <p>The following dates have been requested</p>
+    <ul>
+      {{range .Dates}}
+        <li>{{.}}</li>
+      {{end}}
+    </ul>
+    <br />
+    <p>Click <a href="{{.URL}}">here</a> to view the reservation  </p>
+		<hr />
+    
+		<p style="font-style: italic; font-size: small; color: gray">
+			This is an automated email. Replies will not be processed or read.
+		</p>
+	</body>
+</html>

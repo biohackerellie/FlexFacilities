@@ -13,9 +13,10 @@ import { useFormStore } from '@/lib/form-store';
 interface Step4Props {
   onSubmit: () => void;
   onBack: () => void;
+  onNext: () => void;
 }
 
-export function Step4({ onSubmit, onBack }: Step4Props) {
+export function Step4({ onSubmit, onBack, onNext }: Step4Props) {
   const { formData, updateFormData } = useFormStore();
 
   const {
@@ -40,6 +41,7 @@ export function Step4({ onSubmit, onBack }: Step4Props) {
   const handleFormSubmit = (data: Step4Data) => {
     updateFormData(data);
     onSubmit();
+    onNext();
   };
 
   return (

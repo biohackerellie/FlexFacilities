@@ -25,6 +25,7 @@ type UserStore interface {
 	CreateNotification(context.Context, *models.Notification) error
 	EditNotification(context.Context, *models.Notification) error
 	DeleteNotification(context.Context, int64) error
+	NotificationUsersByBuilding(ctx context.Context, buildingID int64) ([]string, error)
 }
 type FacilityStore interface {
 	Get(ctx context.Context, id int64) (*models.FullFacility, error)
@@ -44,9 +45,9 @@ type FacilityStore interface {
 
 type ReservationStore interface {
 	Get(ctx context.Context, id int64) (*models.FullReservation, error)
-	GetAll(ctx context.Context) ([]*models.FullReservation, error)
-	GetAllIn(ctx context.Context, ids []int64) ([]*models.FullReservation, error)
-	GetUserReservations(ctx context.Context, userID string) ([]*models.FullReservation, error)
+	GetAll(ctx context.Context) ([]models.FullReservation, error)
+	GetAllIn(ctx context.Context, ids []int64) ([]models.FullReservation, error)
+	GetUserReservations(ctx context.Context, userID string) ([]models.FullReservation, error)
 	Create(ctx context.Context, reservation *models.Reservation) (int64, error)
 	CreateDates(ctx context.Context, dates []models.ReservationDate) error
 	CreateFee(ctx context.Context, fee models.ReservationFee) error
