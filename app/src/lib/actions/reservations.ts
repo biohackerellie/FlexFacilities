@@ -6,6 +6,7 @@ import { FormData as CreateReservationSchema } from '../form-store';
 import { Reservation, ReservationStatus } from '../types';
 
 export async function createReservation(formData: CreateReservationSchema) {
+  logger.debug('Creating reservation', { formData });
   const { error } = await client.reservations().createReservation({
     userId: formData.userID,
     eventName: formData.eventName,
@@ -30,7 +31,7 @@ export async function createReservation(formData: CreateReservationSchema) {
     logger.error('Error creating reservation', { 'error ': error });
     throw error;
   }
-  revalidateTag('reservations');
+  revalidateTag('reservations', 'max');
 }
 
 interface IForminput {
@@ -51,8 +52,8 @@ export async function addFee(data: IForminput, id: string) {
     logger.error('Error adding fee', { 'error ': error });
     throw error;
   }
-  revalidateTag('reservations');
-  revalidateTag(String(id));
+  revalidateTag('reservations', 'max');
+  revalidateTag(String(id), 'max');
 }
 
 export async function getReservation(id: string) {
@@ -97,7 +98,7 @@ export async function updateReservation(reservation: Reservation) {
     logger.error('Error updating reservation', { 'error ': error });
     return { message: error.message };
   }
-  revalidateTag('reservations');
+  revalidateTag('reservations', 'max');
   return { message: 'success' };
 }
 
@@ -124,7 +125,7 @@ export async function AddDates({
     logger.error('Error updating reservation', { 'error ': error });
     throw error;
   }
-  revalidateTag('reservations');
+  revalidateTag('reservations', 'max');
 }
 
 export async function ApproveReservation(
@@ -139,8 +140,8 @@ export async function ApproveReservation(
     logger.error('Error updating reservation', { 'error ': error });
     throw error;
   }
-  revalidateTag('reservations');
-  revalidateTag('requests');
+  revalidateTag('reservations', 'max');
+  revalidateTag('requests', 'max');
 }
 export async function UpdateDateStatus(
   ids: string[],
@@ -153,7 +154,7 @@ export async function UpdateDateStatus(
     logger.error('Error updating reservation', { 'error ': error });
     throw error;
   }
-  revalidateTag('reservations');
+  revalidateTag('reservations', 'max');
 }
 
 export async function DeleteDates(ids: string[]) {
@@ -165,7 +166,7 @@ export async function DeleteDates(ids: string[]) {
     logger.error('Error deleting date', { error: error });
     throw error;
   }
-  revalidateTag('reservations');
+  revalidateTag('reservations', 'max');
 }
 
 export async function AggregateChartData() {

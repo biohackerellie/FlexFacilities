@@ -11,8 +11,7 @@ import { getFacilities } from '@/lib/actions/facilities';
 import { type Step1Data, step1Schema } from '@/lib/form-schemas';
 import { useFormStore } from '@/lib/form-store';
 import { Spinner } from '../spinner';
-import { logger } from '@/lib/logger';
-import { BuildingWithFacilities, FacilityWithCategories } from '@/lib/types';
+import { Building, FacilityWithCategories } from '@/lib/types';
 
 interface Step1Props {
   onNext: () => void;
@@ -22,11 +21,14 @@ interface Step1Props {
 
 export function Step1({ onNext, facilitiesPromise, userID }: Step1Props) {
   const { formData, updateFormData } = useFormStore();
-  const [selectedBuilding, setSelectedBuilding] = useState<string | null>(null);
-  const [selectedBuildingData, setSelectedBuildingData] = useState<
+  const [selectedBuilding, setSelectedBuilding] = useState<Building | null>(
+    null,
+  );
+  const [selectedBuildingFacilities, setSelectedBuildingFacilities] = useState<
     FacilityWithCategories[] | null
   >(null);
-  const [selectedFacility, setSelectedFacility] = useState<string | null>(null);
+  const [selectedFacility, setSelectedFacility] =
+    useState<FacilityWithCategories | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [view, setView] = useState<'buildings' | 'facilities' | 'categories'>(
     'buildings',
@@ -60,21 +62,31 @@ export function Step1({ onNext, facilitiesPromise, userID }: Step1Props) {
   }, [userID, formData.userID, setValue, updateFormData]);
 
   const handleBuildingSelect = (buildingId: string) => {
-    console.log('buildings', { buildingsData });
-    setSelectedBuilding(buildingId);
+    const building = buildingsData.find((b) => b.building!.id === buildingId);
+    if (!building || !building.building) {
+      return;
+    }
 
-    setSelectedBuildingData(() => {
+    setSelectedBuilding(building.building);
+
+    setSelectedBuildingFacilities(() => {
       const flat = buildingsData.flatMap((f) => f.facilities);
-      return flat.filter((f) => f.facility!.id === buildingId);
+      return flat.filter((f) => f.facility!.buildingId === buildingId);
     });
-    console.log('selectedBuildingData', selectedBuildingData);
+
     setView('facilities');
   };
 
   const handleFacilitySelect = (facilityId: string) => {
     setValue('facilityID', facilityId);
     updateFormData({ facilityID: facilityId }); // Declare facilityID variable here
-    setSelectedFacility(facilityId);
+    const facility = selectedBuildingFacilities?.find(
+      (f) => f.facility!.id === facilityId,
+    );
+    if (!facility || !facility.facility) {
+      return;
+    }
+    setSelectedFacility(facility);
     setView('categories');
   };
 
@@ -88,13 +100,6 @@ export function Step1({ onNext, facilitiesPromise, userID }: Step1Props) {
     updateFormData(data);
     onNext();
   };
-
-  const selectedFacilityData =
-    (selectedFacility &&
-      selectedBuildingData?.facilities.find(
-        (f) => f.facility!.id === selectedFacility,
-      )) ||
-    null;
 
   return (
     <motion.form
@@ -159,7 +164,7 @@ export function Step1({ onNext, facilitiesPromise, userID }: Step1Props) {
           </motion.div>
         )}
 
-        {view === 'facilities' && selectedBuildingData && (
+        {view === 'facilities' && selectedBuildingFacilities && (
           <motion.div
             key="facilities"
             initial={{ opacity: 0, x: 20 }}
@@ -179,7 +184,7 @@ export function Step1({ onNext, facilitiesPromise, userID }: Step1Props) {
                 ← Back to Buildings
               </Button>
               <h3 className="text-lg font-semibold">
-                {selectedBuildingData.building!.name}
+                {selectedBuilding?.name}
               </h3>
               <p className="text-sm text-muted-foreground">
                 Select a facility to reserve
@@ -187,13 +192,13 @@ export function Step1({ onNext, facilitiesPromise, userID }: Step1Props) {
             </div>
 
             <div className="grid gap-3">
-              {selectedBuildingData.facilities.map((facility) => (
+              {selectedBuildingFacilities.map((facility, i) => (
                 <motion.button
-                  key={facility.facility!.id}
+                  key={i}
                   type="button"
                   onClick={() => handleFacilitySelect(facility.facility!.id)}
                   className={`group relative flex items-start gap-4 rounded-lg border bg-card p-4 text-left transition-all hover:border-primary hover:shadow-md ${
-                    formData.facilityID === facility.facility!.id
+                    selectedFacility?.facility?.id === facility.facility!.id
                       ? 'border-primary bg-primary/5'
                       : ''
                   }`}
@@ -230,7 +235,7 @@ export function Step1({ onNext, facilitiesPromise, userID }: Step1Props) {
             )}
           </motion.div>
         )}
-        {view === 'categories' && selectedFacilityData && (
+        {view === 'categories' && selectedFacility && (
           <motion.div
             key="categories"
             initial={{ opacity: 0, x: 20 }}
@@ -250,7 +255,7 @@ export function Step1({ onNext, facilitiesPromise, userID }: Step1Props) {
                 ← Back to Facilities
               </Button>
               <h3 className="text-lg font-semibold">
-                {selectedFacilityData.facility!.name}
+                {selectedFacility.facility!.name}
               </h3>
               <p className="text-sm text-muted-foreground">
                 Select a category to reserve
@@ -258,13 +263,13 @@ export function Step1({ onNext, facilitiesPromise, userID }: Step1Props) {
             </div>
 
             <div className="grid gap-3">
-              {selectedFacilityData.categories.map((category) => (
+              {selectedFacility.categories.map((category) => (
                 <motion.button
                   key={category.id}
                   type="button"
                   onClick={() => handleCategorySelect(category.id)}
                   className={`group relative flex items-start gap-4 rounded-lg border bg-card p-4 text-left transition-all hover:border-primary hover:shadow-md ${
-                    formData.categoryID === category.id
+                    selectedCategory === category.id
                       ? 'border-primary bg-primary/5'
                       : ''
                   }`}

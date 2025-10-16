@@ -138,78 +138,57 @@ func (s *ReservationStore) GetUserReservations(ctx context.Context, userID strin
 	return toFullReservations(reservations, dates, fees), nil
 }
 
-const createReservationQuery = `INSERT INTO reservation (
-	user_id,
-	event_name,
-	facility_id,
-	approved,
-	created_at,
-	updated_at,
-	details,
-	fees,
-	insurance,
-	primary_contact,
-	door_access,
-	doors_details,
-	name,
-	people,
-	tech_details,
-	tech_support,
-	phone,
-	category_id,
-	total_hours,
+const createReservationQuery = `
+INSERT INTO reservation (
+    user_id,
+    event_name,
+    facility_id,
+    approved,
+    details,
+    insurance,
+    door_access,
+    doors_details,
+    name,
+    tech_details,
+    tech_support,
+    phone,
+    category_id,
+		rrule,
+		rdates,
+		exdates
 ) VALUES (
-	:userId,
-	:eventName,
-	:facilityId,
-	:approved,
-	:createdAt,
-	:updatedAt,
-	:details,
-	:fees,
-	:insurance,
-	:primaryContact,
-	:doorAccess,
-	:doorsDetails,
-	:name,
-	:people,
-	:techDetails,
-	:techSupport,
-	:phone,
-	:categoryId,
-	:totalHours
-) RETURNING id`
+    :user_id,
+    :event_name,
+    :facility_id,
+    :approved,
+    :details,
+    :insurance,
+    :door_access,
+    :doors_details,
+    :name,
+    :tech_details,
+    :tech_support,
+    :phone,
+    :category_id,
+		:rrule,
+		:rdates,
+		:exdates
+)
+RETURNING id`
 
 func (s *ReservationStore) Create(ctx context.Context, reservation *models.Reservation) (int64, error) {
-	params := map[string]any{
-		"userId":       reservation.UserID,
-		"eventName":    reservation.EventName,
-		"facilityId":   reservation.FacilityID,
-		"approved":     reservation.Approved,
-		"createdAt":    reservation.CreatedAt,
-		"updatedAt":    reservation.UpdatedAt,
-		"details":      reservation.Details,
-		"fees":         reservation.Fees,
-		"insurance":    reservation.Insurance,
-		"doorAccess":   reservation.DoorAccess,
-		"doorsDetails": reservation.DoorsDetails,
-		"name":         reservation.Name,
-		"techDetails":  reservation.TechDetails,
-		"techSupport":  reservation.TechSupport,
-		"phone":        reservation.Phone,
-		"categoryId":   reservation.CategoryID,
-		"totalHours":   reservation.TotalHours,
-	}
 
 	var id int64
-	stmt, err := s.db.PreparexContext(ctx, createReservationQuery)
+	rows, err := s.db.NamedQueryContext(ctx, createReservationQuery, reservation)
 	if err != nil {
+		s.log.Error("failed to insert reservation into db", "error", err)
 		return 0, err
 	}
-	defer stmt.Close()
-	if err := stmt.GetContext(ctx, &id, params); err != nil {
-		return 0, err
+	defer rows.Close()
+	if rows.Next() {
+		rows.Scan(&id)
 	}
+
 	return id, nil
 }
 
@@ -226,11 +205,10 @@ const createReservationDatesQuery = `INSERT INTO reservation_date (
 )`
 
 func (s *ReservationStore) CreateDates(ctx context.Context, dates []models.ReservationDate) error {
-	stmt, err := s.db.PreparexContext(ctx, createReservationDatesQuery)
+	tx, err := s.db.BeginTx(ctx, nil)
 	if err != nil {
 		return err
 	}
-	defer stmt.Close()
 	for _, date := range dates {
 		params := map[string]any{
 			"reservationId": date.ReservationID,
@@ -238,7 +216,17 @@ func (s *ReservationStore) CreateDates(ctx context.Context, dates []models.Reser
 			"local_start":   date.LocalStart,
 			"local_end":     date.LocalEnd,
 		}
-		if _, err := stmt.ExecContext(ctx, params); err != nil {
+		query, args, err := sqlx.Named(createReservationDatesQuery, params)
+		if err != nil {
+			s.log.Error("failed to create named query", "error", err)
+			tx.Rollback() //nolint:errcheck
+			return err
+		}
+		if _, err := tx.ExecContext(ctx, query, args...); err != nil {
+			err = tx.Rollback()
+			if err != nil {
+				return err
+			}
 			return err
 		}
 	}
