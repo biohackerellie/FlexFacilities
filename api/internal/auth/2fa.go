@@ -26,7 +26,7 @@ type TwoFACode struct {
 	Attempts  int
 }
 
-const MAX_ATTEMPTS = 5
+const MAX_ATTEMPTS = 3
 
 func (s *Auth) VerifyResetPassword(ctx context.Context, req *connect.Request[service.VerifyPasswordRequest]) (*connect.Response[service.VerifyResetResponse], error) {
 	token := req.Msg.Token
@@ -115,6 +115,54 @@ func (s *Auth) RequestResetPassword(ctx context.Context, req *connect.Request[se
 	return connect.NewResponse(&service.LoginResponse{}), nil
 }
 
+type VerifyRequest struct {
+	Code  string `json:"code"`
+	Token string `json:"token"`
+}
+
+func (s *Auth) Verify(w http.ResponseWriter, r *http.Request) {
+	rcode := r.URL.Query().Get("code")
+	token := r.URL.Query().Get("token")
+	ctx := r.Context()
+	code, email, ok := s.getTempToken(token)
+	if !ok || rcode != code {
+		http.Error(w, "invalid token", http.StatusUnauthorized)
+		return
+	}
+
+	user, err := s.db.GetByEmail(ctx, email)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
+	accessToken, err := createToken(user.ID, user.Name, user.Email, user.Provider, user.Role, s.key)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	s.SetJWTCookie(w, accessToken)
+
+	sessionID := utils.GenerateRandomID()
+
+	session := &models.Session{
+		ID:           sessionID,
+		RefreshToken: &accessToken,
+		UserID:       user.ID,
+		Provider:     user.Provider,
+		CreatedAt:    utils.TimeToPgTimestamptz(time.Now()),
+		ExpiresAt:    utils.TimeToPgTimestamptz(time.Now().Add(absoluteExpiration)),
+	}
+
+	_, err = s.db.CreateSession(ctx, session)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	s.SetSessionCookie(w, sessionID)
+
+	http.Redirect(w, r, s.config.FrontendUrl, http.StatusTemporaryRedirect)
+}
 func (s *Auth) Verify2FACode(ctx context.Context, req *connect.Request[service.VerifyRequest]) (*connect.Response[service.VerifyResponse], error) {
 
 	code, email, ok := s.getTempToken(req.Msg.Token)
@@ -218,6 +266,7 @@ func (s *Auth) send2FACode(email, host string) error {
 	return nil
 }
 func (s *Auth) sendResetPasswordToken(ctx context.Context, email string) error {
+
 	token := utils.GenerateRandomID()
 	s.setTempToken(token, "", token, time.Minute*5)
 	urlString := fmt.Sprintf("%s/login/reset/%v", s.config.FrontendUrl, token)

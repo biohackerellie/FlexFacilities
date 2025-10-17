@@ -2,7 +2,6 @@ package emails
 
 import (
 	"bytes"
-	"context"
 	"embed"
 	"fmt"
 	"html/template"
@@ -10,7 +9,6 @@ import (
 	"net/smtp"
 	"os"
 	"strings"
-	"time"
 )
 
 //go:embed templates/*.html
@@ -51,7 +49,7 @@ func Send(email *EmailData) {
 	}
 
 	auth := smtp.PlainAuth("", EmailUser, EmailPassword, EmailSMTPHost)
-	from := mail.Address{Name: "Flexforms Update", Address: EmailUser}
+	from := mail.Address{Name: "Facilities Update", Address: EmailUser}
 	mime := "MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\n\n"
 
 	subject := "Subject: " + email.Subject + "!\n"
@@ -62,19 +60,8 @@ func Send(email *EmailData) {
 		recipients[i] = strings.TrimSpace(recipient)
 	}
 
-	done := make(chan error, 1)
-	go func() {
-		done <- smtp.SendMail(EmailSMTPHost+":587", auth, EmailUser, recipients, msg)
-	}()
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
-	defer cancel()
-	select {
-	case <-ctx.Done():
-		fmt.Printf("Email Sent\n")
-	case err := <-done:
-		if err != nil {
-			fmt.Printf("Failed to send email: %v\n", err)
-		}
-
+	err = smtp.SendMail(EmailSMTPHost+":587", auth, EmailUser, recipients, msg)
+	if err != nil {
+		fmt.Printf("Failed to send email: %v\n", err)
 	}
 }

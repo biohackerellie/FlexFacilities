@@ -47,20 +47,7 @@ export function InputOTPForm() {
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    setPending(true);
-    toast.promise(Email2FA(token!, data.pin), {
-      loading: 'submitting...',
-      error: (err) => {
-        setPending(false);
-        return getErrorMessage(err);
-      },
-      success: () => {
-        setPending(false);
-        router.push('/login');
-        return 'Success';
-      },
-      position: 'top-center',
-    });
+    router.push(`/api/auth/verify?token=${token}&code=${data.pin}`);
   }
 
   return (

@@ -29,7 +29,7 @@ type Config struct {
 
 func New(getenv func(string, string) string) (*Config, error) {
 	cfg := &Config{
-		LogLevel:           getenv("LOG_LEVEL", "info"),
+		LogLevel:           getenv("LOG_LEVEL", "debug"),
 		VerboseLogging:     getenv("VERBOSE_LOGGING", "true"),
 		AppEnv:             getenv("APP_ENV", "development"),
 		EntraClientID:      getenv("ENTRA_CLIENT_ID", ""),
@@ -44,7 +44,7 @@ func New(getenv func(string, string) string) (*Config, error) {
 		EmailHost:          getenv("EMAIL_HOST", "smtp.gmail.com"),
 		EmailPassword:      getenv("EMAIL_PASSWORD", ""),
 		EmailUser:          getenv("EMAIL_USER", ""),
-		ApiHost:            getenv("HOST", "http://localhost:8080"),
+		ApiHost:            getenv("API_HOST", "http://localhost:8080"),
 		FrontendUrl:        getenv("FRONTEND_URL", "http://localhost:3000"),
 		Timezone:           getenv("TIMEZONE", "America/Denver"),
 	}

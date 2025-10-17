@@ -2,6 +2,7 @@
 import { revalidateTag } from 'next/cache';
 import * as z from 'zod';
 import { client } from '@/lib/rpc';
+import { logger } from '@/lib/logger';
 
 export type FormState =
   | {
@@ -28,34 +29,16 @@ const loginSchema = z.object({
   password: z.string().min(2, 'Password must be at least 8 characters').trim(),
 });
 
-export async function Login(
-  _state: any,
-  formData: FormData,
-): Promise<FormState> {
-  const validated = loginSchema.safeParse({
-    email: formData.get('email'),
-    password: formData.get('password'),
-  });
-  if (!validated.success) {
-    return {
-      errors: z.treeifyError(validated.error).properties,
-      message: 'Invalid form data',
-    };
-  }
-
+export async function Login(email: string, password: string) {
+  logger.info('Login', { email, password });
   const { error } = await client
     .auth()
-    .login({ email: validated.data.email, password: validated.data.password });
+    .login({ email: email, password: password });
 
   if (error) {
-    return {
-      message: error.message,
-    };
+    logger.error(error.message);
+    throw new Error(error.message);
   }
-
-  return {
-    message: 'Login successful',
-  };
 }
 
 export type RegisterFormState =
@@ -130,7 +113,7 @@ export async function Email2FA(token: string, code: string) {
   if (!data || !data.authorized) {
     throw new Error('Invalid code');
   }
-  revalidateTag('session');
+  revalidateTag('session', 'max');
 }
 
 export async function RequestPasswordReset(email: string) {

@@ -32,6 +32,7 @@ func NewServer(handlers *handlers.Handlers, log *slog.Logger) *http.ServeMux {
 	api.Handle(utilityMux.NewUtilityServiceHandler(handlers.UtilityHandler, panicInterceptor))
 	api.HandleFunc("/auth/{provider}", handlers.Auth.BeginOauth)
 	api.HandleFunc("/auth/{provider}/callback", handlers.Auth.AuthCallback)
+	api.HandleFunc("/auth/verify", handlers.Auth.Verify)
 	return api
 }
 
