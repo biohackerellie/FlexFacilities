@@ -14,8 +14,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 export { meta as metadata } from './metadata';
 
 import { Metadata, ResolvingMetadata } from 'next';
-import { auth } from '@/lib/auth';
 import { AuthProvider } from '@/components/hooks/useAuth';
+import { auth } from '@/lib/auth';
 
 export async function generateMetadata(
   parent: ResolvingMetadata,
@@ -46,12 +46,11 @@ const fontMono = JetBrains_Mono({
 });
 
 //layout.tsx
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth();
   return (
     <html lang="en" suppressHydrationWarning={true}>
       <body
@@ -62,17 +61,15 @@ export default async function RootLayout({
         )}
       >
         <ThemeProviders attribute="class" defaultTheme="system" enableSystem>
-          <AuthProvider session={session}>
-            <NavMenu />
+          <NavMenu />
 
-            <div className="container py-8">{children}</div>
-            <div className="fixed  align-bottom bottom-0 w-full">
-              <React.Suspense fallback={footerSkeleton()}>
-                <Footer />
-              </React.Suspense>
-            </div>
-            <Toaster />
-          </AuthProvider>
+          <div className="container py-8">{children}</div>
+          <div className="fixed  align-bottom bottom-0 w-full">
+            <React.Suspense fallback={footerSkeleton()}>
+              <Footer />
+            </React.Suspense>
+          </div>
+          <Toaster />
         </ThemeProviders>
       </body>
     </html>

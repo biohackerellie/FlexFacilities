@@ -7,7 +7,11 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "includes": ["src/**/*", "!node_modules", "!**/*.css"]
+    "includes": [
+      "src/**/*",
+      "!node_modules",
+      "!**/*.css"
+    ]
   },
   "formatter": {
     "enabled": true,
@@ -119,8 +123,7 @@
         "useNamespaceKeyword": "error",
         "noWith": "error"
       }
-    },
-    "includes": ["**", "!**/*.config.js"]
+    }
   },
   "javascript": {
     "formatter": {
