@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 
-const nextConfig:NextConfig = {
+const nextConfig: NextConfig = {
   reactStrictMode: true,
   output: "standalone",
   typedRoutes: true,
@@ -8,10 +8,10 @@ const nextConfig:NextConfig = {
     ignoreBuildErrors: true
   },
 
+  cacheComponents: true,
   reactCompiler: true,
   experimental: {
     turbopackFileSystemCacheForDev: true,
-    cacheComponents: true,
     browserDebugInfoInTerminal: true
   },
   pageExtensions: ["js", "jsx", "ts", "tsx", "md", "mdx"],
