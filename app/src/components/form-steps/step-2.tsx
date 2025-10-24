@@ -44,72 +44,72 @@ export function Step2({ onNext, onBack }: Step2Props) {
       exit={{ opacity: 0, x: -20 }}
       transition={{ duration: 0.3 }}
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-6"
+      className='space-y-6'
     >
-      <div className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="eventName">Event Name</Label>
+      <div className='space-y-4'>
+        <div className='space-y-2'>
+          <Label htmlFor='eventName'>Event Name</Label>
           <Input
-            id="eventName"
-            placeholder="Annual Company Meeting"
+            id='eventName'
+            placeholder='Annual Company Meeting'
             {...register('eventName')}
             className={errors.eventName ? 'border-destructive' : ''}
           />
           {errors.eventName && (
-            <p className="text-sm text-destructive">
+            <p className='text-sm text-destructive'>
               {errors.eventName.message}
             </p>
           )}
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="details">Event Details</Label>
+        <div className='space-y-2'>
+          <Label htmlFor='details'>Event Details</Label>
           <Textarea
-            id="details"
-            placeholder="Describe your event..."
+            id='details'
+            placeholder='Describe your event...'
             rows={4}
             {...register('details')}
             className={errors.details ? 'border-destructive' : ''}
           />
           {errors.details && (
-            <p className="text-sm text-destructive">{errors.details.message}</p>
+            <p className='text-sm text-destructive'>{errors.details.message}</p>
           )}
         </div>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div className="space-y-2">
-            <Label htmlFor="name">Contact Name</Label>
+        <div className='grid gap-4 sm:grid-cols-2'>
+          <div className='space-y-2'>
+            <Label htmlFor='name'>Contact Name</Label>
             <Input
-              id="name"
-              placeholder="John Doe"
+              id='name'
+              placeholder='John Doe'
               {...register('name')}
               className={errors.name ? 'border-destructive' : ''}
             />
             {errors.name && (
-              <p className="text-sm text-destructive">{errors.name.message}</p>
+              <p className='text-sm text-destructive'>{errors.name.message}</p>
             )}
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="phone">Phone Number</Label>
+          <div className='space-y-2'>
+            <Label htmlFor='phone'>Phone Number</Label>
             <Input
-              id="phone"
-              type="tel"
-              placeholder="+1 (555) 123-4567"
+              id='phone'
+              type='tel'
+              placeholder='+1 (555) 123-4567'
               {...register('phone')}
               className={errors.phone ? 'border-destructive' : ''}
             />
             {errors.phone && (
-              <p className="text-sm text-destructive">{errors.phone.message}</p>
+              <p className='text-sm text-destructive'>{errors.phone.message}</p>
             )}
           </div>
         </div>
       </div>
 
-      <div className="flex justify-between">
-        <Button type="button" variant="outline" size="lg" onClick={onBack}>
+      <div className='flex justify-between'>
+        <Button type='button' variant='outline' size='lg' onClick={onBack}>
           Back
         </Button>
-        <Button type="submit" size="lg" className="min-w-32">
+        <Button type='submit' size='lg' className='min-w-32'>
           Next
         </Button>
       </div>

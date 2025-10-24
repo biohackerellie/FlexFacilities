@@ -1,9 +1,9 @@
 'use server';
-import { IEvent } from '@/calendar/interfaces';
-import { TEventColor } from '@/calendar/types';
+import type { IEvent } from '@/calendar/interfaces';
+import type { TEventColor } from '@/calendar/types';
 import { client } from '@/lib/rpc';
 import { logger } from '../logger';
-import { Building } from '../types';
+import type { Building } from '../types';
 
 export async function getFacility(id: string) {
   const { data: facility, error } = await client

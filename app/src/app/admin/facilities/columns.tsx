@@ -28,18 +28,18 @@ export const columns: ColumnDef<TableFacility>[] = [
           {imagePath ? (
             <Image
               src={imagePath}
-              alt="facility image"
+              alt='facility image'
               width={100}
               height={100}
-              className="rounded-full"
+              className='rounded-full'
             />
           ) : (
             <Image
-              src="/logo.jpg"
-              alt="facility image"
+              src='/logo.jpg'
+              alt='facility image'
               width={100}
               height={100}
-              className="drop-shadow-xl"
+              className='drop-shadow-xl'
             />
           )}
         </>
@@ -51,11 +51,11 @@ export const columns: ColumnDef<TableFacility>[] = [
     header: ({ column }) => {
       return (
         <Button
-          variant="ghost"
+          variant='ghost'
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className='ml-2 h-4 w-4' />
         </Button>
       );
     },
@@ -65,11 +65,11 @@ export const columns: ColumnDef<TableFacility>[] = [
     header: ({ column }) => {
       return (
         <Button
-          variant="ghost"
+          variant='ghost'
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Building
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className='ml-2 h-4 w-4' />
         </Button>
       );
     },
@@ -96,19 +96,17 @@ export const columns: ColumnDef<TableFacility>[] = [
     accessorKey: 'id',
     header: ({ column }) => {
       return (
-        <Button variant="link" asChild>
-          <Link href="/admin/facilities/new">New Facility</Link>
+        <Button variant='link' asChild>
+          <Link href='/admin/facilities/new'>New Facility</Link>
         </Button>
       );
     },
     cell: ({ row }) => {
       const id = row.original.id;
       return (
-        <>
-          <Button variant="link" asChild>
-            <Link href={`/admin/facilities/${id}`}>Edit</Link>
-          </Button>
-        </>
+        <Button variant='link' asChild>
+          <Link href={`/admin/facilities/${id}`}>Edit</Link>
+        </Button>
       );
     },
   },

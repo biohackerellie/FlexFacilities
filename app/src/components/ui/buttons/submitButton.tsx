@@ -11,7 +11,7 @@ type Props = {
 
 export function SubmitButton({ children, className, pending }: Props) {
   return (
-    <Button type="submit" disabled={pending} className={cn(className)}>
+    <Button type='submit' disabled={pending} className={cn(className)}>
       {pending && <Spinner />}
       {children ?? 'Submit'}
     </Button>

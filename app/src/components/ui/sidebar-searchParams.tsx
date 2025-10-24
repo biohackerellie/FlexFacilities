@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
-import React, { useCallback } from 'react';
+import type React from 'react';
+import { useCallback } from 'react';
 
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -19,7 +20,7 @@ export function SidebarSearchParamsNav({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   let selectedBuilding: string | null = 'All';
-  if (searchParams && searchParams.has('building')) {
+  if (searchParams?.has('building')) {
     selectedBuilding = searchParams.get('building');
   }
 

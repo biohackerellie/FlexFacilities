@@ -15,7 +15,7 @@ export function Spinner({
           : 'duration-500 opacity-0 delay-0'
       }`}
     >
-      <Loader2 className="size-4" />
+      <Loader2 className='size-4' />
     </div>
   );
 }

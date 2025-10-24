@@ -7,7 +7,7 @@ import { getFacility } from '@/lib/actions/facilities';
 import { getReservation } from '@/lib/actions/reservations';
 import { getUser } from '@/lib/actions/users';
 import { auth } from '@/lib/auth';
-import { ReservationDate } from '@/lib/types';
+import type { ReservationDate } from '@/lib/types';
 import type { SideBarType } from '@/lib/validators/constants';
 import AdminPanel from './_components/adminButtons';
 import { ReservationProvider } from './_components/context';
@@ -59,8 +59,8 @@ export default async function reservationLayout({
   ];
   if (!authorized) {
     return (
-      <div className="flex flex-col flex-wrap justify-center text-center align-middle">
-        <h1 className="text-2xl font-bold">
+      <div className='flex flex-col flex-wrap justify-center text-center align-middle'>
+        <h1 className='text-2xl font-bold'>
           You must be logged in to view this page
         </h1>
       </div>
@@ -74,31 +74,31 @@ export default async function reservationLayout({
   };
   return (
     <ReservationProvider reservation={context}>
-      <div className="container relative">
-        <div className="sm:hidden">{children}</div>
-        <div className="hidden space-y-6 p-10 pb-16 sm:block">
-          <div className="space-y-0.5">
-            <h1 className="text-2xl font-bold">{eventName}</h1>
-            <h2 className="text-muted-foreground">
+      <div className='container relative'>
+        <div className='sm:hidden'>{children}</div>
+        <div className='hidden space-y-6 p-10 pb-16 sm:block'>
+          <div className='space-y-0.5'>
+            <h1 className='text-2xl font-bold'>{eventName}</h1>
+            <h2 className='text-muted-foreground'>
               {fac?.building?.name} {Facility?.name}
             </h2>
-            <h3 className="text-muted-foreground">{range(data.dates)}</h3>
+            <h3 className='text-muted-foreground'>{range(data.dates)}</h3>
             <React.Suspense fallback={<Spinner />}>
               {isAdmin && (
-                <div className="relative float-right self-start p-4 sm:right-0 sm:self-end sm:p-0">
+                <div className='relative float-right self-start p-4 sm:right-0 sm:self-end sm:p-0'>
                   <AdminPanel />
                 </div>
               )}
             </React.Suspense>
           </div>
-          <Separator className="my-6" />
-          <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
-            <aside className="-mx-4 lg:w-1/5">
+          <Separator className='my-6' />
+          <div className='flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0'>
+            <aside className='-mx-4 lg:w-1/5'>
               <React.Suspense fallback={<Spinner />}>
                 <SidebarNav items={reservationItems} />
               </React.Suspense>
             </aside>
-            <div className="flex-1 lg:max-w-4xl">{children}</div>
+            <div className='flex-1 lg:max-w-4xl'>{children}</div>
           </div>
         </div>
       </div>

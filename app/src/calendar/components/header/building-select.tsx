@@ -21,13 +21,13 @@ export function BuildingSelect() {
       value={String(selectedBuildingId)}
       onValueChange={handleSelectBuilding}
     >
-      <SelectTrigger className="flex-1 md:w-48">
+      <SelectTrigger className='flex-1 md:w-48'>
         <SelectValue />
       </SelectTrigger>
 
-      <SelectContent align="end">
-        <SelectItem value="all">
-          <div className="flex items-center gap-1">
+      <SelectContent align='end'>
+        <SelectItem value='all'>
+          <div className='flex items-center gap-1'>
             <AvatarGroup max={2}>
               {buildings.map((building) => {
                 const name =
@@ -35,8 +35,8 @@ export function BuildingSelect() {
                     ? `${building.name.split(' ')[0]?.[0] ?? ''}${building.name.split(' ')[1]?.[0] ?? ''}${building.name.split(' ')[2]?.[0]}}`
                     : building.name.substring(0, 1);
                 return (
-                  <Avatar key={building.id} className="size-6 text-xxs">
-                    <AvatarFallback className="text-xxs">{name}</AvatarFallback>
+                  <Avatar key={building.id} className='size-6 text-xxs'>
+                    <AvatarFallback className='text-xxs'>{name}</AvatarFallback>
                   </Avatar>
                 );
               })}
@@ -54,14 +54,14 @@ export function BuildingSelect() {
             <SelectItem
               key={building.id}
               value={String(building.id)}
-              className="flex-1"
+              className='flex-1'
             >
-              <div className="flex items-center gap-2">
-                <Avatar key={building.id} className="size-6">
-                  <AvatarFallback className="text-xxs">{name}</AvatarFallback>
+              <div className='flex items-center gap-2'>
+                <Avatar key={building.id} className='size-6'>
+                  <AvatarFallback className='text-xxs'>{name}</AvatarFallback>
                 </Avatar>
 
-                <p className="truncate">{building.name}</p>
+                <p className='truncate'>{building.name}</p>
               </div>
             </SelectItem>
           );

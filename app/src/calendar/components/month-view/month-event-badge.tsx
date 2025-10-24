@@ -116,27 +116,27 @@ export function MonthEventBadge({
   return (
     <EventDetailsDialog event={event}>
       <div
-        role="button"
+        role='button'
         tabIndex={0}
         className={eventBadgeClasses}
         onKeyDown={handleKeyDown}
       >
-        <div className="flex items-center gap-1.5 truncate">
+        <div className='flex items-center gap-1.5 truncate'>
           {!['middle', 'last'].includes(position) && (
             <svg
-              width="8"
-              height="8"
-              viewBox="0 0 8 8"
-              className="event-dot shrink-0"
+              width='8'
+              height='8'
+              viewBox='0 0 8 8'
+              className='event-dot shrink-0'
             >
-              <circle cx="4" cy="4" r="4" />
+              <circle cx='4' cy='4' r='4' />
             </svg>
           )}
 
           {renderBadgeText && (
-            <p className="flex-1 truncate font-semibold">
+            <p className='flex-1 truncate font-semibold'>
               {eventCurrentDay && (
-                <span className="text-xs">
+                <span className='text-xs'>
                   Day {eventCurrentDay} of {eventTotalDays} •{' '}
                 </span>
               )}

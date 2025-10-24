@@ -13,8 +13,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 export { meta as metadata } from './metadata';
 
-import { Metadata, ResolvingMetadata } from 'next';
-import { AuthProvider } from '@/components/hooks/useAuth';
+import type { Metadata, ResolvingMetadata } from 'next';
 import { auth } from '@/lib/auth';
 
 export async function generateMetadata(
@@ -46,13 +45,14 @@ const fontMono = JetBrains_Mono({
 });
 
 //layout.tsx
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await auth();
   return (
-    <html lang="en" suppressHydrationWarning={true}>
+    <html lang='en' suppressHydrationWarning={true}>
       <body
         className={cn(
           'h-screen font-sans antialiased',
@@ -60,11 +60,11 @@ export default function RootLayout({
           fontMono.variable,
         )}
       >
-        <ThemeProviders attribute="class" defaultTheme="system" enableSystem>
-          <NavMenu />
+        <ThemeProviders attribute='class' defaultTheme='system' enableSystem>
+          <NavMenu session={session} />
 
-          <div className="container py-8">{children}</div>
-          <div className="fixed  align-bottom bottom-0 w-full">
+          <div className='container py-8'>{children}</div>
+          <div className='fixed  align-bottom bottom-0 w-full'>
             <React.Suspense fallback={footerSkeleton()}>
               <Footer />
             </React.Suspense>
@@ -78,8 +78,8 @@ export default function RootLayout({
 
 function footerSkeleton() {
   return (
-    <footer className="bg-secondary/90 bottom-0 left-0 right-0 mt-5 hidden max-h-10 w-full flex-row items-center justify-around border-t border-t-gray-300 bg-opacity-90 p-2 text-secondary-foreground backdrop-blur-md sm:flex">
-      <Skeleton className="h-4 w-full" />
+    <footer className='bg-secondary/90 bottom-0 left-0 right-0 mt-5 hidden max-h-10 w-full flex-row items-center justify-around border-t border-t-gray-300 bg-opacity-90 p-2 text-secondary-foreground backdrop-blur-md sm:flex'>
+      <Skeleton className='h-4 w-full' />
     </footer>
   );
 }

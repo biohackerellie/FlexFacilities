@@ -22,60 +22,56 @@ export function EventDetailsDialog({ event, children }: IProps) {
   const endDate = parseISO(event.endDate);
 
   return (
-    <>
-      <Dialog>
-        <DialogTrigger asChild>{children}</DialogTrigger>
+    <Dialog>
+      <DialogTrigger asChild>{children}</DialogTrigger>
 
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{event.title}</DialogTitle>
-          </DialogHeader>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>{event.title}</DialogTitle>
+        </DialogHeader>
 
-          <div className="space-y-4">
-            <div className="flex items-start gap-2">
-              <User className="mt-1 size-4 shrink-0" />
-              <div>
-                <p className="text-sm font-medium">Location</p>
-                <p className="text-sm text-muted-foreground">
-                  {event.location}
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-2">
-              <Calendar className="mt-1 size-4 shrink-0" />
-              <div>
-                <p className="text-sm font-medium">Start Date</p>
-                <p className="text-sm text-muted-foreground">
-                  {format(startDate, 'MMM d, yyyy h:mm a')}
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-2">
-              <Clock className="mt-1 size-4 shrink-0" />
-              <div>
-                <p className="text-sm font-medium">End Date</p>
-                <p className="text-sm text-muted-foreground">
-                  {format(endDate, 'MMM d, yyyy h:mm a')}
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-2">
-              <Text className="mt-1 size-4 shrink-0" />
-              <div>
-                <p className="text-sm font-medium">Description</p>
-                <p className="text-sm text-muted-foreground">
-                  {event.description}
-                </p>
-              </div>
+        <div className='space-y-4'>
+          <div className='flex items-start gap-2'>
+            <User className='mt-1 size-4 shrink-0' />
+            <div>
+              <p className='text-sm font-medium'>Location</p>
+              <p className='text-sm text-muted-foreground'>{event.location}</p>
             </div>
           </div>
 
-          <DialogFooter></DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </>
+          <div className='flex items-start gap-2'>
+            <Calendar className='mt-1 size-4 shrink-0' />
+            <div>
+              <p className='text-sm font-medium'>Start Date</p>
+              <p className='text-sm text-muted-foreground'>
+                {format(startDate, 'MMM d, yyyy h:mm a')}
+              </p>
+            </div>
+          </div>
+
+          <div className='flex items-start gap-2'>
+            <Clock className='mt-1 size-4 shrink-0' />
+            <div>
+              <p className='text-sm font-medium'>End Date</p>
+              <p className='text-sm text-muted-foreground'>
+                {format(endDate, 'MMM d, yyyy h:mm a')}
+              </p>
+            </div>
+          </div>
+
+          <div className='flex items-start gap-2'>
+            <Text className='mt-1 size-4 shrink-0' />
+            <div>
+              <p className='text-sm font-medium'>Description</p>
+              <p className='text-sm text-muted-foreground'>
+                {event.description}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <DialogFooter></DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }

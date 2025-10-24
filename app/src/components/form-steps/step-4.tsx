@@ -51,26 +51,26 @@ export function Step4({ onSubmit, onBack, onNext }: Step4Props) {
       exit={{ opacity: 0, x: -20 }}
       transition={{ duration: 0.3 }}
       onSubmit={handleSubmit(handleFormSubmit)}
-      className="space-y-6"
+      className='space-y-6'
     >
-      <div className="space-y-6">
-        <div className="space-y-4 rounded-lg border p-4">
-          <div className="flex items-start space-x-3">
+      <div className='space-y-6'>
+        <div className='space-y-4 rounded-lg border p-4'>
+          <div className='flex items-start space-x-3'>
             <Checkbox
-              id="techSupport"
+              id='techSupport'
               checked={techSupport}
               onCheckedChange={(checked) =>
                 setValue('techSupport', checked as boolean)
               }
             />
-            <div className="space-y-1">
+            <div className='space-y-1'>
               <Label
-                htmlFor="techSupport"
-                className="cursor-pointer font-semibold"
+                htmlFor='techSupport'
+                className='cursor-pointer font-semibold'
               >
                 Technical Support
               </Label>
-              <p className="text-sm text-muted-foreground">
+              <p className='text-sm text-muted-foreground'>
                 Request technical support for your event (AV equipment,
                 projectors, etc.)
               </p>
@@ -83,18 +83,18 @@ export function Step4({ onSubmit, onBack, onNext }: Step4Props) {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
-                className="space-y-2 pl-7"
+                className='space-y-2 pl-7'
               >
-                <Label htmlFor="techDetails">Technical Requirements</Label>
+                <Label htmlFor='techDetails'>Technical Requirements</Label>
                 <Textarea
-                  id="techDetails"
-                  placeholder="Describe your technical needs..."
+                  id='techDetails'
+                  placeholder='Describe your technical needs...'
                   rows={3}
                   {...register('techDetails')}
                   className={errors.techDetails ? 'border-destructive' : ''}
                 />
                 {errors.techDetails && (
-                  <p className="text-sm text-destructive">
+                  <p className='text-sm text-destructive'>
                     {errors.techDetails.message}
                   </p>
                 )}
@@ -103,23 +103,23 @@ export function Step4({ onSubmit, onBack, onNext }: Step4Props) {
           </AnimatePresence>
         </div>
 
-        <div className="space-y-4 rounded-lg border p-4">
-          <div className="flex items-start space-x-3">
+        <div className='space-y-4 rounded-lg border p-4'>
+          <div className='flex items-start space-x-3'>
             <Checkbox
-              id="doorAccess"
+              id='doorAccess'
               checked={doorAccess}
               onCheckedChange={(checked) =>
                 setValue('doorAccess', checked as boolean)
               }
             />
-            <div className="space-y-1">
+            <div className='space-y-1'>
               <Label
-                htmlFor="doorAccess"
-                className="cursor-pointer font-semibold"
+                htmlFor='doorAccess'
+                className='cursor-pointer font-semibold'
               >
                 Door Access
               </Label>
-              <p className="text-sm text-muted-foreground">
+              <p className='text-sm text-muted-foreground'>
                 Request special door access or key card arrangements
               </p>
             </div>
@@ -131,18 +131,18 @@ export function Step4({ onSubmit, onBack, onNext }: Step4Props) {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
-                className="space-y-2 pl-7"
+                className='space-y-2 pl-7'
               >
-                <Label htmlFor="doorDetails">Access Requirements</Label>
+                <Label htmlFor='doorDetails'>Access Requirements</Label>
                 <Textarea
-                  id="doorDetails"
-                  placeholder="Describe your access needs..."
+                  id='doorDetails'
+                  placeholder='Describe your access needs...'
                   rows={3}
                   {...register('doorDetails')}
                   className={errors.doorDetails ? 'border-destructive' : ''}
                 />
                 {errors.doorDetails && (
-                  <p className="text-sm text-destructive">
+                  <p className='text-sm text-destructive'>
                     {errors.doorDetails.message}
                   </p>
                 )}
@@ -152,11 +152,11 @@ export function Step4({ onSubmit, onBack, onNext }: Step4Props) {
         </div>
       </div>
 
-      <div className="flex justify-between">
-        <Button type="button" variant="outline" size="lg" onClick={onBack}>
+      <div className='flex justify-between'>
+        <Button type='button' variant='outline' size='lg' onClick={onBack}>
           Back
         </Button>
-        <Button type="submit" size="lg" className="min-w-32">
+        <Button type='submit' size='lg' className='min-w-32'>
           Submit
         </Button>
       </div>

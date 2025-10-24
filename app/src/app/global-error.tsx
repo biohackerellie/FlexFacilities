@@ -14,7 +14,7 @@ export default function GlobalError({
   }, [error]);
 
   return (
-    <html>
+    <html lang='en' suppressHydrationWarning={true}>
       <body>
         <div>
           <h2>Something went wrong!</h2>

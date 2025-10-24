@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 
-export function proxy(req: NextRequest) {
+export function proxy(_req: NextRequest) {
   const response = NextResponse.next();
   return response;
 }

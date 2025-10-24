@@ -14,7 +14,7 @@ export default function ErrorComponent({
   }, [error]);
 
   return (
-    <div className="flex h-screen flex-col items-center justify-center">
+    <div className='flex h-screen flex-col items-center justify-center'>
       <h1> Something went wrong!</h1>
       <button onClick={reset}>Try again</button>
     </div>

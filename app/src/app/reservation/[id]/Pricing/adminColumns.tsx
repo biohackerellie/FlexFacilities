@@ -19,7 +19,7 @@ interface TableFees {
 const HandleDelete = async (_id: number) => {
   try {
     await new Promise((resolve) => setTimeout(resolve, 1000));
-  } catch (error) {
+  } catch (_error) {
     alert('Error deleting fee');
   }
 };
@@ -35,7 +35,7 @@ export const adminColumns: ColumnDef<TableFees>[] = [
         style: 'currency',
         currency: 'USD',
       }).format(amount);
-      return <div className="text-left font-medium">{formatted}</div>;
+      return <div className='text-left font-medium'>{formatted}</div>;
     },
   },
   {
@@ -50,18 +50,16 @@ export const adminColumns: ColumnDef<TableFees>[] = [
       const feeID = row.getValue('options') as number;
 
       return (
-        <>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline">Options</Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => HandleDelete(feeID)}>
-                Delete Fee
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant='outline'>Options</Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align='end'>
+            <DropdownMenuItem onClick={() => HandleDelete(feeID)}>
+              Delete Fee
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       );
     },
   },

@@ -1,6 +1,6 @@
 'use client';
-import * as React from 'react';
 import { AnimatePresence } from 'framer-motion';
+import * as React from 'react';
 import { toast } from 'sonner';
 import { FormProgress } from '@/components/form-progress';
 import { Step1 } from '@/components/form-steps/step-1';
@@ -15,7 +15,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { getFacilities } from '@/lib/actions/facilities';
+import type { getFacilities } from '@/lib/actions/facilities';
 import { createReservation } from '@/lib/actions/reservations';
 import { getErrorMessage } from '@/lib/errors';
 import { useFormStore } from '@/lib/form-store';
@@ -75,7 +75,7 @@ export function MultiStepForm({
   };
 
   return (
-    <div className="mx-auto w-full max-w-3xl space-y-8">
+    <div className='mx-auto w-full max-w-3xl space-y-8'>
       {currentStep < FORM_STEPS.length && (
         <FormProgress
           currentStep={currentStep}
@@ -86,7 +86,7 @@ export function MultiStepForm({
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl">
+          <CardTitle className='text-2xl'>
             {currentStep < FORM_STEPS.length
               ? FORM_STEPS[currentStep]?.title
               : 'Complete'}
@@ -98,31 +98,31 @@ export function MultiStepForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <AnimatePresence mode="wait">
+          <AnimatePresence mode='wait'>
             {currentStep === 0 && (
               <Step1
-                key="step-1"
+                key='step-1'
                 onNext={nextStep}
                 facilitiesPromise={facilitiesPromise}
                 userID={userID}
               />
             )}
             {currentStep === 1 && (
-              <Step2 key="step-2" onNext={nextStep} onBack={previousStep} />
+              <Step2 key='step-2' onNext={nextStep} onBack={previousStep} />
             )}
             {currentStep === 2 && (
-              <Step3 key="step-3" onNext={nextStep} onBack={previousStep} />
+              <Step3 key='step-3' onNext={nextStep} onBack={previousStep} />
             )}
             {currentStep === 3 && (
               <Step4
-                key="step-4"
+                key='step-4'
                 onSubmit={handleComplete}
                 onBack={previousStep}
                 onNext={nextStep}
               />
             )}
             {currentStep === 4 && (
-              <StepComplete key="complete" onReset={handleReset} />
+              <StepComplete key='complete' onReset={handleReset} />
             )}
           </AnimatePresence>
         </CardContent>

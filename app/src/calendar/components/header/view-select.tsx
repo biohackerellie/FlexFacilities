@@ -22,12 +22,12 @@ export default function ViewSelect() {
   );
 
   return (
-    <div className="inline-flex ">
+    <div className='inline-flex '>
       <Button
         asChild
-        aria-label="View by day"
-        size="icon"
-        className="size-8"
+        aria-label='View by day'
+        size='icon'
+        className='size-8'
         variant={view === 'day' ? 'default' : 'outline'}
         onClick={() => {
           router.push(`${pathname}?${createQueryString('view', 'day')}`);
@@ -38,9 +38,9 @@ export default function ViewSelect() {
 
       <Button
         asChild
-        aria-label="View by week"
-        size="icon"
-        className="size-8"
+        aria-label='View by week'
+        size='icon'
+        className='size-8'
         variant={view === 'week' ? 'default' : 'outline'}
         onClick={() => {
           router.push(`${pathname}?${createQueryString('view', 'week')}`);
@@ -51,9 +51,9 @@ export default function ViewSelect() {
 
       <Button
         asChild
-        aria-label="View by month"
-        size="icon"
-        className="size-8"
+        aria-label='View by month'
+        size='icon'
+        className='size-8'
         variant={view === 'month' ? 'default' : 'outline'}
         onClick={() => {
           router.push(`${pathname}?${createQueryString('view', 'month')}`);
@@ -64,9 +64,9 @@ export default function ViewSelect() {
 
       <Button
         asChild
-        aria-label="View by year"
-        size="icon"
-        className="size-8"
+        aria-label='View by year'
+        size='icon'
+        className='size-8'
         variant={view === 'year' ? 'default' : 'outline'}
         onClick={() => {
           router.push(`${pathname}?${createQueryString('view', 'year')}`);
@@ -77,9 +77,9 @@ export default function ViewSelect() {
 
       <Button
         asChild
-        aria-label="View by agenda"
-        size="icon"
-        className="size-8"
+        aria-label='View by agenda'
+        size='icon'
+        className='size-8'
         variant={view === 'agenda' ? 'default' : 'outline'}
         onClick={() => {
           router.push(`${pathname}?${createQueryString('view', 'agenda')}`);

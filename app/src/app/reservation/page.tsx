@@ -8,9 +8,9 @@ import { auth } from '@/lib/auth';
 const Loading = () => {
   return (
     <div>
-      <Skeleton className="h-20 w-auto" />
-      <Skeleton className="h-96 w-auto" />
-      <Skeleton className="h-20 w-auto" />
+      <Skeleton className='h-20 w-auto' />
+      <Skeleton className='h-96 w-auto' />
+      <Skeleton className='h-20 w-auto' />
     </div>
   );
 };
@@ -21,7 +21,7 @@ export default async function ReservationPage() {
     redirect('/login');
   }
   return (
-    <section className="my-4 flex flex-col justify-center sm:flex-row">
+    <section className='my-4 flex flex-col justify-center sm:flex-row'>
       <Suspense fallback={<Loading />}>
         <MultiStepForm
           userID={session.userId}

@@ -5,7 +5,7 @@ import { Separator } from '@/components/ui/separator';
 import { SidebarSearchParamsNav } from '@/components/ui/sidebar-searchParams';
 import { logger } from '@/lib/logger';
 import { client } from '@/lib/rpc';
-import { FacilityWithCategories } from '@/lib/types';
+import type { FacilityWithCategories } from '@/lib/types';
 import FacilityCard from './facility_card';
 
 async function getData() {
@@ -48,34 +48,33 @@ export default async function FacilitiesPage({
     facilities = buildings.flatMap((building) => building.facilities);
   }
   return (
-    <div className="container relative">
-      <div className=" space-y-6 p-2 pb-16 sm:block">
-        <div className="space-y-0.5">
-          <h1 className="text-2xl font-bold">Facilities</h1>
+    <div className='container relative'>
+      <div className=' space-y-6 p-2 pb-16 sm:block'>
+        <div className='space-y-0.5'>
+          <h1 className='text-2xl font-bold'>Facilities</h1>
         </div>
-        <Separator className="my-6" />
-        <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
-          <aside className="-mx-4 lg:w-1/5">
+        <Separator className='my-6' />
+        <div className='flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0'>
+          <aside className='-mx-4 lg:w-1/5'>
             <React.Suspense fallback={<div>Loading...</div>}>
               <SidebarSearchParamsNav items={buildingSideBar} />
             </React.Suspense>
           </aside>
-          <div className="flex-1 lg:max-w-4xl overflow-y-scroll max-h-[80vh]">
-            <div className="space-y-7">
+          <div className='flex-1 lg:max-w-4xl overflow-y-scroll max-h-[80vh]'>
+            <div className='space-y-7'>
               <React.Suspense fallback={<LoadingScreen />}>
-                <div className="mt-0 flex flex-col gap-4 p-0 pb-px sm:grid sm:grid-cols-2 sm:pb-[150px] overflow-y-scroll">
-                  {facilities &&
-                    facilities?.map((facility, i) => (
-                      <div key={i} className="show m-2 flex-1 gap-3">
-                        <FacilityCard
-                          {...facility}
-                          {...buildings.find(
-                            (building) =>
-                              building.building?.name === selectedBuilding,
-                          )}
-                        />
-                      </div>
-                    ))}
+                <div className='mt-0 flex flex-col gap-4 p-0 pb-px sm:grid sm:grid-cols-2 sm:pb-[150px] overflow-y-scroll'>
+                  {facilities?.map((facility, i) => (
+                    <div key={i} className='show m-2 flex-1 gap-3'>
+                      <FacilityCard
+                        {...facility}
+                        {...buildings.find(
+                          (building) =>
+                            building.building?.name === selectedBuilding,
+                        )}
+                      />
+                    </div>
+                  ))}
                 </div>
               </React.Suspense>
             </div>

@@ -43,8 +43,8 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
   const groupedEvents = groupEvents(dayEvents);
 
   return (
-    <div className="flex">
-      <div className="flex flex-1 flex-col">
+    <div className='flex'>
+      <div className='flex flex-1 flex-col'>
         <div>
           <DayViewMultiDayEventsRow
             selectedDate={selectedDate}
@@ -52,26 +52,26 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
           />
 
           {/* Day header */}
-          <div className="relative z-20 flex border-b">
-            <div className="w-18"></div>
-            <span className="flex-1 border-l py-2 text-center text-xs font-medium text-muted-foreground">
+          <div className='relative z-20 flex border-b'>
+            <div className='w-18'></div>
+            <span className='flex-1 border-l py-2 text-center text-xs font-medium text-muted-foreground'>
               {format(selectedDate, 'EE')}{' '}
-              <span className="font-semibold text-foreground">
+              <span className='font-semibold text-foreground'>
                 {format(selectedDate, 'd')}
               </span>
             </span>
           </div>
         </div>
 
-        <ScrollArea className="h-[800px]" type="always">
-          <div className="flex">
+        <ScrollArea className='h-[800px]' type='always'>
+          <div className='flex'>
             {/* Hours column */}
-            <div className="relative w-18">
+            <div className='relative w-18'>
               {hours.map((hour, index) => (
-                <div key={hour} className="relative" style={{ height: '96px' }}>
-                  <div className="absolute -top-3 right-2 flex h-6 items-center">
+                <div key={hour} className='relative' style={{ height: '96px' }}>
+                  <div className='absolute -top-3 right-2 flex h-6 items-center'>
                     {index !== 0 && (
-                      <span className="text-xs text-muted-foreground">
+                      <span className='text-xs text-muted-foreground'>
                         {format(new Date().setHours(hour, 0, 0, 0), 'hh a')}
                       </span>
                     )}
@@ -81,8 +81,8 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
             </div>
 
             {/* Day grid */}
-            <div className="relative flex-1 border-l">
-              <div className="relative">
+            <div className='relative flex-1 border-l'>
+              <div className='relative'>
                 {hours.map((hour, index) => {
                   return (
                     <div
@@ -91,18 +91,18 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
                       style={{ height: '96px' }}
                     >
                       {index !== 0 && (
-                        <div className="pointer-events-none absolute inset-x-0 top-0 border-b"></div>
+                        <div className='pointer-events-none absolute inset-x-0 top-0 border-b'></div>
                       )}
 
-                      <div className="absolute inset-x-0 top-0 h-[24px] cursor-pointer transition-colors hover:bg-accent" />
+                      <div className='absolute inset-x-0 top-0 h-[24px] cursor-pointer transition-colors hover:bg-accent' />
 
-                      <div className="absolute inset-x-0 top-[24px] h-[24px] cursor-pointer transition-colors hover:bg-accent" />
+                      <div className='absolute inset-x-0 top-[24px] h-[24px] cursor-pointer transition-colors hover:bg-accent' />
 
-                      <div className="pointer-events-none absolute inset-x-0 top-1/2 border-b border-dashed"></div>
+                      <div className='pointer-events-none absolute inset-x-0 top-1/2 border-b border-dashed'></div>
 
-                      <div className="absolute inset-x-0 top-[48px] h-[24px] cursor-pointer transition-colors hover:bg-accent" />
+                      <div className='absolute inset-x-0 top-[48px] h-[24px] cursor-pointer transition-colors hover:bg-accent' />
 
-                      <div className="absolute inset-x-0 top-[72px] h-[24px] cursor-pointer transition-colors hover:bg-accent" />
+                      <div className='absolute inset-x-0 top-[72px] h-[24px] cursor-pointer transition-colors hover:bg-accent' />
                     </div>
                   );
                 })}
@@ -139,7 +139,7 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
                     return (
                       <div
                         key={event.id}
-                        className="absolute p-1"
+                        className='absolute p-1'
                         style={style}
                       >
                         <EventBlock event={event} />
@@ -158,64 +158,64 @@ export function CalendarDayView({ singleDayEvents, multiDayEvents }: IProps) {
         </ScrollArea>
       </div>
 
-      <div className="hidden w-64 divide-y border-l md:block">
+      <div className='hidden w-64 divide-y border-l md:block'>
         <SingleCalendar
-          className="mx-auto w-fit"
-          mode="single"
+          className='mx-auto w-fit'
+          mode='single'
           selected={selectedDate}
           onSelect={setSelectedDate}
           initialFocus
         />
 
-        <div className="flex-1 space-y-3">
+        <div className='flex-1 space-y-3'>
           {currentEvents.length > 0 ? (
-            <div className="flex items-start gap-2 px-4 pt-4">
-              <span className="relative mt-[5px] flex size-2.5">
-                <span className="absolute inline-flex size-full animate-ping rounded-full bg-green-400 opacity-75"></span>
-                <span className="relative inline-flex size-2.5 rounded-full bg-green-600"></span>
+            <div className='flex items-start gap-2 px-4 pt-4'>
+              <span className='relative mt-[5px] flex size-2.5'>
+                <span className='absolute inline-flex size-full animate-ping rounded-full bg-green-400 opacity-75'></span>
+                <span className='relative inline-flex size-2.5 rounded-full bg-green-600'></span>
               </span>
 
-              <p className="text-sm font-semibold text-foreground">
+              <p className='text-sm font-semibold text-foreground'>
                 Happening now
               </p>
             </div>
           ) : (
-            <p className="p-4 text-center text-sm italic text-muted-foreground">
+            <p className='p-4 text-center text-sm italic text-muted-foreground'>
               No events at the moment
             </p>
           )}
 
           {currentEvents.length > 0 && (
-            <ScrollArea className="h-[422px] px-4" type="always">
-              <div className="space-y-6 pb-4">
+            <ScrollArea className='h-[422px] px-4' type='always'>
+              <div className='space-y-6 pb-4'>
                 {currentEvents.map((event) => {
                   const building = buildings.find(
                     (building) => building.id === event.building.id,
                   );
 
                   return (
-                    <div key={event.id} className="space-y-1.5">
-                      <p className="line-clamp-2 text-sm font-semibold">
+                    <div key={event.id} className='space-y-1.5'>
+                      <p className='line-clamp-2 text-sm font-semibold'>
                         {event.title}
                       </p>
 
                       {building && (
-                        <div className="flex items-center gap-1.5 text-muted-foreground">
-                          <User className="size-3.5" />
-                          <span className="text-sm">{building.name}</span>
+                        <div className='flex items-center gap-1.5 text-muted-foreground'>
+                          <User className='size-3.5' />
+                          <span className='text-sm'>{building.name}</span>
                         </div>
                       )}
 
-                      <div className="flex items-center gap-1.5 text-muted-foreground">
-                        <Calendar className="size-3.5" />
-                        <span className="text-sm">
+                      <div className='flex items-center gap-1.5 text-muted-foreground'>
+                        <Calendar className='size-3.5' />
+                        <span className='text-sm'>
                           {format(new Date(), 'MMM d, yyyy')}
                         </span>
                       </div>
 
-                      <div className="flex items-center gap-1.5 text-muted-foreground">
-                        <Clock className="size-3.5" />
-                        <span className="text-sm">
+                      <div className='flex items-center gap-1.5 text-muted-foreground'>
+                        <Clock className='size-3.5' />
+                        <span className='text-sm'>
                           {format(parseISO(event.startDate), 'h:mm a')} -{' '}
                           {format(parseISO(event.endDate), 'h:mm a')}
                         </span>

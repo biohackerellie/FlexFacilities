@@ -18,11 +18,11 @@ export function FormProgress({
   const progress = ((currentStep + 1) / totalSteps) * 100;
 
   return (
-    <div className="w-full space-y-8">
+    <div className='w-full space-y-8'>
       {/* Progress Bar */}
-      <div className="relative h-2 w-full overflow-hidden rounded-full bg-secondary">
+      <div className='relative h-2 w-full overflow-hidden rounded-full bg-secondary'>
         <motion.div
-          className="h-full bg-accent"
+          className='h-full bg-accent'
           initial={{ width: 0 }}
           animate={{ width: `${progress}%` }}
           transition={{ duration: 0.5, ease: 'easeInOut' }}
@@ -30,7 +30,7 @@ export function FormProgress({
       </div>
 
       {/* Step Indicators */}
-      <div className="flex items-start justify-between">
+      <div className='flex items-start justify-between'>
         {steps.map((step, index) => {
           const isCompleted = index < currentStep;
           const isCurrent = index === currentStep;
@@ -39,9 +39,9 @@ export function FormProgress({
           return (
             <div
               key={index}
-              className="flex flex-1 flex-col items-center gap-3"
+              className='flex flex-1 flex-col items-center gap-3'
             >
-              <div className="relative flex items-center justify-center">
+              <div className='relative flex items-center justify-center'>
                 <motion.div
                   className={cn(
                     'flex h-12 w-12 items-center justify-center rounded-full border-2 font-semibold transition-colors',
@@ -64,15 +64,15 @@ export function FormProgress({
                       animate={{ scale: 1 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <Check className="h-6 w-6" />
+                      <Check className='h-6 w-6' />
                     </motion.div>
                   ) : (
-                    <span className="text-sm">{index + 1}</span>
+                    <span className='text-sm'>{index + 1}</span>
                   )}
                 </motion.div>
               </div>
 
-              <div className="text-center">
+              <div className='text-center'>
                 <p
                   className={cn(
                     'text-sm font-medium',
@@ -82,7 +82,7 @@ export function FormProgress({
                 >
                   {step.title}
                 </p>
-                <p className="mt-1 hidden text-xs text-muted-foreground sm:block">
+                <p className='mt-1 hidden text-xs text-muted-foreground sm:block'>
                   {step.description}
                 </p>
               </div>

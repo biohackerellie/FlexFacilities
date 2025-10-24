@@ -42,9 +42,9 @@ export default async function adminFacilitiesPage() {
   const data = await getFacilities();
 
   return (
-    <div className="space-y-7">
+    <div className='space-y-7'>
       <div>
-        <h1 className="text-lg font-medium">Facilities</h1>
+        <h1 className='text-lg font-medium'>Facilities</h1>
       </div>
       <Suspense fallback={<TableSkeleton />}>
         <DataTable columns={columns} data={data} />

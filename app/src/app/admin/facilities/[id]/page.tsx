@@ -23,14 +23,14 @@ export default async function facilityEditForm({
   const name = facility?.name;
 
   return (
-    <div className="gap-y-4 space-y-7">
+    <div className='gap-y-4 space-y-7'>
       <div>
-        <h1 className="text-lg font-medium">
+        <h1 className='text-lg font-medium'>
           Edit {data.building?.name} {facility?.name}
         </h1>
       </div>
-      <div className="flex flex-col justify-center">
-        <Suspense fallback={<Skeleton className="h-[400px] w-[400px]" />}>
+      <div className='flex flex-col justify-center'>
+        <Suspense fallback={<Skeleton className='h-[400px] w-[400px]' />}>
           <div>
             {imagePath ? (
               <Image
@@ -38,20 +38,20 @@ export default async function facilityEditForm({
                 alt={name!}
                 width={400}
                 height={400}
-                className="border-2 shadow-md drop-shadow-md"
+                className='border-2 shadow-md drop-shadow-md'
               />
             ) : (
               <Image
-                src="/logo.jpg"
+                src='/logo.jpg'
                 alt={name!}
                 width={480}
                 height={480}
-                className="border-2 drop-shadow-xl"
+                className='border-2 drop-shadow-xl'
               />
             )}
           </div>
         </Suspense>
-        <Suspense fallback={<Skeleton className="h-[400px] w-[400px]" />}>
+        <Suspense fallback={<Skeleton className='h-[400px] w-[400px]' />}>
           <Forms data={data} />
         </Suspense>
       </div>

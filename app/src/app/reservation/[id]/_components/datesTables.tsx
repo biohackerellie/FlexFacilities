@@ -16,16 +16,12 @@ export default function DatesTables({ isAdmin }: { isAdmin: boolean }) {
     return (
       <>
         <DataTable columns={adminColumns} data={mappedDates} />
-        <div className="float-right">
+        <div className='float-right'>
           <AddDateDialog id={reservation.id} />
         </div>
       </>
     );
   } else {
-    return (
-      <>
-        <DataTable columns={columns} data={mappedDates} />
-      </>
-    );
+    return <DataTable columns={columns} data={mappedDates} />;
   }
 }

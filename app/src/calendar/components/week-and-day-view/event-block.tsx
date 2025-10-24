@@ -78,14 +78,14 @@ export function EventBlock({ event, className }: IProps) {
   return (
     <EventDetailsDialog event={event}>
       <div
-        role="button"
+        role='button'
         tabIndex={0}
         className={calendarWeekEventCardClasses}
         style={{ height: `${heightInPixels}px` }}
         onKeyDown={handleKeyDown}
       >
-        <div className="flex items-center gap-1.5 truncate">
-          <p className="truncate font-semibold">{event.title}</p>
+        <div className='flex items-center gap-1.5 truncate'>
+          <p className='truncate font-semibold'>{event.title}</p>
         </div>
 
         {durationInMinutes > 25 && (

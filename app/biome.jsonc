@@ -6,12 +6,8 @@
     "useIgnoreFile": false
   },
   "files": {
-    "ignoreUnknown": false,
-    "includes": [
-      "src/**/*",
-      "!node_modules",
-      "!**/*.css"
-    ]
+    "ignoreUnknown": true,
+    "includes": ["src/**/*", "!**/node_modules/**/*", "!**/.next", "!**/*.css"]
   },
   "formatter": {
     "enabled": true,
@@ -34,100 +30,33 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": false,
-      "a11y": {
-        "recommended": false
-      },
-      "complexity": {
-        "noExtraBooleanCast": "error",
-        "noUselessCatch": "error",
-        "noUselessThisAlias": "error",
-        "noUselessTypeConstraint": "error",
-        "noAdjacentSpacesInRegex": "error"
+      "recommended": true,
+      "suspicious": {
+        "noExplicitAny": "off",
+        "noArrayIndexKey": "off",
+        "noImplicitAnyLet": "off",
+        "useIterableCallbackReturn": "off"
       },
       "correctness": {
-        "recommended": true,
-        "noConstAssign": "error",
-        "noConstantCondition": "error",
-        "noEmptyCharacterClassInRegex": "error",
-        "noEmptyPattern": "error",
-        "noGlobalObjectCalls": "error",
-        "noInvalidBuiltinInstantiation": "error",
-        "noInvalidConstructorSuper": "error",
-        "noNonoctalDecimalEscape": "error",
-        "noPrecisionLoss": "error",
-        "noSelfAssign": "error",
-        "noSetterReturn": "error",
-        "noSwitchDeclarations": "off",
-        "noUndeclaredVariables": "error",
-        "noUnreachable": "error",
-        "noUnreachableSuper": "error",
-        "noUnsafeFinally": "error",
-        "noUnsafeOptionalChaining": "error",
-        "noUnusedLabels": "warn",
-        "noUnusedPrivateClassMembers": "error",
-        "noUnusedVariables": "off",
-        "useExhaustiveDependencies": "off",
-        "useIsNan": "error",
-        "useJsxKeyInIterable": "warn",
-        "useValidForDirection": "error",
-        "useYield": "error",
-        "useValidTypeof": "error"
+        "useUniqueElementIds": "off",
+        "useHookAtTopLevel": "off",
+        "useExhaustiveDependencies": "off"
       },
-      "style": {
-        "recommended": true,
-        "noInferrableTypes": "error",
-        "noNamespace": "error",
-        "noNonNullAssertion": "off",
-        "useAsConstAssertion": "error",
-        "useConsistentArrayType": "error",
-        "useForOf": "error",
-        "useShorthandFunctionType": "error",
-        "useImportType": "off",
-        "useThrowOnlyError": "error",
-        "useArrayLiterals": "off"
+      "a11y": {
+        "useButtonType": "off",
+        "useKeyWithClickEvents": "off"
       },
-      "suspicious": {
-        "recommended": true,
-        "noAssignInExpressions": "warn",
-        "noAsyncPromiseExecutor": "error",
-        "noArrayIndexKey": "off",
-        "noCatchAssign": "error",
-        "noClassAssign": "error",
-        "noCompareNegZero": "error",
-        "noControlCharactersInRegex": "error",
-        "noDebugger": "error",
-        "noDuplicateCase": "error",
-        "noDuplicateClassMembers": "error",
-        "noDuplicateObjectKeys": "error",
-        "noDuplicateParameters": "error",
-        "noEmptyBlockStatements": "error",
-        "noExplicitAny": "off",
-        "noExtraNonNullAssertion": "error",
-        "noFallthroughSwitchClause": "error",
-        "noFunctionAssign": "error",
-        "noGlobalAssign": "error",
-        "noImportAssign": "error",
-        "noImplicitAnyLet": "warn",
-        "noMisleadingCharacterClass": "error",
-        "noMisleadingInstantiator": "error",
-        "noPrototypeBuiltins": "error",
-        "noRedeclare": "error",
-        "noShadowRestrictedNames": "error",
-        "noSparseArray": "error",
-        "noUnsafeDeclarationMerging": "error",
-        "noUnsafeNegation": "error",
-        "useAwait": "error",
-        "useIterableCallbackReturn": "warn",
-        "useGetterReturn": "error",
-        "useNamespaceKeyword": "error",
-        "noWith": "error"
+      "performance": {
+        "noAccumulatingSpread": "off"
+      },
+      "complexity": {
+        "noForEach": "off"
       }
     }
   },
   "javascript": {
     "formatter": {
-      "jsxQuoteStyle": "double",
+      "jsxQuoteStyle": "single",
       "quoteProperties": "asNeeded",
       "trailingCommas": "all",
       "semicolons": "always",

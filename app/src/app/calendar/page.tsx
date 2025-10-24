@@ -1,5 +1,5 @@
 import { ClientContainer } from '@/calendar/components/client-container';
-import { TCalendarView } from '@/calendar/types';
+import type { TCalendarView } from '@/calendar/types';
 
 export default async function Page({
   searchParams,
@@ -8,7 +8,7 @@ export default async function Page({
 }) {
   const view = ((await searchParams).view as TCalendarView) || 'month';
   return (
-    <div className="space-y-7">
+    <div className='space-y-7'>
       <ClientContainer view={view} />
     </div>
   );

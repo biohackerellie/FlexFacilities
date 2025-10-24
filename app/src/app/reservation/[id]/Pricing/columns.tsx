@@ -19,7 +19,7 @@ export const columns: ColumnDef<TableFees>[] = [
         style: 'currency',
         currency: 'USD',
       }).format(amount);
-      return <div className="text-left font-medium">{formatted}</div>;
+      return <div className='text-left font-medium'>{formatted}</div>;
     },
   },
   {

@@ -3,8 +3,7 @@
 import { Menu } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import * as React from 'react';
-import { useAuth } from '@/components/hooks/useAuth';
+import type * as React from 'react';
 import {
   Accordion,
   AccordionContent,
@@ -29,6 +28,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { useIsMobile } from '@/hooks/use-mobile';
+import type { Session } from '@/lib/types';
 import { Button } from '../button';
 
 // import { requestCount } from "./requestCount";
@@ -59,6 +59,7 @@ interface NavbarProps {
     alt: string;
     title: string;
   };
+  session: Session | null;
 }
 
 const AUTHORIZED_MENU_ITEMS: MenuItem[] = [
@@ -139,29 +140,28 @@ const MENUITEMS: MenuItem[] = [
   },
 ];
 
-export default function NavMenu({ logo }: NavbarProps) {
-  const session = useAuth();
+export default function NavMenu({ logo, session }: NavbarProps) {
   const authorized = !!session;
   const admin = session?.userRole === 'ADMIN';
 
   const isMobile = useIsMobile();
   return (
-    <section className="p-2 mb-2  border-b">
+    <section className='p-2 mb-2  border-b'>
       {!isMobile ? (
-        <nav className="justify-between flex">
-          <div className="flex items-center gap-6">
-            <a href={logo?.url ?? '/'} className="flex items-center gap-2">
+        <nav className='justify-between flex'>
+          <div className='flex items-center gap-6'>
+            <a href={logo?.url ?? '/'} className='flex items-center gap-2'>
               <Image
                 src={logo?.src ?? '/logo.png'}
                 width={50}
                 height={50}
                 alt={logo?.alt ?? 'Logo'}
               />
-              <span className="text-lg font-semibold tracking-tighter">
+              <span className='text-lg font-semibold tracking-tighter'>
                 {logo?.title ?? 'FlexFacilities'}
               </span>
             </a>
-            <div className="flex items-center">
+            <div className='flex items-center'>
               <NavigationMenu>
                 <NavigationMenuList>
                   {MENUITEMS.map((item) => renderMenuItem(item))}
@@ -175,7 +175,7 @@ export default function NavMenu({ logo }: NavbarProps) {
               </NavigationMenu>
             </div>
           </div>
-          <div className="flex gap-2">
+          <div className='flex gap-2'>
             {authorized ? (
               <Button asChild>
                 <Link href={AUTH_ITEMS.logout.href}>
@@ -184,12 +184,12 @@ export default function NavMenu({ logo }: NavbarProps) {
               </Button>
             ) : (
               <>
-                <Button asChild variant="outline" size="sm">
+                <Button asChild variant='outline' size='sm'>
                   <Link href={AUTH_ITEMS.login.href}>
                     {AUTH_ITEMS.login.title}
                   </Link>
                 </Button>
-                <Button asChild variant="default" size="sm">
+                <Button asChild variant='default' size='sm'>
                   <Link href={AUTH_ITEMS.signup.href}>
                     {AUTH_ITEMS.signup.title}
                   </Link>
@@ -200,13 +200,13 @@ export default function NavMenu({ logo }: NavbarProps) {
           </div>
         </nav>
       ) : (
-        <div className="block">
-          <div className="flex items-center justify-between">
+        <div className='block'>
+          <div className='flex items-center justify-between'>
             <a
               href={
                 logo?.url ?? 'https://github.com/biohackerellie/FlexFacilities'
               }
-              className="flex items-center gap-2"
+              className='flex items-center gap-2'
             >
               <Image
                 src={logo?.src ?? '/logo.png'}
@@ -218,27 +218,27 @@ export default function NavMenu({ logo }: NavbarProps) {
 
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="outline" size="icon">
-                  <Menu className="size-4" />
+                <Button variant='outline' size='icon'>
+                  <Menu className='size-4' />
                 </Button>
               </SheetTrigger>
-              <SheetContent className="overflow-y-auto">
+              <SheetContent className='overflow-y-auto'>
                 <SheetHeader>
                   <SheetTitle>
-                    <a href={logo?.url} className="flex items-center gap-2">
+                    <a href={logo?.url} className='flex items-center gap-2'>
                       <img
                         src={logo?.src}
-                        className="max-h-8 dark:invert"
+                        className='max-h-8 dark:invert'
                         alt={logo?.alt}
                       />
                     </a>
                   </SheetTitle>
                 </SheetHeader>
-                <div className="flex flex-col gap-6 p-4">
+                <div className='flex flex-col gap-6 p-4'>
                   <Accordion
-                    type="single"
+                    type='single'
                     collapsible
-                    className="flex w-full flex-col gap-4"
+                    className='flex w-full flex-col gap-4'
                   >
                     {MENUITEMS.map((item) => renderMobileMenuItem(item))}
                     {authorized
@@ -253,16 +253,16 @@ export default function NavMenu({ logo }: NavbarProps) {
                       : null}
                   </Accordion>
 
-                  <div className="flex flex-col gap-3">
+                  <div className='flex flex-col gap-3'>
                     {authorized ? (
-                      <Button asChild variant="outline">
+                      <Button asChild variant='outline'>
                         <Link href={AUTH_ITEMS.logout.href}>
                           {AUTH_ITEMS.logout.title}
                         </Link>
                       </Button>
                     ) : (
                       <>
-                        <Button asChild variant="outline">
+                        <Button asChild variant='outline'>
                           <Link href={AUTH_ITEMS.login.href}>
                             {AUTH_ITEMS.login.title}
                           </Link>
@@ -291,13 +291,13 @@ function renderMenuItem(item: MenuItem) {
       <NavigationMenuItem key={item.title}>
         <NavigationMenuTrigger>{item.title}</NavigationMenuTrigger>
         <NavigationMenuContent>
-          <ul className="grid w-[300px] gap-4">
+          <ul className='grid w-[300px] gap-4'>
             {item.items.map((subItem) => (
               <li key={subItem.title}>
                 <NavigationMenuLink asChild>
                   <Link href={subItem.href ?? '/'}>
-                    <div className="font-medium">{subItem.title}</div>
-                    <div className="text-muted-foreground">
+                    <div className='font-medium'>{subItem.title}</div>
+                    <div className='text-muted-foreground'>
                       {subItem.description}
                     </div>
                   </Link>
@@ -327,10 +327,10 @@ function ListItem({
     <li {...props}>
       <NavigationMenuLink asChild>
         <Link href={href}>
-          <div className="text-lg font-bold leading-none sm:text-sm sm:font-medium">
+          <div className='text-lg font-bold leading-none sm:text-sm sm:font-medium'>
             {title}
           </div>
-          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+          <p className='line-clamp-2 text-sm leading-snug text-muted-foreground'>
             {children}
           </p>
         </Link>
@@ -343,16 +343,16 @@ ListItem.displayName = 'ListItem';
 const renderMobileMenuItem = (item: MenuItem) => {
   if (item.items) {
     return (
-      <AccordionItem key={item.title} value={item.title} className="border-b-0">
-        <AccordionTrigger className="text-md py-0 font-semibold hover:no-underline">
+      <AccordionItem key={item.title} value={item.title} className='border-b-0'>
+        <AccordionTrigger className='text-md py-0 font-semibold hover:no-underline'>
           {item.title}
         </AccordionTrigger>
-        <AccordionContent className="mt-2">
+        <AccordionContent className='mt-2'>
           {item.items.map((subItem) => (
             <Link
               href={subItem.href ?? '/'}
               key={subItem.title}
-              className="block py-1 text-sm"
+              className='block py-1 text-sm'
             >
               {subItem.title}
             </Link>
@@ -366,7 +366,7 @@ const renderMobileMenuItem = (item: MenuItem) => {
     <Link
       key={item.title}
       href={item.href ?? '/'}
-      className="text-md font-semibold"
+      className='text-md font-semibold'
     >
       {item.title}
     </Link>

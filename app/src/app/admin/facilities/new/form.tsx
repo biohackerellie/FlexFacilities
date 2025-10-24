@@ -21,7 +21,7 @@ import {
   SelectItem,
   SelectTrigger,
 } from '@/components/ui/select';
-import { getAllBuildingNames } from '@/lib/actions/facilities';
+import type { getAllBuildingNames } from '@/lib/actions/facilities';
 import { getErrorMessage } from '@/lib/errors';
 import { createFacility } from './actions';
 
@@ -57,7 +57,7 @@ export default function NewFacilityForm({
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
   });
-  const [submitting, startTransition] = React.useTransition();
+  const [_submitting, startTransition] = React.useTransition();
   const buildingNames = React.use(buildingPromise);
   if (!buildingNames) return notFound();
   function onSubmit(values: z.infer<typeof schema>) {
@@ -75,7 +75,7 @@ export default function NewFacilityForm({
     });
   }
   return (
-    <div className="flex flex-col justify-center">
+    <div className='flex flex-col justify-center'>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit((data) => {
@@ -84,7 +84,7 @@ export default function NewFacilityForm({
         >
           <FormField
             control={form.control}
-            name="name"
+            name='name'
             render={({ field }) => (
               <FormItem>
                 <FormControl>
@@ -96,7 +96,7 @@ export default function NewFacilityForm({
           />
           <FormField
             control={form.control}
-            name="buildingId"
+            name='buildingId'
             render={({ field }) => (
               <FormItem>
                 <Select
@@ -129,14 +129,14 @@ export default function NewFacilityForm({
           />
           <FormField
             control={form.control}
-            name="capacity"
+            name='capacity'
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <FormLabel htmlFor="capacity">Capacity</FormLabel>
+                  <FormLabel htmlFor='capacity'>Capacity</FormLabel>
                   <Input
                     {...field}
-                    name="capacity"
+                    name='capacity'
                     value={field.value || 0}
                     className={inputStyle}
                   />
@@ -147,16 +147,16 @@ export default function NewFacilityForm({
           />
           <FormField
             control={form.control}
-            name="category1"
+            name='category1'
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <FormLabel htmlFor="category1">
+                  <FormLabel htmlFor='category1'>
                     Category 1 Price per hour
                   </FormLabel>
                   <Input
                     {...field}
-                    name="category1"
+                    name='category1'
                     value={field.value}
                     className={inputStyle}
                   />
@@ -167,16 +167,16 @@ export default function NewFacilityForm({
           />
           <FormField
             control={form.control}
-            name="category2"
+            name='category2'
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <FormLabel htmlFor="category2">
+                  <FormLabel htmlFor='category2'>
                     Category 2 Price per hour
                   </FormLabel>
                   <Input
                     {...field}
-                    name="category2"
+                    name='category2'
                     value={field.value || 0}
                     className={inputStyle}
                   />
@@ -187,16 +187,16 @@ export default function NewFacilityForm({
           />
           <FormField
             control={form.control}
-            name="category3"
+            name='category3'
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <FormLabel htmlFor="category3">
+                  <FormLabel htmlFor='category3'>
                     Category 3 Price per hour
                   </FormLabel>
                   <Input
                     {...field}
-                    name="category3"
+                    name='category3'
                     value={field.value || 0}
                     className={inputStyle}
                   />
@@ -207,11 +207,11 @@ export default function NewFacilityForm({
           />
           <FormField
             control={form.control}
-            name="googleCalendarId"
+            name='googleCalendarId'
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <FormLabel htmlFor="googlecalid">
+                  <FormLabel htmlFor='googlecalid'>
                     Google Calendar ID
                   </FormLabel>
                   <Input
@@ -225,7 +225,7 @@ export default function NewFacilityForm({
               </FormItem>
             )}
           />
-          <Button type="submit" variant="outline">
+          <Button type='submit' variant='outline'>
             Create
           </Button>
         </form>

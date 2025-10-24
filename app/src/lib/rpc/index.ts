@@ -1,4 +1,4 @@
-import { Interceptor } from '@connectrpc/connect';
+import type { Interceptor } from '@connectrpc/connect';
 import { createConnectTransport } from '@connectrpc/connect-web';
 import { cookies } from 'next/headers';
 import { RPC } from './rpc';
@@ -12,7 +12,6 @@ const cookiesInterceptor: Interceptor = (next) => async (req) => {
     }
     if (cookie.name.includes('flexauth_session')) {
       req.header.set('Session', `${cookie.value}`);
-      continue;
     }
   }
   return next(req);

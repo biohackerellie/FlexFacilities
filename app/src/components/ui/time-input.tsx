@@ -35,7 +35,7 @@ const TimeInput = forwardRef<TTimeInputRef, TTimeInputProps>(
         isDisabled={disabled}
         isInvalid={dataInvalid}
         {...props}
-        aria-label="Time"
+        aria-label='Time'
         shouldForceLeadingZeros
       >
         <DateInput

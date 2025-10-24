@@ -2,8 +2,8 @@
 import { revalidateTag } from 'next/cache';
 import { logger } from '@/lib/logger';
 import { client } from '@/lib/rpc';
-import { FormData as CreateReservationSchema } from '../form-store';
-import { Reservation, ReservationStatus } from '../types';
+import type { FormData as CreateReservationSchema } from '../form-store';
+import type { Reservation, ReservationStatus } from '../types';
 
 export async function createReservation(formData: CreateReservationSchema) {
   logger.debug('Creating reservation', { formData });

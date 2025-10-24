@@ -24,7 +24,7 @@ export default async function ResetPage({
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center py-12 sm:px-6 lg:px-8">
+    <div className='flex min-h-screen flex-col items-center justify-center py-12 sm:px-6 lg:px-8'>
       <React.Suspense fallback={<h1>Loading...</h1>}>
         <ResetForm email={email} />
       </React.Suspense>

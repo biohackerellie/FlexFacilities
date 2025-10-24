@@ -15,10 +15,10 @@ export default async function DetailsPage() {
     email: session.userEmail!,
   };
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       <div>
-        <h3 className="text-lg font-medium">Account Details</h3>
-        <p className="text-muted-foreground">Change your account details</p>
+        <h3 className='text-lg font-medium'>Account Details</h3>
+        <p className='text-muted-foreground'>Change your account details</p>
       </div>
       <Separator />
       <AccountForm data={updateUserValues} />

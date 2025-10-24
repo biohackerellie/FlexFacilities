@@ -4,7 +4,7 @@ import { InputOTPForm } from './form';
 
 export default function verifyPage() {
   return (
-    <div className="@container">
+    <div className='@container'>
       <React.Suspense fallback={<Spinner />}>
         <InputOTPForm />
       </React.Suspense>

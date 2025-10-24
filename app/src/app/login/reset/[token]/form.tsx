@@ -45,7 +45,7 @@ export default function ResetForm({ email }: { email: string }) {
     try {
       await ResetPassword(email, values.password);
       alert('Password reset successfully');
-    } catch (error) {
+    } catch (_error) {
       alert('something went wrong');
     } finally {
       location.href = '/login';
@@ -54,15 +54,15 @@ export default function ResetForm({ email }: { email: string }) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
         <FormField
           control={form.control}
-          name="password"
+          name='password'
           render={({ field }) => (
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="Password" {...field} />
+                <Input type='password' placeholder='Password' {...field} />
               </FormControl>
               <FormDescription>Type your new password.</FormDescription>
               <FormMessage />
@@ -71,14 +71,14 @@ export default function ResetForm({ email }: { email: string }) {
         />
         <FormField
           control={form.control}
-          name="confirmPassword"
+          name='confirmPassword'
           render={({ field }) => (
             <FormItem>
               <FormLabel>Confirm Password</FormLabel>
               <FormControl>
                 <Input
-                  type="password"
-                  placeholder="Confirm Password"
+                  type='password'
+                  placeholder='Confirm Password'
                   {...field}
                 />
               </FormControl>
@@ -86,7 +86,7 @@ export default function ResetForm({ email }: { email: string }) {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type='submit'>Submit</Button>
       </form>
     </Form>
   );

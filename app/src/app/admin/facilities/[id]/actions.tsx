@@ -2,7 +2,7 @@
 
 import { revalidateTag } from 'next/cache';
 import { client } from '@/lib/rpc';
-import { Category, Facility } from '@/lib/types';
+import type { Category, Facility } from '@/lib/types';
 
 // export async function uploadImage(id: number, formData: FormData) {
 //   const file = formData.get('file') as File;

@@ -18,7 +18,7 @@ import {
   UpdateDateStatus,
 } from '@/lib/actions/reservations';
 import { getErrorMessage } from '@/lib/errors';
-import { ReservationDate, ReservationStatus } from '@/lib/types';
+import type { ReservationDate, ReservationStatus } from '@/lib/types';
 
 export const adminColumns: ColumnDef<ReservationDate>[] = [
   {
@@ -30,14 +30,14 @@ export const adminColumns: ColumnDef<ReservationDate>[] = [
           (table.getIsSomePageRowsSelected() && 'indeterminate')
         }
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
+        aria-label='Select all'
       />
     ),
     cell: ({ row }) => (
       <Checkbox
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
+        aria-label='Select row'
       />
     ),
   },
@@ -46,11 +46,11 @@ export const adminColumns: ColumnDef<ReservationDate>[] = [
     header: ({ column }) => {
       return (
         <Button
-          variant="ghost"
+          variant='ghost'
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Start Date
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className='ml-2 h-4 w-4' />
         </Button>
       );
     },
@@ -65,11 +65,11 @@ export const adminColumns: ColumnDef<ReservationDate>[] = [
       column.toggleVisibility(false);
       return (
         <Button
-          variant="ghost"
+          variant='ghost'
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           End Date
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className='ml-2 h-4 w-4' />
         </Button>
       );
     },
@@ -110,9 +110,9 @@ export const adminColumns: ColumnDef<ReservationDate>[] = [
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline">Edit Selected</Button>
+            <Button variant='outline'>Edit Selected</Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align='end'>
             <DropdownMenuItem
               onClick={() =>
                 handleUpdate(

@@ -7,7 +7,7 @@ export async function Update(id: string, formData: FormData) {
   const name = formData.get('name') as string;
   try {
     await client.users().updateUser({ user: { id: id, name: name } });
-  } catch (error) {
+  } catch (_error) {
     throw new Error('Failed to update user');
   }
 

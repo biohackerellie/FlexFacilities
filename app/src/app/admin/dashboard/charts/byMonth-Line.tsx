@@ -11,7 +11,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { AggregateChartData } from '@/lib/actions/reservations';
+import type { AggregateChartData } from '@/lib/actions/reservations';
 
 function getRandomColor() {
   const letters = '0123456789ABCDEF';
@@ -29,39 +29,36 @@ export default function ByMonthLine({
   const data = React.use(dataPromise);
 
   return (
-    <>
-      <ResponsiveContainer width="100%" height={400}>
-        <LineChart width={500} height={300} data={data?.data}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis
-            dataKey="month"
-            stroke="#888888"
-            fontSize={12}
-            tickLine={false}
-            axisLine={false}
-          />
-          <YAxis
-            stroke="#888888"
-            fontSize={12}
-            tickLine={false}
-            axisLine={false}
-          />
-          <Tooltip />
-          <Legend />
-          {data &&
-            data.data.map((v, i) => {
-              return (
-                <Line
-                  connectNulls
-                  key={i}
-                  type="monotone"
-                  dataKey={v.month}
-                  stroke={getRandomColor()}
-                />
-              );
-            })}
-        </LineChart>
-      </ResponsiveContainer>
-    </>
+    <ResponsiveContainer width='100%' height={400}>
+      <LineChart width={500} height={300} data={data?.data}>
+        <CartesianGrid strokeDasharray='3 3' />
+        <XAxis
+          dataKey='month'
+          stroke='#888888'
+          fontSize={12}
+          tickLine={false}
+          axisLine={false}
+        />
+        <YAxis
+          stroke='#888888'
+          fontSize={12}
+          tickLine={false}
+          axisLine={false}
+        />
+        <Tooltip />
+        <Legend />
+        {data?.data.map((v, i) => {
+          return (
+            <Line
+              connectNulls
+              key={i}
+              type='monotone'
+              dataKey={v.month}
+              stroke={getRandomColor()}
+            />
+          );
+        })}
+      </LineChart>
+    </ResponsiveContainer>
   );
 }

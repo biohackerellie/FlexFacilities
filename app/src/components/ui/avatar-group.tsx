@@ -34,7 +34,7 @@ const AvatarGroup = forwardRef<TAvatarGroupRef, TAvatarGroupProps>(
             <div
               className={cn(
                 'relative flex items-center justify-center rounded-full border-2 border-background bg-muted',
-                avatarItems[0]!.props.className,
+                avatarItems[0]?.props.className,
               )}
               style={{ marginLeft: -spacing }}
             >

@@ -2,7 +2,8 @@
 
 import { logger } from './logger';
 import { client } from './rpc';
-import { Session, UserRole } from './types';
+import type { Session, UserRole } from './types';
+
 function parseRole(role: string): UserRole {
   switch (role) {
     case 'ADMIN':

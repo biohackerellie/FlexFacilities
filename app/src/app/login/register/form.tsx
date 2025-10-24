@@ -110,84 +110,84 @@ export default function CreateAccount() {
   };
 
   return (
-    <Card className="flex w-full max-w-3xl flex-col items-center justify-center p-2 text-center">
+    <Card className='flex w-full max-w-3xl flex-col items-center justify-center p-2 text-center'>
       <CardHeader>
         <CardTitle>Create an account</CardTitle>
       </CardHeader>
 
-      <CardContent className="flex gap-4">
-        <form className="grid gap-6 w-full" onSubmit={onSubmit}>
-          <div className="grid gap-3">
-            <Label htmlFor="name">Name</Label>
+      <CardContent className='flex gap-4'>
+        <form className='grid gap-6 w-full' onSubmit={onSubmit}>
+          <div className='grid gap-3'>
+            <Label htmlFor='name'>Name</Label>
             <Input
-              type="text"
-              id="name"
-              name="name"
+              type='text'
+              id='name'
+              name='name'
               value={input.name}
               required
-              placeholder="First and Last name"
+              placeholder='First and Last name'
               onChange={onInputChange}
             />
-            {error.name && <p className="text-sm text-red-500">{error.name}</p>}
+            {error.name && <p className='text-sm text-red-500'>{error.name}</p>}
           </div>
 
-          <div className="grid gap-3">
-            <Label htmlFor="email">Email</Label>
+          <div className='grid gap-3'>
+            <Label htmlFor='email'>Email</Label>
             <Input
-              type="email"
-              id="email"
-              name="email"
+              type='email'
+              id='email'
+              name='email'
               value={input.email}
               required
-              placeholder="Email"
+              placeholder='Email'
               onChange={onInputChange}
             />
             {error.email && (
-              <p className="text-sm text-red-500">{error.email}</p>
+              <p className='text-sm text-red-500'>{error.email}</p>
             )}
           </div>
 
-          <div className="grid gap-3">
-            <Label htmlFor="password">Password</Label>
+          <div className='grid gap-3'>
+            <Label htmlFor='password'>Password</Label>
             <Input
-              type="password"
-              id="password"
-              name="password"
+              type='password'
+              id='password'
+              name='password'
               value={input.password}
               required
-              placeholder="Password"
+              placeholder='Password'
               onChange={onInputChange}
             />
             {error.password && (
-              <p className="text-sm text-red-500">{error.password}</p>
+              <p className='text-sm text-red-500'>{error.password}</p>
             )}
           </div>
 
-          <div className="grid gap-3">
-            <Label htmlFor="confirmPassword">Confirm Password</Label>
+          <div className='grid gap-3'>
+            <Label htmlFor='confirmPassword'>Confirm Password</Label>
             <Input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
+              type='password'
+              id='confirmPassword'
+              name='confirmPassword'
               value={input.confirmPassword}
               required
-              placeholder="Confirm Password"
+              placeholder='Confirm Password'
               onChange={onInputChange}
             />
             {error.confirmPassword && (
-              <p className="text-sm text-red-500">{error.confirmPassword}</p>
+              <p className='text-sm text-red-500'>{error.confirmPassword}</p>
             )}
           </div>
 
-          <CardFooter className="flex justify-center">
-            <Button type="submit" disabled={pending}>
+          <CardFooter className='flex justify-center'>
+            <Button type='submit' disabled={pending}>
               {pending ? <Spinner /> : 'Create Account'}
             </Button>
           </CardFooter>
         </form>
 
         <Dialog open={open} onOpenChange={() => setOpen(!open)}>
-          <DialogContent className="sm:max-w-[425px]">
+          <DialogContent className='sm:max-w-[425px]'>
             <DialogTitle>Account created</DialogTitle>
             <DialogDescription>
               You will need to follow the link sent to your email to log in.

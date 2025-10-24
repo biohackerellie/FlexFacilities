@@ -50,24 +50,22 @@ export default function ShowPayment({ fees }: feeProps) {
     });
   }
   return (
-    <div className="block gap-x-2 p-2">
-      <>
-        <Button
-          disabled={isLoading}
-          variant="outline"
-          onClick={() => PayinPerson()}
-        >
-          Pay in Person
-        </Button>
+    <div className='block gap-x-2 p-2'>
+      <Button
+        disabled={isLoading}
+        variant='outline'
+        onClick={() => PayinPerson()}
+      >
+        Pay in Person
+      </Button>
 
-        <Button
-          disabled={isLoading}
-          variant="outline"
-          onClick={() => PayOnline(reservation.id, fees, email)}
-        >
-          Pay Online
-        </Button>
-      </>
+      <Button
+        disabled={isLoading}
+        variant='outline'
+        onClick={() => PayOnline(reservation.id, fees, email)}
+      >
+        Pay Online
+      </Button>
     </div>
   );
 }

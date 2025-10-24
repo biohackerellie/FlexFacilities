@@ -1,8 +1,8 @@
 'use server';
 import { revalidateTag } from 'next/cache';
 import * as z from 'zod';
-import { client } from '@/lib/rpc';
 import { logger } from '@/lib/logger';
+import { client } from '@/lib/rpc';
 
 export type FormState =
   | {
@@ -24,7 +24,7 @@ export type FormState =
     }
   | undefined;
 
-const loginSchema = z.object({
+const _loginSchema = z.object({
   email: z.email('Email is required').trim(),
   password: z.string().min(2, 'Password must be at least 8 characters').trim(),
 });
@@ -80,7 +80,7 @@ const passwords = z
     message: 'Passwords must match',
     path: ['confirmPassword'],
   });
-const registerSchema = z.object({
+const _registerSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters').trim(),
   email: z.email('Email is required').trim(),
   passwords: passwords,

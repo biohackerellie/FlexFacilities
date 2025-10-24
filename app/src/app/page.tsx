@@ -13,15 +13,15 @@ export default function Home() {
     [],
   );
   return (
-    <div className=" relative py-10  max-h-dvh  items-center justify-center gap-6 p-6 md:p-10">
-      <div className="flex justify-evenly">
-        <div className=" h-[32rem] w-1/2 p-2 mx-2 max-w-[100vw] shadow-sm max-h-[100dvh] m-auto inset-0   ">
+    <div className=' relative py-10  max-h-dvh  items-center justify-center gap-6 p-6 md:p-10'>
+      <div className='flex justify-evenly'>
+        <div className=' h-[32rem] w-1/2 p-2 mx-2 max-w-[100vw] shadow-sm max-h-[100dvh] m-auto inset-0   '>
           <React.Suspense fallback={<Spinner />}>
             <LargeMap promise={getAllMapCoords()} />
           </React.Suspense>
         </div>
 
-        <div className="w-1/2 text-center flex flex-col justify-center items-center">
+        <div className='w-1/2 text-center flex flex-col justify-center items-center'>
           <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam
             vehicula ipsum risus, et iaculis ipsum malesuada a. Praesent

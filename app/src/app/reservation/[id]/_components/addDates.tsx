@@ -34,9 +34,9 @@ const AddDateDialog = ({ id }: { id: string }) => {
   const handleSubmit = async () => {
     try {
       // date + startTime string "2023-10-10 10:30:00"
-      const localStart = `${date!.getFullYear()}-${date!.getMonth() + 1}-${date!.getDate()} ${startTime}`;
+      const localStart = `${date?.getFullYear()}-${date?.getMonth() + 1}-${date?.getDate()} ${startTime}`;
       logger.debug('adding date', { localStart: localStart });
-      const localEnd = `${date!.getFullYear()}-${date!.getMonth() + 1}-${date!.getDate()} ${endTime}`;
+      const localEnd = `${date?.getFullYear()}-${date?.getMonth() + 1}-${date?.getDate()} ${endTime}`;
       await AddDates({
         reservationID: id,
         localStart,
@@ -53,7 +53,7 @@ const AddDateDialog = ({ id }: { id: string }) => {
   };
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <Button onClick={() => setOpen(true)} variant="outline">
+      <Button onClick={() => setOpen(true)} variant='outline'>
         Add Date
       </Button>
       <DialogContent>
@@ -61,36 +61,36 @@ const AddDateDialog = ({ id }: { id: string }) => {
           <DialogTitle>Add Date</DialogTitle>
         </DialogHeader>
         <DialogDescription>Add a date to this reservation.</DialogDescription>
-        <div className="flex flex-col space-y-4">
-          <div className="flex flex-col space-y-2">
-            <Label htmlFor="startDate">Start Date</Label>
+        <div className='flex flex-col space-y-4'>
+          <div className='flex flex-col space-y-2'>
+            <Label htmlFor='startDate'>Start Date</Label>
             <Calendar
-              mode="single"
+              mode='single'
               selected={date}
               onSelect={setDate}
-              className="bg-transparent p-0 [--cell-size:--spacing(10.5)]"
+              className='bg-transparent p-0 [--cell-size:--spacing(10.5)]'
             />
           </div>
-          <div className="flex flex-col space-y-2">
-            <Label htmlFor="startTime">Start Time</Label>
+          <div className='flex flex-col space-y-2'>
+            <Label htmlFor='startTime'>Start Time</Label>
             <Input
-              id="startTime"
-              type="time"
-              step="1"
-              defaultValue="10.30:00"
+              id='startTime'
+              type='time'
+              step='1'
+              defaultValue='10.30:00'
               onChange={handleSetStartTime}
-              className="appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+              className='appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none'
             />
           </div>
-          <div className="flex flex-col space-y-2">
-            <Label htmlFor="endTime">End Time</Label>
+          <div className='flex flex-col space-y-2'>
+            <Label htmlFor='endTime'>End Time</Label>
             <Input
-              id="endTime"
-              type="time"
-              step="1"
-              defaultValue="11.30:00"
+              id='endTime'
+              type='time'
+              step='1'
+              defaultValue='11.30:00'
               onChange={handleSetEndTime}
-              className="appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+              className='appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none'
             />
           </div>
         </div>

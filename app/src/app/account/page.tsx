@@ -28,9 +28,9 @@ export default async function Account() {
     return <div>loading ...</div>;
   }
   return (
-    <div className="space-y-7">
+    <div className='space-y-7'>
       <div>
-        <h3 className="text-lg font-medium">My Reservations</h3>
+        <h3 className='text-lg font-medium'>My Reservations</h3>
       </div>
       <Separator />
 
@@ -44,7 +44,7 @@ export default async function Account() {
 const LoadingComponent = () => {
   return (
     <div>
-      Loading <ReloadIcon className="animate-spin h-4 w-4" />
+      Loading <ReloadIcon className='animate-spin h-4 w-4' />
     </div>
   );
 };

@@ -2,7 +2,7 @@
 import { revalidateTag } from 'next/cache';
 import { logger } from '@/lib/logger';
 import { client } from '@/lib/rpc';
-import { Notification } from '../types';
+import type { Notification } from '../types';
 
 export async function getUser(id: string) {
   const { data: user, error } = await client.users().getUser({ id: id });

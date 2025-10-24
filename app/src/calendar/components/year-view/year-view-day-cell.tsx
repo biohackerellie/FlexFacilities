@@ -26,8 +26,8 @@ export function YearViewDayCell({ day, date, events }: IProps) {
   return (
     <button
       onClick={handleClick}
-      type="button"
-      className="flex h-11 flex-1 flex-col items-center justify-start gap-0.5 rounded-md pt-1 hover:bg-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+      type='button'
+      className='flex h-11 flex-1 flex-col items-center justify-start gap-0.5 rounded-md pt-1 hover:bg-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring'
     >
       <div
         className={cn(
@@ -39,7 +39,7 @@ export function YearViewDayCell({ day, date, events }: IProps) {
       </div>
 
       {eventCount > 0 && (
-        <div className="mt-0.5 flex gap-0.5">
+        <div className='mt-0.5 flex gap-0.5'>
           {eventCount <= maxIndicators ? (
             events.map((event) => (
               <div
@@ -69,7 +69,7 @@ export function YearViewDayCell({ day, date, events }: IProps) {
                   events[0]?.color === 'orange' && 'bg-orange-600',
                 )}
               />
-              <span className="text-[7px] text-muted-foreground">
+              <span className='text-[7px] text-muted-foreground'>
                 +{eventCount - 1}
               </span>
             </>

@@ -11,15 +11,15 @@ interface UserName {
 export default function AccountForm({ data }: { data: UserName }) {
   const updateUserID = Update.bind(null, data.id);
   return (
-    <form action={updateUserID} className="space-y-8">
-      <label className="block text-lg font-bold">Name: {data.name} </label>
+    <form action={updateUserID} className='space-y-8'>
+      <label className='block text-lg font-bold'>Name: {data.name} </label>
       <Input
-        name="name"
-        id="name"
+        name='name'
+        id='name'
         placeholder={data.name}
         defaultValue={data.name}
       />
-      <Button className="float-right" />
+      <Button className='float-right' />
     </form>
   );
 }

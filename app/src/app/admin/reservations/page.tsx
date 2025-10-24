@@ -18,20 +18,20 @@ export default async function Reservations() {
   const Reservations = data?.future ?? [];
   const PastReservations = data?.past ?? [];
   return (
-    <div className="space-y-7">
+    <div className='space-y-7'>
       <div>
-        <h1 className="text-lg font-medium">Reservations</h1>
+        <h1 className='text-lg font-medium'>Reservations</h1>
       </div>
 
-      <Tabs defaultValue="upcoming">
+      <Tabs defaultValue='upcoming'>
         <TabsList>
-          <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
-          <TabsTrigger value="past">Past</TabsTrigger>
+          <TabsTrigger value='upcoming'>Upcoming</TabsTrigger>
+          <TabsTrigger value='past'>Past</TabsTrigger>
         </TabsList>
-        <TabsContent value="upcoming">
+        <TabsContent value='upcoming'>
           <DataTable columns={columns} data={Reservations} />
         </TabsContent>
-        <TabsContent value="past">
+        <TabsContent value='past'>
           <DataTable columns={columns} data={PastReservations} />
         </TabsContent>
       </Tabs>

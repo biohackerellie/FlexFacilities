@@ -126,7 +126,7 @@ export function groupEvents(dayEvents: IEvent[]) {
     let placed = false;
     for (const group of groups) {
       const lastEventInGroup = group[group.length - 1];
-      const lastEventEnd = parseISO(lastEventInGroup!.endDate);
+      const lastEventEnd = parseISO(lastEventInGroup?.endDate);
 
       if (eventStart >= lastEventEnd) {
         group.push(event);

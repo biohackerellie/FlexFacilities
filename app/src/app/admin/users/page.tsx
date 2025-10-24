@@ -24,9 +24,9 @@ async function getUsers() {
 export default async function Users() {
   const data = await getUsers();
   return (
-    <div className="space-y-7">
+    <div className='space-y-7'>
       <div>
-        <h1 className="text-lg font-medium">Users</h1>
+        <h1 className='text-lg font-medium'>Users</h1>
       </div>
       <DataTable columns={columns} data={data?.users ?? []} />
     </div>

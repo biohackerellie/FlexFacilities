@@ -42,12 +42,12 @@ export function UploadFile({ id }: { id: string }) {
     <div>
       <form onSubmit={handleSubmit}>
         <div>
-          <input type="file" ref={inputFileRef} accept=".pdf,.docx,.txt,.doc" />
+          <input type='file' ref={inputFileRef} accept='.pdf,.docx,.txt,.doc' />
         </div>
-        <div className="p-2">
+        <div className='p-2'>
           {loading ? (
             <Button disabled={true}>
-              <Loader2 className="animate-spin" />
+              <Loader2 className='animate-spin' />
               uploading...
             </Button>
           ) : (

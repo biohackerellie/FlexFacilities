@@ -12,12 +12,12 @@ export default async function reservationDatesPage() {
 
   const isAdmin = session.userRole === 'ADMIN';
   return (
-    <div className="space-y-7" suppressHydrationWarning>
+    <div className='space-y-7' suppressHydrationWarning>
       <div>
-        <h2 className="Text-lg font-medium">Reservation Dates </h2>
+        <h2 className='Text-lg font-medium'>Reservation Dates </h2>
       </div>
 
-      <Suspense fallback={<Skeleton className="h-auto w-auto" />}>
+      <Suspense fallback={<Skeleton className='h-auto w-auto' />}>
         <DatesTables isAdmin={isAdmin} />
       </Suspense>
     </div>

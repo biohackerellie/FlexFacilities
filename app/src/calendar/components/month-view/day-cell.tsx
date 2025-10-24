@@ -57,12 +57,12 @@ export function DayCell({ cell, events, eventPositions }: IProps) {
               : `empty-${position}`;
 
             return (
-              <div key={eventKey} className="lg:flex-1">
+              <div key={eventKey} className='lg:flex-1'>
                 {event && (
                   <>
-                    <EventBullet className="lg:hidden" color={event.color} />
+                    <EventBullet className='lg:hidden' color={event.color} />
                     <MonthEventBadge
-                      className="hidden lg:flex"
+                      className='hidden lg:flex'
                       event={event}
                       cellDate={startOfDay(date)}
                     />
@@ -80,10 +80,10 @@ export function DayCell({ cell, events, eventPositions }: IProps) {
               !currentMonth && 'opacity-50',
             )}
           >
-            <span className="sm:hidden">
+            <span className='sm:hidden'>
               +{cellEvents.length - MAX_VISIBLE_EVENTS}
             </span>
-            <span className="hidden sm:inline">
+            <span className='hidden sm:inline'>
               {' '}
               {cellEvents.length - MAX_VISIBLE_EVENTS} more...
             </span>

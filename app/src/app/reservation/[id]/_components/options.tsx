@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { getFacilities } from '@/lib/actions/facilities';
+import type { getFacilities } from '@/lib/actions/facilities';
 import { updateReservation } from '@/lib/actions/reservations';
 import { ReservationContext } from './context';
 
@@ -63,42 +63,42 @@ export default function Options({
     });
   };
   return (
-    <Tabs defaultValue="Cost">
-      <TabsList className="grid w-full grid-cols-3">
-        <TabsTrigger value="Cost">Total Cost Override</TabsTrigger>
-        <TabsTrigger value="Facility">Change Facility</TabsTrigger>
-        <TabsTrigger value="Category">Change Category</TabsTrigger>
+    <Tabs defaultValue='Cost'>
+      <TabsList className='grid w-full grid-cols-3'>
+        <TabsTrigger value='Cost'>Total Cost Override</TabsTrigger>
+        <TabsTrigger value='Facility'>Change Facility</TabsTrigger>
+        <TabsTrigger value='Category'>Change Category</TabsTrigger>
       </TabsList>
-      <TabsContent value="Cost">
-        <Card className="m-2 flex h-auto flex-col items-center justify-center align-middle">
-          <Label htmlFor="newCost">Manually Set Total</Label>
+      <TabsContent value='Cost'>
+        <Card className='m-2 flex h-auto flex-col items-center justify-center align-middle'>
+          <Label htmlFor='newCost'>Manually Set Total</Label>
           <Input
-            className="w-auto text-black"
-            type="number"
-            name="newCost"
+            className='w-auto text-black'
+            type='number'
+            name='newCost'
             value={costOverride}
             onChange={(e) => setCostOverride(parseFloat(e.target.value))}
           />
           <Button
-            variant="outline"
-            className="flex justify-end self-end"
+            variant='outline'
+            className='flex justify-end self-end'
             onClick={() => overrideCost()}
           >
             Submit
           </Button>
         </Card>
       </TabsContent>
-      <TabsContent value="Facility">
-        <Card className="m-2 flex h-auto flex-col items-center justify-center align-middle">
-          <Label htmlFor="newFacility">Change Facility</Label>
+      <TabsContent value='Facility'>
+        <Card className='m-2 flex h-auto flex-col items-center justify-center align-middle'>
+          <Label htmlFor='newFacility'>Change Facility</Label>
           <Select
             onValueChange={onSelectChange}
             value={String(selectedFacility.id)}
           >
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className='w-[180px]'>
               {selectedFacility.name}
             </SelectTrigger>
-            <SelectContent className="max-h-80 overflow-scroll">
+            <SelectContent className='max-h-80 overflow-scroll'>
               {facilities?.map((location) => (
                 <SelectItem key={location.id} value={String(location.id)}>
                   {location.name}
@@ -107,25 +107,25 @@ export default function Options({
             </SelectContent>
           </Select>
           <Button
-            variant="outline"
-            className="flex justify-end self-end"
+            variant='outline'
+            className='flex justify-end self-end'
             onClick={() => changeFacility()}
           >
             Submit
           </Button>
         </Card>
       </TabsContent>
-      <TabsContent value="Category">
-        <Card className="m-2 flex h-auto flex-col items-center justify-center align-middle">
-          <Label htmlFor="newCategory">Change Category</Label>
+      <TabsContent value='Category'>
+        <Card className='m-2 flex h-auto flex-col items-center justify-center align-middle'>
+          <Label htmlFor='newCategory'>Change Category</Label>
           <Select
             onValueChange={onSelectCategoryChange}
             value={String(selectedCategory)}
           >
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Category" />
+            <SelectTrigger className='w-[180px]'>
+              <SelectValue placeholder='Category' />
             </SelectTrigger>
-            <SelectContent className="max-h-80 overflow-scroll">
+            <SelectContent className='max-h-80 overflow-scroll'>
               {categories?.map((category) => (
                 <SelectItem key={category.id} value={String(category.id)}>
                   {category.name}${category.price}
@@ -134,8 +134,8 @@ export default function Options({
             </SelectContent>
           </Select>
           <Button
-            variant="outline"
-            className="flex justify-end self-end"
+            variant='outline'
+            className='flex justify-end self-end'
             onClick={() => changeCategory()}
           >
             Submit

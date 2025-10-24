@@ -10,8 +10,11 @@ import {
   SelectTrigger,
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
-import { getAllBuildingNames } from '@/lib/actions/facilities';
-import { getUserNotifications, newNotification } from '@/lib/actions/users';
+import type { getAllBuildingNames } from '@/lib/actions/facilities';
+import {
+  type getUserNotifications,
+  newNotification,
+} from '@/lib/actions/users';
 
 type Props = {
   getNotificationsPromise: Promise<
@@ -40,26 +43,26 @@ export default function NotificationList({
   };
 
   return (
-    <div className="space-y-7 max-w-2xl">
-      <ScrollArea className="h-72 w-lg rounded-md border">
-        <div className="p-4">
-          <h4 className="mb-4 text-sm leading-none font-medium">
+    <div className='space-y-7 max-w-2xl'>
+      <ScrollArea className='h-72 w-lg rounded-md border'>
+        <div className='p-4'>
+          <h4 className='mb-4 text-sm leading-none font-medium'>
             Enabled Notifications
           </h4>
           {notifications.map((n) => (
             <React.Fragment key={n.id}>
-              <div className="text-sm">{n.buildingName}</div>
-              <Separator className="my-2" />
+              <div className='text-sm'>{n.buildingName}</div>
+              <Separator className='my-2' />
             </React.Fragment>
           ))}
         </div>
       </ScrollArea>
       <div>
-        <h4 className="mb-4 text-sm leading-none font-medium">
+        <h4 className='mb-4 text-sm leading-none font-medium'>
           Add New Notification
         </h4>
         <Select onValueChange={onChange}>
-          <SelectTrigger className="w-full">
+          <SelectTrigger className='w-full'>
             {selectedBuilding ? selectedBuilding.name : 'Select Building'}
           </SelectTrigger>
           <SelectContent>

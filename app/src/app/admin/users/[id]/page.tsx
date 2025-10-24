@@ -39,28 +39,28 @@ export default async function accountPage({
   if (!user) return notFound();
   const reservations = await getReservations(id);
   return (
-    <div className="space-x-2 space-y-7">
-      <h1 className="m-3 flex justify-center border-b p-3 text-4xl font-bold drop-shadow-lg">
+    <div className='space-x-2 space-y-7'>
+      <h1 className='m-3 flex justify-center border-b p-3 text-4xl font-bold drop-shadow-lg'>
         {user.name}
       </h1>
-      <h2 className="text-3xl font-bold text-primary shadow-secondary drop-shadow-sm dark:text-secondary">
+      <h2 className='text-3xl font-bold text-primary shadow-secondary drop-shadow-sm dark:text-secondary'>
         Reservations
       </h2>
-      <Tabs defaultValue="reservations">
+      <Tabs defaultValue='reservations'>
         <TabsList>
-          <TabsTrigger value="reservations">Reservations</TabsTrigger>
-          <TabsTrigger value="notifications">Notifications</TabsTrigger>
+          <TabsTrigger value='reservations'>Reservations</TabsTrigger>
+          <TabsTrigger value='notifications'>Notifications</TabsTrigger>
         </TabsList>
-        <TabsContent value="reservations">
+        <TabsContent value='reservations'>
           {reservations.length === 0 ? (
-            <p className="text-center">No reservations found.</p>
+            <p className='text-center'>No reservations found.</p>
           ) : (
             <Suspense fallback={<TableSkeleton />}>
               <DataTable columns={columns} data={reservations} />
             </Suspense>
           )}
         </TabsContent>
-        <TabsContent value="notifications">
+        <TabsContent value='notifications'>
           <Suspense fallback={<TableSkeleton />}>
             <NotificationList
               userId={id}

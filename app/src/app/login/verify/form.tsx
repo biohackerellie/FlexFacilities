@@ -4,7 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { notFound, useRouter, useSearchParams } from 'next/navigation';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
 import { z } from 'zod';
 import { Spinner } from '@/components/spinner';
 import { Button } from '@/components/ui/button';
@@ -22,8 +21,6 @@ import {
   InputOTPGroup,
   InputOTPSlot,
 } from '@/components/ui/input-otp';
-import { getErrorMessage } from '@/lib/errors';
-import { Email2FA } from '../actions';
 
 const FormSchema = z.object({
   pin: z.string().min(6, {
@@ -34,7 +31,7 @@ const FormSchema = z.object({
 export function InputOTPForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [pending, setPending] = React.useState(false);
+  const [pending, _setPending] = React.useState(false);
   const token = searchParams.get('token');
   if (!token) {
     return notFound();
@@ -52,10 +49,10 @@ export function InputOTPForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className='w-2/3 space-y-6'>
         <FormField
           control={form.control}
-          name="pin"
+          name='pin'
           render={({ field }) => (
             <FormItem>
               <FormLabel>One-Time Password</FormLabel>
@@ -77,7 +74,7 @@ export function InputOTPForm() {
           )}
         />
 
-        <Button type="submit" disabled={pending}>
+        <Button type='submit' disabled={pending}>
           {pending ? (
             <span>
               <Spinner /> submitting...

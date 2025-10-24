@@ -39,7 +39,7 @@ export default function EditPricing({ id }: { id: string }) {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline">Add Fee</Button>
+        <Button variant='outline'>Add Fee</Button>
       </SheetTrigger>
       <SheetContent>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -49,23 +49,23 @@ export default function EditPricing({ id }: { id: string }) {
               Add an additional fee to this reservation.
             </SheetDescription>
           </SheetHeader>
-          <div className="flex flex-col space-y-4">
-            <div className="flex flex-col space-y-2">
-              <Label htmlFor="start-date">Fee Amount</Label>
+          <div className='flex flex-col space-y-4'>
+            <div className='flex flex-col space-y-2'>
+              <Label htmlFor='start-date'>Fee Amount</Label>
               <input
                 {...register('additionalFees')}
-                id="additionalFees"
-                type="number"
+                id='additionalFees'
+                type='number'
               />
             </div>
-            <div className="flex flex-col space-y-2">
-              <Label htmlFor="feesType">Type of Fee</Label>
-              <input {...register('feesType')} id="feesType" />
+            <div className='flex flex-col space-y-2'>
+              <Label htmlFor='feesType'>Type of Fee</Label>
+              <input {...register('feesType')} id='feesType' />
             </div>
           </div>
           <SheetFooter>
             <SheetClose asChild>
-              <Button type="submit">Save Changes</Button>
+              <Button type='submit'>Save Changes</Button>
             </SheetClose>
           </SheetFooter>
         </form>

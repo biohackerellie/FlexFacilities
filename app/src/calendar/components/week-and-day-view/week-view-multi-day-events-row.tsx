@@ -67,7 +67,7 @@ export function WeekViewMultiDayEventsRow({
         rows.push([]);
       }
 
-      rows[rowIndex]!.push(event);
+      rows[rowIndex]?.push(event);
     });
 
     return rows;
@@ -94,13 +94,13 @@ export function WeekViewMultiDayEventsRow({
   }
 
   return (
-    <div className="hidden overflow-hidden sm:flex">
-      <div className="w-18 border-b"></div>
-      <div className="grid flex-1 grid-cols-7 divide-x border-b border-l">
+    <div className='hidden overflow-hidden sm:flex'>
+      <div className='w-18 border-b'></div>
+      <div className='grid flex-1 grid-cols-7 divide-x border-b border-l'>
         {weekDays.map((day, dayIndex) => (
           <div
             key={day.toISOString()}
-            className="flex h-full flex-col gap-1 py-1"
+            className='flex h-full flex-col gap-1 py-1'
           >
             {eventRows.map((row, rowIndex) => {
               const event = row.find(
@@ -109,7 +109,7 @@ export function WeekViewMultiDayEventsRow({
 
               if (!event) {
                 return (
-                  <div key={`${rowIndex}-${dayIndex}`} className="h-6.5" />
+                  <div key={`${rowIndex}-${dayIndex}`} className='h-6.5' />
                 );
               }
 

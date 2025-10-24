@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import { ArrowUpDown } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
-import { ReservationDate } from '@/lib/types';
+import type { ReservationDate } from '@/lib/types';
 
 export const columns: ColumnDef<ReservationDate>[] = [
   {
@@ -13,11 +13,11 @@ export const columns: ColumnDef<ReservationDate>[] = [
     header: ({ column }) => {
       return (
         <Button
-          variant="ghost"
+          variant='ghost'
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Start Date
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className='ml-2 h-4 w-4' />
         </Button>
       );
     },
@@ -31,11 +31,11 @@ export const columns: ColumnDef<ReservationDate>[] = [
     header: ({ column }) => {
       return (
         <Button
-          variant="ghost"
+          variant='ghost'
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           End Date
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ArrowUpDown className='ml-2 h-4 w-4' />
         </Button>
       );
     },
