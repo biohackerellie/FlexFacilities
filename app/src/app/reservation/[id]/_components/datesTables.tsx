@@ -1,5 +1,6 @@
 'use client';
 
+import { notFound } from 'next/navigation';
 import * as React from 'react';
 import { DataTable } from '@/components/ui/tables/reservations/reservation/data-table';
 import AddDateDialog from './addDates';
@@ -9,7 +10,8 @@ import { ReservationContext } from './context';
 export default function DatesTables({ isAdmin }: { isAdmin: boolean }) {
   const data = React.use(ReservationContext);
   if (!data) return <div>no data</div>;
-  const reservation = data.reservation!;
+  const reservation = data.reservation;
+  if (!reservation) return notFound();
   const mappedDates = data.dates;
 
   if (isAdmin) {

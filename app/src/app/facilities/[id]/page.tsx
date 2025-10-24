@@ -24,8 +24,8 @@ export default async function FacilityPage({
   const fac = await getFacility(id);
   const events = await getEventsByFacility(id);
 
-  if (!fac) return notFound();
-  const facility = fac.facility!;
+  if (!fac || !fac.facility) return notFound();
+  const facility = fac.facility;
   const map = `https://www.google.com/maps/search/?api=1&query=${fac.building?.address}`;
 
   return (
@@ -136,8 +136,8 @@ export default async function FacilityPage({
                   [...events.events]
                     .sort(
                       (a, b) =>
-                        new Date(a.start!).getTime() -
-                        new Date(b.start!).getTime(),
+                        new Date(a.start).getTime() -
+                        new Date(b.start).getTime(),
                     )
                     .map((event) => (
                       <div key={event.title}>

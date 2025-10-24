@@ -34,9 +34,9 @@ const AddDateDialog = ({ id }: { id: string }) => {
   const handleSubmit = async () => {
     try {
       // date + startTime string "2023-10-10 10:30:00"
-      const localStart = `${date?.getFullYear()}-${date?.getMonth() + 1}-${date?.getDate()} ${startTime}`;
+      const localStart = `${date?.getFullYear()}-${date?.getMonth()! + 1}-${date?.getDate()} ${startTime}`;
       logger.debug('adding date', { localStart: localStart });
-      const localEnd = `${date?.getFullYear()}-${date?.getMonth() + 1}-${date?.getDate()} ${endTime}`;
+      const localEnd = `${date?.getFullYear()}-${date?.getMonth()! + 1}-${date?.getDate()} ${endTime}`;
       await AddDates({
         reservationID: id,
         localStart,

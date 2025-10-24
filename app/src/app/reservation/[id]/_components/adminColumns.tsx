@@ -105,7 +105,7 @@ export const adminColumns: ColumnDef<ReservationDate>[] = [
       const selectedData = selectedRows.flatRows.map((row) => row.original);
       const SelectedRowIds = selectedData.map((row) => row.id);
       const reservationID =
-        table.getRowModel().rows[0]?.original.reservationId!;
+        table.getRowModel().rows[0]?.original.reservationId ?? '';
 
       return (
         <DropdownMenu>

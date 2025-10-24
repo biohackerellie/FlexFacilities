@@ -1,6 +1,5 @@
 import { useCalendar } from '@/calendar/contexts/calendar-context';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { AvatarGroup } from '@/components/ui/avatar-group';
 import {
   Select,
   SelectContent,
@@ -28,24 +27,23 @@ export function BuildingSelect() {
       <SelectContent align='end'>
         <SelectItem value='all'>
           <div className='flex items-center gap-1'>
-            <AvatarGroup max={2}>
-              {buildings.map((building) => {
-                const name =
-                  building.name.split(' ').length > 1
-                    ? `${building.name.split(' ')[0]?.[0] ?? ''}${building.name.split(' ')[1]?.[0] ?? ''}${building.name.split(' ')[2]?.[0]}}`
-                    : building.name.substring(0, 1);
-                return (
-                  <Avatar key={building.id} className='size-6 text-xxs'>
-                    <AvatarFallback className='text-xxs'>{name}</AvatarFallback>
-                  </Avatar>
-                );
-              })}
-            </AvatarGroup>
+            {buildings.map((building) => {
+              const name =
+                building.name.split(' ').length > 1
+                  ? `${building.name.split(' ')[0]?.[0] ?? ''}${building.name.split(' ')[1]?.[0] ?? ''}${building.name.split(' ')[2]?.[0]}}`
+                  : building.name.substring(0, 1);
+              return (
+                <Avatar key={building.id} className='size-6 text-xxs'>
+                  <AvatarFallback className='text-xxs'>{name}</AvatarFallback>
+                </Avatar>
+              );
+            })}
             All
           </div>
         </SelectItem>
 
-        {buildings.map((building) => {
+        {buildings.map((building, i) => {
+          if (i >= 3) return null;
           const name =
             building.name.split(' ').length > 1
               ? `${building.name.split(' ')[0]?.[0] ?? ''}${building.name.split(' ')[1]?.[0] ?? ''}${building.name.split(' ')[2]?.[0]}}`

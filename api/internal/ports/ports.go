@@ -70,6 +70,7 @@ type BrandingStore interface {
 
 type AuthService interface {
 	AuthMiddleware(next http.Handler) http.Handler
+	GetSessionHandler(w http.ResponseWriter, r *http.Request)
 	AuthCallback(w http.ResponseWriter, r *http.Request)
 	BeginOauth(w http.ResponseWriter, r *http.Request)
 	CleanupExpiredTokens(ctx context.Context)

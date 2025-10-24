@@ -12,7 +12,9 @@ export default function AccountForm({ data }: { data: UserName }) {
   const updateUserID = Update.bind(null, data.id);
   return (
     <form action={updateUserID} className='space-y-8'>
-      <label className='block text-lg font-bold'>Name: {data.name} </label>
+      <label htmlFor='name' className='block text-lg font-bold'>
+        Name: {data.name}{' '}
+      </label>
       <Input
         name='name'
         id='name'

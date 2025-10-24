@@ -1,6 +1,6 @@
 'use client';
+import { notFound } from 'next/navigation';
 import * as React from 'react';
-
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -15,6 +15,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import type { getFacilities } from '@/lib/actions/facilities';
 import { updateReservation } from '@/lib/actions/reservations';
+import type { Facility } from '@/lib/types';
 import { ReservationContext } from './context';
 
 export default function Options({
@@ -24,22 +25,25 @@ export default function Options({
 }) {
   const data = React.use(ReservationContext);
   const fac = React.use(facilitiesPromise);
+  if (!data || !fac) return notFound();
   const facilitiesflat = fac?.buildings.flatMap((b) => b.facilities);
-  const facilities = facilitiesflat?.map((f) => f.facility!);
+  const facilities = facilitiesflat.map((f) => f.facility ?? ({} as Facility));
   const categoriesflat = facilitiesflat?.filter(
     (f) => f.facility?.id === data?.facility?.id,
-  )!;
-  const categories = categoriesflat?.flatMap((f) => f.categories!);
-  const facility = data?.facility!;
-  const reservation = data?.reservation!;
-  const override = parseFloat(data?.reservation.costOverride!);
+  );
+  const categories = categoriesflat?.flatMap((f) => f.categories);
+  const facility = data?.facility;
+  const reservation = data?.reservation;
+  const override = parseFloat(data?.reservation.costOverride);
   const [costOverride, setCostOverride] = React.useState(override);
-  const [selectedFacility, setSelectedFacility] = React.useState(facility);
+  const [selectedFacility, setSelectedFacility] = React.useState<
+    Facility | undefined
+  >(facility);
   const [selectedCategory, setSelectedCategory] = React.useState(
     reservation.categoryId,
   );
   const onSelectChange = (facilityId: string) => {
-    setSelectedFacility(facilities?.find((f) => f.id === facilityId)!);
+    setSelectedFacility(facilities?.find((f) => f.id === facilityId));
   };
   const onSelectCategoryChange = (categoryId: string) => {
     setSelectedCategory(categoryId);
@@ -51,6 +55,7 @@ export default function Options({
     });
   };
   const changeFacility = async () => {
+    if (!selectedFacility) return;
     await updateReservation({
       ...reservation,
       facilityId: selectedFacility.id,
@@ -93,10 +98,10 @@ export default function Options({
           <Label htmlFor='newFacility'>Change Facility</Label>
           <Select
             onValueChange={onSelectChange}
-            value={String(selectedFacility.id)}
+            value={String(selectedFacility?.id ?? '')}
           >
             <SelectTrigger className='w-[180px]'>
-              {selectedFacility.name}
+              {selectedFacility?.name ?? 'Facility'}
             </SelectTrigger>
             <SelectContent className='max-h-80 overflow-scroll'>
               {facilities?.map((location) => (

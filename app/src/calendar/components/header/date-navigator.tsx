@@ -27,9 +27,10 @@ export function DateNavigator({ view, events }: IProps) {
   );
 
   const handlePrevious = () =>
-    setSelectedDate(navigateDate(selectedDate!, view, 'previous'));
+    selectedDate &&
+    setSelectedDate(navigateDate(selectedDate, view, 'previous'));
   const handleNext = () =>
-    setSelectedDate(navigateDate(selectedDate!, view, 'next'));
+    selectedDate && setSelectedDate(navigateDate(selectedDate, view, 'next'));
 
   return (
     <div className='space-y-0.5'>

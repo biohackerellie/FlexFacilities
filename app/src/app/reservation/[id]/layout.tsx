@@ -7,7 +7,7 @@ import { getFacility } from '@/lib/actions/facilities';
 import { getReservation } from '@/lib/actions/reservations';
 import { getUser } from '@/lib/actions/users';
 import { auth } from '@/lib/auth';
-import type { ReservationDate } from '@/lib/types';
+import type { Facility, ReservationDate } from '@/lib/types';
 import type { SideBarType } from '@/lib/validators/constants';
 import AdminPanel from './_components/adminButtons';
 import { ReservationProvider } from './_components/context';
@@ -31,9 +31,10 @@ export default async function reservationLayout({
   if (!reservation) return notFound();
   const { id, eventName } = reservation;
   const fac = await getFacility(String(reservation.facilityId));
-  const Facility = fac?.facility!;
+  const facility = fac?.facility || null;
 
   const user = await getUser(reservation.userId);
+  if (!user) return notFound();
   const authorized = session.userId === reservation.userId || isAdmin;
   const reservationItems: SideBarType = [
     {
@@ -53,7 +54,7 @@ export default async function reservationLayout({
       href: `/reservation/${id}/Dates`,
     },
     {
-      title: `${Facility.name} Calendar`,
+      title: `${facility?.name} Calendar`,
       href: `/reservation/${id}/Calendar`,
     },
   ];
@@ -68,8 +69,8 @@ export default async function reservationLayout({
   }
   const context = {
     reservation: reservation,
-    user: user!,
-    facility: Facility,
+    user: user,
+    facility: facility || ({} as Facility),
     dates: data.dates,
   };
   return (
@@ -80,7 +81,7 @@ export default async function reservationLayout({
           <div className='space-y-0.5'>
             <h1 className='text-2xl font-bold'>{eventName}</h1>
             <h2 className='text-muted-foreground'>
-              {fac?.building?.name} {Facility?.name}
+              {fac?.building?.name} {facility?.name}
             </h2>
             <h3 className='text-muted-foreground'>{range(data.dates)}</h3>
             <React.Suspense fallback={<Spinner />}>

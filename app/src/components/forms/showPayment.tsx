@@ -22,7 +22,7 @@ export default function ShowPayment({ fees }: feeProps) {
   const email = user?.email || '';
 
   const description = `${reservation.eventName} at ${facility?.building} ${facility.name} by ${user?.name}`;
-  function PayOnline(id: string, fees: number, email: string) {
+  const PayOnline = (id: string, fees: number, email: string) => {
     startTransition(() => {
       toast.promise(GeneratePaymentLink(id, fees, description, email), {
         loading: 'Creating payment link...',
@@ -35,8 +35,8 @@ export default function ShowPayment({ fees }: feeProps) {
         },
       });
     });
-  }
-  function PayinPerson() {
+  };
+  const PayinPerson = () => {
     startTransition(() => {
       toast.promise(updateReservation({ ...reservation, paid: true }), {
         loading: 'loading...',
@@ -48,7 +48,7 @@ export default function ShowPayment({ fees }: feeProps) {
         },
       });
     });
-  }
+  };
   return (
     <div className='block gap-x-2 p-2'>
       <Button

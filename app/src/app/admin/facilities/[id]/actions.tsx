@@ -31,15 +31,15 @@ import type { Category, Facility } from '@/lib/types';
 
 export async function updateFacility(facility: Facility) {
   await client.facilities().updateFacility({ facility });
-  revalidateTag('facilities');
+  revalidateTag('facilities', 'max');
 }
 
 export async function deleteFacility(id: string) {
   await client.facilities().deleteFacility({ id });
-  revalidateTag('facilities');
+  revalidateTag('facilities', 'max');
 }
 
 export async function updateCategory(category: Category) {
   await client.facilities().updateFacilityCategory({ category });
-  revalidateTag('facilities');
+  revalidateTag('facilities', 'max');
 }

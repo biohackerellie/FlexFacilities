@@ -132,7 +132,7 @@ export function Step1({ onNext, facilitiesPromise, userID }: Step1Props) {
                 <motion.button
                   key={item.building?.id}
                   type='button'
-                  onClick={() => handleBuildingSelect(item.building?.id)}
+                  onClick={() => handleBuildingSelect(item.building?.id ?? '')}
                   className='group relative flex items-start gap-4 rounded-lg border bg-card p-4 text-left transition-all hover:border-primary hover:shadow-md'
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
@@ -196,7 +196,9 @@ export function Step1({ onNext, facilitiesPromise, userID }: Step1Props) {
                 <motion.button
                   key={i}
                   type='button'
-                  onClick={() => handleFacilitySelect(facility.facility?.id)}
+                  onClick={() =>
+                    handleFacilitySelect(facility.facility?.id ?? '')
+                  }
                   className={`group relative flex items-start gap-4 rounded-lg border bg-card p-4 text-left transition-all hover:border-primary hover:shadow-md ${
                     selectedFacility?.facility?.id === facility.facility?.id
                       ? 'border-primary bg-primary/5'

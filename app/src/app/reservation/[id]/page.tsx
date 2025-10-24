@@ -13,9 +13,9 @@ export default async function reservationPage({
 }) {
   const { id } = await params;
   const data = await getReservation(id);
-  if (!data) return notFound();
+  if (!data || !data.reservation) return notFound();
 
-  const reservation = data.reservation!;
+  const reservation = data.reservation;
   const { name, phone, details } = reservation;
   const user = await getUser(reservation.userId);
   const category = await getReservationCategory(String(reservation.categoryId));

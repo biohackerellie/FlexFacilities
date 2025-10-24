@@ -111,8 +111,8 @@ func requiresAuth(procedure string) bool {
 
 func (s *Auth) AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		s.logger.Debug("cookies: ", "cookies", r.Cookies())
 		procedure, ok := InferProcedure(r.URL)
-		s.logger.Debug("AuthMiddleware", "procedure", procedure)
 		if !ok {
 			// Not a grpc request
 			next.ServeHTTP(w, r)
@@ -188,6 +188,27 @@ func issueCookie(w http.ResponseWriter, name, val string, secure bool, maxAge in
 		SameSite: http.SameSiteLaxMode,
 		MaxAge:   maxAge, // 0 => session cookie
 	})
+}
+
+func (s *Auth) GetSessionHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+	authCTX, ok := ctx.Value(utils.CtxKey("user")).(*AuthCTX)
+	if !ok || authCTX == nil {
+		_ = s.ErrW.Write(w, r, connect.NewError(connect.CodeUnauthenticated, errors.New("unauthenticated")))
+		return
+	}
+
+	user := authCTX.User
+	sessionID := authCTX.SessionID
+	res := &service.GetSessionResponse{
+		SessionId: sessionID,
+		UserId:    user.ID,
+		UserEmail: user.Email,
+		UserName:  user.Name,
+		UserRole:  user.Role.String(),
+	}
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(res.String()))
 }
 
 func (s *Auth) GetSession(ctx context.Context, req *connect.Request[service.GetSessionRequest]) (*connect.Response[service.GetSessionResponse], error) {

@@ -10,7 +10,7 @@ export default function FacilityCard(
   facility: FacilityWithCategories,
   building?: Building,
 ) {
-  const idString = facility.facility?.id?.toString()!;
+  const idString = facility.facility?.id?.toString() ?? '';
   if (!facility.facility) return null;
 
   return (

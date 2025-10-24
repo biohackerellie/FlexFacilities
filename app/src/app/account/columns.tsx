@@ -5,22 +5,15 @@ import { ArrowUpDown } from 'lucide-react';
 import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
+import type { FullResWithFacilityName } from '@/lib/types';
 
-interface TableReservations {
-  eventName: string;
-  Facility: string;
-  ReservationDate: string | undefined;
-  approved: 'pending' | 'approved' | 'denied' | 'canceled';
-  id: number;
-}
-
-export const columns: ColumnDef<TableReservations>[] = [
+export const columns: ColumnDef<FullResWithFacilityName>[] = [
   {
     accessorKey: 'eventName',
     header: 'Event Name',
   },
   {
-    accessorKey: 'Facility',
+    accessorKey: 'facilityName',
     header: ({ column }) => {
       return (
         <Button
@@ -34,7 +27,7 @@ export const columns: ColumnDef<TableReservations>[] = [
     },
   },
   {
-    accessorKey: 'ReservationDate',
+    accessorKey: 'reservationDate',
 
     header: ({ column }) => {
       return (
@@ -53,10 +46,10 @@ export const columns: ColumnDef<TableReservations>[] = [
     header: 'Status',
   },
   {
-    accessorKey: 'id',
+    accessorKey: 'reservationId',
     header: 'Details',
     cell: ({ row }) => {
-      const id = row.original.id;
+      const id = row.original.reservationId;
 
       return (
         <Button asChild>

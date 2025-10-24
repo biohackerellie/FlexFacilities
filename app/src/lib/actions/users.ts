@@ -29,6 +29,6 @@ export async function newNotification(notification: Partial<Notification>) {
     logger.error(error.message);
     throw error;
   }
-  revalidateTag('notifications');
-  revalidateTag(notification?.userId!);
+  revalidateTag('notifications', 'max');
+  revalidateTag(notification?.userId!, 'max');
 }

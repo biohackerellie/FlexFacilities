@@ -40,17 +40,18 @@
       "correctness": {
         "useUniqueElementIds": "off",
         "useHookAtTopLevel": "off",
+        "noNestedComponentDefinitions": "off",
         "useExhaustiveDependencies": "off"
       },
-      "a11y": {
-        "useButtonType": "off",
-        "useKeyWithClickEvents": "off"
-      },
+      "a11y": "off",
       "performance": {
         "noAccumulatingSpread": "off"
       },
       "complexity": {
         "noForEach": "off"
+      },
+      "style": {
+        "noNonNullAssertion": "off"
       }
     }
   },

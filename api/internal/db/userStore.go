@@ -334,7 +334,7 @@ func (s *UserStore) NotificationUsersByBuilding(ctx context.Context, buildingID 
 		if errors.Is(err, sql.ErrNoRows) {
 			return []string{}, nil
 		}
-		s.log.Error("error getting notificaiton users", "error", err)
+		s.log.Error("error getting notification users", "error", err)
 		return nil, err
 	}
 	if len(ids) == 0 {

@@ -30,7 +30,8 @@ export default async function paymentPage({
   const { id } = await params;
   const data = await getReservation(id);
   if (!data) return notFound();
-  const reservation = data.reservation!;
+  const reservation = data.reservation;
+  if (!reservation) return notFound();
   const category = await getReservationCategory(String(reservation.categoryId));
 
   const CategoryPrice = category?.price;

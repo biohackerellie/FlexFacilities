@@ -35,5 +35,5 @@ export async function createFacility(facility: CreateFacilitySchema) {
     throw error;
   }
 
-  revalidateTag('facilities');
+  revalidateTag('facilities', 'max');
 }

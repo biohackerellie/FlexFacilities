@@ -187,7 +187,7 @@ func (s *ReservationStore) Create(ctx context.Context, reservation *models.Reser
 	}
 	defer rows.Close()
 	if rows.Next() {
-		rows.Scan(&id)
+		_ = rows.Scan(&id)
 	}
 
 	return id, nil

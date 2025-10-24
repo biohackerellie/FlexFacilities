@@ -2,6 +2,7 @@ import { ReloadIcon } from '@radix-ui/react-icons';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 import { Separator } from '@/components/ui/separator';
+import { DataTable } from '@/components/ui/tables/users/data-table';
 import { auth } from '@/lib/auth';
 import { client } from '@/lib/rpc';
 import { columns } from './columns';
@@ -35,7 +36,7 @@ export default async function Account() {
       <Separator />
 
       <Suspense fallback={<LoadingComponent />}>
-        <DataTable columns={columns} data={mappedData} />
+        <DataTable columns={columns} data={data.reservations} />
       </Suspense>
     </div>
   );
