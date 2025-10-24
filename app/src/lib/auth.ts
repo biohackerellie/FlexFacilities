@@ -1,8 +1,6 @@
 'use server';
 
 import { cacheTag } from 'next/cache';
-import { logger } from './logger';
-import { client } from './rpc';
 import type { Session, UserRole } from './types';
 
 function parseRole(role: string): UserRole {
@@ -27,7 +25,6 @@ export async function auth() {
   // }
   if (!data) return null;
 
-  console.log(data);
   return {
     userEmail: data?.userEmail,
     userId: data?.userId,
