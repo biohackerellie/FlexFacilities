@@ -1,8 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server';
 
 export function proxy(req: NextRequest) {
-  const cookies = req.cookies;
-  console.log('cookies: ', cookies);
   const response = NextResponse.next();
 
   return response;

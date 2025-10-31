@@ -1,6 +1,7 @@
 'use server';
 
-import { cacheTag } from 'next/cache';
+import { logger } from './logger';
+import { client } from './rpc';
 import type { Session, UserRole } from './types';
 
 function parseRole(role: string): UserRole {
@@ -15,14 +16,11 @@ function parseRole(role: string): UserRole {
 }
 
 export async function auth() {
-  'use cache';
-  // const { data, error } = await client.auth().getSession({});
-  const data = await fetch('/api/auth/session').then((res) => res.json());
-  cacheTag('session');
+  const { data, error } = await client.auth().getSession({});
 
-  // if (error) {
-  //   logger.warn(error.message);
-  // }
+  if (error) {
+    logger.warn(error.message);
+  }
   if (!data) return null;
 
   return {

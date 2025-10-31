@@ -19,7 +19,6 @@ async function handler(
   const cookieStore = await cookies();
 
   for (const cookie of cookieStore.getAll()) {
-    console.log('cookie: ', cookie);
     rheaders.append('Cookie', `${cookie.name}=${cookie.value}`);
   }
   try {
@@ -39,7 +38,6 @@ async function handler(
         )
       ) {
         if (key.toLowerCase() === 'set-cookie') {
-          console.log('cookie: ', value);
           cookieStore.set(
             `${value.split(';')[0]?.split('=')[0] ?? ''}`,
             `${value.split(';')[0]?.split('=')[1] ?? ''}`,

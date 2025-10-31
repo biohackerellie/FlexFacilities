@@ -147,6 +147,7 @@ func (s *Auth) AuthMiddleware(next http.Handler) http.Handler {
 			_ = s.ErrW.Write(w, r, connect.NewError(connect.CodeUnauthenticated, errors.New("unauthenticated")))
 			return
 		}
+
 		token, err := VerifyToken(jwtVal, &Claims{}, s.key)
 		if err != nil {
 			if errors.Is(err, jwt.ErrTokenExpired) {
@@ -173,6 +174,8 @@ func (s *Auth) AuthMiddleware(next http.Handler) http.Handler {
 			_ = s.ErrW.Write(w, r, connect.NewError(connect.CodeUnauthenticated, errors.New("unauthenticated")))
 			return
 		}
+		s.logger.Debug("user", "user", user, "session", session)
+
 		ctx := WithAuthCTX(r.Context(), user, session.ID)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
