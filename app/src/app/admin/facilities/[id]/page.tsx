@@ -34,7 +34,7 @@ export default async function facilityEditForm({
           <div>
             {imagePath ? (
               <Image
-                src={imagePath}
+                src={`/api/files/images/${imagePath}`}
                 alt={name!}
                 width={400}
                 height={400}

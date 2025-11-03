@@ -50,7 +50,7 @@ export default async function FacilityPage({
             <div className='hidden sm:flex'>
               {facility.imagePath ? (
                 <Image
-                  src={facility.imagePath}
+                  src={`/api/files${facility.imagePath}`}
                   alt={facility.name}
                   width={600}
                   height={600}

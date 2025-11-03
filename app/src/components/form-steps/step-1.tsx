@@ -62,17 +62,19 @@ export function Step1({ onNext, facilitiesPromise, userID }: Step1Props) {
   }, [userID, formData.userID, setValue, updateFormData]);
 
   const handleBuildingSelect = (buildingId: string) => {
+    console.log('buildingId', buildingId);
     const building = buildingsData.find((b) => b.building?.id === buildingId);
+    console.log('building.building', building?.building);
+    console.log('building.facilities', building?.facilities.length);
     if (!building || !building.building) {
+      setSelectedBuilding(null);
+      setSelectedBuildingFacilities(null);
       return;
     }
 
     setSelectedBuilding(building.building);
 
-    setSelectedBuildingFacilities(() => {
-      const flat = buildingsData.flatMap((f) => f.facilities);
-      return flat.filter((f) => f.facility?.buildingId === buildingId);
-    });
+    setSelectedBuildingFacilities(building.facilities);
 
     setView('facilities');
   };
@@ -192,18 +194,17 @@ export function Step1({ onNext, facilitiesPromise, userID }: Step1Props) {
             </div>
 
             <div className='grid gap-3'>
-              {selectedBuildingFacilities.map((facility, i) => (
+              {selectedBuildingFacilities.flatMap((facility, i) => (
                 <motion.button
-                  key={i}
+                  key={facility.facility?.id!}
                   type='button'
                   onClick={() =>
                     handleFacilitySelect(facility.facility?.id ?? '')
                   }
-                  className={`group relative flex items-start gap-4 rounded-lg border bg-card p-4 text-left transition-all hover:border-primary hover:shadow-md ${
-                    selectedFacility?.facility?.id === facility.facility?.id
+                  className={`group relative flex items-start gap-4 rounded-lg border bg-card p-4 text-left transition-all hover:border-primary hover:shadow-md ${selectedFacility?.facility?.id === facility.facility?.id
                       ? 'border-primary bg-primary/5'
                       : ''
-                  }`}
+                    }`}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -270,11 +271,10 @@ export function Step1({ onNext, facilitiesPromise, userID }: Step1Props) {
                   key={category.id}
                   type='button'
                   onClick={() => handleCategorySelect(category.id)}
-                  className={`group relative flex items-start gap-4 rounded-lg border bg-card p-4 text-left transition-all hover:border-primary hover:shadow-md ${
-                    selectedCategory === category.id
+                  className={`group relative flex items-start gap-4 rounded-lg border bg-card p-4 text-left transition-all hover:border-primary hover:shadow-md ${selectedCategory === category.id
                       ? 'border-primary bg-primary/5'
                       : ''
-                  }`}
+                    }`}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >

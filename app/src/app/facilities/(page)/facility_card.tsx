@@ -24,7 +24,7 @@ export default function FacilityCard(
           >
             {facility.facility?.imagePath ? (
               <Image
-                src={facility.facility?.imagePath}
+                src={`/api/files${facility.facility?.imagePath}`}
                 alt={`${facility.facility?.name}`}
                 width={350}
                 height={260}

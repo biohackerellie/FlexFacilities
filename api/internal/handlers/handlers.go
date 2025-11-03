@@ -5,13 +5,13 @@ import (
 	"api/internal/config"
 	repository "api/internal/db"
 	"api/pkg/calendar"
+	"api/pkg/files"
 	"context"
 	"fmt"
-	"log/slog"
-	"time"
-
 	"github.com/biohackerellie/flexauth"
 	"github.com/biohackerellie/flexauth/providers/entra"
+	"log/slog"
+	"time"
 )
 
 type Handlers struct {
@@ -20,6 +20,7 @@ type Handlers struct {
 	ReservationHandler *ReservationHandler
 	UtilityHandler     *UtilityHandler
 	Auth               *auth.Auth
+	FilesHandler       *FileHandler
 }
 
 func New(db *repository.DB, log *slog.Logger, config *config.Config) *Handlers {
@@ -29,10 +30,12 @@ func New(db *repository.DB, log *slog.Logger, config *config.Config) *Handlers {
 		log.Error("Could not create calendar", "error", err)
 		panic(err)
 	}
+	localFiles := files.NewLocalFileStorage(config.FilesPath, config.FrontendUrl)
 	userStore := repository.NewUserStore(db, log)
 	facilityStore := repository.NewFacilityStore(db, log)
 	reservationStore := repository.NewReservationStore(db, log)
 	brandingStore := repository.NewBrandingStore(db, log)
+	filesHandler := NewFileHandler(localFiles, log)
 
 	entraconfig := flexauth.Config{
 		ClientID:     config.EntraClientID,
@@ -61,5 +64,6 @@ func New(db *repository.DB, log *slog.Logger, config *config.Config) *Handlers {
 		ReservationHandler: reservationHandler,
 		UtilityHandler:     utilityHandler,
 		Auth:               authHandler,
+		FilesHandler:       filesHandler,
 	}
 }

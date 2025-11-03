@@ -211,7 +211,7 @@ func (s *Auth) GetSessionHandler(w http.ResponseWriter, r *http.Request) {
 		UserRole:  user.Role.String(),
 	}
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(res.String()))
+	_, _ = w.Write([]byte(res.String()))
 }
 
 func (s *Auth) GetSession(ctx context.Context, req *connect.Request[service.GetSessionRequest]) (*connect.Response[service.GetSessionResponse], error) {

@@ -6,25 +6,27 @@ import (
 )
 
 type Config struct {
-	LogLevel           string         `mapstructure:"LOG_LEVEL"`
-	VerboseLogging     string         `mapstructure:"VERBOSE_LOGGING"`
-	AppEnv             string         `mapstructure:"APP_ENV"`
-	EntraClientID      string         `mapstructure:"ENTRA_CLIENT_ID"`
-	EntraClientSecret  string         `mapstructure:"ENTRA_CLIENT_SECRET"`
-	EntraTenant        string         `mapstructure:"ENTRA_TENANT_ID"`
-	GoogleClientID     string         `mapstructure:"GOOGLE_CLIENT_ID"`
-	GoogleClientSecret string         `mapstructure:"GOOGLE_CLIENT_SECRET"`
-	GoogleRefreshToken string         `mapstructure:"GOOGLE_REFRESH_TOKEN"`
-	DatabaseURL        string         `mapstructure:"DATABASE_URL"`
-	AuthSecret         string         `mapstructure:"AUTH_SECRET"`
-	AuthSalt           string         `mapstructure:"AUTH_SALT"`
-	EmailHost          string         `mapstructure:"EMAIL_HOST"`
-	EmailPassword      string         `mapstructure:"EMAIL_PASSWORD"`
-	EmailUser          string         `mapstructure:"EMAIL_USER"`
-	ApiHost            string         `mapstructure:"API_HOST"`
-	FrontendUrl        string         `mapstructure:"FRONTEND_URL"`
-	Timezone           string         `mapstructure:"TIMEZONE"`
-	Location           *time.Location `mapstructure:"-"`
+	LogLevel           string `mapstructure:"LOG_LEVEL"`
+	VerboseLogging     string `mapstructure:"VERBOSE_LOGGING"`
+	AppEnv             string `mapstructure:"APP_ENV"`
+	EntraClientID      string `mapstructure:"ENTRA_CLIENT_ID"`
+	EntraClientSecret  string `mapstructure:"ENTRA_CLIENT_SECRET"`
+	EntraTenant        string `mapstructure:"ENTRA_TENANT_ID"`
+	GoogleClientID     string `mapstructure:"GOOGLE_CLIENT_ID"`
+	GoogleClientSecret string `mapstructure:"GOOGLE_CLIENT_SECRET"`
+	GoogleRefreshToken string `mapstructure:"GOOGLE_REFRESH_TOKEN"`
+	DatabaseURL        string `mapstructure:"DATABASE_URL"`
+	AuthSecret         string `mapstructure:"AUTH_SECRET"`
+	AuthSalt           string `mapstructure:"AUTH_SALT"`
+	EmailHost          string `mapstructure:"EMAIL_HOST"`
+	EmailPassword      string `mapstructure:"EMAIL_PASSWORD"`
+	EmailUser          string `mapstructure:"EMAIL_USER"`
+	ApiHost            string `mapstructure:"API_HOST"`
+	FrontendUrl        string `mapstructure:"FRONTEND_URL"`
+	FilesPath          string `mapstructure:"FILES_PATH"`
+	Timezone           string `mapstructure:"TIMEZONE"`
+
+	Location *time.Location `mapstructure:"-"`
 }
 
 func New(getenv func(string, string) string) (*Config, error) {
@@ -46,6 +48,7 @@ func New(getenv func(string, string) string) (*Config, error) {
 		EmailUser:          getenv("EMAIL_USER", ""),
 		ApiHost:            getenv("API_HOST", "http://localhost:8080"),
 		FrontendUrl:        getenv("FRONTEND_URL", "http://localhost:3000"),
+		FilesPath:          getenv("FILES_PATH", "data"),
 		Timezone:           getenv("TIMEZONE", "America/Denver"),
 	}
 	loc, err := time.LoadLocation(cfg.Timezone)

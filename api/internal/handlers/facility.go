@@ -31,6 +31,7 @@ func (a *FacilityHandler) GetAllFacilities(ctx context.Context, req *connect.Req
 	}
 	protoFacilities := make([]*service.BuildingWithFacilities, len(facilities))
 	for i, facility := range facilities {
+		a.log.Debug("GetAllFacilities", "facility", len(facility.Facilities))
 		protoFacilities[i] = facility.ToProto()
 	}
 
