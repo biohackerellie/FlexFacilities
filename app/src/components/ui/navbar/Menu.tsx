@@ -3,7 +3,7 @@
 import { Menu } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import type * as React from 'react';
+import * as React from 'react';
 import {
   Accordion,
   AccordionContent,
@@ -164,39 +164,45 @@ export default function NavMenu({ logo, session }: NavbarProps) {
             <div className='flex items-center'>
               <NavigationMenu>
                 <NavigationMenuList>
-                  {MENUITEMS.map((item) => renderMenuItem(item))}
-                  {authorized
-                    ? AUTHORIZED_MENU_ITEMS.map((item) => renderMenuItem(item))
-                    : null}
-                  {admin
-                    ? ADMIN_MENU_ITEMS.map((item) => renderMenuItem(item))
-                    : null}
+                  <React.Suspense fallback={<div>Loading...</div>}>
+                    {MENUITEMS.map((item) => renderMenuItem(item))}
+                    {authorized
+                      ? AUTHORIZED_MENU_ITEMS.map((item) =>
+                        renderMenuItem(item),
+                      )
+                      : null}
+                    {admin
+                      ? ADMIN_MENU_ITEMS.map((item) => renderMenuItem(item))
+                      : null}
+                  </React.Suspense>
                 </NavigationMenuList>
               </NavigationMenu>
             </div>
           </div>
           <div className='flex gap-2'>
-            {authorized ? (
-              <Button asChild>
-                <Link href={AUTH_ITEMS.logout.href}>
-                  {AUTH_ITEMS.logout.title}
-                </Link>
-              </Button>
-            ) : (
-              <>
-                <Button asChild variant='outline' size='sm'>
-                  <Link href={AUTH_ITEMS.login.href}>
-                    {AUTH_ITEMS.login.title}
+            <React.Suspense fallback={<div>Loading...</div>}>
+              {authorized ? (
+                <Button asChild>
+                  <Link href={AUTH_ITEMS.logout.href}>
+                    {AUTH_ITEMS.logout.title}
                   </Link>
                 </Button>
-                <Button asChild variant='default' size='sm'>
-                  <Link href={AUTH_ITEMS.signup.href}>
-                    {AUTH_ITEMS.signup.title}
-                  </Link>
-                </Button>
-              </>
-            )}
-            <ModeToggle />
+              ) : (
+                <>
+                  <Button asChild variant='outline' size='sm'>
+                    <Link href={AUTH_ITEMS.login.href}>
+                      {AUTH_ITEMS.login.title}
+                    </Link>
+                  </Button>
+                  <Button asChild variant='default' size='sm'>
+                    <Link href={AUTH_ITEMS.signup.href}>
+                      {AUTH_ITEMS.signup.title}
+                    </Link>
+                  </Button>
+                </>
+              )}
+              <ModeToggle />
+            </React.Suspense>
           </div>
         </nav>
       ) : (
@@ -235,46 +241,50 @@ export default function NavMenu({ logo, session }: NavbarProps) {
                   </SheetTitle>
                 </SheetHeader>
                 <div className='flex flex-col gap-6 p-4'>
-                  <Accordion
-                    type='single'
-                    collapsible
-                    className='flex w-full flex-col gap-4'
-                  >
-                    {MENUITEMS.map((item) => renderMobileMenuItem(item))}
-                    {authorized
-                      ? AUTHORIZED_MENU_ITEMS.map((item) =>
+                  <React.Suspense fallback={<div>Loading...</div>}>
+                    <Accordion
+                      type='single'
+                      collapsible
+                      className='flex w-full flex-col gap-4'
+                    >
+                      {MENUITEMS.map((item) => renderMobileMenuItem(item))}
+                      {authorized
+                        ? AUTHORIZED_MENU_ITEMS.map((item) =>
                           renderMobileMenuItem(item),
                         )
-                      : null}
-                    {admin
-                      ? ADMIN_MENU_ITEMS.map((item) =>
+                        : null}
+                      {admin
+                        ? ADMIN_MENU_ITEMS.map((item) =>
                           renderMobileMenuItem(item),
                         )
-                      : null}
-                  </Accordion>
+                        : null}
+                    </Accordion>
+                  </React.Suspense>
 
-                  <div className='flex flex-col gap-3'>
-                    {authorized ? (
-                      <Button asChild variant='outline'>
-                        <Link href={AUTH_ITEMS.logout.href}>
-                          {AUTH_ITEMS.logout.title}
-                        </Link>
-                      </Button>
-                    ) : (
-                      <>
+                  <React.Suspense fallback={<div>Loading...</div>}>
+                    <div className='flex flex-col gap-3'>
+                      {authorized ? (
                         <Button asChild variant='outline'>
-                          <Link href={AUTH_ITEMS.login.href}>
-                            {AUTH_ITEMS.login.title}
+                          <Link href={AUTH_ITEMS.logout.href}>
+                            {AUTH_ITEMS.logout.title}
                           </Link>
                         </Button>
-                        <Button asChild>
-                          <Link href={AUTH_ITEMS.signup.href}>
-                            {AUTH_ITEMS.signup.title}
-                          </Link>
-                        </Button>
-                      </>
-                    )}
-                  </div>
+                      ) : (
+                        <>
+                          <Button asChild variant='outline'>
+                            <Link href={AUTH_ITEMS.login.href}>
+                              {AUTH_ITEMS.login.title}
+                            </Link>
+                          </Button>
+                          <Button asChild>
+                            <Link href={AUTH_ITEMS.signup.href}>
+                              {AUTH_ITEMS.signup.title}
+                            </Link>
+                          </Button>
+                        </>
+                      )}
+                    </div>
+                  </React.Suspense>
                 </div>
               </SheetContent>
             </Sheet>
@@ -291,7 +301,7 @@ function renderMenuItem(item: MenuItem) {
       <NavigationMenuItem key={item.title}>
         <NavigationMenuTrigger>{item.title}</NavigationMenuTrigger>
         <NavigationMenuContent>
-          <ul className='grid w-[300px] gap-4'>
+          <ul className=' w-[300px] gap-4'>
             {item.items.map((subItem) => (
               <li key={subItem.title}>
                 <NavigationMenuLink asChild>

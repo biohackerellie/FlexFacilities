@@ -14,10 +14,10 @@ export default async function authLayout({
   const user = await auth();
 
   const admin = user?.userRole === 'ADMIN';
-  if (!admin) return notFound();
+
+  if (!admin) return <div>fuck you</div>;
   return (
     <div className='container relative'>
-      <div className='sm:hidden'>{children}</div>
       <div className='hidden space-y-6 p-2 pb-16 sm:block'>
         <div className='space-y-0.5'>
           <h1 className='text-2xl font-bold'>Admin</h1>

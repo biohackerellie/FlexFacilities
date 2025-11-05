@@ -1,13 +1,13 @@
 'use server';
-import * as React from 'react';
 import { logger } from '../logger';
-import { client } from '../rpc';
+import { unauthenticatedClient as client } from '../rpc';
 
-export const getBranding = React.cache(async () => {
+export async function getBranding() {
+  'use cache';
   const { data, error } = await client.utility().getBranding({});
   if (error) {
     logger.error('Error fetching branding', { 'error ': error });
     return undefined;
   }
   return data ?? undefined;
-});
+}

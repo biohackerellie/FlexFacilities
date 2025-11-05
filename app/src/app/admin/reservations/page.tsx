@@ -1,20 +1,47 @@
+import { cookies } from 'next/headers';
 import { DataTable } from '@/components/ui/tables';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { client } from '@/lib/rpc';
+import { logger } from '@/lib/logger';
+import { unauthenticatedClient as client } from '@/lib/rpc';
 import { columns } from './columns';
 
-async function getReservations() {
-  // TODO: cache
-  const { data, error } = await client.reservations().allSortedReservations({});
+async function getReservations(session: string, token: string) {
+  'use cache';
+  const { data, error } = await client
+    .reservations()
+    .allSortedReservations(
+      {},
+      { headers: { 'X-Session': session, Authorization: `Bearer ${token}` } },
+    );
   if (error) {
-    console.error(error);
+    logger.error('Failed to get reservations', { error });
     return null;
   }
   return data;
 }
 
+async function getCookies() {
+  const cookieStore = await cookies();
+  let session;
+  let token;
+  for (const cookie of cookieStore.getAll()) {
+    if (cookie.name.includes('flexauth_token')) {
+      token = cookie.value;
+      continue;
+    }
+    if (cookie.name.includes('session')) {
+      session = cookie.value;
+    }
+  }
+  return { session, token };
+}
 export default async function Reservations() {
-  const data = await getReservations();
+  const { session, token } = await getCookies();
+  if (!session || !token) {
+    return <div>Please login</div>;
+  }
+
+  const data = await getReservations(session, token);
   const Reservations = data?.future ?? [];
   const PastReservations = data?.past ?? [];
   return (

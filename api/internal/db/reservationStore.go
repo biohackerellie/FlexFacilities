@@ -180,7 +180,29 @@ RETURNING id`
 func (s *ReservationStore) Create(ctx context.Context, reservation *models.Reservation) (int64, error) {
 
 	var id int64
-	rows, err := s.db.NamedQueryContext(ctx, createReservationQuery, reservation)
+	args := map[string]any{
+		"user_id":       reservation.UserID,
+		"event_name":    reservation.EventName,
+		"facility_id":   reservation.FacilityID,
+		"approved":      reservation.Approved,
+		"details":       reservation.Details,
+		"insurance":     reservation.Insurance,
+		"door_access":   reservation.DoorAccess,
+		"doors_details": reservation.DoorsDetails,
+		"name":          reservation.Name,
+		"tech_details":  reservation.TechDetails,
+		"tech_support":  reservation.TechSupport,
+		"phone":         reservation.Phone,
+		"category_id":   reservation.CategoryID,
+		"rrule":         reservation.RRule,
+	}
+	if reservation.RDates != nil && len(*reservation.RDates) > 0 {
+		args["rdates"] = reservation.RDates
+	}
+	if reservation.EXDates != nil && len(*reservation.EXDates) > 0 {
+		args["exdates"] = reservation.EXDates
+	}
+	rows, err := s.db.NamedQueryContext(ctx, createReservationQuery, args)
 	if err != nil {
 		s.log.Error("failed to insert reservation into db", "error", err)
 		return 0, err

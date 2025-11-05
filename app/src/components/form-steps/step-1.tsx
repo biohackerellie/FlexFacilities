@@ -62,20 +62,14 @@ export function Step1({ onNext, facilitiesPromise, userID }: Step1Props) {
   }, [userID, formData.userID, setValue, updateFormData]);
 
   const handleBuildingSelect = (buildingId: string) => {
-    console.log('buildingId', buildingId);
     const building = buildingsData.find((b) => b.building?.id === buildingId);
-    console.log('building.building', building?.building);
-    console.log('building.facilities', building?.facilities.length);
     if (!building || !building.building) {
       setSelectedBuilding(null);
       setSelectedBuildingFacilities(null);
       return;
     }
-
     setSelectedBuilding(building.building);
-
     setSelectedBuildingFacilities(building.facilities);
-
     setView('facilities');
   };
 
@@ -194,7 +188,7 @@ export function Step1({ onNext, facilitiesPromise, userID }: Step1Props) {
             </div>
 
             <div className='grid gap-3'>
-              {selectedBuildingFacilities.flatMap((facility, i) => (
+              {selectedBuildingFacilities.flatMap((facility, _i) => (
                 <motion.button
                   key={facility.facility?.id!}
                   type='button'

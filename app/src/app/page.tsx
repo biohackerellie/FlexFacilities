@@ -1,19 +1,30 @@
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import * as React from 'react';
 import { Spinner } from '@/components/spinner';
+import { buttonVariants } from '@/components/ui/button';
 import { getAllMapCoords } from '@/lib/actions/facilities';
+import { getBranding } from '@/lib/actions/utility';
 
-export default function Home() {
-  const LargeMap = React.useMemo(
-    () =>
-      dynamic(() => import('@/components/maps/large'), {
-        loading: () => <Spinner />,
-        ssr: !!false,
-      }),
-    [],
-  );
+export default async function Home() {
+  const branding = await getBranding();
+
+  const LargeMap = dynamic(() => import('@/components/maps/large'), {
+    loading: () => <Spinner />,
+    ssr: !!false,
+  });
+
   return (
-    <div className=' relative py-10  max-h-dvh  items-center justify-center gap-6 p-6 md:p-10'>
+    <div className=' relative py-10   max-h-dvh  items-center justify-center gap-6 p-6 md:p-10'>
+      <div className='gap-6 py-10'>
+        <h1 className='text-4xl font-bold text-center'>
+          Welcome to
+          <React.Suspense fallback={''}>
+            {branding && <span> {branding.organizationName} </span>}
+          </React.Suspense>
+          Facility Rentals
+        </h1>
+      </div>
       <div className='flex justify-evenly'>
         <div className=' h-[32rem] w-1/2 p-2 mx-2 max-w-[100vw] shadow-sm max-h-[100dvh] m-auto inset-0   '>
           <React.Suspense fallback={<Spinner />}>
@@ -21,16 +32,24 @@ export default function Home() {
           </React.Suspense>
         </div>
 
-        <div className='w-1/2 text-center flex flex-col justify-center items-center'>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam
-            vehicula ipsum risus, et iaculis ipsum malesuada a. Praesent
-            consectetur id nulla et pretium. Pellentesque auctor luctus ligula
-            sit amet ullamcorper. In sem tortor, malesuada at venenatis sit
-            amet, consectetur sit amet eros. In congue sodales ligula, id varius
-            mi pretium at. Pellentesque eu faucibus quam. Sed at lacus ex. Fusce
-            auctor est turpis, nec auctor sapien faucibus sit amet.{' '}
-          </p>
+        <div className='w-1/2 text-center flex flex-col gap-3 justify-center items-center'>
+          <React.Suspense fallback={''}>
+            <React.Activity
+              mode={
+                branding && branding.organizationDescription
+                  ? 'visible'
+                  : 'hidden'
+              }
+            >
+              <p>{branding?.organizationDescription}</p>
+            </React.Activity>
+          </React.Suspense>
+          <Link href='/facilities' className={buttonVariants({ size: 'lg' })}>
+            View Facilities
+          </Link>
+          <Link href='/reservation' className={buttonVariants({ size: 'lg' })}>
+            Reserve now
+          </Link>
         </div>
       </div>
     </div>

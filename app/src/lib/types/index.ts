@@ -1,6 +1,7 @@
 import type { Message } from '@bufbuild/protobuf';
 import type { Path, UseFormRegister } from 'react-hook-form';
 import type {
+  Branding as PBBranding,
   Building as PBBuilding,
   BuildingWithFacilities as PBBuildingWithFacilities,
   Category as PBCategory,
@@ -20,6 +21,7 @@ import type {
   Users as PBUser,
 } from '../rpc/proto';
 export type ProtoType<T> = Omit<T, keyof Message<any>>;
+export type Branding = ProtoType<PBBranding>;
 export type Category = ProtoType<PBCategory>;
 export type Facility = ProtoType<PBFacility>;
 export type Reservation = ProtoType<PBReservation>;

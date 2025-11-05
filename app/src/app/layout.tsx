@@ -61,8 +61,11 @@ export default async function RootLayout({
         )}
       >
         <ThemeProviders attribute='class' defaultTheme='system' enableSystem>
-          <NavMenu session={session} />
-
+          <div className='z-10'>
+            <React.Suspense fallback={<Skeleton className='h-4 w-full' />}>
+              <NavMenu session={session} />
+            </React.Suspense>
+          </div>
           <div className='container py-8'>{children}</div>
           <div className='fixed  align-bottom bottom-0 w-full'>
             <React.Suspense fallback={footerSkeleton()}>

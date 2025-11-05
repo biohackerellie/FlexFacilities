@@ -97,6 +97,7 @@ func (a *ReservationHandler) RequestCount(ctx context.Context, req *connect.Requ
 func (a *ReservationHandler) GetRequestsThisWeek(ctx context.Context, req *connect.Request[service.GetRequestsThisWeekRequest]) (*connect.Response[service.RequestThisWeekResponse], error) {
 	requests, err := a.reservationStore.GetAll(ctx)
 	if err != nil {
+		a.log.Error("Failed to get requests", "err", err)
 		return nil, err
 	}
 	sevenDaysFromNow := time.Now().Add(time.Hour * 24 * 7)

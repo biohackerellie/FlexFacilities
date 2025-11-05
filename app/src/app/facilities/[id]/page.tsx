@@ -15,6 +15,12 @@ import {
 } from '@/components/ui/tooltip';
 import { getEventsByFacility, getFacility } from '@/lib/actions/facilities';
 
+export async function generateStaticParams() {
+  return [];
+}
+
+export const dynamic = 'force-static';
+
 export default async function FacilityPage({
   params,
 }: {

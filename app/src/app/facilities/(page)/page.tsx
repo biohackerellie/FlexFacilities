@@ -4,12 +4,15 @@ import LoadingScreen from '@/components/ui/loadingScreen';
 import { Separator } from '@/components/ui/separator';
 import { SidebarSearchParamsNav } from '@/components/ui/sidebar-searchParams';
 import { logger } from '@/lib/logger';
-import { client } from '@/lib/rpc';
+import { unauthenticatedClient } from '@/lib/rpc';
 import type { FacilityWithCategories } from '@/lib/types';
 import FacilityCard from './facility_card';
 
 async function getData() {
-  const { data, error } = await client.facilities().getAllFacilities({});
+  'use cache';
+  const { data, error } = await unauthenticatedClient
+    .facilities()
+    .getAllFacilities({});
   if (error) {
     logger.error(error.message);
     return null;

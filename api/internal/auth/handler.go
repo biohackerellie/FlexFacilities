@@ -136,7 +136,7 @@ func (s *Auth) AuthMiddleware(next http.Handler) http.Handler {
 			return
 		}
 		jwtVal := splitToken[1]
-		sessVal := r.Header.Get("Session")
+		sessVal := r.Header.Get("X-Session")
 		if sessVal == "" {
 			_ = s.ErrW.Write(w, r, connect.NewError(connect.CodeUnauthenticated, errors.New("unauthenticated")))
 			return

@@ -1,5 +1,4 @@
 import { School } from 'lucide-react';
-import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -17,7 +16,16 @@ export default async function DashboardPage() {
     .getRequestsThisWeek({});
 
   if (countError || weeklyCountError || !totalCount || !thisWeekData) {
-    return notFound();
+    return (
+      <div className='flex flex-col'>
+        <pre className='text-sm text-red-500'>
+          <code>{countError?.message}</code>
+        </pre>
+        <pre className='text-sm text-red-500'>
+          <code>{weeklyCountError?.message}</code>
+        </pre>
+      </div>
+    );
   }
 
   const count = totalCount?.count ?? 0;
@@ -32,7 +40,7 @@ export default async function DashboardPage() {
           </TabsList>
 
           <TabsContent value='overview'>
-            <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-4'>
+            <div className='grid gap-4 m-2 md:grid-cols-2 lg:grid-cols-4'>
               <Suspense fallback={<Skeleton className='h-auto w-auto' />}>
                 <Card className=''>
                   <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
