@@ -12,6 +12,7 @@ import {
   getReservationCategory,
 } from '@/lib/actions/reservations';
 import { auth } from '@/lib/auth';
+import { getCookies } from '@/lib/setHeader';
 import Options from '../_components/options';
 import Paid from '../_components/paid';
 import { adminColumns } from './adminColumns';
@@ -26,13 +27,21 @@ export default async function paymentPage({
   if (!session) {
     return notFound();
   }
+  const { session: sessionId, token } = await getCookies();
+  if (!sessionId || !token) {
+    return notFound();
+  }
   const isAdmin = session.userRole === 'ADMIN';
   const { id } = await params;
-  const data = await getReservation(id);
+  const data = await getReservation(id, sessionId, token);
   if (!data) return notFound();
   const reservation = data.reservation;
   if (!reservation) return notFound();
-  const category = await getReservationCategory(String(reservation.categoryId));
+  const category = await getReservationCategory(
+    String(reservation.categoryId),
+    sessionId,
+    token,
+  );
 
   const CategoryPrice = category?.price;
   const mappedFees = data.fees
@@ -46,7 +55,7 @@ export default async function paymentPage({
     : [];
 
   let totalCost = 0.0;
-  const tcData = await costReducer(id);
+  const tcData = await costReducer(id, sessionId, token);
   if (tcData) {
     totalCost = parseFloat(tcData.cost);
   }

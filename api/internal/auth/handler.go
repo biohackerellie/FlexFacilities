@@ -97,10 +97,16 @@ func requiresAuth(procedure string) bool {
 		FacilitiesServiceGetFacilityProcedure:           true,
 		FacilitiesServiceGetBuildingFacilitiesProcedure: true,
 		FacilitiesServiceGetFacilityCategoriesProcedure: true,
-		AuthLoginProcedure:                              true,
-		AuthRegisterProcedure:                           true,
-		AuthVerify2FACodeProcedure:                      true,
-		GetAllCoordsProcedure:                           true,
+		FacilitiesServiceGetAllCoordsProcedure:          true,
+		FacilitiesServiceGetAllBuildingsProcedure:       true,
+		FacilitiesServiceGetEventsByFacilityProcedure:   true,
+		FacilitiesServiceGetEventsByBuildingProcedure:   true,
+		FacilitiesServiceGetAllEventsProcedure:          true,
+		FacilitiesServiceGetCategoryProcedure:           true,
+
+		AuthLoginProcedure:         true,
+		AuthRegisterProcedure:      true,
+		AuthVerify2FACodeProcedure: true,
 	}
 	if _, ok := publicProcedures[procedure]; ok {
 		return false
@@ -111,7 +117,6 @@ func requiresAuth(procedure string) bool {
 
 func (s *Auth) AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		s.logger.Debug("cookies: ", "cookies", r.Cookies())
 		procedure, ok := InferProcedure(r.URL)
 		if !ok {
 			// Not a grpc request

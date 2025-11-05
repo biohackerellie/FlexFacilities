@@ -1,18 +1,14 @@
-import { cookies } from 'next/headers';
 import { DataTable } from '@/components/ui/tables';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { logger } from '@/lib/logger';
-import { unauthenticatedClient as client } from '@/lib/rpc';
+import { client } from '@/lib/rpc';
+import { getCookies } from '@/lib/setHeader';
 import { columns } from './columns';
 
 async function getReservations(session: string, token: string) {
   'use cache';
-  const { data, error } = await client
-    .reservations()
-    .allSortedReservations(
-      {},
-      { headers: { 'X-Session': session, Authorization: `Bearer ${token}` } },
-    );
+  const authed = client.withAuth(session, token);
+  const { data, error } = await authed.reservations().allSortedReservations({});
   if (error) {
     logger.error('Failed to get reservations', { error });
     return null;
@@ -20,21 +16,6 @@ async function getReservations(session: string, token: string) {
   return data;
 }
 
-async function getCookies() {
-  const cookieStore = await cookies();
-  let session;
-  let token;
-  for (const cookie of cookieStore.getAll()) {
-    if (cookie.name.includes('flexauth_token')) {
-      token = cookie.value;
-      continue;
-    }
-    if (cookie.name.includes('session')) {
-      session = cookie.value;
-    }
-  }
-  return { session, token };
-}
 export default async function Reservations() {
   const { session, token } = await getCookies();
   if (!session || !token) {

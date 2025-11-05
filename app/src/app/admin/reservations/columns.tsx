@@ -1,7 +1,7 @@
 'use client';
 
 import type { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown } from 'lucide-react';
+import { ArrowUpDown, LinkIcon } from 'lucide-react';
 import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
@@ -11,6 +11,14 @@ export const columns: ColumnDef<FullResWithFacilityName>[] = [
   {
     accessorKey: 'eventName',
     header: 'Event Name',
+    cell: ({ row }) => {
+      const name = row.original.eventName;
+      return (
+        <div className='truncate text-ellipsis max-w-48' title={name}>
+          {name}
+        </div>
+      );
+    },
   },
   {
     accessorKey: 'facilityName',
@@ -66,9 +74,9 @@ export const columns: ColumnDef<FullResWithFacilityName>[] = [
       const id = row.original.reservationId;
 
       return (
-        <Button asChild>
+        <Button asChild size='icon' variant='ghost'>
           <Link prefetch={false} href={`/reservation/${id}`}>
-            Details
+            <LinkIcon />
           </Link>
         </Button>
       );

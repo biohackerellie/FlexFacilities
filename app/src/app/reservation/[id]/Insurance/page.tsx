@@ -5,6 +5,7 @@ import * as React from 'react';
 import { UploadFile } from '@/components/forms/uploadFile';
 import { Button } from '@/components/ui/button';
 import { getReservation } from '@/lib/actions/reservations';
+import { getCookies } from '@/lib/setHeader';
 
 export default async function insurancePage({
   params,
@@ -12,7 +13,11 @@ export default async function insurancePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const reservation = await getReservation(id);
+  const { session, token } = await getCookies();
+  if (!session || !token) {
+    return notFound();
+  }
+  const reservation = await getReservation(id, session, token);
   if (!reservation) return notFound();
   let link;
   if (reservation.reservation?.insuranceLink) {

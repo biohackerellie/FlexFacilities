@@ -7,6 +7,7 @@ import { getFacility } from '@/lib/actions/facilities';
 import { getReservation } from '@/lib/actions/reservations';
 import { getUser } from '@/lib/actions/users';
 import { auth } from '@/lib/auth';
+import { getCookies } from '@/lib/setHeader';
 import type { Facility, ReservationDate } from '@/lib/types';
 import type { SideBarType } from '@/lib/validators/constants';
 import AdminPanel from './_components/adminButtons';
@@ -23,9 +24,13 @@ export default async function reservationLayout({
   if (!session) {
     return notFound();
   }
+  const { session: sessionId, token } = await getCookies();
+  if (!sessionId || !token) {
+    return notFound();
+  }
   const isAdmin = session.userRole === 'ADMIN';
   const { id: paramsId } = await params;
-  const data = await getReservation(paramsId);
+  const data = await getReservation(paramsId, sessionId, token);
   if (!data) return notFound();
   const reservation = data.reservation;
   if (!reservation) return notFound();
@@ -33,7 +38,7 @@ export default async function reservationLayout({
   const fac = await getFacility(String(reservation.facilityId));
   const facility = fac?.facility || null;
 
-  const user = await getUser(reservation.userId);
+  const user = await getUser(reservation.userId, sessionId, token);
   if (!user) return notFound();
   const authorized = session.userId === reservation.userId || isAdmin;
   const reservationItems: SideBarType = [

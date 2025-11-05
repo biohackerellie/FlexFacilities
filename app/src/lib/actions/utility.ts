@@ -1,13 +1,26 @@
 'use server';
+import { cacheTag } from 'next/cache';
 import { logger } from '../logger';
-import { unauthenticatedClient as client } from '../rpc';
+import { client } from '../rpc';
+import { getCookies } from '../setHeader';
 
-export async function getBranding() {
+async function fetchBranding(session: string, token: string) {
   'use cache';
-  const { data, error } = await client.utility().getBranding({});
+  const authed = client.withAuth(session, token);
+  const { data, error } = await authed.utility().getBranding({});
   if (error) {
     logger.error('Error fetching branding', { 'error ': error });
     return undefined;
   }
-  return data ?? undefined;
+
+  cacheTag('branding');
+  return data;
+}
+
+export async function getBranding() {
+  const { session, token } = await getCookies();
+  if (!session || !token) {
+    return undefined;
+  }
+  return await fetchBranding(session, token);
 }

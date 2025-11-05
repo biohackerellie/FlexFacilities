@@ -793,13 +793,14 @@ type entry struct {
 }
 
 func (a *ReservationHandler) AllSortedReservations(ctx context.Context, req *connect.Request[service.GetAllReservationsRequest]) (*connect.Response[service.AllSortedResponse], error) {
-
 	reservations, err := a.reservationStore.GetAll(ctx)
 	if err != nil {
+		a.log.Error("error getting reservations", "err", err)
 		return nil, err
 	}
 	facilities, err := a.facilityStore.GetAllFacilities(ctx)
 	if err != nil {
+		a.log.ErrorContext(ctx, "error getting facilities", "err", err)
 		return nil, err
 	}
 
@@ -894,6 +895,7 @@ func (a *ReservationHandler) AllSortedReservations(ctx context.Context, req *con
 	}
 
 	if err := g.Wait(); err != nil {
+		a.log.Error("error waiting for reservations", "err", err)
 		return nil, err
 	}
 

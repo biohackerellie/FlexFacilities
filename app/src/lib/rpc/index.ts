@@ -3,6 +3,16 @@ import { createConnectTransport } from '@connectrpc/connect-web';
 import { cookies } from 'next/headers';
 import { RPC } from './rpc';
 
+const base = `${process.env.FRONTEND_URL ?? 'http://localhost:3000'}/api`;
+
+const transport = createConnectTransport({
+  baseUrl: base,
+  useBinaryFormat: true,
+  useHttpGet: true,
+  fetch: (input, init) => fetch(input, { ...init, credentials: 'include' }),
+});
+export const client = new RPC(transport);
+
 const cookiesInterceptor: Interceptor = (next) => async (req) => {
   const cookieStore = await cookies();
   for (const cookie of cookieStore.getAll()) {
@@ -16,23 +26,11 @@ const cookiesInterceptor: Interceptor = (next) => async (req) => {
   }
   return next(req);
 };
-// const base = new URL(process.env.API_HOST ?? 'http://localhost');
-// base.port = String(process.env.API_PORT ?? 8080);
-const base = 'http://localhost:3000/api';
-const transport = createConnectTransport({
-  baseUrl: base.toString(),
+const authenticatedTransport = createConnectTransport({
+  baseUrl: base,
   interceptors: [cookiesInterceptor],
   useBinaryFormat: true,
   useHttpGet: true,
   fetch: (input, init) => fetch(input, { ...init, credentials: 'include' }),
 });
-
-const unauthenticatedTransport = createConnectTransport({
-  baseUrl: base.toString(),
-  useBinaryFormat: true,
-  useHttpGet: true,
-  fetch: (input, init) =>
-    fetch(input, { ...init, credentials: 'include', cache: 'force-cache' }),
-});
-export const client = new RPC(transport);
-export const unauthenticatedClient = new RPC(unauthenticatedTransport);
+export const authenticatedClient = new RPC(authenticatedTransport);

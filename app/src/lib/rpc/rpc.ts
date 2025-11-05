@@ -48,6 +48,43 @@ export class RPC {
   utility() {
     return this.getWrapped(UtilityService);
   }
+
+  withAuth(session: string, token: string) {
+    const injectHeaders = (opts?: any) => ({
+      ...opts,
+      headers: {
+        ...(opts?.headers ?? {}),
+        'X-Session': session,
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return new Proxy(this, {
+      get: (target, prop, receiver) => {
+        const original = Reflect.get(target, prop, receiver);
+
+        if (typeof original !== 'function') return original;
+
+        return (...args: any[]) => {
+          const serviceClient = original.apply(target, args);
+
+          return new Proxy(serviceClient, {
+            get(svcTarget, methodKey, svcReceiver) {
+              const svcMethod = Reflect.get(svcTarget, methodKey, svcReceiver);
+
+              if (typeof svcMethod !== 'function') return svcMethod;
+              return (...margs: any[]) => {
+                const maybeInput = margs[0];
+                const maybeOptions = margs[1];
+                const finalOptions = injectHeaders(maybeOptions);
+                return svcMethod.call(svcTarget, maybeInput, finalOptions);
+              };
+            },
+          });
+        };
+      },
+    });
+  }
 }
 
 export class RPCResponse<T> {

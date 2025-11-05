@@ -5,6 +5,7 @@ import {
   getReservationCategory,
 } from '@/lib/actions/reservations';
 import { getUser } from '@/lib/actions/users';
+import { getCookies } from '@/lib/setHeader';
 
 export default async function reservationPage({
   params,
@@ -12,13 +13,21 @@ export default async function reservationPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const data = await getReservation(id);
+  const { session, token } = await getCookies();
+  if (!session || !token) {
+    return notFound();
+  }
+  const data = await getReservation(id, session, token);
   if (!data || !data.reservation) return notFound();
 
   const reservation = data.reservation;
   const { name, phone, details } = reservation;
-  const user = await getUser(reservation.userId);
-  const category = await getReservationCategory(String(reservation.categoryId));
+  const user = await getUser(reservation.userId, session, token);
+  const category = await getReservationCategory(
+    String(reservation.categoryId),
+    session,
+    token,
+  );
 
   return (
     <div className='space-y-7'>

@@ -2,6 +2,7 @@
 
 import { revalidateTag } from 'next/cache';
 import { client } from '@/lib/rpc';
+import { getCookies } from '@/lib/setHeader';
 import type { Category, Facility } from '@/lib/types';
 
 // export async function uploadImage(id: number, formData: FormData) {
@@ -30,16 +31,31 @@ import type { Category, Facility } from '@/lib/types';
 // }
 
 export async function updateFacility(facility: Facility) {
-  await client.facilities().updateFacility({ facility });
+  const { session, token } = await getCookies();
+  if (!session || !token) {
+    throw new Error('No session or token found');
+  }
+  const authed = client.withAuth(session, token);
+  await authed.facilities().updateFacility({ facility });
   revalidateTag('facilities', 'max');
 }
 
 export async function deleteFacility(id: string) {
-  await client.facilities().deleteFacility({ id });
+  const { session, token } = await getCookies();
+  if (!session || !token) {
+    throw new Error('No session or token found');
+  }
+  const authed = client.withAuth(session, token);
+  await authed.facilities().deleteFacility({ id });
   revalidateTag('facilities', 'max');
 }
 
 export async function updateCategory(category: Category) {
-  await client.facilities().updateFacilityCategory({ category });
+  const { session, token } = await getCookies();
+  if (!session || !token) {
+    throw new Error('No session or token found');
+  }
+  const authed = client.withAuth(session, token);
+  await authed.facilities().updateFacilityCategory({ category });
   revalidateTag('facilities', 'max');
 }

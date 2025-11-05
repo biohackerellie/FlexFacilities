@@ -5,8 +5,9 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"github.com/jmoiron/sqlx"
 	"log/slog"
+
+	"github.com/jmoiron/sqlx"
 )
 
 type FacilityStore struct {
@@ -90,21 +91,25 @@ func (f *FacilityStore) GetBuilding(ctx context.Context, id int64) (*models.Buil
 }
 
 const allCategoriesInQuery = `SELECT * FROM category WHERE facility_id IN (?)`
-const getAllFacilitiesQuery = `SELECT * FROM facility WHERE building_id = $1`
+const getAllFacilitiesForBuildingQuery = `SELECT * FROM facility WHERE building_id = $1`
+const getAllFacilitiesQuery = `SELECT * FROM facility`
 
 func (f *FacilityStore) GetAll(ctx context.Context) ([]*models.BuildingWithFacilities, error) {
 
 	var buildings []models.Building
 	if err := f.db.SelectContext(ctx, &buildings, getAllBuildingsQuery); err != nil {
+		f.log.ErrorContext(ctx, "error getting buildings", "err", err)
 		return nil, err
 	}
 	result := make([]*models.BuildingWithFacilities, len(buildings))
 	for i, building := range buildings {
 		var facilities []*models.Facility
-		if err := f.db.SelectContext(ctx, &facilities, getAllFacilitiesQuery, building.ID); err != nil {
+		if err := f.db.SelectContext(ctx, &facilities, getAllFacilitiesForBuildingQuery, building.ID); err != nil {
 			if errors.Is(err, sql.ErrNoRows) {
 				facilities = []*models.Facility{}
 			}
+			f.log.ErrorContext(ctx, "error getting facilities, db", "err", err)
+
 			return nil, err
 		}
 
@@ -118,6 +123,7 @@ func (f *FacilityStore) GetAll(ctx context.Context) ([]*models.BuildingWithFacil
 
 		categories, err := f.GetCategories(ctx, facilityIds)
 		if err != nil {
+			f.log.ErrorContext(ctx, "error getting categories", "err", err)
 			return nil, err
 		}
 
@@ -141,13 +147,14 @@ func (f *FacilityStore) GetAll(ctx context.Context) ([]*models.BuildingWithFacil
 	}
 	return result, nil
 }
-
 func (f *FacilityStore) GetAllFacilities(ctx context.Context) ([]*models.Facility, error) {
 	var facilities []*models.Facility
 	if err := f.db.SelectContext(ctx, &facilities, getAllFacilitiesQuery); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, nil
 		}
+		f.log.ErrorContext(ctx, "error getting facilities, db", "err", err)
+
 		return nil, err
 	}
 	return facilities, nil

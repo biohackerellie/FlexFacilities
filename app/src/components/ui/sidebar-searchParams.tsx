@@ -2,23 +2,26 @@
 
 import Link from 'next/link';
 import { usePathname, useSearchParams } from 'next/navigation';
-import type React from 'react';
+import * as React from 'react';
 import { useCallback } from 'react';
 
 import { buttonVariants } from '@/components/ui/button';
+import type { getAllBuildingNames } from '@/lib/actions/facilities';
 import { cn } from '@/lib/utils';
 
 interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
-  items: string[];
+  namesQuery: Promise<Awaited<ReturnType<typeof getAllBuildingNames>>>;
 }
 
 export function SidebarSearchParamsNav({
   className,
-  items,
+  namesQuery,
   ...props
 }: SidebarNavProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const items = React.use(namesQuery) ?? [];
+
   let selectedBuilding: string | null = 'All';
   if (searchParams?.has('building')) {
     selectedBuilding = searchParams.get('building');
@@ -46,16 +49,16 @@ export function SidebarSearchParamsNav({
         <Link
           key={index}
           prefetch={false}
-          href={`${pathname}?${handleSetSelectedBuilding('building', item)}`}
+          href={`${pathname}?${handleSetSelectedBuilding('building', item.name)}`}
           className={cn(
             buttonVariants({ variant: 'ghost' }),
-            selectedBuilding === item
+            selectedBuilding === item.name
               ? 'bg-muted hover:bg-muted'
               : 'hover:bg-transparent hover:underline',
             'justify-start',
           )}
         >
-          {item}
+          {item.name}
         </Link>
       ))}
     </nav>

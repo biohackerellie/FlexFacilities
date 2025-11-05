@@ -1,14 +1,17 @@
+import { cacheTag } from 'next/cache';
 import * as React from 'react';
 import { DataTable } from '@/components/ui/tables';
 import { logger } from '@/lib/logger';
 import { client } from '@/lib/rpc';
+import { getCookies } from '@/lib/setHeader';
 import type { FullResWithFacilityName } from '@/lib/types';
 import { columns } from './columns';
 import TableSkeleton from './skeleton';
 
-async function getData() {
-  // TODO: cache
-  const { data, error } = await client.reservations().getAllPending({});
+async function getData(session: string, token: string) {
+  'use cache';
+  const authed = client.withAuth(session, token);
+  const { data, error } = await authed.reservations().getAllPending({});
 
   if (error) {
     logger.error(error.message);
@@ -17,11 +20,16 @@ async function getData() {
   if (!data) {
     return [] as FullResWithFacilityName[];
   }
+  cacheTag('requests');
   return data.data;
 }
 
 export default async function Requests() {
-  const data = await getData();
+  const { session, token } = await getCookies();
+  if (!session || !token) {
+    return null;
+  }
+  const data = await getData(session, token);
   return (
     <div className='space-y-7'>
       <div>

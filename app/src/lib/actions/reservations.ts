@@ -1,13 +1,18 @@
 'use server';
-import { revalidateTag } from 'next/cache';
+import { cacheTag, revalidateTag } from 'next/cache';
 import { logger } from '@/lib/logger';
 import { client } from '@/lib/rpc';
 import type { FormData as CreateReservationSchema } from '../form-store';
+import { getCookies } from '../setHeader';
 import type { Reservation, ReservationStatus } from '../types';
 
 export async function createReservation(formData: CreateReservationSchema) {
-  logger.debug('Creating reservation', { formData });
-  const { error } = await client.reservations().createReservation({
+  const { session, token } = await getCookies();
+  if (!session || !token) {
+    throw new Error('No session or token found');
+  }
+  const authed = client.withAuth(session, token);
+  const { error } = await authed.reservations().createReservation({
     userId: formData.userID,
     eventName: formData.eventName,
     facilityId: formData.facilityID,
@@ -32,6 +37,7 @@ export async function createReservation(formData: CreateReservationSchema) {
     throw error;
   }
   revalidateTag('reservations', 'max');
+  revalidateTag('requests', 'max');
 }
 
 interface IForminput {
@@ -41,7 +47,12 @@ interface IForminput {
 }
 
 export async function addFee(data: IForminput, id: string) {
-  const { error } = await client.reservations().updateReservationFee({
+  const { session, token } = await getCookies();
+  if (!session || !token) {
+    throw new Error('No session or token found');
+  }
+  const authed = client.withAuth(session, token);
+  const { error } = await authed.reservations().updateReservationFee({
     fee: {
       additionalFees: String(data.additionalFees),
       feesType: data.feesType,
@@ -56,8 +67,14 @@ export async function addFee(data: IForminput, id: string) {
   revalidateTag(String(id), 'max');
 }
 
-export async function getReservation(id: string) {
-  const { data, error } = await client
+export async function getReservation(
+  id: string,
+  session: string,
+  token: string,
+) {
+  'use cache';
+  const authed = client.withAuth(session, token);
+  const { data, error } = await authed
     .reservations()
     .getReservation({ id: id });
   if (error) {
@@ -65,21 +82,30 @@ export async function getReservation(id: string) {
     return null;
   }
 
+  cacheTag('reservation', id);
+
   return data;
 }
 
-export async function getReservationCategory(id: string) {
-  const { data, error } = await client.facilities().getCategory({ id: id });
+export async function getReservationCategory(
+  id: string,
+  session: string,
+  token: string,
+) {
+  'use cache';
+  const authed = client.withAuth(session, token);
+  const { data, error } = await authed.facilities().getCategory({ id: id });
   if (error) {
     logger.error('Error fetching reservation', { 'error ': error });
     return null;
   }
-
   return data;
 }
 
-export async function costReducer(id: string) {
-  const { data, error } = await client.reservations().costReducer({ id: id });
+export async function costReducer(id: string, session: string, token: string) {
+  'use cache';
+  const authed = client.withAuth(session, token);
+  const { data, error } = await authed.reservations().costReducer({ id: id });
 
   if (error) {
     logger.error('Error fetching cost reducer', { 'error ': error });
@@ -90,7 +116,12 @@ export async function costReducer(id: string) {
 }
 
 export async function updateReservation(reservation: Reservation) {
-  const { error } = await client
+  const { session, token } = await getCookies();
+  if (!session || !token) {
+    throw new Error('No session or token found');
+  }
+  const authed = client.withAuth(session, token);
+  const { error } = await authed
     .reservations()
     .updateReservation({ reservation });
 
@@ -111,7 +142,12 @@ export async function AddDates({
   localStart: string;
   localEnd: string;
 }) {
-  const { error } = await client.reservations().createReservationDates({
+  const { session, token } = await getCookies();
+  if (!session || !token) {
+    throw new Error('No session or token found');
+  }
+  const authed = client.withAuth(session, token);
+  const { error } = await authed.reservations().createReservationDates({
     date: [
       {
         reservationId: reservationID,
@@ -132,7 +168,12 @@ export async function ApproveReservation(
   id: string,
   status: ReservationStatus,
 ) {
-  const { error } = await client
+  const { session, token } = await getCookies();
+  if (!session || !token) {
+    throw new Error('No session or token found');
+  }
+  const authed = client.withAuth(session, token);
+  const { error } = await authed
     .reservations()
     .updateReservationStatus({ id: id, status: status });
 
@@ -147,7 +188,12 @@ export async function UpdateDateStatus(
   ids: string[],
   status: ReservationStatus,
 ) {
-  const { error } = await client
+  const { session, token } = await getCookies();
+  if (!session || !token) {
+    throw new Error('No session or token found');
+  }
+  const authed = client.withAuth(session, token);
+  const { error } = await authed
     .reservations()
     .updateReservationDatesStatus({ ids: ids, status: status });
   if (error) {
@@ -158,7 +204,12 @@ export async function UpdateDateStatus(
 }
 
 export async function DeleteDates(ids: string[]) {
-  const { error } = await client
+  const { session, token } = await getCookies();
+  if (!session || !token) {
+    throw new Error('No session or token found');
+  }
+  const authed = client.withAuth(session, token);
+  const { error } = await authed
     .reservations()
     .deleteReservationDates({ id: ids });
 
@@ -169,12 +220,15 @@ export async function DeleteDates(ids: string[]) {
   revalidateTag('reservations', 'max');
 }
 
-export async function AggregateChartData() {
-  const { data, error } = await client.utility().aggregateChartData({});
+export async function AggregateChartData(session: string, token: string) {
+  'use cache';
+  const authed = client.withAuth(session, token);
+  const { data, error } = await authed.utility().aggregateChartData({});
 
   if (error) {
     logger.error('Error fetching aggregate chart data', { 'error ': error });
     throw error;
   }
+  cacheTag('chartData');
   return data;
 }

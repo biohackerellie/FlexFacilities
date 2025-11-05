@@ -2,6 +2,7 @@
 
 import { revalidateTag } from 'next/cache';
 import { client } from '@/lib/rpc';
+import { getCookies } from '@/lib/setHeader';
 import type { Category, Facility } from '@/lib/types';
 import type { CreateFacilitySchema } from './form';
 export async function createFacility(facility: CreateFacilitySchema) {
@@ -12,6 +13,11 @@ export async function createFacility(facility: CreateFacilitySchema) {
     googleCalendarId: facility.googleCalendarId,
   };
 
+  const { session: sessionId, token } = await getCookies();
+  if (!sessionId || !token) {
+    throw new Error('No session or token found');
+  }
+  const authed = client.withAuth(sessionId, token);
   const categories: Partial<Category>[] = [
     {
       name: 'Category 1',
@@ -27,7 +33,7 @@ export async function createFacility(facility: CreateFacilitySchema) {
     },
   ];
 
-  const { error } = await client
+  const { error } = await authed
     .facilities()
     .createFacility({ facility: fac, categories: categories });
 

@@ -195,10 +195,11 @@ export function Step1({ onNext, facilitiesPromise, userID }: Step1Props) {
                   onClick={() =>
                     handleFacilitySelect(facility.facility?.id ?? '')
                   }
-                  className={`group relative flex items-start gap-4 rounded-lg border bg-card p-4 text-left transition-all hover:border-primary hover:shadow-md ${selectedFacility?.facility?.id === facility.facility?.id
+                  className={`group relative flex items-start gap-4 rounded-lg border bg-card p-4 text-left transition-all hover:border-primary hover:shadow-md ${
+                    selectedFacility?.facility?.id === facility.facility?.id
                       ? 'border-primary bg-primary/5'
                       : ''
-                    }`}
+                  }`}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -265,10 +266,11 @@ export function Step1({ onNext, facilitiesPromise, userID }: Step1Props) {
                   key={category.id}
                   type='button'
                   onClick={() => handleCategorySelect(category.id)}
-                  className={`group relative flex items-start gap-4 rounded-lg border bg-card p-4 text-left transition-all hover:border-primary hover:shadow-md ${selectedCategory === category.id
+                  className={`group relative flex items-start gap-4 rounded-lg border bg-card p-4 text-left transition-all hover:border-primary hover:shadow-md ${
+                    selectedCategory === category.id
                       ? 'border-primary bg-primary/5'
                       : ''
-                    }`}
+                  }`}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >

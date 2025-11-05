@@ -2,12 +2,17 @@ import type * as React from 'react';
 import { CalendarProvider } from '@/calendar/contexts/calendar-context';
 import { Separator } from '@/components/ui/separator';
 import { getAllCalEvents } from '@/lib/actions/facilities';
+import { getCookies } from '@/lib/setHeader';
 
 export default async function calendarLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { session, token } = await getCookies();
+  if (!session || !token) {
+    return null;
+  }
   const data = await getAllCalEvents();
 
   return (

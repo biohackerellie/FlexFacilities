@@ -195,6 +195,8 @@ func (s *ReservationStore) Create(ctx context.Context, reservation *models.Reser
 		"phone":         reservation.Phone,
 		"category_id":   reservation.CategoryID,
 		"rrule":         reservation.RRule,
+		"rdates":        nil,
+		"exdates":       nil,
 	}
 	if reservation.RDates != nil && len(*reservation.RDates) > 0 {
 		args["rdates"] = reservation.RDates

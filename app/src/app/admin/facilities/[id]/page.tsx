@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
 import { Skeleton } from '@/components/ui/skeleton';
-import { client } from '@/lib/rpc';
+import { getFacility } from '@/lib/actions/facilities';
 
 export default async function facilityEditForm({
   params,
@@ -15,8 +15,8 @@ export default async function facilityEditForm({
 }) {
   const Forms = dynamic(() => import('./forms'));
   const { id } = await params;
-  const { data, error } = await client.facilities().getFacility({ id: id });
-  if (!data || error) return notFound();
+  const data = await getFacility(id);
+  if (!data) return notFound();
   const facility = data?.facility;
   if (!facility) return notFound();
   const imagePath = facility?.imagePath;

@@ -3,19 +3,85 @@ import Link from 'next/link';
 import * as React from 'react';
 import { Spinner } from '@/components/spinner';
 import { buttonVariants } from '@/components/ui/button';
-import { getAllMapCoords } from '@/lib/actions/facilities';
+import { Skeleton } from '@/components/ui/skeleton';
 import { getBranding } from '@/lib/actions/utility';
+import { client } from '@/lib/rpc';
+
+type LatLngTuple = [number, number, number?];
+interface ICoords {
+  latlng: LatLngTuple;
+  building: string;
+}
+interface mapCoords {
+  coords: ICoords[];
+  center: LatLngTuple;
+}
+
+async function getAllMapCoords(): Promise<mapCoords | null> {
+  'use cache';
+  const { data, error } = await client.facilities().getAllCoords({});
+  if (error) return null;
+  if (!data) return null;
+  const coords = data.data.map((d) => {
+    return {
+      latlng: [d.latitude, d.longitude],
+      building: d.building,
+    } as ICoords;
+  });
+
+  const center = calculateCenter(coords);
+  return { coords, center };
+}
+
+function calculateCenter(coords: ICoords[]): LatLngTuple {
+  if (coords.length < 2) {
+    return [coords[0]?.latlng[0] ?? 0, coords[0]?.latlng[1] ?? 0];
+  }
+  const toRadians = (deg: number) => (deg * Math.PI) / 180;
+  const toDegrees = (rad: number) => (rad * 180) / Math.PI;
+
+  let x = 0,
+    y = 0,
+    z = 0;
+
+  for (const { latlng } of coords) {
+    const lat = toRadians(latlng[0]);
+    const lng = toRadians(latlng[1]);
+    x += Math.cos(lat) * Math.cos(lng);
+    y += Math.cos(lat) * Math.sin(lng);
+    z += Math.sin(lat);
+  }
+
+  const total = coords.length;
+  x /= total;
+  y /= total;
+  z /= total;
+
+  const lng = Math.atan2(y, x);
+  const hyp = Math.sqrt(x * x + y * y);
+  const lat = Math.atan2(z, hyp);
+
+  return [toDegrees(lat), toDegrees(lng)];
+}
 
 export default async function Home() {
-  const branding = await getBranding();
+  return (
+    <div className=' relative py-10   max-h-dvh  items-center justify-center gap-6 p-6 md:p-10'>
+      <React.Suspense fallback={<Skeleton className='h-full w-full' />}>
+        <Wrapped />
+      </React.Suspense>
+    </div>
+  );
+}
 
+async function Wrapped() {
+  const branding = await getBranding();
   const LargeMap = dynamic(() => import('@/components/maps/large'), {
     loading: () => <Spinner />,
     ssr: !!false,
   });
-
   return (
-    <div className=' relative py-10   max-h-dvh  items-center justify-center gap-6 p-6 md:p-10'>
+    <>
       <div className='gap-6 py-10'>
         <h1 className='text-4xl font-bold text-center'>
           Welcome to
@@ -35,11 +101,7 @@ export default async function Home() {
         <div className='w-1/2 text-center flex flex-col gap-3 justify-center items-center'>
           <React.Suspense fallback={''}>
             <React.Activity
-              mode={
-                branding && branding.organizationDescription
-                  ? 'visible'
-                  : 'hidden'
-              }
+              mode={branding?.organizationDescription ? 'visible' : 'hidden'}
             >
               <p>{branding?.organizationDescription}</p>
             </React.Activity>
@@ -52,6 +114,6 @@ export default async function Home() {
           </Link>
         </div>
       </div>
-    </div>
+    </>
   );
 }

@@ -1,13 +1,16 @@
+import { cacheTag } from 'next/cache';
 import { Suspense } from 'react';
 import { DataTable } from '@/components/ui/tables';
 import { logger } from '@/lib/logger';
 import { client } from '@/lib/rpc';
+import { getCookies } from '@/lib/setHeader';
 import TableSkeleton from '../requests/skeleton';
 import { columns, type TableFacility } from './columns';
 
-async function getFacilities() {
-  // TODO: cache
-  const { data, error } = await client.facilities().getAllFacilities({});
+async function getFacilities(session: string, token: string) {
+  'use cache';
+  const authed = client.withAuth(session, token);
+  const { data, error } = await authed.facilities().getAllFacilities({});
   if (error) {
     logger.error('error fetching facilities', { error: error });
     return [] as TableFacility[];
@@ -35,11 +38,16 @@ async function getFacilities() {
       facilities.push(facility);
     }
   }
+  cacheTag('facilities');
   return facilities;
 }
 
 export default async function adminFacilitiesPage() {
-  const data = await getFacilities();
+  const { session, token } = await getCookies();
+  if (!session || !token) {
+    return null;
+  }
+  const data = await getFacilities(session, token);
 
   return (
     <div className='space-y-7'>

@@ -1,7 +1,9 @@
 'use server';
 
+import { cacheTag } from 'next/cache';
 import { logger } from './logger';
 import { client } from './rpc';
+import { getCookies } from './setHeader';
 import type { Session, UserRole } from './types';
 
 function parseRole(role: string): UserRole {
@@ -15,19 +17,28 @@ function parseRole(role: string): UserRole {
   }
 }
 
-export async function auth() {
-  const { data, error } = await client.auth().getSession({});
-
+async function fetchSession(session: string, token: string) {
+  'use cache';
+  const authed = client.withAuth(session, token);
+  const { data, error } = await authed.auth().getSession({});
+  cacheTag('session');
   if (error) {
-    logger.warn(error.message);
+    logger.debug('Failed to get session', { error });
+    return null;
   }
+  return data;
+}
+
+export async function auth() {
+  const { session, token } = await getCookies();
+  if (!session || !token) {
+    return null;
+  }
+  const data = await fetchSession(session, token);
   if (!data) return null;
 
   return {
-    userEmail: data?.userEmail,
-    userId: data?.userId,
-    userName: data?.userName,
+    ...data,
     userRole: parseRole(data?.userRole),
-    sessionId: data?.sessionId,
   } as Session;
 }

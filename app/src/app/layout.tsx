@@ -3,7 +3,6 @@ import * as React from 'react';
 
 import { ThemeProviders } from '@/components/contexts/providers/ThemeProvider';
 import Footer from '@/components/ui/footer';
-import NavMenu from '@/components/ui/navbar/Menu';
 import { Toaster } from '@/components/ui/sonner';
 import { getBranding } from '@/lib/actions/utility';
 import { cn } from '@/lib/utils';
@@ -14,7 +13,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 export { meta as metadata } from './metadata';
 
 import type { Metadata, ResolvingMetadata } from 'next';
-import { auth } from '@/lib/auth';
+import NavbarWrapper from '@/components/ui/navbar/wrapper';
 
 export async function generateMetadata(
   parent: ResolvingMetadata,
@@ -50,7 +49,6 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth();
   return (
     <html lang='en' suppressHydrationWarning={true}>
       <body
@@ -63,7 +61,7 @@ export default async function RootLayout({
         <ThemeProviders attribute='class' defaultTheme='system' enableSystem>
           <div className='z-10'>
             <React.Suspense fallback={<Skeleton className='h-4 w-full' />}>
-              <NavMenu session={session} />
+              <NavbarWrapper />
             </React.Suspense>
           </div>
           <div className='container py-8'>{children}</div>

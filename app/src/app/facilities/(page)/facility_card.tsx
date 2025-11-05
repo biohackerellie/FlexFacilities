@@ -6,11 +6,8 @@ import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import type { Building, FacilityWithCategories } from '@/lib/types';
+import { toBase64 } from '@/lib/utils';
 
-const toBase64 = (str: string) =>
-  typeof window === 'undefined'
-    ? Buffer.from(str).toString('base64')
-    : window.btoa(str);
 export default function FacilityCard(
   facility: FacilityWithCategories,
   building?: Building,

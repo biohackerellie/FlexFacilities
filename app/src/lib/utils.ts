@@ -30,3 +30,8 @@ export function tryCatch<T, E = Error>(
     return { data: null, error: error as E };
   }
 }
+
+export const toBase64 = (str: string) =>
+  typeof window === 'undefined'
+    ? Buffer.from(str).toString('base64')
+    : window.btoa(str);
