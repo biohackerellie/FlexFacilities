@@ -102,6 +102,7 @@ export async function getAllCalEvents(): Promise<ReturnType | null> {
   let color = possibleColors[0];
   data.data.forEach((event, i) => {
     const events = event.events.map((e, x) => {
+      logger.debug('event', e);
       return {
         id: x,
         startDate: e.start,

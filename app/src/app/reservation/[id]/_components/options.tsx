@@ -34,7 +34,8 @@ export default function Options({
   const categories = categoriesflat?.flatMap((f) => f.categories);
   const facility = data?.facility;
   const reservation = data?.reservation;
-  const override = parseFloat(data?.reservation.costOverride);
+  let override = parseFloat(data?.reservation.costOverride);
+  if (Number.isNaN(override)) override = 0;
   const [costOverride, setCostOverride] = React.useState(override);
   const [selectedFacility, setSelectedFacility] = React.useState<
     Facility | undefined
@@ -75,7 +76,7 @@ export default function Options({
         <TabsTrigger value='Category'>Change Category</TabsTrigger>
       </TabsList>
       <TabsContent value='Cost'>
-        <Card className='m-2 flex h-auto flex-col items-center justify-center align-middle'>
+        <Card className='m-2 flex flex-col gap-2 p-2 items-center justify-center align-middle'>
           <Label htmlFor='newCost'>Manually Set Total</Label>
           <Input
             className='w-auto text-black'

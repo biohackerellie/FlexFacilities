@@ -22,8 +22,13 @@ interface IForminput {
   feesType: string;
   reservationId: any;
 }
-
-export default function EditPricing({ id }: { id: string }) {
+export default function EditPricing({
+  id,
+  className,
+}: {
+  id: string;
+  className?: string;
+}) {
   const { register, handleSubmit } = useForm<IForminput>();
   const router = useRouter();
   const reservationID = id;
@@ -39,7 +44,9 @@ export default function EditPricing({ id }: { id: string }) {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant='outline'>Add Fee</Button>
+        <Button className={className} variant='outline'>
+          Add Fee
+        </Button>
       </SheetTrigger>
       <SheetContent>
         <form onSubmit={handleSubmit(onSubmit)}>

@@ -55,7 +55,7 @@ export function MultiStepForm({
   const { currentStep, nextStep, previousStep, resetForm, formData } =
     useFormStore();
 
-  React.useEffect(() => { }, [currentStep]);
+  React.useEffect(() => {}, [currentStep]);
   const handleComplete = () => {
     nextStep();
     toast.promise(createReservation(formData), {

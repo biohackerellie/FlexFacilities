@@ -50,7 +50,7 @@ export const columns: ColumnDef<FullResWithFacilityName>[] = [
     },
     cell: ({ row }) => {
       const date = new Date(row.original.reservationDate);
-      if (isNaN(date.getTime()))
+      if (Number.isNaN(date.getTime()))
         return <div>{row.original.reservationDate}</div>;
       const formattedDate = date.toLocaleDateString('en-US', {
         year: 'numeric',

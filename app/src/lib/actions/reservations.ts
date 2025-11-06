@@ -203,6 +203,20 @@ export async function UpdateDateStatus(
   revalidateTag('reservations', 'max');
 }
 
+export async function DeleteReservation(id: string) {
+  const { session, token } = await getCookies();
+  if (!session || !token) {
+    throw new Error('No session or token found');
+  }
+  const authed = client.withAuth(session, token);
+  const { error } = await authed.reservations().deleteReservation({ id: id });
+  if (error) {
+    logger.error('Error deleting reservation', { error: error });
+    throw error;
+  }
+  revalidateTag('reservations', 'max');
+}
+
 export async function DeleteDates(ids: string[]) {
   const { session, token } = await getCookies();
   if (!session || !token) {

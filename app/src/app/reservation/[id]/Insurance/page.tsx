@@ -1,8 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import * as React from 'react';
 
-import { UploadFile } from '@/components/forms/uploadFile';
 import { Button } from '@/components/ui/button';
 import { getReservation } from '@/lib/actions/reservations';
 import { getCookies } from '@/lib/setHeader';
@@ -52,9 +50,11 @@ export default async function insurancePage({
                 )}
               </div>
               <div className='my-3'>
-                <React.Suspense fallback={<h1>Loading...</h1>}>
-                  <UploadFile id={id} />
-                </React.Suspense>
+                {/* <React.Suspense fallback={<h1>Loading...</h1>}> */}
+                {/*   <UploadFile id={id} /> */}
+                {/* </React.Suspense> */}
+                Feature currently unavailable, please send insurance to the
+                school district
               </div>
             </div>
           </div>

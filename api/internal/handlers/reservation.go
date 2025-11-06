@@ -716,12 +716,11 @@ func (a *ReservationHandler) CostReducer(ctx context.Context, req *connect.Reque
 	if err != nil {
 		return nil, err
 	}
-	ids := []int64{reservation.Reservation.CategoryID}
-	categories, err := a.facilityStore.GetCategories(ctx, ids)
+
+	category, err := a.facilityStore.GetCategory(ctx, reservation.Reservation.CategoryID)
 	if err != nil {
 		return nil, err
 	}
-	category := categories[0]
 	var total time.Duration
 	for _, date := range reservation.Dates {
 		if date.Approved != models.ReservationDateApprovedApproved {

@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { Spinner } from '@/components/spinner';
 import { Separator } from '@/components/ui/separator';
-import { getFacilities } from '@/lib/actions/facilities';
-import ReservationOptions from './options';
+import ReservationOptions from './reservationOptions';
 
 export default async function AdminPanel() {
   return (
@@ -10,7 +9,7 @@ export default async function AdminPanel() {
       <Separator orientation='vertical' />
       <div>
         <React.Suspense fallback={<Spinner />}>
-          <ReservationOptions facilitiesPromise={getFacilities()} />
+          <ReservationOptions />
         </React.Suspense>
       </div>
     </div>

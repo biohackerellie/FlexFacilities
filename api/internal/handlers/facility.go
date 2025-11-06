@@ -141,13 +141,17 @@ func (a *FacilityHandler) GetAllEvents(ctx context.Context, req *connect.Request
 
 	result := make([]*service.BuildingWithEvents, len(buildings))
 	for i, building := range buildings {
+
 		calId := building.GoogleCalendarID
 		if calId == nil || *calId == "" {
 			continue
 		}
+
+		a.log.Debug("GetAllEvents", "calId", *calId)
 		res, err := a.calendar.ListEvents(*calId)
 		if err != nil {
-			return nil, err
+
+			continue
 		}
 		events := make([]*service.Event, len(res.Items))
 		for i, event := range res.Items {
@@ -159,6 +163,7 @@ func (a *FacilityHandler) GetAllEvents(ctx context.Context, req *connect.Request
 				Description: event.Description,
 				Title:       event.Summary,
 			}
+			a.log.Debug("GetAllEvents", "event", event)
 		}
 		result[i] = &service.BuildingWithEvents{
 			Building: building.ToProto(),

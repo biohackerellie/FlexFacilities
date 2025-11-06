@@ -1,23 +1,23 @@
-import { ExternalLink } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import * as React from "react";
-import shimmer from "@/components/shimmer";
-import { Spinner } from "@/components/spinner";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Button } from "@/components/ui/button";
-import LoadingScreen from "@/components/ui/loadingScreen";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
+import { ExternalLink } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import * as React from 'react';
+import shimmer from '@/components/shimmer';
+import { Spinner } from '@/components/spinner';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { Button } from '@/components/ui/button';
+import LoadingScreen from '@/components/ui/loadingScreen';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Separator } from '@/components/ui/separator';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { getEventsByFacility, getFacility } from "@/lib/actions/facilities";
-import { toBase64 } from "@/lib/utils";
+} from '@/components/ui/tooltip';
+import { getEventsByFacility, getFacility } from '@/lib/actions/facilities';
+import { toBase64 } from '@/lib/utils';
 
 export default async function FacilityPage({
   params,
@@ -33,115 +33,106 @@ export default async function FacilityPage({
   const map = `https://www.google.com/maps/search/?api=1&query=${fac.building?.address}`;
 
   return (
-    <div className="container-wrapper">
-      <div className="container">
+    <div className='container-wrapper'>
+      <div className='container'>
         <React.Suspense fallback={<Spinner />}>
-          <div className=" sm:flex sm:justify-between">
+          <div className=' sm:flex sm:justify-between'>
             <div>
-              <h1 className="text-center text-2xl font-bold drop-shadow-sm sm:text-start sm:text-4xl">
+              <h1 className='text-center text-2xl font-bold drop-shadow-sm sm:text-start sm:text-4xl'>
                 {facility.name}
               </h1>
-              <h2 className="text-md text-center font-bold text-gray-600 drop-shadow-sm dark:text-gray-300 sm:text-start sm:text-xl">
-                {fac.building?.name} ⋅ Max Capacity: {facility.capacity}{" "}
+              <h2 className='text-md text-center font-bold text-gray-600 drop-shadow-sm dark:text-gray-300 sm:text-start sm:text-xl'>
+                {fac.building?.name} ⋅ Max Capacity: {facility.capacity}{' '}
               </h2>
               <Link
                 href={map}
-                target="_blank"
-                className="text-center sm:text-start"
+                target='_blank'
+                className='text-center sm:text-start'
               >
-                {fac.building?.address}{" "}
-                <ExternalLink className="inline-block scale-75" />
+                {fac.building?.address}{' '}
+                <ExternalLink className='inline-block scale-75' />
               </Link>
             </div>
           </div>
         </React.Suspense>
         <Separator />
         <TooltipProvider>
-          <div className="m-1 flex flex-col gap-x-8 justify-center gap-2 p-2 sm:m-5 sm:grid sm:grid-cols-3 ">
+          <div className='m-1 flex flex-col gap-x-8 justify-center gap-2 p-2 sm:m-5 sm:grid sm:grid-cols-3 '>
             <React.Suspense fallback={<Spinner />}>
-              <div className="hidden sm:block col-span-2">
+              <div className='hidden sm:block col-span-2'>
                 <AspectRatio ratio={16 / 9}>
                   {facility.imagePath ? (
                     <Image
                       src={`/api/files${facility.imagePath}`}
                       alt={facility.name}
                       fill
-                      className="rounded-md object-cover h-full w-full"
+                      className='rounded-md object-cover h-full w-full'
                       placeholder={`data:image/svg+xml;base64,${toBase64(shimmer(700, 475))}`}
-                      blurDataURL="data:image/png"
-                      sizes="(max-width: 1280px) 100vw, 33vw"
-                      loading="lazy"
+                      blurDataURL='data:image/png'
+                      sizes='(max-width: 1280px) 100vw, 33vw'
+                      loading='lazy'
                     />
                   ) : (
                     <Image
-                      src="/logo.jpg"
+                      src='/logo.jpg'
                       alt={facility.name}
                       width={480}
                       height={480}
-                      className="drop-shadow-xl"
+                      className='drop-shadow-xl'
                     />
                   )}
                 </AspectRatio>
               </div>
-              <div className="flex justify-center sm:hidden">
+              <div className='flex justify-center sm:hidden'>
                 {facility.imagePath ? (
                   <Image
                     src={facility.imagePath}
                     alt={facility.name}
                     width={300}
                     height={300}
-                    className="shadow-md drop-shadow-md"
+                    className='shadow-md drop-shadow-md'
                   />
                 ) : (
                   <Image
-                    src="/logo.jpg"
+                    src='/logo.jpg'
                     alt={facility.name}
                     width={240}
                     height={240}
-                    className="drop-shadow-xl"
+                    className='drop-shadow-xl'
                   />
                 )}
               </div>
-              <div className="flex flex-col gap-4 justify-center items-center">
-                <div className="relative  items-end align-bottom bottom-0">
-                  <Button asChild className="text-xl font-bold drop-shadow-lg">
+              <div className='flex flex-col gap-4 justify-center items-center'>
+                <div className='relative  items-end align-bottom bottom-0'>
+                  <Button asChild className='text-xl font-bold drop-shadow-lg'>
                     <Link
                       href={{
-                        pathname: "/reservation",
+                        pathname: '/reservation',
                         query: {
                           id: facility.id,
                         },
                       }}
                     >
-                      {" "}
-                      Request a rental{" "}
+                      {' '}
+                      Request a rental{' '}
                     </Link>
                   </Button>
                 </div>
-                <div className=" block self-end  max-w-md items-end justify-end right-0 ml-4  border-4 p-4 ">
+                <div className=' block self-end  max-w-md items-end justify-end right-0 ml-4  border-4 p-4 '>
                   <div>
-                    <h1 className="border-b-2 text-2xl font-bold">Pricing</h1>
+                    <h1 className='border-b-2 text-2xl font-bold'>Pricing</h1>
                     {fac.categories.map((category) => (
-                      <div key={category.id} className="grid grid-cols-3 p-4">
+                      <div key={category.id} className='grid grid-cols-3 p-4'>
                         <Tooltip>
-                          <TooltipTrigger className="col-span-2 col-start-1 truncate text-left text-lg font-semibold">
+                          <TooltipTrigger className='col-span-2 col-start-1 truncate text-left text-lg font-semibold'>
                             {category.name}
                           </TooltipTrigger>
                           <TooltipContent>
-                            <p className="flex w-[240px] flex-wrap">
+                            <p className='flex w-[240px] flex-wrap'>
                               {category.description}
                             </p>
                           </TooltipContent>
                         </Tooltip>
-                        {facility.name === "Laurel Stadium" ? (
-                          <p className="left-9 right-0 col-start-3 items-end justify-around justify-items-end self-end text-right align-bottom text-lg font-semibold">
-                            ${category.price}
-                          </p>
-                        ) : (
-                          <p className="left-9 right-0 col-start-3 items-end justify-around justify-items-end self-end text-right align-bottom text-lg font-semibold">
-                            ${category.price} / hr
-                          </p>
-                        )}
                       </div>
                     ))}
                   </div>
@@ -149,10 +140,10 @@ export default async function FacilityPage({
               </div>
             </React.Suspense>
 
-            <div className="col-span-3 rounded-md border p-4">
-              <h1 className="border-b-2 text-2xl font-bold">Upcoming Events</h1>
+            <div className='col-span-3 rounded-md border p-4'>
+              <h1 className='border-b-2 text-2xl font-bold'>Upcoming Events</h1>
               <React.Suspense fallback={<LoadingScreen />}>
-                <ScrollArea className="max-h-[30vh] min-h-[25vh] overflow-y-scroll w-full  ">
+                <ScrollArea className='max-h-[30vh] min-h-[25vh] overflow-y-scroll w-full  '>
                   {events &&
                     [...events.events]
                       .sort(
@@ -162,10 +153,10 @@ export default async function FacilityPage({
                       )
                       .map((event) => (
                         <div key={event.start}>
-                          <div className="grid grid-cols-2 border-b p-4">
-                            <h3 className="col-start-1">{event.title}</h3>
-                            <p className="bg-transparent text-sm">
-                              {new Date(event.start).toLocaleString()} to{" "}
+                          <div className='grid grid-cols-2 border-b p-4'>
+                            <h3 className='col-start-1'>{event.title}</h3>
+                            <p className='bg-transparent text-sm'>
+                              {new Date(event.start).toLocaleString()} to{' '}
                               {new Date(event.end).toLocaleString()}
                             </p>
                           </div>

@@ -28,7 +28,7 @@ export const columns: ColumnDef<FullResWithFacilityName>[] = [
   },
   {
     accessorKey: 'reservationDate',
-
+    id: 'ReservationDate',
     header: ({ column }) => {
       return (
         <Button
@@ -39,6 +39,18 @@ export const columns: ColumnDef<FullResWithFacilityName>[] = [
           <ArrowUpDown className='ml-2 h-4 w-4' />
         </Button>
       );
+    },
+    cell: ({ row }) => {
+      const date = new Date(row.original.reservationDate);
+      if (Number.isNaN(date.getTime())) {
+        return <div>{row.original.reservationDate}</div>;
+      }
+      const formattedDate = date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      });
+      return <div>{formattedDate}</div>;
     },
   },
   {

@@ -61,7 +61,7 @@ export default async function paymentPage({
   }
 
   return (
-    <div className='my-3 mb-2 flex h-full w-auto flex-col justify-center gap-y-4 pb-3 sm:flex-row lg:w-[1000px]'>
+    <div className='gap-2 flex  flex-col '>
       <div className='m-3 gap-y-4 p-4 drop-shadow-md'>
         <h2 className='gap-y-4 text-xl font-bold text-gray-600 dark:text-gray-300'>
           Pricing and Payments
@@ -69,17 +69,20 @@ export default async function paymentPage({
         <h3 className='mt-1 font-bold text-gray-600 dark:text-gray-300'>
           Added Fees:
         </h3>
-        <div className='sm:container sm:w-[600px]'>
+        <div className=''>
           <Suspense
             fallback={<Skeleton className='h-[600px] w-[600px]'></Skeleton>}
           >
             {isAdmin ? (
               <>
-                <div className='mb-2 border-b py-2'>
+                <div className=' relative py-2'>
+                  <EditPricing
+                    id={id}
+                    className=' right-0 top-0 z-5 block absolute  align-top justify-end'
+                  />
                   <DataTable columns={adminColumns} data={mappedFees} />
-                  <EditPricing id={id} />
                 </div>
-                <div className='flex justify-center border-b-2'>
+                <div className='flex justify-center '>
                   <Options facilitiesPromise={getFacilities()} />
                 </div>
               </>

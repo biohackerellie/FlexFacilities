@@ -243,7 +243,7 @@ func (s *UserStore) GetNotifications(ctx context.Context) ([]*models.Notificatio
 	return notifications, nil
 }
 
-const buildingNamesInQuery = `SELECT * FROM buildings WHERE id IN (?)`
+const buildingNamesInQuery = `SELECT * FROM building WHERE id IN (?)`
 const getUserNotificationsQuery = `SELECT * FROM notifications WHERE user_id = $1`
 
 func (s *UserStore) GetUserNotifications(ctx context.Context, id string) ([]*models.NotificationReadable, error) {
@@ -304,17 +304,21 @@ func (s *UserStore) DeleteNotification(ctx context.Context, id int64) error {
 }
 
 const createNotificationQuery = `INSERT INTO notifications (
-	id, 
-	facility_id,
-	building,
-	title,
-	body
+	building_id,
+	user_id
 ) 
-VALUES (:id, :user_id, :title, :body)
+VALUES (
+	:building_id,
+	:user_id
+)
 `
 
 func (s *UserStore) CreateNotification(ctx context.Context, notification *models.Notification) error {
-	_, err := s.db.NamedExecContext(ctx, createNotificationQuery, notification)
+	params := map[string]any{
+		"building_id": notification.BuildingID,
+		"user_id":     notification.UserID,
+	}
+	_, err := s.db.NamedExecContext(ctx, createNotificationQuery, params)
 	return err
 }
 
