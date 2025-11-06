@@ -53,32 +53,25 @@ const initialFormData: FormData = {
   doorDetails: '',
 };
 
-export const useFormStore = create<FormStore>()(
-  persist(
-    (set) => ({
+export const useFormStore = create<FormStore>((set) => ({
+  currentStep: 0,
+  formData: initialFormData,
+  setCurrentStep: (step) => set({ currentStep: step }),
+  updateFormData: (data) =>
+    set((state) => ({
+      formData: { ...state.formData, ...data },
+    })),
+  resetForm: () =>
+    set({
       currentStep: 0,
       formData: initialFormData,
-      setCurrentStep: (step) => set({ currentStep: step }),
-      updateFormData: (data) =>
-        set((state) => ({
-          formData: { ...state.formData, ...data },
-        })),
-      resetForm: () =>
-        set({
-          currentStep: 0,
-          formData: initialFormData,
-        }),
-      nextStep: () =>
-        set((state) => ({
-          currentStep: Math.min(state.currentStep + 1, 4),
-        })),
-      previousStep: () =>
-        set((state) => ({
-          currentStep: Math.max(state.currentStep - 1, 0),
-        })),
     }),
-    {
-      name: 'multi-step-form-storage',
-    },
-  ),
-);
+  nextStep: () =>
+    set((state) => ({
+      currentStep: Math.min(state.currentStep + 1, 4),
+    })),
+  previousStep: () =>
+    set((state) => ({
+      currentStep: Math.max(state.currentStep - 1, 0),
+    })),
+}));

@@ -5,9 +5,9 @@
   "private": true,
   "scripts": {
     "clean": "git clean -xdf .next node_modules",
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "build": "next build ",
-    "start": "next start --turbo",
+    "start": "next start",
     "check": "biome check .",
     "check:fix": "biome check . --write --unsafe",
     "with-env:dev": "dotenv -e ../.env.local --",

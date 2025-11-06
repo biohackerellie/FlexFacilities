@@ -53,108 +53,106 @@ export default async function FacilityPage({
                 <ExternalLink className="inline-block scale-75" />
               </Link>
             </div>
-            <div className="relative flex items-end align-bottom bottom-0">
-              <Button asChild className="text-xl font-bold drop-shadow-lg">
-                <Link
-                  href={{
-                    pathname: "/reservation",
-                    query: {
-                      id: facility.id,
-                    },
-                  }}
-                >
-                  {" "}
-                  Request a rental{" "}
-                </Link>
-              </Button>
-            </div>
           </div>
         </React.Suspense>
         <Separator />
         <TooltipProvider>
-          <div className="m-1 flex flex-col justify-center gap-2 p-2 sm:m-5 sm:grid sm:grid-cols-2 ">
+          <div className="m-1 flex flex-col gap-x-8 justify-center gap-2 p-2 sm:m-5 sm:grid sm:grid-cols-3 ">
             <React.Suspense fallback={<Spinner />}>
-              <div>
-                <div className="hidden sm:flex">
-                  <AspectRatio ratio={16 / 9}>
-                    {facility.imagePath ? (
-                      <Image
-                        src={`/api/files${facility.imagePath}`}
-                        alt={facility.name}
-                        fill
-                        className="rounded-md object-cover h-full w-full"
-                        placeholder={`data:image/svg+xml;base64,${toBase64(shimmer(700, 475))}`}
-                        blurDataURL="data:image/png"
-                        sizes="(max-width: 1280px) 100vw, 33vw"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <Image
-                        src="/logo.jpg"
-                        alt={facility.name}
-                        width={480}
-                        height={480}
-                        className="drop-shadow-xl"
-                      />
-                    )}
-                  </AspectRatio>
-                </div>
-                <div className="flex justify-center sm:hidden">
+              <div className="hidden sm:block col-span-2">
+                <AspectRatio ratio={16 / 9}>
                   {facility.imagePath ? (
                     <Image
-                      src={facility.imagePath}
+                      src={`/api/files${facility.imagePath}`}
                       alt={facility.name}
-                      width={300}
-                      height={300}
-                      className="shadow-md drop-shadow-md"
+                      fill
+                      className="rounded-md object-cover h-full w-full"
+                      placeholder={`data:image/svg+xml;base64,${toBase64(shimmer(700, 475))}`}
+                      blurDataURL="data:image/png"
+                      sizes="(max-width: 1280px) 100vw, 33vw"
+                      loading="lazy"
                     />
                   ) : (
                     <Image
                       src="/logo.jpg"
                       alt={facility.name}
-                      width={240}
-                      height={240}
+                      width={480}
+                      height={480}
                       className="drop-shadow-xl"
                     />
                   )}
-                </div>
+                </AspectRatio>
               </div>
-              <div className=" relative self-end  max-w-md items-end justify-end right-0 ml-4  border-4 p-4 ">
-                <div>
-                  <h1 className="border-b-2 text-2xl font-bold">Pricing</h1>
-                  {fac.categories.map((category, i) => (
-                    <div key={i} className="grid grid-cols-3 p-4">
-                      <Tooltip>
-                        <TooltipTrigger className="col-span-2 col-start-1 truncate text-left text-lg font-semibold">
-                          {category.name}
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p className="flex w-[240px] flex-wrap">
-                            {category.description}
+              <div className="flex justify-center sm:hidden">
+                {facility.imagePath ? (
+                  <Image
+                    src={facility.imagePath}
+                    alt={facility.name}
+                    width={300}
+                    height={300}
+                    className="shadow-md drop-shadow-md"
+                  />
+                ) : (
+                  <Image
+                    src="/logo.jpg"
+                    alt={facility.name}
+                    width={240}
+                    height={240}
+                    className="drop-shadow-xl"
+                  />
+                )}
+              </div>
+              <div className="flex flex-col gap-4 justify-center items-center">
+                <div className="relative  items-end align-bottom bottom-0">
+                  <Button asChild className="text-xl font-bold drop-shadow-lg">
+                    <Link
+                      href={{
+                        pathname: "/reservation",
+                        query: {
+                          id: facility.id,
+                        },
+                      }}
+                    >
+                      {" "}
+                      Request a rental{" "}
+                    </Link>
+                  </Button>
+                </div>
+                <div className=" block self-end  max-w-md items-end justify-end right-0 ml-4  border-4 p-4 ">
+                  <div>
+                    <h1 className="border-b-2 text-2xl font-bold">Pricing</h1>
+                    {fac.categories.map((category) => (
+                      <div key={category.id} className="grid grid-cols-3 p-4">
+                        <Tooltip>
+                          <TooltipTrigger className="col-span-2 col-start-1 truncate text-left text-lg font-semibold">
+                            {category.name}
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p className="flex w-[240px] flex-wrap">
+                              {category.description}
+                            </p>
+                          </TooltipContent>
+                        </Tooltip>
+                        {facility.name === "Laurel Stadium" ? (
+                          <p className="left-9 right-0 col-start-3 items-end justify-around justify-items-end self-end text-right align-bottom text-lg font-semibold">
+                            ${category.price}
                           </p>
-                        </TooltipContent>
-                      </Tooltip>
-                      {facility.name === "Laurel Stadium" ? (
-                        <p className="left-9 right-0 col-start-3 items-end justify-around justify-items-end self-end text-right align-bottom text-lg font-semibold">
-                          ${category.price}
-                        </p>
-                      ) : (
-                        <p className="left-9 right-0 col-start-3 items-end justify-around justify-items-end self-end text-right align-bottom text-lg font-semibold">
-                          ${category.price} / hr
-                        </p>
-                      )}
-                    </div>
-                  ))}
+                        ) : (
+                          <p className="left-9 right-0 col-start-3 items-end justify-around justify-items-end self-end text-right align-bottom text-lg font-semibold">
+                            ${category.price} / hr
+                          </p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </React.Suspense>
 
-            <div className="col-span-2">
+            <div className="col-span-3 rounded-md border p-4">
+              <h1 className="border-b-2 text-2xl font-bold">Upcoming Events</h1>
               <React.Suspense fallback={<LoadingScreen />}>
-                <ScrollArea className="max-h-[30vh] min-h-[25vh] w-full rounded-md border p-4 ">
-                  <h1 className="border-b-2 text-2xl font-bold">
-                    Upcoming Events
-                  </h1>
+                <ScrollArea className="max-h-[30vh] min-h-[25vh] overflow-y-scroll w-full  ">
                   {events &&
                     [...events.events]
                       .sort(
@@ -163,13 +161,12 @@ export default async function FacilityPage({
                           new Date(b.start).getTime(),
                       )
                       .map((event) => (
-                        <div key={event.title}>
+                        <div key={event.start}>
                           <div className="grid grid-cols-2 border-b p-4">
                             <h3 className="col-start-1">{event.title}</h3>
                             <p className="bg-transparent text-sm">
-                              {new Date(event.start!).toDateString()}
-                              to
-                              {new Date(event.end!).toTimeString()}
+                              {new Date(event.start).toLocaleString()} to{" "}
+                              {new Date(event.end).toLocaleString()}
                             </p>
                           </div>
                         </div>

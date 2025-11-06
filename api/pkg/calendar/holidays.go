@@ -2,6 +2,7 @@ package calendar
 
 import (
 	"context"
+	"fmt"
 	"time"
 )
 
@@ -16,13 +17,14 @@ func (c *Calendar) USHolidayDates(ctx context.Context, from, to time.Time) ([]ti
 		SingleEvents(true).MaxResults(2500)
 	evs, err := call.Do()
 	if err != nil {
-		return nil, err
+		fmt.Println(err)
+		return []time.Time{}, err
 	}
 
 	var dates []time.Time
 	for _, e := range evs.Items {
 		if e.Start != nil && e.Start.Date != "" {
-			d, _ := time.ParseInLocation("2006-01-02", e.Start.Date, c.loc)
+			d, _ := time.ParseInLocation("2006-01-02", e.Start.Date, &c.loc)
 			dates = append(dates, d)
 		}
 	}

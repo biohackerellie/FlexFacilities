@@ -2,6 +2,7 @@ package server
 
 import (
 	"api/internal/handlers"
+	"api/internal/lib/utils"
 	authMux "api/internal/proto/auth/authserviceconnect"
 	facilityMux "api/internal/proto/facilities/facilitiesserviceconnect"
 	reservationMux "api/internal/proto/reservation/reservationserviceconnect"
@@ -64,7 +65,18 @@ func RecoveryInterceptor() connect.UnaryInterceptorFunc {
 		) (res connect.AnyResponse, err error) {
 			defer func() {
 				if r := recover(); r != nil {
-					slog.Error("recovered from server panic", "error", r, "stack", string(debug.Stack()))
+					stack := debug.Stack()
+					method := req.Spec().Procedure
+					requestID := "unknown"
+					if id, ok := ctx.Value(utils.CtxKey("requestID")).(string); ok {
+						requestID = id
+					}
+					slog.Error("panic recovered",
+						"error", r,
+						"method", method,
+						"requestID", requestID,
+						"stack", string(stack),
+					)
 					err = connect.NewError(connect.CodeInternal, errors.New("recovered from server panic"))
 				}
 			}()

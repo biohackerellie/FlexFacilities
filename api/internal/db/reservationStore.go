@@ -294,7 +294,7 @@ WHERE id = :id`
 
 func (s *ReservationStore) Update(ctx context.Context, reservation *models.Reservation) error {
 	params := map[string]any{
-		"approved":      reservation.Approved,
+		"approved":      reservation.Approved.String(),
 		"updatedAt":     pgtype.Timestamp{Time: time.Now(), Valid: true},
 		"insurance":     reservation.Insurance,
 		"categoryId":    reservation.CategoryID,
@@ -307,12 +307,8 @@ func (s *ReservationStore) Update(ctx context.Context, reservation *models.Reser
 		"gcalEventid":   reservation.GCalEventID,
 		"id":            reservation.ID,
 	}
-	stmt, err := s.db.PreparexContext(ctx, updateReservationQuery)
-	if err != nil {
-		return err
-	}
-	defer stmt.Close()
-	if _, err := stmt.ExecContext(ctx, params); err != nil {
+	s.log.Debug("updating reservation", "params", params)
+	if _, err := s.db.NamedExecContext(ctx, updateReservationQuery, params); err != nil {
 		return err
 	}
 	return nil
@@ -375,19 +371,19 @@ const updateReservationDatesQuery = `UPDATE reservation_date SET
 	WHERE id = :id`
 
 func (s *ReservationStore) UpdateDate(ctx context.Context, date *models.ReservationDate) error {
+	var calId string
+	if date.GcalEventid != nil {
+		calId = *date.GcalEventid
+	}
 	params := map[string]any{
-		"approved":     date.Approved,
-		"gcal_eventid": date.GcalEventid,
+		"approved":     date.Approved.String(),
+		"gcal_eventid": calId,
 		"local_start":  date.LocalStart,
 		"local_end":    date.LocalEnd,
 		"id":           date.ID,
 	}
-	stmt, err := s.db.PreparexContext(ctx, updateReservationDatesQuery)
-	if err != nil {
-		return err
-	}
-	defer stmt.Close()
-	if _, err := stmt.ExecContext(ctx, params); err != nil {
+	s.log.Debug("updating reservation date", "params", params)
+	if _, err := s.db.NamedExecContext(ctx, updateReservationDatesQuery, params); err != nil {
 		return err
 	}
 	return nil

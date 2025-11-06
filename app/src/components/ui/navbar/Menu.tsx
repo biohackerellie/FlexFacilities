@@ -146,7 +146,7 @@ export default function NavMenu({ logo, session }: NavbarProps) {
 
   const isMobile = useIsMobile();
   return (
-    <section className="p-2 mb-2  border-b">
+    <section className="py-2 px-4 mb-2  border-b">
       <React.Activity mode={!isMobile ? "visible" : "hidden"}>
         <nav className="justify-between flex">
           <div className="flex items-center gap-6">
@@ -224,10 +224,11 @@ export default function NavMenu({ logo, session }: NavbarProps) {
                 <SheetHeader>
                   <SheetTitle>
                     <a href={logo?.url} className="flex items-center gap-2">
-                      <img
-                        src={logo?.src}
-                        className="max-h-8 dark:invert"
-                        alt={logo?.alt}
+                      <Image
+                        src={logo?.src ?? "/logo.png"}
+                        width={50}
+                        height={50}
+                        alt={logo?.alt ?? "Logo"}
                       />
                     </a>
                   </SheetTitle>

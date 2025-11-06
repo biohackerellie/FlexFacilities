@@ -12,12 +12,11 @@ import (
 
 type Calendar struct {
 	svc *gcal.Service
-	loc *time.Location
+	loc time.Location
 	tz  string
 }
 
-func NewCalendar(ctx context.Context, clientID, clientSecret, refreshToken string, loc *time.Location, tz string) (*Calendar, error) {
-
+func NewCalendar(ctx context.Context, clientID, clientSecret, refreshToken string, loc time.Location, tz string) (*Calendar, error) {
 	config := &oauth2.Config{
 		ClientID:     clientID,
 		ClientSecret: clientSecret,
@@ -31,16 +30,28 @@ func NewCalendar(ctx context.Context, clientID, clientSecret, refreshToken strin
 	if err != nil {
 		return nil, err
 	}
-
-	return &Calendar{
+	cal := &Calendar{
 		svc: service,
 		loc: loc,
 		tz:  tz,
-	}, nil
+	}
+	return cal, nil
 }
 
 func (c *Calendar) ListEvents(calendarID string) (*gcal.Events, error) {
-	return c.svc.Events.List(calendarID).SingleEvents(true).MaxResults(1000).OrderBy("startTime").Do()
+	now := time.Now()
+	// only go back  1 month
+	timeMin := now.AddDate(0, -1, 0).Format(time.RFC3339)
+	timeMax := now.AddDate(0, 3, 0).Format(time.RFC3339)
+
+	return c.svc.Events.
+		List(calendarID).
+		SingleEvents(true).
+		TimeMin(timeMin).
+		TimeMax(timeMax).
+		MaxResults(1000).
+		OrderBy("startTime").
+		Do()
 }
 
 func (c *Calendar) InsertEvent(calendarID string, event *gcal.Event) (*gcal.Event, error) {

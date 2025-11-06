@@ -2,7 +2,7 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
-
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getFacility } from '@/lib/actions/facilities';
 
@@ -31,25 +31,25 @@ export default async function facilityEditForm({
       </div>
       <div className='flex flex-col justify-center'>
         <Suspense fallback={<Skeleton className='h-[400px] w-[400px]' />}>
-          <div>
+          <AspectRatio ratio={16 / 9}>
             {imagePath ? (
               <Image
-                src={`/api/files/images/${imagePath}`}
-                alt={name!}
-                width={400}
-                height={400}
+                src={`/api/files${imagePath}`}
+                alt={name ?? 'facility image'}
+                fill
+                sizes='(max-width: 400px)(max-height: 400px) 100vw, 33vw'
                 className='border-2 shadow-md drop-shadow-md'
               />
             ) : (
               <Image
-                src='/logo.jpg'
-                alt={name!}
+                src='/logo.png'
+                alt={name ?? 'facility image'}
                 width={480}
                 height={480}
                 className='border-2 drop-shadow-xl'
               />
             )}
-          </div>
+          </AspectRatio>
         </Suspense>
         <Suspense fallback={<Skeleton className='h-[400px] w-[400px]' />}>
           <Forms data={data} />

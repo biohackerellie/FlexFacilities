@@ -25,7 +25,8 @@ type Handlers struct {
 
 func New(db *repository.DB, log *slog.Logger, config *config.Config) *Handlers {
 
-	cal, err := calendar.NewCalendar(context.Background(), config.GoogleClientID, config.GoogleClientSecret, config.GoogleRefreshToken, time.Local, config.Timezone)
+	cal, err := calendar.NewCalendar(context.Background(), config.GoogleClientID, config.GoogleClientSecret, config.GoogleRefreshToken, config.Location, config.Timezone)
+
 	if err != nil {
 		log.Error("Could not create calendar", "error", err)
 		panic(err)
@@ -42,8 +43,7 @@ func New(db *repository.DB, log *slog.Logger, config *config.Config) *Handlers {
 		ClientSecret: config.EntraClientSecret,
 		RedirectURL:  fmt.Sprintf("%s/api/auth/entra/callback", config.FrontendUrl),
 	}
-	log.Debug("Entra config", "config", entraconfig)
-	log.Debug("Entra tenant", "tenant", config.EntraTenant)
+
 	entraProvider := entra.NewEntraProvider(entraconfig, config.EntraTenant)
 	authHandler := auth.NewAuth(userStore, log, config)
 	authHandler.RegisterProvider("entra", entraProvider)
@@ -55,7 +55,7 @@ func New(db *repository.DB, log *slog.Logger, config *config.Config) *Handlers {
 	}
 	userHandler := NewUserHandler(userStore, log)
 	facilityHandler := NewFacilityHandler(facilityStore, log, cal)
-	reservationHandler := NewReservationHandler(reservationStore, userStore, facilityStore, log, timezone, config)
+	reservationHandler := NewReservationHandler(reservationStore, userStore, facilityStore, log, timezone, config, cal)
 	utilityHandler := NewUtilityHandler(reservationStore, brandingStore, log, timezone)
 
 	return &Handlers{

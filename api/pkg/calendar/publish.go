@@ -90,21 +90,24 @@ func (c *Calendar) Publish(ctx context.Context, plan *PublishPlan, opts PublishO
 			return nil, fmt.Errorf("missing series spec")
 		}
 		exdates = plan.Series.EXDATEs
-		holidays, err := c.USHolidayDates(ctx, plan.Series.Start, plan.Series.End)
-		if err != nil {
-			return nil, err
-		}
-		exdates = append(exdates, holidays...)
+		// firstDay := exdates[0]
+		// lastDay := exdates[len(exdates)-1]
+		// holidays, err := c.USHolidayDates(ctx, firstDay, lastDay)
+		// if err != nil {
+		// 	return nil, err
+		// }
+		// exdates = append(exdates, holidays...)
+		fmt.Println("Start: ", plan.Series.Start.In(&c.loc).Format(time.RFC3339))
 		ev := &gcal.Event{
 			Summary:     firstNonEmpty(opts.Summary, plan.Series.Summary),
 			Description: firstNonEmpty(opts.Description, plan.Series.Description),
 			Location:    firstNonEmpty(opts.Location, plan.Series.Location),
 			Start: &gcal.EventDateTime{
-				DateTime: plan.Series.Start.In(c.loc).Format(time.RFC3339),
+				DateTime: plan.Series.Start.Format("2006-01-02T15:04:05"),
 				TimeZone: c.tz,
 			},
 			End: &gcal.EventDateTime{
-				DateTime: plan.Series.End.In(c.loc).Format(time.RFC3339),
+				DateTime: plan.Series.End.Format("2006-01-02T15:04:05"),
 				TimeZone: c.tz,
 			},
 			Recurrence: buildRecurrence(c.tz, plan.Series.RRULE, exdates),
@@ -133,11 +136,11 @@ func (c *Calendar) Publish(ctx context.Context, plan *PublishPlan, opts PublishO
 				Description: firstNonEmpty(oc.Description, opts.Description),
 				Location:    firstNonEmpty(oc.Location, opts.Location),
 				Start: &gcal.EventDateTime{
-					DateTime: oc.Start.In(c.loc).Format(time.RFC3339),
+					DateTime: oc.Start.Format("2006-01-02T15:04:05"),
 					TimeZone: c.tz,
 				},
 				End: &gcal.EventDateTime{
-					DateTime: oc.End.In(c.loc).Format(time.RFC3339),
+					DateTime: oc.End.Format("2006-01-02T15:04:05"),
 					TimeZone: c.tz,
 				},
 			}
@@ -161,10 +164,11 @@ func (c *Calendar) Publish(ctx context.Context, plan *PublishPlan, opts PublishO
 func buildRecurrence(tz, rrule string, exdates []time.Time) []string {
 	rec := []string{}
 	if rrule != "" {
-		if hasPrefixCaseInsensitive(rrule, "RRULE:") {
-			rec = append(rec, rrule)
+		clean := normalizeRRule(rrule)
+		if hasPrefixCaseInsensitive(clean, "RRULE:") {
+			rec = append(rec, clean)
 		} else {
-			rec = append(rec, "RRULE:"+rrule)
+			rec = append(rec, "RRULE:"+clean)
 		}
 	}
 	if len(exdates) > 0 {
@@ -195,7 +199,16 @@ func firstNonEmpty(xs ...string) string {
 	}
 	return ""
 }
-
+func normalizeRRule(rr string) string {
+	lines := strings.Split(rr, "\n")
+	for _, line := range lines {
+		line = strings.TrimSpace(line)
+		if strings.HasPrefix(strings.ToUpper(line), "RRULE:") {
+			return line // only keep the RRULE part
+		}
+	}
+	return rr // fallback: return as-is
+}
 func (c *Calendar) AddExdatesToMaster(ctx context.Context, calendarID, masterEventID, rrule string, exdates []time.Time) error {
 	rec := buildRecurrence(c.tz, rrule, exdates)
 	patch := &gcal.Event{Recurrence: rec}
@@ -206,7 +219,7 @@ func (c *Calendar) AddExdatesToMaster(ctx context.Context, calendarID, masterEve
 	return err
 }
 func (c *Calendar) AddRdatesToMaster(ctx context.Context, calendarID, masterEventID, rrule string, exdates, rdates []time.Time) error {
-	rec := buildRecurrenceWithRdates(c.tz, rrule, exdates, rdates, c.loc)
+	rec := buildRecurrenceWithRdates(c.tz, rrule, exdates, rdates, &c.loc)
 	patch := &gcal.Event{Recurrence: rec}
 	_, err := c.svc.Events.Patch(calendarID, masterEventID, patch).
 		SendUpdates("none").
@@ -269,7 +282,7 @@ func (c *Calendar) AddRdatesWithOverrides(ctx context.Context, calendarID, maste
 	for i := range adds {
 		rdateStarts[i] = adds[i].Start
 	}
-	rec := buildRecurrenceWithRdates(c.tz, rrule, exdates, rdateStarts, c.loc)
+	rec := buildRecurrenceWithRdates(c.tz, rrule, exdates, rdateStarts, &c.loc)
 
 	_, err := c.svc.Events.Patch(calendarID, masterEventID, &gcal.Event{
 		Recurrence: rec,
@@ -302,9 +315,9 @@ func (c *Calendar) AddRdatesWithOverrides(ctx context.Context, calendarID, maste
 // Patch one instance (override). Only that occurrence is changed.
 func (c *Calendar) patchInstance(ctx context.Context, calendarID, masterEventID string, spec RDateSpec) error {
 	// Find the instance by original start (Instances API). Give a window for safety.
-	tMin := spec.Start.Add(-2 * time.Hour).In(c.loc).Format(time.RFC3339)
-	tMax := spec.Start.Add(2 * time.Hour).In(c.loc).Format(time.RFC3339)
-	orig := spec.Start.In(c.loc).Format(time.RFC3339)
+	tMin := spec.Start.Add(-2 * time.Hour).In(&c.loc).Format(time.RFC3339)
+	tMax := spec.Start.Add(2 * time.Hour).In(&c.loc).Format(time.RFC3339)
+	orig := spec.Start.In(&c.loc).Format(time.RFC3339)
 
 	inst, err := c.svc.Events.Instances(calendarID, masterEventID).
 		TimeMin(tMin).
@@ -330,11 +343,11 @@ func (c *Calendar) patchInstance(ctx context.Context, calendarID, masterEventID 
 
 	patch := &gcal.Event{
 		Start: &gcal.EventDateTime{
-			DateTime: spec.Start.In(c.loc).Format(time.RFC3339),
+			DateTime: spec.Start.In(&c.loc).Format(time.RFC3339),
 			TimeZone: c.tz,
 		},
 		End: &gcal.EventDateTime{
-			DateTime: spec.End.In(c.loc).Format(time.RFC3339),
+			DateTime: spec.End.In(&c.loc).Format(time.RFC3339),
 			TimeZone: c.tz,
 		},
 	}

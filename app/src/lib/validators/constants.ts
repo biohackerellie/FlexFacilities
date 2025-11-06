@@ -100,7 +100,6 @@ const adminSideBar: SideBarType = [
   { title: 'Requests', href: '/admin/requests' },
   { title: 'Users', href: '/admin/users' },
   { title: 'Facilities', href: '/admin/facilities' },
-  { title: 'Settings', href: '/admin/settings' },
 ];
 
 // const buildingNames = [

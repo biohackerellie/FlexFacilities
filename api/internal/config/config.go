@@ -26,7 +26,7 @@ type Config struct {
 	FilesPath          string `mapstructure:"FILES_PATH"`
 	Timezone           string `mapstructure:"TIMEZONE"`
 
-	Location *time.Location `mapstructure:"-"`
+	Location time.Location `mapstructure:"-"`
 }
 
 func New(getenv func(string, string) string) (*Config, error) {
@@ -55,6 +55,6 @@ func New(getenv func(string, string) string) (*Config, error) {
 	if err != nil {
 		return nil, fmt.Errorf("invalid TIMEZONE %q: %w", cfg.Timezone, err)
 	}
-	cfg.Location = loc
+	cfg.Location = *loc
 	return cfg, nil
 }

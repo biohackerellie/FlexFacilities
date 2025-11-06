@@ -40,6 +40,7 @@ func NewReservationHandler(
 	log *slog.Logger,
 	timezone *time.Location,
 	config *config.Config,
+	calendar *calendar.Calendar,
 ) *ReservationHandler {
 	log.With(slog.Group("Core_ReservationHandler", slog.String("name", "reservation")))
 	return &ReservationHandler{
@@ -49,6 +50,7 @@ func NewReservationHandler(
 		log:              log,
 		timezone:         timezone,
 		config:           config,
+		calendar:         calendar,
 	}
 }
 func (a *ReservationHandler) GetAllReservations(ctx context.Context, req *connect.Request[service.GetAllReservationsRequest]) (*connect.Response[service.AllReservationsResponse], error) {
@@ -339,6 +341,7 @@ func (a *ReservationHandler) UpdateReservationStatus(ctx context.Context, req *c
 	if err != nil {
 		return nil, err
 	}
+	a.log.Debug("Reservation published", "google response", pubRes)
 	switch plan.Mode {
 	case calendar.ModeSingles:
 		dateByID := make(map[int64]*models.ReservationDate, len(resWrap.Dates))
@@ -368,6 +371,7 @@ func (a *ReservationHandler) UpdateReservationStatus(ctx context.Context, req *c
 		}
 		for i := range resWrap.Dates {
 			resWrap.Dates[i].Approved = models.ReservationDateApprovedApproved
+			resWrap.Dates[i].GcalEventid = pubRes.MasterEventID
 			if err := a.reservationStore.UpdateDate(ctx, &resWrap.Dates[i]); err != nil {
 				a.log.Error("Failed to update date after series published", "date_id", resWrap.Dates[i].ID, "err", err)
 			}
@@ -856,7 +860,7 @@ func (a *ReservationHandler) AllSortedReservations(ctx context.Context, req *con
 				}
 				wrapped := &service.FullResWithFacilityName{
 					EventName:       r.Reservation.EventName,
-					ReservationDate: key.Format("2006-01-02 10:04 PM"),
+					ReservationDate: key.String(),
 					Approved:        r.Reservation.Approved.String(),
 					ReservationId:   r.Reservation.ID,
 					FacilityName:    facN,
@@ -881,7 +885,7 @@ func (a *ReservationHandler) AllSortedReservations(ctx context.Context, req *con
 					EventName:       r.Reservation.EventName,
 					Approved:        r.Reservation.Approved.String(),
 					ReservationId:   r.Reservation.ID,
-					ReservationDate: key.Format("2006-01-02 10:04 PM"),
+					ReservationDate: key.String(),
 					FacilityName:    facN,
 					UserName:        r.Reservation.Name,
 				}

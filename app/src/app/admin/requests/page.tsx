@@ -24,19 +24,24 @@ async function getData(session: string, token: string) {
   return data.data;
 }
 
-export default async function Requests() {
+async function TableWrapper() {
   const { session, token } = await getCookies();
   if (!session || !token) {
     return null;
   }
   const data = await getData(session, token);
+
+  return <DataTable columns={columns} data={data} />;
+}
+
+export default async function Requests() {
   return (
     <div className='space-y-7'>
       <div>
         <h1 className='text-lg font-medium'>Requests</h1>
       </div>
       <React.Suspense fallback={<TableSkeleton />}>
-        <DataTable columns={columns} data={data} />
+        <TableWrapper />
       </React.Suspense>
     </div>
   );
