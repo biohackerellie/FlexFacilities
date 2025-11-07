@@ -7,6 +7,7 @@ import (
 	"api/internal/lib/logger"
 	"api/internal/lib/workers"
 	"api/internal/server"
+	"api/pkg/calendar"
 	"context"
 	"io"
 	"log/slog"
@@ -74,6 +75,16 @@ func Run(ctx context.Context, stdout io.Writer, getenv func(string, string) stri
 	}()
 
 	log.Info("Server started", "addr", srv.Addr)
+
+	// Initialize stores and services for workers
+	facilityStore := repository.NewFacilityStore(db, log)
+	cal, err := createCalendar(ctx, config)
+	if err != nil {
+		log.Error("Could not create calendar for worker", slog.Any("error", err))
+		// Continue without calendar sync worker
+		cal = nil
+	}
+
 	mgr := workers.NewManager()
 	janitor := workers.NewWorker(&workers.Janitor{
 		Auth:      nil,
@@ -82,11 +93,34 @@ func Run(ctx context.Context, stdout io.Writer, getenv func(string, string) stri
 		Logger:    log,
 	})
 	mgr.Add(janitor)
+
+	// Only add calendar sync worker if calendar was created successfully
+	if cal != nil {
+		calendarSync := workers.NewWorker(&workers.CalendarSync{
+			FacilityStore: facilityStore,
+			Calendar:      cal,
+			Interval:      1 * time.Hour,
+			Logger:        log,
+		})
+		mgr.Add(calendarSync)
+	}
+
 	mgr.Start(ctx)
 
 	log.Info("Workers started")
 	waitForShutdown(srv, ctx, cancel, log)
 	return nil
+}
+
+func createCalendar(ctx context.Context, config *config.Config) (*calendar.Calendar, error) {
+	return calendar.NewCalendar(
+		ctx,
+		config.GoogleClientID,
+		config.GoogleClientSecret,
+		config.GoogleRefreshToken,
+		config.Location,
+		config.Timezone,
+	)
 }
 
 func waitForShutdown(srv *http.Server, ctx context.Context, cancel context.CancelFunc, log *slog.Logger) {
