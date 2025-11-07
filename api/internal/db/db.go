@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"time"
 
 	_ "github.com/jackc/pgx/v5/stdlib"
@@ -21,7 +22,7 @@ CREATE TABLE IF NOT EXISTS schema_migrations (
 );
 `
 
-func NewDB(ctx context.Context, connectionString string) *DB {
+func InitDB(ctx context.Context, connectionString string) *DB {
 	sqlDB := sqlx.MustOpen("pgx", connectionString)
 	sqlDB.SetMaxOpenConns(25)
 	sqlDB.SetMaxIdleConns(5)
@@ -40,4 +41,20 @@ func NewDB(ctx context.Context, connectionString string) *DB {
 	}
 	fmt.Println("Connected to database")
 	return db
+}
+
+type DBService struct {
+	*FacilityStore
+	*UserStore
+	*ReservationStore
+	*BrandingStore
+}
+
+func NewDBService(db *DB, log *slog.Logger) *DBService {
+	return &DBService{
+		FacilityStore:    NewFacilityStore(db, log),
+		UserStore:        NewUserStore(db, log),
+		ReservationStore: NewReservationStore(db, log),
+		BrandingStore:    NewBrandingStore(db, log),
+	}
 }

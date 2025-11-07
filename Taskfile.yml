@@ -98,7 +98,7 @@ tasks:
     desc: build bun app
     dir: "{{.NEXT_ROOT}}"
     cmds:
-      - bun --bun run build
+      - bun run build
   build:go:
     desc: build go app
     dir: "{{.API_ROOT}}"
@@ -106,6 +106,6 @@ tasks:
       - go build -o bin/main main.go
   build:
     desc: build all apps
-    tasks:
-      - build:bun
-      - build:go
+    cmds:
+      - task build:bun
+      - task build:go

@@ -6,12 +6,12 @@ import (
 	repository "api/internal/db"
 	"api/pkg/calendar"
 	"api/pkg/files"
-	"context"
 	"fmt"
-	"github.com/biohackerellie/flexauth"
-	"github.com/biohackerellie/flexauth/providers/entra"
 	"log/slog"
 	"time"
+
+	"github.com/biohackerellie/flexauth"
+	"github.com/biohackerellie/flexauth/providers/entra"
 )
 
 type Handlers struct {
@@ -23,19 +23,9 @@ type Handlers struct {
 	FilesHandler       *FileHandler
 }
 
-func New(db *repository.DB, log *slog.Logger, config *config.Config) *Handlers {
+func New(dbService *repository.DBService, log *slog.Logger, config *config.Config, cal *calendar.Calendar) *Handlers {
 
-	cal, err := calendar.NewCalendar(context.Background(), config.GoogleClientID, config.GoogleClientSecret, config.GoogleRefreshToken, config.Location, config.Timezone)
-
-	if err != nil {
-		log.Error("Could not create calendar", "error", err)
-		panic(err)
-	}
 	localFiles := files.NewLocalFileStorage(config.FilesPath, config.FrontendUrl)
-	userStore := repository.NewUserStore(db, log)
-	facilityStore := repository.NewFacilityStore(db, log)
-	reservationStore := repository.NewReservationStore(db, log)
-	brandingStore := repository.NewBrandingStore(db, log)
 	filesHandler := NewFileHandler(localFiles, log)
 
 	entraconfig := flexauth.Config{
@@ -45,7 +35,7 @@ func New(db *repository.DB, log *slog.Logger, config *config.Config) *Handlers {
 	}
 
 	entraProvider := entra.NewEntraProvider(entraconfig, config.EntraTenant)
-	authHandler := auth.NewAuth(userStore, log, config)
+	authHandler := auth.NewAuth(dbService.UserStore, log, config)
 	authHandler.RegisterProvider("entra", entraProvider)
 
 	timezone, err := time.LoadLocation(config.Timezone)
@@ -53,10 +43,10 @@ func New(db *repository.DB, log *slog.Logger, config *config.Config) *Handlers {
 		log.Error("Could not load timezone", "error", err)
 		panic(err)
 	}
-	userHandler := NewUserHandler(userStore, log)
-	facilityHandler := NewFacilityHandler(facilityStore, log, cal)
-	reservationHandler := NewReservationHandler(reservationStore, userStore, facilityStore, log, timezone, config, cal)
-	utilityHandler := NewUtilityHandler(reservationStore, brandingStore, log, timezone)
+	userHandler := NewUserHandler(dbService.UserStore, log)
+	facilityHandler := NewFacilityHandler(dbService.FacilityStore, log, cal)
+	reservationHandler := NewReservationHandler(dbService.ReservationStore, dbService.UserStore, dbService.FacilityStore, log, timezone, config, cal)
+	utilityHandler := NewUtilityHandler(dbService.ReservationStore, dbService.BrandingStore, log, timezone)
 
 	return &Handlers{
 		UserHandler:        userHandler,

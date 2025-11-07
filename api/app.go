@@ -55,10 +55,16 @@ func Run(ctx context.Context, stdout io.Writer, getenv func(string, string) stri
 	}
 
 	log.Info("Starting server", "local", local, "log_level", logLevel, "verbose_logging", verboseLogging)
-	db := repository.NewDB(ctx, config.DatabaseURL)
+	db := repository.InitDB(ctx, config.DatabaseURL)
 	defer db.Close()
 
-	h := handlers.New(db, log, config)
+	dbService := repository.NewDBService(db, log)
+
+	cal, err := createCalendar(ctx, config)
+	if err != nil {
+		panic(err)
+	}
+	h := handlers.New(dbService, log, config, cal)
 	s := server.NewServer(h, log)
 	handler := h2c.NewHandler(s, &http2.Server{})
 	srv := &http.Server{
@@ -76,15 +82,6 @@ func Run(ctx context.Context, stdout io.Writer, getenv func(string, string) stri
 
 	log.Info("Server started", "addr", srv.Addr)
 
-	// Initialize stores and services for workers
-	facilityStore := repository.NewFacilityStore(db, log)
-	cal, err := createCalendar(ctx, config)
-	if err != nil {
-		log.Error("Could not create calendar for worker", slog.Any("error", err))
-		// Continue without calendar sync worker
-		cal = nil
-	}
-
 	mgr := workers.NewManager()
 	janitor := workers.NewWorker(&workers.Janitor{
 		Auth:      nil,
@@ -97,7 +94,7 @@ func Run(ctx context.Context, stdout io.Writer, getenv func(string, string) stri
 	// Only add calendar sync worker if calendar was created successfully
 	if cal != nil {
 		calendarSync := workers.NewWorker(&workers.CalendarSync{
-			FacilityStore: facilityStore,
+			FacilityStore: dbService.FacilityStore,
 			Calendar:      cal,
 			Interval:      1 * time.Hour,
 			Logger:        log,
