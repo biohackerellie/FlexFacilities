@@ -1,12 +1,14 @@
 import { notFound } from 'next/navigation';
 import * as React from 'react';
+import { logger } from '@/lib/logger';
 import { client } from '@/lib/rpc';
 import ResetForm from './form';
 
 async function VerifyToken(token: string) {
-  'use server';
   const { data, error } = await client.auth().verifyResetPassword({ token });
+  logger.debug('VerifyToken', { data, error });
   if (error) {
+    logger.debug(error.message);
     return null;
   }
   return data?.email;

@@ -50,7 +50,6 @@ export function CalendarProvider({
     if (!date) return;
     setSelectedDate(date);
   };
-
   return (
     <CalendarContext.Provider
       value={{

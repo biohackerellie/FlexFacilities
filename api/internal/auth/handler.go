@@ -104,9 +104,12 @@ func requiresAuth(procedure string) bool {
 		FacilitiesServiceGetAllEventsProcedure:          true,
 		FacilitiesServiceGetCategoryProcedure:           true,
 
-		AuthLoginProcedure:         true,
-		AuthRegisterProcedure:      true,
-		AuthVerify2FACodeProcedure: true,
+		AuthLoginProcedure:                true,
+		AuthRegisterProcedure:             true,
+		AuthVerify2FACodeProcedure:        true,
+		AuthRequestResetPasswordProcedure: true,
+		AuthResetPasswordProcedure:        true,
+		AuthVerifyResetPassword:           true,
 	}
 	if _, ok := publicProcedures[procedure]; ok {
 		return false
@@ -118,6 +121,7 @@ func requiresAuth(procedure string) bool {
 func (s *Auth) AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		procedure, ok := InferProcedure(r.URL)
+		s.logger.Debug("AuthMiddleware", "procedure", procedure)
 		if !ok {
 			// Not a grpc request
 			next.ServeHTTP(w, r)
@@ -219,6 +223,25 @@ func (s *Auth) GetSessionHandler(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write([]byte(res.String()))
 }
 
+func (s *Auth) LogoutHandler(w http.ResponseWriter, r *http.Request) {
+	issueCookie(w, fmt.Sprintf("%s%s", s.cookiePrefix, jwtCookieName), "", s.secure, -1)
+	issueCookie(w, fmt.Sprintf("%s%s", s.cookiePrefix, sessionCookieName), "", s.secure, -1)
+
+	authCTX, ok := r.Context().Value(utils.CtxKey("user")).(*AuthCTX)
+	if !ok || authCTX == nil {
+		http.Redirect(w, r, s.config.FrontendUrl, http.StatusTemporaryRedirect)
+		return
+	}
+
+	err := s.db.DeleteSession(r.Context(), authCTX.SessionID)
+	if err != nil {
+		s.logger.Error("failed to delete session", "error", err)
+		http.Redirect(w, r, s.config.FrontendUrl, http.StatusTemporaryRedirect)
+		return
+
+	}
+	http.Redirect(w, r, fmt.Sprintf("%s/api/logout", s.config.FrontendUrl), http.StatusTemporaryRedirect)
+}
 func (s *Auth) GetSession(ctx context.Context, req *connect.Request[service.GetSessionRequest]) (*connect.Response[service.GetSessionResponse], error) {
 	s.logger.Debug("GetSession", "ctx", ctx.Value(utils.CtxKey("user")))
 	authCTX, ok := ctx.Value(utils.CtxKey("user")).(*AuthCTX)

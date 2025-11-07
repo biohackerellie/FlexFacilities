@@ -30,7 +30,8 @@ const MAX_ATTEMPTS = 3
 
 func (s *Auth) VerifyResetPassword(ctx context.Context, req *connect.Request[service.VerifyPasswordRequest]) (*connect.Response[service.VerifyResetResponse], error) {
 	token := req.Msg.Token
-	email, _, ok := s.getTempToken(token)
+	s.logger.Debug("VerifyResetPassword", "token", token)
+	token, email, ok := s.getTempToken(token)
 	if !ok {
 		return nil, connect.NewError(connect.CodeUnauthenticated, fmt.Errorf("invalid token"))
 	}
@@ -41,6 +42,7 @@ func (s *Auth) VerifyResetPassword(ctx context.Context, req *connect.Request[ser
 func (s *Auth) ResetPassword(ctx context.Context, req *connect.Request[service.LoginRequest]) (*connect.Response[service.LoginResponse], error) {
 	user, err := s.db.GetByEmail(ctx, req.Msg.Email)
 	if err != nil {
+		s.logger.Debug("error getting user", "error", err)
 		return nil, err
 	}
 	hash, err := bcrypt.GenerateFromPassword([]byte(req.Msg.Password), bcrypt.DefaultCost)
@@ -101,6 +103,7 @@ func (s *Auth) ResetPassword(ctx context.Context, req *connect.Request[service.L
 }
 func (s *Auth) RequestResetPassword(ctx context.Context, req *connect.Request[service.RequestResetPasswordRequest]) (*connect.Response[service.LoginResponse], error) {
 	email := req.Msg.Email
+
 	user, err := s.db.GetByEmail(ctx, email)
 	if err != nil {
 		return nil, connect.NewError(connect.CodeNotFound, fmt.Errorf("user not found"))
@@ -268,7 +271,7 @@ func (s *Auth) send2FACode(email, host string) error {
 func (s *Auth) sendResetPasswordToken(ctx context.Context, email string) error {
 
 	token := utils.GenerateRandomID()
-	s.setTempToken(token, "", token, time.Minute*5)
+	s.setTempToken(token, "", email, time.Minute*5)
 	urlString := fmt.Sprintf("%s/login/reset/%v", s.config.FrontendUrl, token)
 	url, err := url.Parse(urlString)
 	if err != nil {
@@ -277,7 +280,7 @@ func (s *Auth) sendResetPasswordToken(ctx context.Context, email string) error {
 	emails.Send(&emails.EmailData{
 		To:       email,
 		Subject:  "Facilities Reset Password",
-		Template: "resetPassword.html",
+		Template: "passwordReset.html",
 		Data: map[string]any{
 			"URL": url,
 		},

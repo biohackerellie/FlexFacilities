@@ -28,13 +28,24 @@ export function BuildingSelect() {
         <SelectItem value='all'>
           <div className='flex items-center gap-1'>
             {buildings.map((building) => {
-              const name =
-                building.name.split(' ').length > 1
-                  ? `${building.name.split(' ')[0]?.[0] ?? ''}${building.name.split(' ')[1]?.[0] ?? ''}${building.name.split(' ')[2]?.[0]}}`
-                  : building.name.substring(0, 1);
+              if (building.name === undefined) return null;
+              const words = building.name.split(' ');
+              if (words.length < 3) words.slice(0, 2);
+              let name = '';
+              switch (words.length) {
+                case 3:
+                  name = `${building.name.split(' ')[0]?.[0] ?? ''}${building.name.split(' ')[1]?.[0] ?? ''}${building.name.split(' ')[2]?.[0]}`;
+                  break;
+                case 2:
+                  name = `${building.name.split(' ')[0]?.[0] ?? ''}${building.name.split(' ')[1]?.[0] ?? ''}`;
+                  break;
+                case 1:
+                  name = `${building.name.split(' ')[0]?.[0] ?? ''}`;
+                  break;
+              }
               return (
-                <Avatar key={building.id} className='size-6 text-xxs'>
-                  <AvatarFallback className='text-xxs'>{name}</AvatarFallback>
+                <Avatar key={building.id} className='size-8 text-xs'>
+                  <AvatarFallback className='text-xs'>{name}</AvatarFallback>
                 </Avatar>
               );
             })}
@@ -42,12 +53,21 @@ export function BuildingSelect() {
           </div>
         </SelectItem>
 
-        {buildings.map((building, i) => {
-          if (i >= 3) return null;
-          const name =
-            building.name.split(' ').length > 1
-              ? `${building.name.split(' ')[0]?.[0] ?? ''}${building.name.split(' ')[1]?.[0] ?? ''}${building.name.split(' ')[2]?.[0]}}`
-              : building.name.substring(0, 1);
+        {buildings.map((building) => {
+          const words = building.name.split(' ');
+          if (words.length < 3) words.slice(0, 2);
+          let name = '';
+          switch (words.length) {
+            case 3:
+              name = `${building.name.split(' ')[0]?.[0] ?? ''}${building.name.split(' ')[1]?.[0] ?? ''}${building.name.split(' ')[2]?.[0]}`;
+              break;
+            case 2:
+              name = `${building.name.split(' ')[0]?.[0] ?? ''}${building.name.split(' ')[1]?.[0] ?? ''}`;
+              break;
+            case 1:
+              name = `${building.name.split(' ')[0]?.[0] ?? ''}`;
+              break;
+          }
           return (
             <SelectItem
               key={building.id}
@@ -55,8 +75,8 @@ export function BuildingSelect() {
               className='flex-1'
             >
               <div className='flex items-center gap-2'>
-                <Avatar key={building.id} className='size-6'>
-                  <AvatarFallback className='text-xxs'>{name}</AvatarFallback>
+                <Avatar key={building.id} className='size-8'>
+                  <AvatarFallback className='text-xs'>{name}</AvatarFallback>
                 </Avatar>
 
                 <p className='truncate'>{building.name}</p>

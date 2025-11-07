@@ -6,22 +6,22 @@ import { client } from '@/lib/rpc';
 
 export type FormState =
   | {
-      errors?:
-        | {
-            email?:
-              | {
-                  errors: string[];
-                }
-              | undefined;
-            password?:
-              | {
-                  errors: string[];
-                }
-              | undefined;
-          }
-        | undefined;
-      message?: string;
+    errors?:
+    | {
+      email?:
+      | {
+        errors: string[];
+      }
+      | undefined;
+      password?:
+      | {
+        errors: string[];
+      }
+      | undefined;
     }
+    | undefined;
+    message?: string;
+  }
   | undefined;
 
 const _loginSchema = z.object({
@@ -43,32 +43,32 @@ export async function Login(email: string, password: string) {
 
 export type RegisterFormState =
   | {
-      errors?:
-        | {
-            name?:
-              | {
-                  errors: string[];
-                }
-              | undefined;
-            email?:
-              | {
-                  errors: string[];
-                }
-              | undefined;
-            password?:
-              | {
-                  errors: string[];
-                }
-              | undefined;
-            confirmPassword?:
-              | {
-                  errors: string[];
-                }
-              | undefined;
-          }
-        | undefined;
-      message?: string;
+    errors?:
+    | {
+      name?:
+      | {
+        errors: string[];
+      }
+      | undefined;
+      email?:
+      | {
+        errors: string[];
+      }
+      | undefined;
+      password?:
+      | {
+        errors: string[];
+      }
+      | undefined;
+      confirmPassword?:
+      | {
+        errors: string[];
+      }
+      | undefined;
     }
+    | undefined;
+    message?: string;
+  }
   | undefined;
 
 const passwords = z
@@ -124,6 +124,7 @@ export async function RequestPasswordReset(email: string) {
 }
 
 export async function ResetPassword(email: string, password: string) {
+  logger.debug('ResetPassword', { email, password });
   const { error } = await client.auth().resetPassword({ email, password });
   if (error) {
     throw error;

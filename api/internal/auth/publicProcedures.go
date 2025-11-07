@@ -37,5 +37,8 @@ const (
 	// AuthRegisterProcedure is the fully-qualified name of the Auth's Register RPC.
 	AuthRegisterProcedure = "/api.auth.Auth/Register"
 
-	AuthVerify2FACodeProcedure = "/api.auth.Auth/Verify2FACode"
+	AuthVerify2FACodeProcedure        = "/api.auth.Auth/Verify2FACode"
+	AuthRequestResetPasswordProcedure = "/api.auth.Auth/RequestResetPassword"
+	AuthResetPasswordProcedure        = "/api.auth.Auth/ResetPassword"
+	AuthVerifyResetPassword           = "/api.auth.Auth/VerifyResetPassword"
 )

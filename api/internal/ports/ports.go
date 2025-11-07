@@ -74,4 +74,5 @@ type AuthService interface {
 	AuthCallback(w http.ResponseWriter, r *http.Request)
 	BeginOauth(w http.ResponseWriter, r *http.Request)
 	CleanupExpiredTokens(ctx context.Context)
+	LogoutHandler(w http.ResponseWriter, r *http.Request)
 }

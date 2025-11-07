@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import * as React from 'react';
 import { toast } from 'sonner';
 import { Spinner } from '@/components/spinner';
@@ -15,6 +16,7 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -84,10 +86,8 @@ export default function CreateAccount() {
       return next;
     });
   };
-
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
+  const router = useRouter();
+  const onSubmit = () => {
     if (input.password !== input.confirmPassword) {
       setError((prev) => ({
         ...prev,
@@ -116,7 +116,7 @@ export default function CreateAccount() {
       </CardHeader>
 
       <CardContent className='flex gap-4'>
-        <form className='grid gap-6 w-full' onSubmit={onSubmit}>
+        <div className='grid gap-6 w-full'>
           <div className='grid gap-3'>
             <Label htmlFor='name'>Name</Label>
             <Input
@@ -180,11 +180,11 @@ export default function CreateAccount() {
           </div>
 
           <CardFooter className='flex justify-center'>
-            <Button type='submit' disabled={pending}>
+            <Button onClick={onSubmit} disabled={pending}>
               {pending ? <Spinner /> : 'Create Account'}
             </Button>
           </CardFooter>
-        </form>
+        </div>
 
         <Dialog open={open} onOpenChange={() => setOpen(!open)}>
           <DialogContent className='sm:max-w-[425px]'>
@@ -192,6 +192,9 @@ export default function CreateAccount() {
             <DialogDescription>
               You will need to follow the link sent to your email to log in.
             </DialogDescription>
+            <DialogFooter>
+              <Button onClick={() => router.push('/login')}>Ok</Button>
+            </DialogFooter>
           </DialogContent>
         </Dialog>
       </CardContent>

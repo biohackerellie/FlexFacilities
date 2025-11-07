@@ -45,6 +45,7 @@ func NewServer(handlers *handlers.Handlers, log *slog.Logger) *http.ServeMux {
 		r.HandleFunc("/{provider}/callback", handlers.Auth.AuthCallback)
 		r.HandleFunc("/verify", handlers.Auth.Verify)
 		r.HandleFunc("/session", handlers.Auth.GetSessionHandler)
+		r.HandleFunc("/logout", handlers.Auth.LogoutHandler)
 	})
 	r.Route("/files", func(r chi.Router) {
 		r.Get("/images/{building}/{file}", handlers.FilesHandler.GetFacilityImage)

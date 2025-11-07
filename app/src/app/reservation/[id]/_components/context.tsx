@@ -1,6 +1,12 @@
 'use client';
 import * as React from 'react';
-import type { Facility, Reservation, ReservationDate, User } from '@/lib/types';
+import type {
+  Facility,
+  Reservation,
+  ReservationDate,
+  Session,
+  User,
+} from '@/lib/types';
 
 interface ReservationContext {
   reservation: Reservation;
@@ -28,3 +34,47 @@ export const ReservationProvider = ({
     </ReservationContext.Provider>
   );
 };
+
+interface AuthContext {
+  session: Session | null;
+}
+
+export const AuthContext = React.createContext<AuthContext | undefined>(
+  undefined,
+);
+
+export const AuthProvider = ({
+  children,
+  session,
+}: {
+  children: React.ReactNode;
+  session: Session | null;
+}) => {
+  return (
+    <AuthContext.Provider value={{ session }}>{children}</AuthContext.Provider>
+  );
+};
+
+interface UserContext {
+  user: User;
+}
+
+export const UserContext = React.createContext<UserContext | undefined>(
+  undefined,
+);
+
+export const UserProvider = ({
+  children,
+  user,
+}: {
+  children: React.ReactNode;
+  user: User;
+}) => {
+  return (
+    <UserContext.Provider value={{ user }}>{children}</UserContext.Provider>
+  );
+};
+
+interface FacilityContext {
+  facility: Facility;
+}

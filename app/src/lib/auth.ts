@@ -1,6 +1,4 @@
-'use server';
-
-import { cacheTag } from 'next/cache';
+import { cacheLife, cacheTag } from 'next/cache';
 import { logger } from './logger';
 import { client } from './rpc';
 import { getCookies } from './setHeader';
@@ -17,24 +15,22 @@ function parseRole(role: string): UserRole {
   }
 }
 
-async function fetchSession(session: string, token: string) {
-  'use cache';
-  const authed = client.withAuth(session, token);
-  const { data, error } = await authed.auth().getSession({});
-  cacheTag('session');
-  if (error) {
-    logger.debug('Failed to get session', { error });
-    return null;
-  }
-  return data;
-}
-
 export async function auth() {
+  'use cache: private';
+  cacheTag('session');
+  cacheLife({ stale: 60 });
   const { session, token } = await getCookies();
   if (!session || !token) {
     return null;
   }
-  const data = await fetchSession(session, token);
+
+  const authed = client.withAuth(session, token);
+  const { data, error } = await authed.auth().getSession({});
+
+  if (error) {
+    logger.debug('Failed to get session', { error });
+    return null;
+  }
   if (!data) return null;
 
   return {

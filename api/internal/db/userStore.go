@@ -84,17 +84,11 @@ func (s *UserStore) UpdatePassword(ctx context.Context, user *models.Users) (*mo
 		"id":       user.ID,
 		"password": user.Password,
 	}
-	var u models.Users
-	stmt, err := s.db.PrepareNamedContext(ctx, updateUserPasswordQuery)
+	_, err := s.db.NamedExecContext(ctx, updateUserPasswordQuery, params)
 	if err != nil {
 		return nil, err
 	}
-	defer stmt.Close()
-	err = stmt.QueryRowxContext(ctx, params).StructScan(&u)
-	if err != nil {
-		return nil, err
-	}
-	return &u, nil
+	return user, nil
 }
 
 const updateUserQuery = `UPDATE users SET name = :name, email = :email, provider = :provider WHERE id = :id RETURNING *`
