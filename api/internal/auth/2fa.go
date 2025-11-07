@@ -30,8 +30,7 @@ const MAX_ATTEMPTS = 3
 
 func (s *Auth) VerifyResetPassword(ctx context.Context, req *connect.Request[service.VerifyPasswordRequest]) (*connect.Response[service.VerifyResetResponse], error) {
 	token := req.Msg.Token
-	s.logger.Debug("VerifyResetPassword", "token", token)
-	token, email, ok := s.getTempToken(token)
+	_, email, ok := s.getTempToken(token)
 	if !ok {
 		return nil, connect.NewError(connect.CodeUnauthenticated, fmt.Errorf("invalid token"))
 	}
@@ -42,7 +41,6 @@ func (s *Auth) VerifyResetPassword(ctx context.Context, req *connect.Request[ser
 func (s *Auth) ResetPassword(ctx context.Context, req *connect.Request[service.LoginRequest]) (*connect.Response[service.LoginResponse], error) {
 	user, err := s.db.GetByEmail(ctx, req.Msg.Email)
 	if err != nil {
-		s.logger.Debug("error getting user", "error", err)
 		return nil, err
 	}
 	hash, err := bcrypt.GenerateFromPassword([]byte(req.Msg.Password), bcrypt.DefaultCost)

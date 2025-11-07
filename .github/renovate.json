@@ -1,24 +1,56 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base"
+    "config:recommended",
+    "group:allNonMajor"
   ],
   "labels": [
     "dependencies"
   ],
   "autoApprove": true,
   "schedule": [
-    "after 10pm and before 5am every day"
+    "after 10pm",
+    "before 5am"
+  ],
+  "baseBranches": [
+    "main"
   ],
   "packageRules": [
     {
-      "matchPackagePatterns": [
-        "^@local/"
+      "matchPackageNames": [
+        "babel-plugin-react-compiler",
+        "react-day-picker"
       ],
       "enabled": false
+    },
+    {
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "groupName": "all non-major dependencies",
+      "groupSlug": "all-minor-patch",
+      "matchPackageNames": [
+        "*"
+      ]
     }
   ],
+  "gomod": {
+    "fileMatch": [
+      "(^|/)go\\.mod$"
+    ],
+    "pinDigests": false,
+    "postUpdateOptions": [
+      "gomodTidy"
+    ]
+  },
   "updateInternalDeps": true,
   "rangeStrategy": "bump",
-  "automerge": true
+  "automerge": true,
+  "npm": {
+    "fileMatch": [
+      "(^|/)package\\.json$",
+      "(^|/)package\\.json\\.hbs$"
+    ]
+  }
 }

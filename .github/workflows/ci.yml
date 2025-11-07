@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  pull_request:
+    branches: ["*"]
+  push:
+    branches: ["main"]
+
+  workflow_dispatch:
+  merge_group:
+
+permissions:
+  contents: write
+
+env:
+  FORCE_COLOR: 3
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{github.ref != 'refs/heads/main'}}
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./app
+    steps:
+      - uses: actions/checkout@v5
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Install deps
+        run: bun install
+      - name: Lint
+        run: bun run check
+      - name: Typecheck
+        run: bun run typecheck
+
+  golangci:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./api
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
+        with:
+          go-version: stable
+      - uses: golangci/golangci-lint-action@v8
+        with:
+          args: --config=./.golangci.yml

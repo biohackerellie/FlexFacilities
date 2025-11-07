@@ -1,4 +1,4 @@
-import { cacheLife, cacheTag } from 'next/cache';
+import { cache } from 'react';
 import { logger } from './logger';
 import { client } from './rpc';
 import { getCookies } from './setHeader';
@@ -15,10 +15,7 @@ function parseRole(role: string): UserRole {
   }
 }
 
-export async function auth() {
-  'use cache: private';
-  cacheTag('session');
-  cacheLife({ stale: 60 });
+export const auth = cache(async (): Promise<Session | null> => {
   const { session, token } = await getCookies();
   if (!session || !token) {
     return null;
@@ -37,4 +34,4 @@ export async function auth() {
     ...data,
     userRole: parseRole(data?.userRole),
   } as Session;
-}
+});

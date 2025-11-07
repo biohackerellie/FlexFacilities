@@ -3,10 +3,10 @@ package auth
 const (
 	// FacilitiesServiceGetAllFacilitiesProcedure is the fully-qualified name of the FacilitiesService's
 	// GetAllFacilities RPC.
-	FacilitiesServiceGetAllFacilitiesProcedure = "/api.facilities.FacilitiesService/GetAllFacilities"
+	FacilitiesServiceGetAllFacilitiesProcedure = "/api.facilities.FacilitiesService/GetAllFacilities" // nolint:gosec
 	// FacilitiesServiceGetAllBuildingsProcedure is the fully-qualified name of the FacilitiesService's
 	// GetAllBuildings RPC.
-	FacilitiesServiceGetAllBuildingsProcedure = "/api.facilities.FacilitiesService/GetAllBuildings"
+	FacilitiesServiceGetAllBuildingsProcedure = "/api.facilities.FacilitiesService/GetAllBuildings" // nolint:gosec
 	// FacilitiesServiceGetFacilityProcedure is the fully-qualified name of the FacilitiesService's
 	// GetFacility RPC.
 	FacilitiesServiceGetFacilityProcedure = "/api.facilities.FacilitiesService/GetFacility"
@@ -33,12 +33,12 @@ const (
 	FacilitiesServiceGetAllCoordsProcedure = "/api.facilities.FacilitiesService/GetAllCoords"
 
 	// AuthLoginProcedure is the fully-qualified name of the Auth's Login RPC.
-	AuthLoginProcedure = "/api.auth.Auth/Login"
+	AuthLoginProcedure = "/api.auth.Auth/Login" // nolint:gosec
 	// AuthRegisterProcedure is the fully-qualified name of the Auth's Register RPC.
-	AuthRegisterProcedure = "/api.auth.Auth/Register"
+	AuthRegisterProcedure = "/api.auth.Auth/Register" // nolint:gosec
 
-	AuthVerify2FACodeProcedure        = "/api.auth.Auth/Verify2FACode"
-	AuthRequestResetPasswordProcedure = "/api.auth.Auth/RequestResetPassword"
-	AuthResetPasswordProcedure        = "/api.auth.Auth/ResetPassword"
-	AuthVerifyResetPassword           = "/api.auth.Auth/VerifyResetPassword"
+	AuthVerify2FACodeProcedure        = "/api.auth.Auth/Verify2FACode"        // nolint:gosec
+	AuthRequestResetPasswordProcedure = "/api.auth.Auth/RequestResetPassword" // nolint:gosec
+	AuthResetPasswordProcedure        = "/api.auth.Auth/ResetPassword"        // nolint:gosec
+	AuthVerifyResetPassword           = "/api.auth.Auth/VerifyResetPassword"  // nolint:gosec
 )
