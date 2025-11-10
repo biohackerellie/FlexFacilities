@@ -5,7 +5,7 @@ export type SideBarType = {
 
 const userSideBar: SideBarType = [
   { title: 'Reservations', href: '/account' },
-  { title: 'Details', href: '/account/details' },
+  // { title: 'Details', href: '/account/details' },
 ];
 
 const adminSideBar: SideBarType = [

@@ -49,10 +49,12 @@ func (f *FacilityStore) Get(ctx context.Context, id int64) (*models.FullFacility
 
 	var building models.Building
 	if err := f.db.GetContext(ctx, &building, "SELECT * FROM building WHERE id = $1", facility.BuildingID); err != nil {
+
 		if errors.Is(err, sql.ErrNoRows) {
 			building = models.Building{}
 		}
 		return nil, err
+
 	}
 	facilityWithCategories := &models.FullFacility{
 		Facility:       &facility,
@@ -60,7 +62,6 @@ func (f *FacilityStore) Get(ctx context.Context, id int64) (*models.FullFacility
 		Categories:     categories,
 		ReservationIDs: reservationIds,
 	}
-	f.log.Debug("got facility", "facility", facilityWithCategories)
 	return facilityWithCategories, nil
 }
 

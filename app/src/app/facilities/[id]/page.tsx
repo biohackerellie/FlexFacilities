@@ -1,4 +1,5 @@
 import { ExternalLink } from 'lucide-react';
+import { cacheTag } from 'next/cache';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -16,8 +17,37 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { getEventsByFacility, getFacility } from '@/lib/actions/facilities';
+import { logger } from '@/lib/logger';
+import { client } from '@/lib/rpc';
 import { toBase64 } from '@/lib/utils';
+
+async function getFacility(id: string) {
+  'use cache: private';
+  const { data: facility, error } = await client
+    .facilities()
+    .getFacility({ id: id });
+
+  if (error) {
+    logger.error('Error fetching facilities', { 'error ': error });
+    return null;
+  }
+  cacheTag('facility', id);
+  logger.debug('building', { building: facility?.building });
+  return facility;
+}
+
+async function getEventsByFacility(id: string) {
+  'use cache: private';
+  const { data: events, error } = await client
+    .facilities()
+    .getEventsByFacility({ id: id });
+  if (error) {
+    logger.error('Error fetching facilities', { 'error ': error });
+    return null;
+  }
+  cacheTag(`events-${id}`);
+  return events;
+}
 
 export default async function FacilityPage({
   params,

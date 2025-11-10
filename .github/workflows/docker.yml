@@ -44,12 +44,11 @@ jobs:
         with:
           images: ${{matrix.image}}
           flavor: |
-            latest=false
+            latest=true
           tags: |
             type=ref,event=branch
             type=schedule,enable=true,priority=1000,prefix=,suffix=,pattern=nightly
             type=match,pattern=v(.*),group=1
-            type=raw,value=latest,enable=true
           labels: |
             org.opencontainers.image.title=${{matrix.name}}
             org.opencontainers.image.description=FlexFacilities's open source containers

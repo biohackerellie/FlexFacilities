@@ -382,6 +382,7 @@ func (f *FullFacility) ToProto() *pbFacilities.FullFacility {
 		Facility:      f.Facility.ToProto(),
 		Categories:    protoCategories,
 		ReservationId: f.ReservationIDs,
+		Building:      f.Building.ToProto(),
 	}
 }
 

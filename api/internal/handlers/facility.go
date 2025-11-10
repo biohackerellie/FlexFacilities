@@ -66,6 +66,7 @@ func (a *FacilityHandler) GetFacility(ctx context.Context, req *connect.Request[
 		Facility:      facility.Facility,
 		Categories:    facility.Categories,
 		ReservationId: facility.ReservationId,
+		Building:      facility.Building,
 	}), nil
 }
 func (a *FacilityHandler) GetFacilityCategories(ctx context.Context, req *connect.Request[service.GetFacilityCategoriesRequest]) (*connect.Response[service.GetFacilityCategoriesResponse], error) {

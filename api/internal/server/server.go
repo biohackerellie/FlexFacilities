@@ -48,6 +48,7 @@ func NewServer(handlers *handlers.Handlers, log *slog.Logger) *http.ServeMux {
 		r.HandleFunc("/logout", handlers.Auth.LogoutHandler)
 	})
 	r.Route("/files", func(r chi.Router) {
+		r.Get("/images/{file}", handlers.FilesHandler.GetImage)
 		r.Get("/images/{building}/{file}", handlers.FilesHandler.GetFacilityImage)
 		r.Get("/images/{building}/{facility}/{file}", handlers.FilesHandler.GetFacilityImage)
 		r.Post("/images/{building}/{facility}", handlers.FilesHandler.UploadFacilityImage)

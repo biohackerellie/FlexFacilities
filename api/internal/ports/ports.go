@@ -76,3 +76,7 @@ type AuthService interface {
 	CleanupExpiredTokens(ctx context.Context)
 	LogoutHandler(w http.ResponseWriter, r *http.Request)
 }
+
+type FileHandler interface {
+	GetImage(w http.ResponseWriter, r *http.Request)
+}

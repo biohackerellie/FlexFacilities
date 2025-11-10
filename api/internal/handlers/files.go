@@ -78,6 +78,22 @@ func (a *FileHandler) GetFacilityImage(w http.ResponseWriter, r *http.Request) {
 	http.ServeContent(w, r, path, time.Now(), reader)
 }
 
+// Hanlder gets other images like logo, cover, etc
+// @path: images/{file}
+func (a *FileHandler) GetImage(w http.ResponseWriter, r *http.Request) {
+	a.log.Debug("Get image", "path", r.URL.Path)
+	file := r.PathValue("file")
+	path := filepath.Join("images", file)
+	reader, err := a.fileStorage.Get(path)
+	if err != nil {
+		a.log.Error("Failed to get file", "err", err)
+		http.Error(w, "failed to get file", http.StatusBadRequest)
+		return
+	}
+	w.Header().Set("Cache-Control", "public, max-age=86400")
+	http.ServeContent(w, r, path, time.Now(), reader)
+}
+
 func (a *FileHandler) UploadFacilityImage(w http.ResponseWriter, r *http.Request) {
 	contentType := r.Header.Get("Content-Type")
 	if contentType != "multipart/form-data" {
