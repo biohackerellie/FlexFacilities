@@ -78,7 +78,7 @@ func (a *FileHandler) GetFacilityImage(w http.ResponseWriter, r *http.Request) {
 	http.ServeContent(w, r, path, time.Now(), reader)
 }
 
-// Hanlder gets other images like logo, cover, etc
+// Handler gets other images like logo, cover, etc
 // @path: images/{file}
 func (a *FileHandler) GetImage(w http.ResponseWriter, r *http.Request) {
 	a.log.Debug("Get image", "path", r.URL.Path)
