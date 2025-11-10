@@ -1,12 +1,12 @@
+import { cacheTag } from 'next/cache';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import * as React from 'react';
 import { Spinner } from '@/components/spinner';
 import { buttonVariants } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { client } from '@/lib/rpc';
 import { logger } from '@/lib/logger';
-import { cacheTag } from 'next/cache';
+import { client } from '@/lib/rpc';
 
 type LatLngTuple = [number, number, number?];
 interface ICoords {
