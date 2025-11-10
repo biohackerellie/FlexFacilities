@@ -6,7 +6,7 @@ async function handler(
   { params }: { params: Promise<{ path: string[] }> },
 ) {
   const path = await params.then((x) => x.path.join('/'));
-  const apiHost = process.env.API_URL ?? 'http://localhost';
+  const apiHost = process.env.API_HOST ?? 'http://localhost';
   const apiPort = process.env.API_PORT ?? '8080';
   const url = new URL(`/${path}`, `${apiHost}:${apiPort}`);
   request.nextUrl.searchParams.forEach((value, key) =>
