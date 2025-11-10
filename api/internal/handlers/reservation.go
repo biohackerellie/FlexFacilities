@@ -249,27 +249,25 @@ func (a *ReservationHandler) CreateReservation(ctx context.Context, req *connect
 	if err != nil {
 		return nil, err
 	}
-	if len(toEmails) == 0 {
-		toEmails = []string{"ellie@epklabs.com"}
+	if len(toEmails) != 0 {
+		toEmailsString := strings.Join(toEmails, ",")
+		var datesStr []string
+		for _, o := range occ {
+			datesStr = append(datesStr, o.Start.Format("2006-01-02"))
+		}
+		emailData := &emails.EmailData{
+			To:       toEmailsString,
+			Template: "newReservation.html",
+			Subject:  "New Reservation",
+			Data: map[string]any{
+				"Building": facility.Building.Name,
+				"Facility": facility.Facility.Name,
+				"Dates":    datesStr,
+				"URL":      fmt.Sprintf("%s/reservation/%v", a.config.FrontendUrl, id),
+			},
+		}
+		go emails.Send(emailData)
 	}
-	toEmailsString := strings.Join(toEmails, ",")
-	var datesStr []string
-	for _, o := range occ {
-		datesStr = append(datesStr, o.Start.Format("2006-01-02"))
-	}
-	emailData := &emails.EmailData{
-		To:       toEmailsString,
-		Template: "newReservation.html",
-		Subject:  "New Reservation",
-		Data: map[string]any{
-			"Building": facility.Building.Name,
-			"Facility": facility.Facility.Name,
-			"Dates":    datesStr,
-			"URL":      fmt.Sprintf("%s/reservation/%v", a.config.FrontendUrl, id),
-		},
-	}
-	go emails.Send(emailData)
-
 	return connect.NewResponse(&service.CreateReservationResponse{
 		Id: id,
 	}), nil

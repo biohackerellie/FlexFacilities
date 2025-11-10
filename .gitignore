@@ -1,4 +1,5 @@
 output.sql
+docker-compose.yml
 .cache
 www/
 .secrets.baseline
