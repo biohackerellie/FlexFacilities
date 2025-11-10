@@ -6,7 +6,7 @@
   "scripts": {
     "clean": "git clean -xdf .next node_modules",
     "dev": "next dev",
-    "build": "next build ",
+    "build": "next build --webpack",
     "start": "next start",
     "check": "biome check .",
     "check:fix": "biome check . --write --unsafe",

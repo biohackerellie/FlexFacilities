@@ -3,7 +3,7 @@ import { createConnectTransport } from '@connectrpc/connect-web';
 import { cookies } from 'next/headers';
 import { RPC } from './rpc';
 
-const base = `${process.env.FRONTEND_URL ?? 'http://localhost:3000'}/api`;
+const base = `${process.env.API_HOST ?? 'http://localhost'}:${process.env.API_PORT ?? '8080'}`;
 
 const transport = createConnectTransport({
   baseUrl: base,
