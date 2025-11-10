@@ -16,16 +16,15 @@ export function getAuthHeaders(
 
 export async function getCookies() {
   const cookieStore = await cookies();
-  let session = '';
-  let token = '';
-  for (const cookie of cookieStore.getAll()) {
-    if (cookie.name.includes('flexauth_token')) {
-      token = cookie.value;
-      continue;
-    }
-    if (cookie.name.includes('fleauth_session')) {
-      session = cookie.value;
-    }
-  }
+  const tokenName =
+    process.env.NODE_ENV === 'production'
+      ? 'Secure__flexauth_token'
+      : 'flexauth_token';
+  const sessionName =
+    process.env.NODE_ENV === 'production'
+      ? 'Secure__flexauth_session'
+      : 'Secure__flexauth_session';
+  const token = cookieStore.get(tokenName)?.value;
+  const session = cookieStore.get(sessionName)?.value;
   return { session, token };
 }
