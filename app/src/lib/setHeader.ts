@@ -23,7 +23,7 @@ export async function getCookies() {
   const sessionName =
     process.env.NODE_ENV === 'production'
       ? 'Secure__flexauth_session'
-      : 'Secure__flexauth_session';
+      : 'flexauth_session';
   const token = cookieStore.get(tokenName)?.value;
   const session = cookieStore.get(sessionName)?.value;
   return { session, token };
