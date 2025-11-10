@@ -9,7 +9,7 @@ import { getCookies } from '@/lib/setHeader';
 import { columns } from './columns';
 
 async function getData(id: string, session: string, token: string) {
-  'use server';
+  'use server: private';
   const authed = client.withAuth(session, token);
   const { data, error } = await authed
     .reservations()

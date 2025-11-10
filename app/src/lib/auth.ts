@@ -1,4 +1,3 @@
-import { cache } from 'react';
 import { logger } from './logger';
 import { client } from './rpc';
 import { getCookies } from './setHeader';
@@ -15,7 +14,7 @@ function parseRole(role: string): UserRole {
   }
 }
 
-export const auth = cache(async (): Promise<Session | null> => {
+export const auth = async (): Promise<Session | null> => {
   const { session, token } = await getCookies();
   if (!session || !token) {
     return null;
@@ -34,4 +33,4 @@ export const auth = cache(async (): Promise<Session | null> => {
     ...data,
     userRole: parseRole(data?.userRole),
   } as Session;
-});
+};

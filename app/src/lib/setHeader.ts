@@ -23,7 +23,7 @@ export async function getCookies() {
       token = cookie.value;
       continue;
     }
-    if (cookie.name.includes('session')) {
+    if (cookie.name.includes('fleauth_session')) {
       session = cookie.value;
     }
   }
