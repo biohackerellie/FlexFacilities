@@ -4,8 +4,9 @@ import * as React from 'react';
 import { Spinner } from '@/components/spinner';
 import { buttonVariants } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { getBranding } from '@/lib/actions/utility';
 import { client } from '@/lib/rpc';
+import { logger } from '@/lib/logger';
+import { cacheTag } from 'next/cache';
 
 type LatLngTuple = [number, number, number?];
 interface ICoords {
@@ -74,8 +75,19 @@ export default async function Home() {
   );
 }
 
+async function fetchBranding() {
+  'use cache';
+  const { data, error } = await client.utility().getBranding({});
+  if (error) {
+    logger.error('Error fetching branding', { 'error ': error });
+    return undefined;
+  }
+
+  cacheTag('branding');
+  return data;
+}
 async function Wrapped() {
-  const branding = await getBranding();
+  const branding = await fetchBranding();
   const LargeMap = dynamic(() => import('@/components/maps/large'), {
     loading: () => <Spinner />,
     ssr: !!false,

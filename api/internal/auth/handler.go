@@ -57,7 +57,7 @@ func (s *Auth) ClearJWTCookie(w http.ResponseWriter) {
 		MaxAge:   -1,
 	})
 	http.SetCookie(w, &http.Cookie{
-		Name: "session",
+		Name: fmt.Sprintf("%s%s", s.cookiePrefix, sessionCookieName),
 
 		Value:    "",
 		Path:     "/",

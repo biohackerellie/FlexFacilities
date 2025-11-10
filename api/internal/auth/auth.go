@@ -64,7 +64,7 @@ func NewAuth(db ports.UserStore, logger *slog.Logger, config *config.Config) *Au
 	authKey := []byte(os.Getenv("AUTH_SECRET"))
 	salt := []byte(os.Getenv("AUTH_SALT"))
 	encKey := generateEncryptionKey(authKey, salt)
-	secure := os.Getenv("ENVIRONMENT") == "production"
+	secure := config.AppEnv == "production"
 	var cookiePrefix string
 	if secure {
 		cookiePrefix = "Secure__"
