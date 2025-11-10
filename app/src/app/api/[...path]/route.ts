@@ -1,15 +1,14 @@
 import { cookies } from 'next/headers';
 import { type NextRequest, NextResponse } from 'next/server';
 
-const API_URL = 'http://0.0.0.0:8080';
-
 async function handler(
   request: NextRequest,
   { params }: { params: Promise<{ path: string[] }> },
 ) {
   const path = await params.then((x) => x.path.join('/'));
-
-  const url = new URL(`/${path}`, API_URL);
+  const apiHost = process.env.API_URL ?? 'http://localhost';
+  const apiPort = process.env.API_PORT ?? '8080';
+  const url = new URL(`/${path}`, `${apiHost}:${apiPort}`);
   request.nextUrl.searchParams.forEach((value, key) =>
     url.searchParams.append(key, value),
   );
