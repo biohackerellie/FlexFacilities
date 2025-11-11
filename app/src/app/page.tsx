@@ -1,4 +1,3 @@
-import { cacheTag } from 'next/cache';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import * as React from 'react';
@@ -19,7 +18,6 @@ interface mapCoords {
 }
 
 async function getAllMapCoords(): Promise<mapCoords | null> {
-  'use cache';
   const { data, error } = await client.facilities().getAllCoords({});
   if (error) return null;
   if (!data) return null;
@@ -76,14 +74,12 @@ export default async function Home() {
 }
 
 async function fetchBranding() {
-  'use cache';
   const { data, error } = await client.utility().getBranding({});
   if (error) {
     logger.error('Error fetching branding', { 'error ': error });
     return undefined;
   }
 
-  cacheTag('branding');
   return data;
 }
 async function Wrapped() {
@@ -99,7 +95,7 @@ async function Wrapped() {
           Welcome to
           <React.Suspense fallback={''}>
             {branding && <span> {branding.organizationName} </span>}
-          </React.Suspense>
+          </React.Suspense>{' '}
           Facility Rentals
         </h1>
       </div>

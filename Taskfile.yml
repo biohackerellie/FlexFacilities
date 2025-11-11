@@ -61,6 +61,12 @@ tasks:
     desc: start dev go and bun servers
     cmds:
       - concurrently --names "API,APP" --prefix "[{name}]" --prefix-colors "blue,magenta" "cd api && air -c .air.toml" "cd app && bun --env-file=../.env run dev"
+  dev:build:
+    desc: build front end and run and start dev backend
+    cmds:
+      - task build:bun
+      - concurrently --names "API,APP" --prefix "[{name}]" --prefix-colors "blue,magenta" "cd api && air -c .air.toml" "cd app && bun --env-file=../.env run next start"
+
   dev:go:
     desc: start dev go server
     dir: "{{.API_ROOT}}"

@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  output: "standalone",
+  // output: "standalone",
   typedRoutes: true,
   typescript: {
     ignoreBuildErrors: true

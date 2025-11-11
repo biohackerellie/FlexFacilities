@@ -6,7 +6,6 @@ import (
 	service "api/internal/proto/auth"
 	"context"
 	"errors"
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -23,7 +22,8 @@ func VerifyToken[T jwt.Claims](token string, claims T, key []byte) (*jwt.Token, 
 
 func (a *Auth) SetJWTCookie(w http.ResponseWriter, token string) {
 	http.SetCookie(w, &http.Cookie{
-		Name:     fmt.Sprintf("%s%s", a.cookiePrefix, jwtCookieName),
+		Name:     jwtCookieName,
+		MaxAge:   int(sessionLife.Seconds()),
 		Value:    token,
 		Path:     "/",
 		HttpOnly: true,
@@ -35,7 +35,7 @@ func (a *Auth) SetJWTCookie(w http.ResponseWriter, token string) {
 
 func (s *Auth) SetSessionCookie(w http.ResponseWriter, id string) {
 	http.SetCookie(w, &http.Cookie{
-		Name:     fmt.Sprintf("%s%s", s.cookiePrefix, sessionCookieName),
+		Name:     sessionCookieName,
 		Value:    id,
 		Path:     "/",
 		HttpOnly: true,
@@ -48,7 +48,7 @@ func (s *Auth) SetSessionCookie(w http.ResponseWriter, id string) {
 
 func (s *Auth) ClearJWTCookie(w http.ResponseWriter) {
 	http.SetCookie(w, &http.Cookie{
-		Name:     fmt.Sprintf("%s%s", s.cookiePrefix, jwtCookieName),
+		Name:     jwtCookieName,
 		Value:    "",
 		Path:     "/",
 		HttpOnly: true,
@@ -57,8 +57,7 @@ func (s *Auth) ClearJWTCookie(w http.ResponseWriter) {
 		MaxAge:   -1,
 	})
 	http.SetCookie(w, &http.Cookie{
-		Name: fmt.Sprintf("%s%s", s.cookiePrefix, sessionCookieName),
-
+		Name:     sessionCookieName,
 		Value:    "",
 		Path:     "/",
 		HttpOnly: true,
@@ -121,7 +120,6 @@ func requiresAuth(procedure string) bool {
 func (s *Auth) AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		procedure, ok := InferProcedure(r.URL)
-		s.logger.Debug("AuthMiddleware", "procedure", procedure)
 		if !ok {
 			// Not a grpc request
 			next.ServeHTTP(w, r)
@@ -129,44 +127,48 @@ func (s *Auth) AuthMiddleware(next http.Handler) http.Handler {
 		}
 
 		if !requiresAuth(procedure) {
-			s.logger.Debug("AuthMiddleware", "procedure", procedure, "reason", "does not require auth")
 			next.ServeHTTP(w, r)
 			return
 		}
 		var user *models.Users
 		authHeader := r.Header.Get("Authorization")
-		if authHeader == "" {
+		sessVal := r.Header.Get("X-Session")
+		if authHeader == "" && sessVal == "" {
 			_ = s.ErrW.Write(w, r, connect.NewError(connect.CodeUnauthenticated, errors.New("unauthenticated")))
 			return
 		}
 		splitToken := strings.Split(authHeader, " ")
 		if len(splitToken) != 2 {
+			s.logger.Debug("AuthMiddleware", "procedure", procedure, "reason", "invalid auth header", "header", authHeader)
 			_ = s.ErrW.Write(w, r, connect.NewError(connect.CodeUnauthenticated, errors.New("unauthenticated")))
 			return
 		}
 		jwtVal := splitToken[1]
-		sessVal := r.Header.Get("X-Session")
 		if sessVal == "" {
+			s.logger.Debug("AuthMiddleware", "procedure", procedure, "reason", "no session header", "header", sessVal)
 			_ = s.ErrW.Write(w, r, connect.NewError(connect.CodeUnauthenticated, errors.New("unauthenticated")))
 			return
 		}
 
 		session, err := s.db.GetSession(r.Context(), sessVal)
 		if err != nil {
+			s.logger.Debug("AuthMiddleware", "procedure", procedure, "reason", "invalid session", "header", sessVal)
 			_ = s.ErrW.Write(w, r, connect.NewError(connect.CodeUnauthenticated, errors.New("unauthenticated")))
 			return
 		}
 
 		token, err := VerifyToken(jwtVal, &Claims{}, s.key)
 		if err != nil {
+			s.logger.Debug("AuthMiddleware", "coudn't verify token", "oops", "errors", err)
 			if errors.Is(err, jwt.ErrTokenExpired) {
 				res, err := s.RefreshToken(r.Context(), session)
 				if err != nil {
+					s.logger.Debug("AuthMiddleware", "error", err, "reason", "failed to refresh token")
 					_ = s.ErrW.Write(w, r, connect.NewError(connect.CodeUnauthenticated, errors.New("unauthenticated")))
 					return
 				}
-				issueCookie(w, fmt.Sprintf("%s%s", s.cookiePrefix, jwtCookieName), res.NewToken, s.secure, 0)
-				issueCookie(w, fmt.Sprintf("%s%s", s.cookiePrefix, sessionCookieName), res.Session, s.secure, 0)
+				issueCookie(w, jwtCookieName, res.NewToken, s.secure, 0)
+				issueCookie(w, sessionCookieName, res.Session, s.secure, 0)
 				token, err = VerifyToken(res.NewToken, &Claims{}, s.key)
 				if err != nil {
 					_ = s.ErrW.Write(w, r, connect.NewError(connect.CodeUnauthenticated, errors.New("unauthenticated")))
@@ -199,6 +201,7 @@ func issueCookie(w http.ResponseWriter, name, val string, secure bool, maxAge in
 		Secure:   secure,
 		SameSite: http.SameSiteLaxMode,
 		MaxAge:   maxAge, // 0 => session cookie
+		Domain:   "",
 	})
 }
 
@@ -224,8 +227,6 @@ func (s *Auth) GetSessionHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Auth) LogoutHandler(w http.ResponseWriter, r *http.Request) {
-	issueCookie(w, fmt.Sprintf("%s%s", s.cookiePrefix, jwtCookieName), "", s.secure, -1)
-	issueCookie(w, fmt.Sprintf("%s%s", s.cookiePrefix, sessionCookieName), "", s.secure, -1)
 
 	authCTX, ok := r.Context().Value(utils.CtxKey("user")).(*AuthCTX)
 	if !ok || authCTX == nil {
@@ -240,7 +241,9 @@ func (s *Auth) LogoutHandler(w http.ResponseWriter, r *http.Request) {
 		return
 
 	}
-	http.Redirect(w, r, fmt.Sprintf("%s/api/logout", s.config.FrontendUrl), http.StatusTemporaryRedirect)
+
+	s.ClearJWTCookie(w)
+	http.Redirect(w, r, s.config.FrontendUrl, http.StatusTemporaryRedirect)
 }
 func (s *Auth) GetSession(ctx context.Context, req *connect.Request[service.GetSessionRequest]) (*connect.Response[service.GetSessionResponse], error) {
 	s.logger.Debug("GetSession", "ctx", ctx.Value(utils.CtxKey("user")))

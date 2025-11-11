@@ -20,7 +20,7 @@ const cookiesInterceptor: Interceptor = (next) => async (req) => {
       req.header.set('Authorization', `Bearer ${cookie.value}`);
       continue;
     }
-    if (cookie.name.includes('session')) {
+    if (cookie.name.includes('flexauth_session')) {
       req.header.set('X-Session', `${cookie.value}`);
     }
   }

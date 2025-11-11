@@ -24,17 +24,16 @@ import (
 )
 
 type Auth struct {
-	db           ports.UserStore
-	config       *config.Config
-	logger       *slog.Logger
-	key          []byte
-	providers    flexauth.ProviderRegistry
-	providerMu   sync.RWMutex
-	secure       bool
-	cookiePrefix string
-	tokenStore   map[string]TwoFACode
-	storeMu      sync.RWMutex
-	ErrW         *connect.ErrorWriter
+	db         ports.UserStore
+	config     *config.Config
+	logger     *slog.Logger
+	key        []byte
+	providers  flexauth.ProviderRegistry
+	providerMu sync.RWMutex
+	secure     bool
+	tokenStore map[string]TwoFACode
+	storeMu    sync.RWMutex
+	ErrW       *connect.ErrorWriter
 }
 type RefreshClaims struct {
 	RefreshToken string `json:"refreshToken"`
@@ -65,24 +64,17 @@ func NewAuth(db ports.UserStore, logger *slog.Logger, config *config.Config) *Au
 	salt := []byte(os.Getenv("AUTH_SALT"))
 	encKey := generateEncryptionKey(authKey, salt)
 	secure := config.AppEnv == "production"
-	var cookiePrefix string
-	if secure {
-		cookiePrefix = "Secure__"
-	} else {
-		cookiePrefix = "__"
-	}
 	return &Auth{
-		db:           db,
-		config:       config,
-		logger:       logger,
-		key:          encKey,
-		providers:    make(flexauth.ProviderRegistry),
-		providerMu:   sync.RWMutex{},
-		secure:       secure,
-		cookiePrefix: cookiePrefix,
-		tokenStore:   make(map[string]TwoFACode),
-		storeMu:      sync.RWMutex{},
-		ErrW:         connect.NewErrorWriter(),
+		db:         db,
+		config:     config,
+		logger:     logger,
+		key:        encKey,
+		providers:  make(flexauth.ProviderRegistry),
+		providerMu: sync.RWMutex{},
+		secure:     secure,
+		tokenStore: make(map[string]TwoFACode),
+		storeMu:    sync.RWMutex{},
+		ErrW:       connect.NewErrorWriter(),
 	}
 }
 
@@ -121,13 +113,13 @@ func (a *Auth) AuthCallback(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
-	a.logger.Debug("exchange code for token", "code", code)
 	tokens, err := provider.ExchangeCodeForToken(ctx, code)
 	if err != nil {
 		a.logger.Error("failed to exchange code for token", "error", err)
 		http.Error(w, "failed to exchange code for token", http.StatusBadRequest)
 		return
 	}
+	a.logger.Debug("exchange code for token", "tokens", tokens)
 	userInfo, err := provider.GetUserInfo(ctx, tokens.AccessToken)
 	if err != nil {
 		a.logger.Error("failed to get user info from auth provider", "error", err)
@@ -147,7 +139,10 @@ func (a *Auth) AuthCallback(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "failed to get or create user from database", http.StatusBadRequest)
 		return
 	}
-	accessToken, err := createToken(user.ID, user.Name, user.Email, user.Provider, user.Role, a.key)
+	expires := time.Second * time.Duration(tokens.ExpiresIn)
+
+	a.logger.Debug("create token", "refreshToken", tokens.RefreshToken, "expiresIn", expires)
+	accessToken, err := createToken(user.ID, user.Name, user.Email, user.Provider, user.Role, a.key, expires)
 	if err != nil {
 		a.logger.Error("failed to create token", "error", err)
 		http.Error(w, "failed to create token", http.StatusBadRequest)
@@ -206,7 +201,7 @@ func (a *Auth) BeginOauth(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, authURL, http.StatusTemporaryRedirect)
 }
 
-func createToken(userId, userName, userEmail, provider string, role models.UserRole, key []byte) (string, error) {
+func createToken(userId, userName, userEmail, provider string, role models.UserRole, key []byte, expiresIn time.Duration) (string, error) {
 	roleString := string(role)
 	claims := Claims{
 		userName,
@@ -216,7 +211,7 @@ func createToken(userId, userName, userEmail, provider string, role models.UserR
 		jwt.RegisteredClaims{
 			Subject:   userId,
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(absoluteExpiration)),
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(expiresIn)),
 			ID:        utils.GenerateRandomID(),
 		},
 	}
@@ -361,7 +356,7 @@ func (s *Auth) RefreshToken(ctx context.Context, session *models.Session) (*Refr
 	if err != nil {
 		return nil, err
 	}
-	newToken, err := createToken(user.ID, user.Name, user.Email, user.Provider, user.Role, s.key)
+	newToken, err := createToken(user.ID, user.Name, user.Email, user.Provider, user.Role, s.key, time.Duration(newAuthToken.ExpiresIn))
 	if err != nil {
 		return nil, err
 	}

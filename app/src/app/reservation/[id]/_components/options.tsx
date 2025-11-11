@@ -1,5 +1,4 @@
 'use client';
-import { notFound } from 'next/navigation';
 import * as React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -25,7 +24,7 @@ export default function Options({
 }) {
   const data = React.use(ReservationContext);
   const fac = React.use(facilitiesPromise);
-  if (!data || !fac) return notFound();
+  if (!data || !fac) return <div>no data</div>;
   const facilitiesflat = fac?.buildings.flatMap((b) => b.facilities);
   const facilities = facilitiesflat.map((f) => f.facility ?? ({} as Facility));
   const categoriesflat = facilitiesflat?.filter(

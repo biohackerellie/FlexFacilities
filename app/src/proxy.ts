@@ -1,8 +1,6 @@
 import { type NextRequest, NextResponse } from 'next/server';
-
 export function proxy(_req: NextRequest) {
   const response = NextResponse.next();
-
   return response;
 }
 

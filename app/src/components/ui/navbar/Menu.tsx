@@ -175,10 +175,10 @@ export default function NavMenu({ logo, session }: NavbarProps) {
           </div>
           <div className='flex gap-2'>
             <React.Activity mode={authorized ? 'visible' : 'hidden'}>
-              <Button asChild>
-                <Link href={AUTH_ITEMS.logout.href}>
-                  {AUTH_ITEMS.logout.title}
-                </Link>
+              <Button
+                onClick={() => (window.location.href = AUTH_ITEMS.logout.href)}
+              >
+                {AUTH_ITEMS.logout.title}
               </Button>
             </React.Activity>
             <React.Activity mode={authorized ? 'hidden' : 'visible'}>
@@ -243,13 +243,13 @@ export default function NavMenu({ logo, session }: NavbarProps) {
                       {MENUITEMS.map((item) => renderMobileMenuItem(item))}
                       {authorized
                         ? AUTHORIZED_MENU_ITEMS.map((item) =>
-                            renderMobileMenuItem(item),
-                          )
+                          renderMobileMenuItem(item),
+                        )
                         : null}
                       {admin
                         ? ADMIN_MENU_ITEMS.map((item) =>
-                            renderMobileMenuItem(item),
-                          )
+                          renderMobileMenuItem(item),
+                        )
                         : null}
                     </Accordion>
                   </React.Suspense>

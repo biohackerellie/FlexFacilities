@@ -1,6 +1,6 @@
+import { cookies } from 'next/headers';
 import { logger } from './logger';
 import { client } from './rpc';
-import { getCookies } from './setHeader';
 import type { Session, UserRole } from './types';
 
 function parseRole(role: string): UserRole {
@@ -14,20 +14,34 @@ function parseRole(role: string): UserRole {
   }
 }
 
-export const auth = async (): Promise<Session | null> => {
-  const { session, token } = await getCookies();
-  if (!session || !token) {
-    return null;
-  }
-
+async function fetchSession(session: string, token: string) {
   const authed = client.withAuth(session, token);
   const { data, error } = await authed.auth().getSession({});
-
   if (error) {
-    logger.debug('Failed to get session', { error });
     return null;
   }
-  if (!data) return null;
+  return data;
+}
+
+export const auth = async (): Promise<Session | null> => {
+  // DO NOT CACHE: Auth state depends on request-specific cookies
+  // Caching causes users to get stale auth results in production
+  const cookieStore = await cookies();
+  let session = '';
+  let token = '';
+  for (const cookie of cookieStore.getAll()) {
+    if (cookie.name.includes('flexauth_token')) {
+      token = cookie.value;
+    }
+    if (cookie.name.includes('flexauth_session')) {
+      session = cookie.value;
+    }
+  }
+
+  const data = await fetchSession(session, token);
+  if (!data) {
+    return null;
+  }
 
   return {
     ...data,

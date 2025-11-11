@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation';
+import { redirect } from 'next/navigation';
 import * as React from 'react';
 import { Spinner } from '@/components/spinner';
 import { Separator } from '@/components/ui/separator';
@@ -8,7 +8,7 @@ import { getReservation } from '@/lib/actions/reservations';
 import { getUser } from '@/lib/actions/users';
 import { auth } from '@/lib/auth';
 import { getCookies } from '@/lib/setHeader';
-import type { Facility, ReservationDate } from '@/lib/types';
+import type { Facility, ReservationDate, User } from '@/lib/types';
 import type { SideBarType } from '@/lib/validators/constants';
 import AdminPanel from './_components/adminButtons';
 import { ReservationProvider } from './_components/context';
@@ -22,24 +22,23 @@ export default async function reservationLayout({
 }) {
   const session = await auth();
   if (!session) {
-    return notFound();
+    return redirect('/login');
   }
   const { session: sessionId, token } = await getCookies();
   if (!sessionId || !token) {
-    return notFound();
+    return redirect('/login');
   }
   const isAdmin = session.userRole === 'ADMIN';
   const { id: paramsId } = await params;
   const data = await getReservation(paramsId, sessionId, token);
-  if (!data) return notFound();
+  if (!data) throw new Error('Reservation not found');
   const reservation = data.reservation;
-  if (!reservation) return notFound();
+  if (!reservation) throw new Error('Reservation not found');
   const { id, eventName } = reservation;
   const fac = await getFacility(String(reservation.facilityId));
   const facility = fac?.facility || null;
 
   const user = await getUser(reservation.userId, sessionId, token);
-  if (!user) return notFound();
   const authorized = session.userId === reservation.userId || isAdmin;
   const reservationItems: SideBarType = [
     {
@@ -74,7 +73,7 @@ export default async function reservationLayout({
   }
   const context = {
     reservation: reservation,
-    user: user,
+    user: user || ({} as User),
     facility: facility || ({} as Facility),
     dates: data.dates,
   };

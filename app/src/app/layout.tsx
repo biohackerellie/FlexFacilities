@@ -4,7 +4,6 @@ import * as React from 'react';
 import { ThemeProviders } from '@/components/contexts/providers/ThemeProvider';
 import Footer from '@/components/ui/footer';
 import { Toaster } from '@/components/ui/sonner';
-import { getBranding } from '@/lib/actions/utility';
 import { cn } from '@/lib/utils';
 
 import './styles/globals.css';
@@ -12,28 +11,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 export { meta as metadata } from './metadata';
 
-import type { Metadata, ResolvingMetadata } from 'next';
 import NavbarWrapper from '@/components/ui/navbar/wrapper';
 
-export async function generateMetadata(
-  parent: ResolvingMetadata,
-): Promise<Metadata> {
-  const branding = await getBranding();
-  const previous = await parent;
-  return {
-    title: branding?.organizationName
-      ? `${branding?.organizationName} Facility Rentals`
-      : previous.title,
-    description: branding?.organizationDescription ?? previous.description,
-    openGraph: {
-      title: branding?.organizationName
-        ? `${branding?.organizationName} Facility Rentals`
-        : previous.openGraph?.title,
-      description:
-        branding?.organizationDescription ?? previous.openGraph?.description,
-    },
-  };
-}
 const fontSans = Inter({
   subsets: ['latin'],
   variable: '--font-sans',

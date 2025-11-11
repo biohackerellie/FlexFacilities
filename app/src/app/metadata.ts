@@ -4,9 +4,8 @@ export const meta: Metadata = {
   title: 'FlexFacilities',
   description: 'Flexible Facility Rentals',
   keywords: ['Facility Rentals, Open Source, Facilities'],
-  authors: [{ name: 'Ellie Kerns', url: 'https://epklabs.com' }],
-  creator: 'Ellie Kerns',
-  publisher: 'EPKLabs',
+  creator: 'That gay gorl',
+  publisher: 'Antifa Gay Trans Mafia',
   openGraph: {
     title: 'FlexFacilities',
     description: 'Open Source Facility Rentals',

@@ -52,14 +52,14 @@ func (s *Auth) ResetPassword(ctx context.Context, req *connect.Request[service.L
 	if err != nil {
 		return nil, err
 	}
-	accessToken, err := createToken(user.ID, user.Name, user.Email, user.Provider, user.Role, s.key)
+	accessToken, err := createToken(user.ID, user.Name, user.Email, user.Provider, user.Role, s.key, sessionLife.Abs())
 	if err != nil {
 		return nil, err
 	}
 	response := &service.LoginResponse{}
 	w := connect.NewResponse(response)
 	cookie := &http.Cookie{
-		Name:     fmt.Sprintf("%s%s", s.cookiePrefix, jwtCookieName),
+		Name:     jwtCookieName,
 		Value:    accessToken,
 		Path:     "/",
 		HttpOnly: true,
@@ -85,7 +85,7 @@ func (s *Auth) ResetPassword(ctx context.Context, req *connect.Request[service.L
 		return nil, err
 	}
 	sessionCookie := &http.Cookie{
-		Name:     fmt.Sprintf("%s%s", s.cookiePrefix, sessionCookieName),
+		Name:     sessionCookieName,
 		Value:    sessionID,
 		Path:     "/",
 		HttpOnly: true,
@@ -137,7 +137,7 @@ func (s *Auth) Verify(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	accessToken, err := createToken(user.ID, user.Name, user.Email, user.Provider, user.Role, s.key)
+	accessToken, err := createToken(user.ID, user.Name, user.Email, user.Provider, user.Role, s.key, sessionLife.Abs())
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -179,7 +179,7 @@ func (s *Auth) Verify2FACode(ctx context.Context, req *connect.Request[service.V
 		return nil, err
 	}
 
-	accessToken, err := createToken(user.ID, user.Name, user.Email, user.Provider, user.Role, s.key)
+	accessToken, err := createToken(user.ID, user.Name, user.Email, user.Provider, user.Role, s.key, sessionLife.Abs())
 	if err != nil {
 		return nil, err
 	}
@@ -188,12 +188,14 @@ func (s *Auth) Verify2FACode(ctx context.Context, req *connect.Request[service.V
 	}
 	w := connect.NewResponse(response)
 	cookie := &http.Cookie{
-		Name:     fmt.Sprintf("%s%s", s.cookiePrefix, jwtCookieName),
+		Name:     jwtCookieName,
 		Value:    accessToken,
 		Path:     "/",
 		HttpOnly: true,
 		Secure:   s.secure,
 		SameSite: http.SameSiteLaxMode,
+		MaxAge:   int(sessionLife.Seconds()),
+		Domain:   "",
 	}
 	w.Header().Set("Set-Cookie", cookie.String())
 
@@ -212,7 +214,7 @@ func (s *Auth) Verify2FACode(ctx context.Context, req *connect.Request[service.V
 		return nil, err
 	}
 	sessionCookie := &http.Cookie{
-		Name:     fmt.Sprintf("%s%s", s.cookiePrefix, sessionCookieName),
+		Name:     sessionCookieName,
 		Value:    sessionID,
 		Path:     "/",
 		HttpOnly: true,

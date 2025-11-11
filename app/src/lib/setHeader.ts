@@ -14,16 +14,15 @@ export function getAuthHeaders(
   return headers;
 }
 
+export const TokenCookie = 'flexauth_token';
+
+export const SessionCookie = 'flexauth_session';
+
 export async function getCookies() {
   const cookieStore = await cookies();
-  const tokenName =
-    process.env.NODE_ENV === 'production'
-      ? 'Secure__flexauth_token'
-      : 'flexauth_token';
-  const sessionName =
-    process.env.NODE_ENV === 'production'
-      ? 'Secure__flexauth_session'
-      : 'flexauth_session';
+  const tokenName = TokenCookie;
+  const sessionName = SessionCookie;
+
   const token = cookieStore.get(tokenName)?.value;
   const session = cookieStore.get(sessionName)?.value;
   return { session, token };

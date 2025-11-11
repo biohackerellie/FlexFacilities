@@ -1,6 +1,49 @@
 import { cookies } from 'next/headers';
 import { type NextRequest, NextResponse } from 'next/server';
 
+// Parse Set-Cookie header to extract cookie options
+function parseSetCookie(setCookieValue: string) {
+  const parts = setCookieValue.split(';').map(p => p.trim());
+  const [nameValue] = parts;
+  const [name, value] = nameValue?.split('=') ?? ['', ''];
+
+  const options: {
+    path?: string;
+    domain?: string;
+    maxAge?: number;
+    expires?: Date;
+    httpOnly?: boolean;
+    secure?: boolean;
+    sameSite?: 'strict' | 'lax' | 'none';
+  } = {};
+
+  for (let i = 1; i < parts.length; i++) {
+    const part = parts[i];
+    if (!part) continue;
+
+    const [key, val] = part.split('=').map(s => s.trim());
+    const lowerKey = key?.toLowerCase() ?? '';
+
+    if (lowerKey === 'path') {
+      options.path = val;
+    } else if (lowerKey === 'domain') {
+      options.domain = val;
+    } else if (lowerKey === 'max-age') {
+      options.maxAge = Number.parseInt(val ?? '0', 10);
+    } else if (lowerKey === 'expires') {
+      options.expires = new Date(val ?? '');
+    } else if (lowerKey === 'httponly') {
+      options.httpOnly = true;
+    } else if (lowerKey === 'secure') {
+      options.secure = true;
+    } else if (lowerKey === 'samesite') {
+      options.sameSite = val?.toLowerCase() as 'strict' | 'lax' | 'none';
+    }
+  }
+
+  return { name, value, options };
+}
+
 async function handler(
   request: NextRequest,
   { params }: { params: Promise<{ path: string[] }> },
@@ -36,12 +79,14 @@ async function handler(
           key.toLowerCase(),
         )
       ) {
+        // Parse and set cookies properly with all attributes
         if (key.toLowerCase() === 'set-cookie') {
-          cookieStore.set(
-            `${value.split(';')[0]?.split('=')[0] ?? ''}`,
-            `${value.split(';')[0]?.split('=')[1] ?? ''}`,
-          );
+          const { name, value: cookieValue, options } = parseSetCookie(value);
+          if (name && cookieValue) {
+            cookieStore.set(name, cookieValue, options);
+          }
         }
+        // Forward all headers including Set-Cookie to browser
         responseHeaders.append(key, value);
       }
     }

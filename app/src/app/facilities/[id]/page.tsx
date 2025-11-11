@@ -2,7 +2,6 @@ import { ExternalLink } from 'lucide-react';
 import { cacheTag } from 'next/cache';
 import Image from 'next/image';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
 import * as React from 'react';
 import shimmer from '@/components/shimmer';
 import { Spinner } from '@/components/spinner';
@@ -58,7 +57,13 @@ export default async function FacilityPage({
   const fac = await getFacility(id);
   const events = await getEventsByFacility(id);
 
-  if (!fac || !fac.facility) return notFound();
+  if (!fac || !fac.facility) {
+    return (
+      <div className='container-wrapper'>
+        <div className='container'>Something went wrong</div>
+      </div>
+    );
+  }
   const facility = fac.facility;
   const map = `https://www.google.com/maps/search/?api=1&query=${fac.building?.address}`;
 
