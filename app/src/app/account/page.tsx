@@ -1,5 +1,4 @@
 import { ReloadIcon } from '@radix-ui/react-icons';
-import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 import { Separator } from '@/components/ui/separator';
 import { DataTable } from '@/components/ui/tables/reservations/data-table';
@@ -8,8 +7,11 @@ import { client } from '@/lib/rpc';
 import { getCookies } from '@/lib/setHeader';
 import { columns } from './columns';
 
-async function getData(id: string, session: string, token: string) {
+async function getData(id?: string, session?: string, token?: string) {
   'use server: private';
+  if (!id || !session || !token) {
+    return null;
+  }
   const authed = client.withAuth(session, token);
   const { data, error } = await authed
     .reservations()
@@ -24,9 +26,8 @@ async function getData(id: string, session: string, token: string) {
 
 export default async function Account() {
   const session = await auth();
-  if (!session) return notFound();
   const { session: sessionid, token } = await getCookies();
-  const data = await getData(session.userId, sessionid, token);
+  const data = await getData(session?.userId, sessionid, token);
   if (!data) {
     return <div>loading ...</div>;
   }

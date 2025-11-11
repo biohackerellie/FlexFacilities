@@ -3,7 +3,7 @@ import { type NextRequest, NextResponse } from 'next/server';
 
 // Parse Set-Cookie header to extract cookie options
 function parseSetCookie(setCookieValue: string) {
-  const parts = setCookieValue.split(';').map(p => p.trim());
+  const parts = setCookieValue.split(';').map((p) => p.trim());
   const [nameValue] = parts;
   const [name, value] = nameValue?.split('=') ?? ['', ''];
 
@@ -21,7 +21,7 @@ function parseSetCookie(setCookieValue: string) {
     const part = parts[i];
     if (!part) continue;
 
-    const [key, val] = part.split('=').map(s => s.trim());
+    const [key, val] = part.split('=').map((s) => s.trim());
     const lowerKey = key?.toLowerCase() ?? '';
 
     if (lowerKey === 'path') {
