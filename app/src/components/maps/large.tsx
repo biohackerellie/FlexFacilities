@@ -41,4 +41,4 @@ const LargeMap = (MapProps: MapProps) => {
     </MapContainer>
   );
 };
-export default LargeMap;
+export default React.memo(LargeMap);
