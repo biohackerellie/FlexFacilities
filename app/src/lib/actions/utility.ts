@@ -1,17 +1,13 @@
-'use server';
+import { cache } from 'react';
 import { logger } from '../logger';
 import { client } from '../rpc';
 
-async function fetchBranding() {
+export const getBranding = cache(async () => {
   const { data, error } = await client.utility().getBranding({});
   if (error) {
     logger.error('Error fetching branding', { 'error ': error });
-    return undefined;
+    return null;
   }
 
   return data;
-}
-
-export async function getBranding() {
-  return await fetchBranding();
-}
+});

@@ -119,13 +119,13 @@ func (a *Auth) AuthCallback(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "failed to exchange code for token", http.StatusBadRequest)
 		return
 	}
-	a.logger.Debug("exchange code for token", "tokens", tokens)
 	userInfo, err := provider.GetUserInfo(ctx, tokens.AccessToken)
 	if err != nil {
 		a.logger.Error("failed to get user info from auth provider", "error", err)
 		http.Error(w, "failed to get user info from auth provider", http.StatusBadRequest)
 		return
 	}
+	a.logger.Debug("info", "provider", providerName, "user info", userInfo)
 
 	user, err := a.GetOrCreateAuthUser(r.Context(), &models.Users{
 		ID:       userInfo.ID,
@@ -154,6 +154,7 @@ func (a *Auth) AuthCallback(w http.ResponseWriter, r *http.Request) {
 		ID:           sessionID,
 		RefreshToken: &tokens.RefreshToken,
 		UserID:       user.ID,
+		Provider:     user.Provider,
 		CreatedAt:    utils.TimeToPgTimestamptz(time.Now()),
 		ExpiresAt:    utils.TimeToPgTimestamptz(time.Now().Add(absoluteExpiration)),
 	}
@@ -219,22 +220,22 @@ func createToken(userId, userName, userEmail, provider string, role models.UserR
 	return token.SignedString(key)
 }
 
-func (s *Auth) createRefreshToken(userId, userName, userEmail, refreshToken, provider string, exp time.Duration) (string, error) {
-	claims := RefreshClaims{
-		refreshToken,
-		provider,
-		userName,
-		userEmail,
-		jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(exp)),
-			Subject:   userId,
-			IssuedAt:  jwt.NewNumericDate(time.Now()),
-			ID:        utils.GenerateRandomID(),
-		},
-	}
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString(s.key)
-}
+// func (s *Auth) createRefreshToken(userId, userName, userEmail, refreshToken, provider string, exp time.Duration) (string, error) {
+// 	claims := RefreshClaims{
+// 		refreshToken,
+// 		provider,
+// 		userName,
+// 		userEmail,
+// 		jwt.RegisteredClaims{
+// 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(exp)),
+// 			Subject:   userId,
+// 			IssuedAt:  jwt.NewNumericDate(time.Now()),
+// 			ID:        utils.GenerateRandomID(),
+// 		},
+// 	}
+// 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+// 	return token.SignedString(s.key)
+// }
 
 func generateEncryptionKey(secret, salt []byte) []byte {
 
@@ -319,29 +320,22 @@ type RefreshTokenResponse struct {
 	User     *models.Users
 }
 
-func (s *Auth) RefreshToken(ctx context.Context, session *models.Session) (*RefreshTokenResponse, error) {
-	token, err := VerifyToken(*session.RefreshToken, &RefreshClaims{}, s.key)
-	if err != nil {
-		return nil, err
-	}
-
-	claims, ok := token.Claims.(*RefreshClaims)
-	if !ok {
+func (s *Auth) RefreshToken(ctx context.Context, session *models.Session, providerName string) (*RefreshTokenResponse, error) {
+	if session.RefreshToken == nil {
 		return nil, errors.New("Invalid Refresh Token")
 	}
-	providerName := claims.Provider
+
 	s.providerMu.Lock()
 	provider := s.providers[providerName]
 	s.providerMu.Unlock()
 	if provider == nil {
 		return nil, errors.New("Invalid Refresh Token")
 	}
-	newAuthToken, err := provider.RefreshToken(ctx, claims.RefreshToken)
+	newAuthToken, err := provider.RefreshToken(ctx, *session.RefreshToken)
 	if err != nil {
 		return nil, err
 	}
-	ctx, cancel := context.WithTimeout(ctx, 30*time.Second)
-	defer cancel()
+
 	u, err := provider.GetUserInfo(ctx, newAuthToken.AccessToken)
 	if err != nil {
 		return nil, err
@@ -356,27 +350,34 @@ func (s *Auth) RefreshToken(ctx context.Context, session *models.Session) (*Refr
 	if err != nil {
 		return nil, err
 	}
-	newToken, err := createToken(user.ID, user.Name, user.Email, user.Provider, user.Role, s.key, time.Duration(newAuthToken.ExpiresIn))
-	if err != nil {
-		return nil, err
-	}
-	newRefreshToken, err := s.createRefreshToken(user.ID, user.Name, user.Email, newAuthToken.RefreshToken, user.Provider, absoluteExpiration)
+	newToken, err := createToken(
+		user.ID,
+		user.Name,
+		user.Email,
+		user.Provider,
+		user.Role,
+		s.key,
+		time.Second*time.Duration(newAuthToken.ExpiresIn),
+	)
 	if err != nil {
 		return nil, err
 	}
 
-	err = s.db.UpdateSession(ctx, &models.Session{
-		ID:           session.ID,
-		RefreshToken: &newRefreshToken,
-		ExpiresAt:    utils.TimeToPgTimestamptz(time.Now().Add(absoluteExpiration)),
-	})
-	if err != nil {
-		return nil, err
+	if newAuthToken.RefreshToken != "" {
+
+		err = s.db.UpdateSession(ctx, &models.Session{
+			ID:           session.ID,
+			RefreshToken: &newAuthToken.RefreshToken,
+			ExpiresAt:    utils.TimeToPgTimestamptz(time.Now().Add(absoluteExpiration)),
+		})
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return &RefreshTokenResponse{
 		NewToken: newToken,
-		Session:  newRefreshToken,
+		Session:  session.ID,
 		User:     user,
 	}, nil
 }

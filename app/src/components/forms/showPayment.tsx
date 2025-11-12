@@ -3,7 +3,7 @@
 
 import * as React from 'react';
 import { toast } from 'sonner';
-import { ReservationContext } from '@/app/reservation/[id]/_components/context';
+import { ReservationContext } from '@/app/(inner-app)/reservation/[id]/_components/context';
 import { GeneratePaymentLink } from '@/functions/other/payments';
 import { updateReservation } from '@/lib/actions/reservations';
 import { logger } from '@/lib/logger';

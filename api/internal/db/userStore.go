@@ -204,14 +204,14 @@ func (s *UserStore) DeleteSession(ctx context.Context, id string) error {
 	return err
 }
 
-const updateSessionQuery = `UPDATE sessions SET user_id = :user_id, refresh_token = :refresh_token, provider = :provider WHERE id = :id`
+const updateSessionQuery = `UPDATE sessions SET refresh_token = :refresh_token, provider = :provider, expires_at = :expires_at WHERE id = :id`
 
 func (s *UserStore) UpdateSession(ctx context.Context, session *models.Session) error {
 	args := map[string]any{
 		"id":            session.ID,
-		"user_id":       session.UserID,
 		"refresh_token": session.RefreshToken,
 		"provider":      session.Provider,
+		"expires_at":    session.ExpiresAt,
 	}
 	_, err := s.db.NamedExecContext(ctx, updateSessionQuery, args)
 	return err

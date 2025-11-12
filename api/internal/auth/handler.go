@@ -23,7 +23,7 @@ func VerifyToken[T jwt.Claims](token string, claims T, key []byte) (*jwt.Token, 
 func (a *Auth) SetJWTCookie(w http.ResponseWriter, token string) {
 	http.SetCookie(w, &http.Cookie{
 		Name:     jwtCookieName,
-		MaxAge:   int(sessionLife.Seconds()),
+		MaxAge:   int(absoluteExpiration.Seconds()),
 		Value:    token,
 		Path:     "/",
 		HttpOnly: true,
@@ -131,6 +131,9 @@ func (s *Auth) AuthMiddleware(next http.Handler) http.Handler {
 			return
 		}
 		var user *models.Users
+		var token *jwt.Token
+		var tokenErr error
+		jwtVal := ""
 		authHeader := r.Header.Get("Authorization")
 		sessVal := r.Header.Get("X-Session")
 		if authHeader == "" && sessVal == "" {
@@ -138,30 +141,24 @@ func (s *Auth) AuthMiddleware(next http.Handler) http.Handler {
 			return
 		}
 		splitToken := strings.Split(authHeader, " ")
-		if len(splitToken) != 2 {
-			s.logger.Debug("AuthMiddleware", "procedure", procedure, "reason", "invalid auth header", "header", authHeader)
-			_ = s.ErrW.Write(w, r, connect.NewError(connect.CodeUnauthenticated, errors.New("unauthenticated")))
-			return
+		if len(splitToken) > 1 {
+			jwtVal = splitToken[1]
 		}
-		jwtVal := splitToken[1]
 		if sessVal == "" {
-			s.logger.Debug("AuthMiddleware", "procedure", procedure, "reason", "no session header", "header", sessVal)
 			_ = s.ErrW.Write(w, r, connect.NewError(connect.CodeUnauthenticated, errors.New("unauthenticated")))
 			return
 		}
 
 		session, err := s.db.GetSession(r.Context(), sessVal)
 		if err != nil {
-			s.logger.Debug("AuthMiddleware", "procedure", procedure, "reason", "invalid session", "header", sessVal)
 			_ = s.ErrW.Write(w, r, connect.NewError(connect.CodeUnauthenticated, errors.New("unauthenticated")))
 			return
 		}
 
-		token, err := VerifyToken(jwtVal, &Claims{}, s.key)
-		if err != nil {
-			s.logger.Debug("AuthMiddleware", "coudn't verify token", "oops", "errors", err)
-			if errors.Is(err, jwt.ErrTokenExpired) {
-				res, err := s.RefreshToken(r.Context(), session)
+		token, tokenErr = VerifyToken(jwtVal, &Claims{}, s.key)
+		if tokenErr != nil || token == nil {
+			if errors.Is(tokenErr, jwt.ErrTokenExpired) || session != nil {
+				res, err := s.RefreshToken(r.Context(), session, session.Provider)
 				if err != nil {
 					s.logger.Debug("AuthMiddleware", "error", err, "reason", "failed to refresh token")
 					_ = s.ErrW.Write(w, r, connect.NewError(connect.CodeUnauthenticated, errors.New("unauthenticated")))
@@ -174,11 +171,11 @@ func (s *Auth) AuthMiddleware(next http.Handler) http.Handler {
 					_ = s.ErrW.Write(w, r, connect.NewError(connect.CodeUnauthenticated, errors.New("unauthenticated")))
 					return
 				}
-
 			} else {
 				_ = s.ErrW.Write(w, r, connect.NewError(connect.CodeUnauthenticated, errors.New("unauthenticated")))
 				return
 			}
+
 		}
 		user, err = userFromClaims(token)
 		if err != nil {
