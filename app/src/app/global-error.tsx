@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
 export default function GlobalError({
@@ -13,14 +14,15 @@ export default function GlobalError({
     console.error(error);
   }, [error]);
 
+  const router = useRouter();
   return (
-    <html lang='en' suppressHydrationWarning={true}>
-      <body>
-        <div>
-          <h2>Something went wrong!</h2>
-          <button onClick={() => reset()}>Try again</button>
-        </div>
-      </body>
-    </html>
+    <div className='container-wrapper'>
+      <div className='container'>
+        <h2>Something went wrong!</h2>
+        <p className='text-red-500'>{error.message}</p>
+        <button onClick={() => reset()}>Try again</button>
+        <button onClick={() => router.push('/')}>Home</button>
+      </div>
+    </div>
   );
 }

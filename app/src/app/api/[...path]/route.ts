@@ -62,6 +62,14 @@ async function handler(
 
   for (const cookie of cookieStore.getAll()) {
     rheaders.append('Cookie', `${cookie.name}=${cookie.value}`);
+    if (
+      cookie.name === 'flexauth_token' ||
+      cookie.name === 'flexauth_session'
+    ) {
+      if (path === 'auth/logout') {
+        cookieStore.delete(cookie.name);
+      }
+    }
   }
   try {
     const response = await fetch(url.toString(), {

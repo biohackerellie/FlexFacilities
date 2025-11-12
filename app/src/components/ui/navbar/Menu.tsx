@@ -3,7 +3,6 @@
 import { Menu } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import * as React from 'react';
 import {
   Accordion,
@@ -144,7 +143,6 @@ const MENUITEMS: MenuItem[] = [
 export default function NavMenu({ logo, session }: NavbarProps) {
   const authorized = !!session;
   const admin = session?.userRole === 'ADMIN';
-  const router = useRouter();
   const isMobile = useIsMobile();
   return (
     <section className='py-2 px-4 mb-2  border-b'>
@@ -176,10 +174,8 @@ export default function NavMenu({ logo, session }: NavbarProps) {
           </div>
           <div className='flex gap-2'>
             <React.Activity mode={authorized ? 'visible' : 'hidden'}>
-              <Button
-                onClick={() => router.push(AUTH_ITEMS.logout.href ?? '/')}
-              >
-                {AUTH_ITEMS.logout.title}
+              <Button asChild>
+                <a href={AUTH_ITEMS.logout.href}>{AUTH_ITEMS.logout.title}</a>
               </Button>
             </React.Activity>
             <React.Activity mode={authorized ? 'hidden' : 'visible'}>
@@ -244,13 +240,13 @@ export default function NavMenu({ logo, session }: NavbarProps) {
                       {MENUITEMS.map((item) => renderMobileMenuItem(item))}
                       {authorized
                         ? AUTHORIZED_MENU_ITEMS.map((item) =>
-                            renderMobileMenuItem(item),
-                          )
+                          renderMobileMenuItem(item),
+                        )
                         : null}
                       {admin
                         ? ADMIN_MENU_ITEMS.map((item) =>
-                            renderMobileMenuItem(item),
-                          )
+                          renderMobileMenuItem(item),
+                        )
                         : null}
                     </Accordion>
                   </React.Suspense>

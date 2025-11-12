@@ -182,9 +182,11 @@ func (s *Auth) AuthMiddleware(next http.Handler) http.Handler {
 			_ = s.ErrW.Write(w, r, connect.NewError(connect.CodeUnauthenticated, errors.New("unauthenticated")))
 			return
 		}
-		s.logger.Debug("user", "user", user, "session", session)
 
-		ctx := WithAuthCTX(r.Context(), user, session.ID)
+		ctx := r.Context()
+		if user != nil && session != nil {
+			ctx = WithAuthCTX(r.Context(), user, session.ID)
+		}
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }

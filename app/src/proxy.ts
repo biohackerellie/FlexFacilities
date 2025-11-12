@@ -1,6 +1,9 @@
 import { type NextRequest, NextResponse } from 'next/server';
+import { logger } from './lib/logger';
+
 export function proxy(req: NextRequest) {
   const response = NextResponse.next();
+  const path = req.nextUrl.pathname;
   /* CSRF Protection */
   if (req.method !== 'GET') {
     const originHeader = req.headers.get('Origin');
@@ -30,17 +33,32 @@ export function proxy(req: NextRequest) {
     }
   }
   /* End CSRF Protection */
-  return response;
+  if (
+    path.startsWith('/facilities') ||
+    path.startsWith('/calendar') ||
+    path.startsWith('/login') ||
+    path === '/'
+  ) {
+    return response;
+  }
+  logger.info('Proxying unauthenticated request', {
+    path: path,
+    method: req.method,
+    origin: req.headers.get('Origin'),
+    host: req.headers.get('Host'),
+  });
+  return NextResponse.redirect(new URL('/login', req.url));
 }
 
 // The matcher property is used to specify which paths the middleware should run on.
 export const config = {
   matcher: [
     {
-      source: '/((?!trpc|_next/static|_next/image|favicon.ico).*)',
+      source: '/((?!api|trpc|_next/static|_next/image|favicon.ico).*)',
       missing: [
         { type: 'header', key: 'next-router-prefetch' },
         { type: 'header', key: 'purpose', value: 'prefetch' },
+        { type: 'cookie', key: 'flexauth_token' },
       ],
     },
   ],
