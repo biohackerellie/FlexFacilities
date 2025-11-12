@@ -67,11 +67,9 @@ func LogOptions(logLevel string, verbose bool, local bool) *log.HandlerOptions {
 					return log.Attr{}
 				}
 			case log.LevelKey:
-				if local {
-					level := a.Value.Any().(log.Level)
-					color := levelColors[level]
-					fmt.Print(color)
-				}
+				level := a.Value.Any().(log.Level)
+				color := levelColors[level]
+				fmt.Print(color + " " + a.Value.String() + RESET + " ")
 				return log.Attr{}
 			case log.MessageKey:
 				if local {
