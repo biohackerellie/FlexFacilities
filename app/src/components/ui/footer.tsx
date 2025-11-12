@@ -1,5 +1,7 @@
-'use client';
-export default function Footer() {
+import { connection } from 'next/server';
+
+export default async function Footer() {
+  await connection();
   const year = new Date().getFullYear();
   return (
     <footer className='bg-secondary/90 bottom-0  left-0 right-0 mt-5 hidden max-h-10 w-full flex-row items-center justify-around border-t border-t-gray-300 bg-opacity-90 p-2 text-secondary-foreground backdrop-blur-md sm:flex'>

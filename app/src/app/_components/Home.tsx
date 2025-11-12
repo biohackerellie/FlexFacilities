@@ -1,5 +1,6 @@
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import { connection } from 'next/server';
 import * as React from 'react';
 import { Spinner } from '@/components/spinner';
 import { buttonVariants } from '@/components/ui/button';
@@ -18,6 +19,7 @@ interface mapCoords {
 }
 
 const BrandingSection = async () => {
+  await connection();
   const brandingPromise = getBranding();
   const branding = await brandingPromise;
 

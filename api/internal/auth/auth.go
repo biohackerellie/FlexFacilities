@@ -329,7 +329,7 @@ func (s *Auth) RefreshToken(ctx context.Context, session *models.Session, provid
 	provider := s.providers[providerName]
 	s.providerMu.Unlock()
 	if provider == nil {
-		return nil, errors.New("Invalid Refresh Token")
+		return nil, errors.New("Invalid Provider")
 	}
 	newAuthToken, err := provider.RefreshToken(ctx, *session.RefreshToken)
 	if err != nil {
