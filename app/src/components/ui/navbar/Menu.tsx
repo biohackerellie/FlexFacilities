@@ -210,75 +210,76 @@ export default function NavMenu({ logo, session }: NavbarProps) {
                 alt={logo?.alt ?? 'Logo'}
               />
             </a>
-
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant='outline' size='icon'>
-                  <Menu className='size-4' />
-                </Button>
-              </SheetTrigger>
-              <SheetContent className='overflow-y-auto'>
-                <SheetHeader>
-                  <SheetTitle>
-                    <a href={logo?.url} className='flex items-center gap-2'>
-                      <Image
-                        src={logo?.src ?? '/logo.png'}
-                        width={50}
-                        height={50}
-                        alt={logo?.alt ?? 'Logo'}
-                      />
-                    </a>
-                  </SheetTitle>
-                </SheetHeader>
-                <div className='flex flex-col gap-6 p-4'>
-                  <React.Suspense fallback={<div>Loading...</div>}>
-                    <Accordion
-                      type='single'
-                      collapsible
-                      className='flex w-full flex-col gap-4'
-                    >
-                      {MENUITEMS.map((item) => renderMobileMenuItem(item))}
-                      {authorized
-                        ? AUTHORIZED_MENU_ITEMS.map((item) =>
+            <div className='flex items-center gap-2'>
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant='outline' size='icon'>
+                    <Menu className='size-4' />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent className='overflow-y-auto'>
+                  <SheetHeader>
+                    <SheetTitle>
+                      <a href={logo?.url} className='flex items-center gap-2'>
+                        <Image
+                          src={logo?.src ?? '/logo.png'}
+                          width={50}
+                          height={50}
+                          alt={logo?.alt ?? 'Logo'}
+                        />
+                      </a>
+                    </SheetTitle>
+                  </SheetHeader>
+                  <div className='flex flex-col gap-6 p-4'>
+                    <React.Suspense fallback={<div>Loading...</div>}>
+                      <Accordion
+                        type='single'
+                        collapsible
+                        className='flex w-full flex-col gap-4'
+                      >
+                        {MENUITEMS.map((item) => renderMobileMenuItem(item))}
+                        {authorized
+                          ? AUTHORIZED_MENU_ITEMS.map((item) =>
                             renderMobileMenuItem(item),
                           )
-                        : null}
-                      {admin
-                        ? ADMIN_MENU_ITEMS.map((item) =>
+                          : null}
+                        {admin
+                          ? ADMIN_MENU_ITEMS.map((item) =>
                             renderMobileMenuItem(item),
                           )
-                        : null}
-                    </Accordion>
-                  </React.Suspense>
+                          : null}
+                      </Accordion>
+                    </React.Suspense>
 
-                  <React.Suspense fallback={<div>Loading...</div>}>
-                    <div className='flex flex-col gap-3'>
-                      {authorized ? (
-                        <Button asChild variant='outline'>
-                          <Link href={AUTH_ITEMS.logout.href}>
-                            {AUTH_ITEMS.logout.title}
-                          </Link>
-                        </Button>
-                      ) : (
-                        <>
+                    <React.Suspense fallback={<div>Loading...</div>}>
+                      <div className='flex flex-col gap-3'>
+                        {authorized ? (
                           <Button asChild variant='outline'>
-                            <Link href={AUTH_ITEMS.login.href}>
-                              {AUTH_ITEMS.login.title}
+                            <Link href={AUTH_ITEMS.logout.href}>
+                              {AUTH_ITEMS.logout.title}
                             </Link>
                           </Button>
-                          <Button asChild>
-                            <Link href={AUTH_ITEMS.signup.href}>
-                              {AUTH_ITEMS.signup.title}
-                            </Link>
-                          </Button>
-                        </>
-                      )}
-                    </div>
-                  </React.Suspense>
-                </div>
-              </SheetContent>
-            </Sheet>
-            <ModeToggle />
+                        ) : (
+                          <>
+                            <Button asChild variant='outline'>
+                              <Link href={AUTH_ITEMS.login.href}>
+                                {AUTH_ITEMS.login.title}
+                              </Link>
+                            </Button>
+                            <Button asChild>
+                              <Link href={AUTH_ITEMS.signup.href}>
+                                {AUTH_ITEMS.signup.title}
+                              </Link>
+                            </Button>
+                          </>
+                        )}
+                      </div>
+                    </React.Suspense>
+                  </div>
+                </SheetContent>
+              </Sheet>
+              <ModeToggle />
+            </div>
           </div>
         </div>
       </React.Activity>

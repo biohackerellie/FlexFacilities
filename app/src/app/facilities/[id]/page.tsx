@@ -109,33 +109,38 @@ export default async function FacilityPage({
                     />
                   ) : (
                     <Image
-                      src='/logo.jpg'
+                      src='/logo.png'
                       alt={facility.name}
-                      width={480}
-                      height={480}
-                      className='drop-shadow-xl'
+                      fill
+                      className='drop-shadow-xl rounded-md object-cover h-full w-full border opacity-20 grayscale'
+                      sizes='(max-width: 1280px) 100vw, 33vw'
                     />
                   )}
                 </AspectRatio>
               </div>
               <div className='flex justify-center sm:hidden'>
-                {facility.imagePath ? (
-                  <Image
-                    src={facility.imagePath}
-                    alt={facility.name}
-                    width={300}
-                    height={300}
-                    className='shadow-md drop-shadow-md'
-                  />
-                ) : (
-                  <Image
-                    src='/logo.jpg'
-                    alt={facility.name}
-                    width={240}
-                    height={240}
-                    className='drop-shadow-xl'
-                  />
-                )}
+                <AspectRatio ratio={4 / 3}>
+                  {facility.imagePath ? (
+                    <Image
+                      src={`/api/files${facility.imagePath}`}
+                      alt={facility.name}
+                      fill
+                      className='rounded-md object-cover h-full w-full'
+                      placeholder={`data:image/svg+xml;base64,${toBase64(shimmer(700, 475))}`}
+                      blurDataURL='data:image/png'
+                      sizes='(max-width: 1280px) 100vw, 33vw'
+                      loading='lazy'
+                    />
+                  ) : (
+                    <Image
+                      src='/logo.png'
+                      alt={facility.name}
+                      fill
+                      className='drop-shadow-xl rounded-md object-cover h-full w-full border opacity-20 grayscale'
+                      sizes='(max-width: 1280px) 100vw, 33vw'
+                    />
+                  )}
+                </AspectRatio>
               </div>
               <div className='flex flex-col gap-4 justify-center items-center'>
                 <div className='relative  items-end align-bottom bottom-0'>

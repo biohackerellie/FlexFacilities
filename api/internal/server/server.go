@@ -73,7 +73,7 @@ func RecoveryInterceptor() connect.UnaryInterceptorFunc {
 					if id, ok := ctx.Value(utils.CtxKey("requestID")).(string); ok {
 						requestID = id
 					}
-					slog.Error("panic recovered",
+					slog.ErrorContext(ctx, "panic recovered",
 						"error", r,
 						"method", method,
 						"requestID", requestID,

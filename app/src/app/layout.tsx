@@ -30,26 +30,27 @@ export default function RootLayout({
     <html lang='en' suppressHydrationWarning={true}>
       <body
         className={cn(
-          'h-screen font-sans antialiased',
+          'min-h-screen font-sans antialiased',
           fontSans.variable,
           fontMono.variable,
         )}
       >
         <ThemeProviders attribute='class' defaultTheme='system' enableSystem>
-          <main>
+          <main className='min-h-[95vh]'>
             <div className='z-10'>
               <React.Suspense fallback={<Skeleton className='h-4 w-full' />}>
                 <NavbarWrapper />
               </React.Suspense>
             </div>
             <div className='container py-8'>{children}</div>
-            <div className='relative  align-bottom bottom-0 w-full'>
-              <React.Suspense fallback={footerSkeleton()}>
-                <Footer />
-              </React.Suspense>
-            </div>
             <Toaster />
           </main>
+
+          <div className='relative  align-bottom bottom-0 w-full'>
+            <React.Suspense fallback={footerSkeleton()}>
+              <Footer />
+            </React.Suspense>
+          </div>
         </ThemeProviders>
       </body>
     </html>
