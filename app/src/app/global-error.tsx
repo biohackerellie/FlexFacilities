@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { Button } from '@/components/ui/button';
 
 export default function GlobalError({
   error,
@@ -17,11 +18,17 @@ export default function GlobalError({
   const router = useRouter();
   return (
     <div className='container-wrapper'>
-      <div className='container'>
-        <h2>Something went wrong!</h2>
-        <p className='text-red-500'>{error.message}</p>
-        <button onClick={() => reset()}>Try again</button>
-        <button onClick={() => router.push('/')}>Home</button>
+      <div className='container '>
+        <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
+          <h2>Something went wrong!</h2>
+          <pre className='text-red-500'>
+            <code>{error.message}</code>
+          </pre>
+          <div className='flex gap-2'>
+            <Button onClick={() => reset()}>Try again</Button>
+            <Button onClick={() => router.push('/')}>Home</Button>
+          </div>
+        </div>
       </div>
     </div>
   );

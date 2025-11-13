@@ -65,7 +65,7 @@ export default function NewFacilityForm({
       toast.promise(createFacility(values), {
         loading: 'Creating...',
         success: () => {
-          form.reset;
+          window.location.href = '/admin/facilities';
           return 'Facility created!';
         },
         error: (error) => {
@@ -87,6 +87,7 @@ export default function NewFacilityForm({
             name='name'
             render={({ field }) => (
               <FormItem>
+                <FormLabel htmlFor='name'>Facility Name</FormLabel>
                 <FormControl>
                   <Input {...field} className={inputStyle} required />
                 </FormControl>
@@ -99,16 +100,17 @@ export default function NewFacilityForm({
             name='buildingId'
             render={({ field }) => (
               <FormItem>
+                <FormLabel htmlFor='buildingId'>Building</FormLabel>
                 <Select
                   onValueChange={field.onChange}
-                  defaultValue={field.value.toString()}
+                  defaultValue={field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
                       {field.value
                         ? buildingNames.find(
-                            (b) => b.id.toString() === field.value,
-                          )?.name
+                          (b) => b.id.toString() === field.value,
+                        )?.name
                         : 'Select a building'}
                     </SelectTrigger>
                   </FormControl>
@@ -132,8 +134,8 @@ export default function NewFacilityForm({
             name='capacity'
             render={({ field }) => (
               <FormItem>
+                <FormLabel htmlFor='capacity'>Capacity</FormLabel>
                 <FormControl>
-                  <FormLabel htmlFor='capacity'>Capacity</FormLabel>
                   <Input
                     {...field}
                     name='capacity'
@@ -150,14 +152,14 @@ export default function NewFacilityForm({
             name='category1'
             render={({ field }) => (
               <FormItem>
+                <FormLabel htmlFor='category1'>
+                  Category 1 Price per hour
+                </FormLabel>
                 <FormControl>
-                  <FormLabel htmlFor='category1'>
-                    Category 1 Price per hour
-                  </FormLabel>
                   <Input
                     {...field}
                     name='category1'
-                    value={field.value}
+                    value={field.value || 0}
                     className={inputStyle}
                   />
                 </FormControl>
@@ -170,10 +172,10 @@ export default function NewFacilityForm({
             name='category2'
             render={({ field }) => (
               <FormItem>
+                <FormLabel htmlFor='category2'>
+                  Category 2 Price per hour
+                </FormLabel>
                 <FormControl>
-                  <FormLabel htmlFor='category2'>
-                    Category 2 Price per hour
-                  </FormLabel>
                   <Input
                     {...field}
                     name='category2'
@@ -190,10 +192,10 @@ export default function NewFacilityForm({
             name='category3'
             render={({ field }) => (
               <FormItem>
+                <FormLabel htmlFor='category3'>
+                  Category 3 Price per hour
+                </FormLabel>
                 <FormControl>
-                  <FormLabel htmlFor='category3'>
-                    Category 3 Price per hour
-                  </FormLabel>
                   <Input
                     {...field}
                     name='category3'
@@ -210,10 +212,8 @@ export default function NewFacilityForm({
             name='googleCalendarId'
             render={({ field }) => (
               <FormItem>
+                <FormLabel htmlFor='googlecalid'>Google Calendar ID</FormLabel>
                 <FormControl>
-                  <FormLabel htmlFor='googlecalid'>
-                    Google Calendar ID
-                  </FormLabel>
                   <Input
                     {...field}
                     className={inputStyle}
