@@ -56,8 +56,9 @@ func (cs *CalendarSync) syncCalendars(ctx context.Context) error {
 
 	cs.Logger.Info("Syncing calendars", "building_count", len(buildings))
 
-	// Process buildings concurrently
-	var wg sync.WaitGroup
+	// Process buildings sequentially to reduce API load
+	// The Calendar package handles rate limiting internally
+	errorCount := 0
 	for _, building := range buildings {
 		// Skip buildings without a calendar ID
 		if building.GoogleCalendarID == nil || *building.GoogleCalendarID == "" {
@@ -65,26 +66,32 @@ func (cs *CalendarSync) syncCalendars(ctx context.Context) error {
 			continue
 		}
 
-		wg.Add(1)
-		go func(buildingID int64, buildingName string, buildingCalendarID string) {
-			defer wg.Done()
+		if err := cs.syncBuildingCalendar(ctx, building.ID, building.Name, *building.GoogleCalendarID); err != nil {
+			cs.Logger.Error("Failed to sync building calendar",
+				"building_id", building.ID,
+				"building_name", building.Name,
+				"error", err,
+			)
+			errorCount++
+		} else {
+			cs.Logger.Info("Successfully synced building calendar",
+				"building_id", building.ID,
+				"building_name", building.Name,
+			)
+		}
 
-			if err := cs.syncBuildingCalendar(ctx, buildingID, buildingName, buildingCalendarID); err != nil {
-				cs.Logger.Error("Failed to sync building calendar",
-					"building_id", buildingID,
-					"building_name", buildingName,
-					"error", err,
-				)
-			} else {
-				cs.Logger.Info("Successfully synced building calendar",
-					"building_id", buildingID,
-					"building_name", buildingName,
-				)
-			}
-		}(building.ID, building.Name, *building.GoogleCalendarID)
+		// Check for context cancellation between buildings
+		select {
+		case <-ctx.Done():
+			return fmt.Errorf("sync cancelled after %d errors: %w", errorCount, ctx.Err())
+		default:
+		}
 	}
 
-	wg.Wait()
+	if errorCount > 0 {
+		return fmt.Errorf("sync completed with %d building errors", errorCount)
+	}
+
 	return nil
 }
 
@@ -96,7 +103,7 @@ func (cs *CalendarSync) syncBuildingCalendar(ctx context.Context, buildingID int
 	}
 
 	// Clear existing events from building calendar
-	if err := cs.clearBuildingCalendar(buildingCalendarID); err != nil {
+	if err := cs.clearBuildingCalendar(ctx, buildingCalendarID); err != nil {
 		return fmt.Errorf("failed to clear building calendar: %w", err)
 	}
 
@@ -128,7 +135,7 @@ func (cs *CalendarSync) syncBuildingCalendar(ctx context.Context, buildingID int
 		go func(facilityID int64, facilityName string, calendarID string) {
 			defer wg.Done()
 
-			events, err := cs.Calendar.ListEvents(calendarID)
+			events, err := cs.Calendar.ListEventsWithContext(ctx, calendarID)
 			if err != nil {
 				cs.Logger.Error("Failed to list events for facility",
 					"facility_id", facilityID,
@@ -183,7 +190,7 @@ func (cs *CalendarSync) syncBuildingCalendar(ctx context.Context, buildingID int
 	// Add all events to building calendar
 	errorCount := 0
 	for _, event := range allEvents {
-		if _, err := cs.Calendar.InsertEvent(buildingCalendarID, event); err != nil {
+		if _, err := cs.Calendar.InsertEventWithContext(ctx, buildingCalendarID, event); err != nil {
 			cs.Logger.Error("Failed to insert event into building calendar",
 				"building_id", buildingID,
 				"event_summary", event.Summary,
@@ -200,9 +207,9 @@ func (cs *CalendarSync) syncBuildingCalendar(ctx context.Context, buildingID int
 	return nil
 }
 
-func (cs *CalendarSync) clearBuildingCalendar(calendarID string) error {
+func (cs *CalendarSync) clearBuildingCalendar(ctx context.Context, calendarID string) error {
 	// List all events in the building calendar
-	events, err := cs.Calendar.ListEvents(calendarID)
+	events, err := cs.Calendar.ListEventsWithContext(ctx, calendarID)
 	if err != nil {
 		return fmt.Errorf("failed to list events: %w", err)
 	}
@@ -213,7 +220,7 @@ func (cs *CalendarSync) clearBuildingCalendar(calendarID string) error {
 
 	// Delete all events
 	for _, event := range events.Items {
-		if err := cs.Calendar.DeleteEvent(calendarID, event.Id); err != nil {
+		if err := cs.Calendar.DeleteEventWithContext(ctx, calendarID, event.Id); err != nil {
 			cs.Logger.Warn("Failed to delete event from building calendar",
 				"calendar_id", calendarID,
 				"event_id", event.Id,

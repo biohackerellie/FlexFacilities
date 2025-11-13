@@ -60,7 +60,7 @@ func Run(ctx context.Context, stdout io.Writer, getenv func(string, string) stri
 
 	dbService := repository.NewDBService(db, log)
 
-	cal, err := createCalendar(ctx, config)
+	cal, err := createCalendar(ctx, config, log)
 	if err != nil {
 		panic(err)
 	}
@@ -109,14 +109,23 @@ func Run(ctx context.Context, stdout io.Writer, getenv func(string, string) stri
 	return nil
 }
 
-func createCalendar(ctx context.Context, config *config.Config) (*calendar.Calendar, error) {
-	return calendar.NewCalendar(
+func createCalendar(ctx context.Context, config *config.Config, log *slog.Logger) (*calendar.Calendar, error) {
+	// Configure rate limiting to prevent hitting Google Calendar API limits
+	// Google allows ~10 queries per second per user
+	rateLimitConfig := &calendar.RateLimitConfig{
+		MaxConcurrent: 5,  // Limit to 5 concurrent API calls
+		MaxRetries:    5,  // Retry up to 5 times with exponential backoff
+		Logger:        log,
+	}
+
+	return calendar.NewCalendarWithRateLimit(
 		ctx,
 		config.GoogleClientID,
 		config.GoogleClientSecret,
 		config.GoogleRefreshToken,
 		config.Location,
 		config.Timezone,
+		rateLimitConfig,
 	)
 }
 
