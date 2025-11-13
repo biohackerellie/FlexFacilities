@@ -109,8 +109,8 @@ export default function NewFacilityForm({
                     <SelectTrigger>
                       {field.value
                         ? buildingNames.find(
-                          (b) => b.id.toString() === field.value,
-                        )?.name
+                            (b) => b.id.toString() === field.value,
+                          )?.name
                         : 'Select a building'}
                     </SelectTrigger>
                   </FormControl>

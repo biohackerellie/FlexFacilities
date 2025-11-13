@@ -240,13 +240,13 @@ export default function NavMenu({ logo, session }: NavbarProps) {
                         {MENUITEMS.map((item) => renderMobileMenuItem(item))}
                         {authorized
                           ? AUTHORIZED_MENU_ITEMS.map((item) =>
-                            renderMobileMenuItem(item),
-                          )
+                              renderMobileMenuItem(item),
+                            )
                           : null}
                         {admin
                           ? ADMIN_MENU_ITEMS.map((item) =>
-                            renderMobileMenuItem(item),
-                          )
+                              renderMobileMenuItem(item),
+                            )
                           : null}
                       </Accordion>
                     </React.Suspense>
