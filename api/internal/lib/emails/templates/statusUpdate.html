@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-    <meta charset="UTF-8">
-		<title>{{.Subject}}</title>
+		<title>Reservation Update</title>
+
     <style>
       body {
 				font-family: Arial, sans-serif;
@@ -20,9 +20,8 @@
     </style> 
 	</head>
 	<body>
-		<h1>{{.Subject}}</h1>
-    <h2>Your temporary authentication code: {{.Code}}</h2>
-    <p>Click here to verify, <a href="{{.URL}}" class="btn" target="_blank">Open</a></p>
+		<h1>Reservation Update</h1>
+    <p>The reservation "{{.Name}}" has been {{.Status}} </p>
 		<hr />
 		<p style="font-style: italic; font-size: small; color: gray">
 			This is an automated email. Replies will not be processed or read.

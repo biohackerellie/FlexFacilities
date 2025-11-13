@@ -102,7 +102,7 @@ func Run(ctx context.Context, stdout io.Writer, getenv func(string, string) stri
 		calendarSync := workers.NewWorker(&workers.CalendarSync{
 			FacilityStore: dbService.FacilityStore,
 			Calendar:      cal,
-			Interval:      8 * time.Hour,
+			Interval:      2 * time.Hour,
 			Logger:        log,
 		})
 		mgr.Add(calendarSync)

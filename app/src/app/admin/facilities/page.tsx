@@ -3,7 +3,6 @@ import { Suspense } from 'react';
 import { DataTable } from '@/components/ui/tables';
 import { logger } from '@/lib/logger';
 import { client } from '@/lib/rpc';
-import { getCookies } from '@/lib/setHeader';
 import TableSkeleton from '../requests/skeleton';
 import { columns, type TableFacility } from './columns';
 

@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"log/slog"
 	log "log/slog"
-	"strconv"
+	// "strconv"
 )
 
 const (
@@ -54,21 +54,23 @@ func LogOptions(logLevel string, verbose bool, local bool) *log.HandlerOptions {
 				}
 			case log.SourceKey:
 				source := a.Value.Any().(*log.Source)
-				if local {
+
+				if !verbose {
+					return log.Attr{}
+				}
+				if local && verbose {
 					// Use a different strategy for local logging
-					sourceInfo := fmt.Sprintf("%s:%s", CYAN+source.Function+RESET, GREEN+strconv.Itoa(source.Line)+RESET+"\n")
-					a.Value = log.StringValue(sourceInfo + "hi")
+
+					sourceInfo := fmt.Sprintf("%s:%d", source.Function, source.Line)
+					a.Value = log.StringValue(sourceInfo)
 					a.Key = "src"
+					fmt.Print(CYAN + " " + a.Value.String() + RESET + "\n")
 					return log.Attr{}
 				} else {
 					sourceInfo := fmt.Sprintf("%s:%d", source.Function, source.Line)
 					a.Value = log.StringValue(sourceInfo)
 					a.Key = "src"
-					return log.Attr{}
-				}
-
-				if !verbose {
-					return log.Attr{}
+					return a
 				}
 			case log.LevelKey:
 				level := a.Value.Any().(log.Level)
@@ -77,7 +79,7 @@ func LogOptions(logLevel string, verbose bool, local bool) *log.HandlerOptions {
 				return log.Attr{}
 			case log.MessageKey:
 				if local {
-					fmt.Print(a.Value, RESET, " ")
+					fmt.Print(YELLOW+" "+"message: "+RESET+" "+a.Value.String()+RESET, "\n")
 					return log.Attr{}
 				}
 			}
