@@ -158,7 +158,7 @@ func (s *Auth) AuthMiddleware(next http.Handler) http.Handler {
 		token, tokenErr = VerifyToken(jwtVal, &Claims{}, s.key)
 		if tokenErr != nil || token == nil {
 			if errors.Is(tokenErr, jwt.ErrTokenExpired) || session != nil {
-				res, err := s.RefreshToken(r.Context(), session, session.Provider)
+				res, err := s.RefreshToken(r.Context(), session)
 				if err != nil {
 					s.logger.Debug("AuthMiddleware", "error", err, "reason", "failed to refresh token")
 					_ = s.ErrW.Write(w, r, connect.NewError(connect.CodeUnauthenticated, errors.New("unauthenticated")))

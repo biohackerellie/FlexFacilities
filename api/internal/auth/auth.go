@@ -320,15 +320,22 @@ type RefreshTokenResponse struct {
 	User     *models.Users
 }
 
-func (s *Auth) RefreshToken(ctx context.Context, session *models.Session, providerName string) (*RefreshTokenResponse, error) {
+func (s *Auth) RefreshToken(ctx context.Context, session *models.Session) (*RefreshTokenResponse, error) {
 	if session.RefreshToken == nil {
 		return nil, errors.New("Invalid Refresh Token")
 	}
+	var providerName *string
+	providerName = &session.Provider
+	if providerName == nil {
+		providerName = new(string)
+		*providerName = "entra"
+	}
+
 	s.providerMu.Lock()
-	provider := s.providers[providerName]
+	provider := s.providers[*providerName]
 	s.providerMu.Unlock()
 	if provider == nil {
-		s.logger.Error("Invalid Provider", "provider", providerName)
+		s.logger.Error("Invalid Provider", "provider", *providerName)
 		provider = s.providers["entra"]
 	}
 	newAuthToken, err := provider.RefreshToken(ctx, *session.RefreshToken)
