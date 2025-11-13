@@ -187,6 +187,11 @@ func (a *FacilityHandler) GetEventsByFacility(ctx context.Context, req *connect.
 	if err != nil {
 		return nil, err
 	}
+	if res == nil || len(res.Items) == 0 {
+		return connect.NewResponse(&service.GetEventsByFacilityResponse{
+			Events: []*service.Event{},
+		}), nil
+	}
 	events := make([]*service.Event, len(res.Items))
 	for i, event := range res.Items {
 		events[i] = &service.Event{
