@@ -15,6 +15,7 @@ import {
   type getUserNotifications,
   newNotification,
 } from '@/lib/actions/users';
+import { getErrorMessage } from '@/lib/errors';
 
 type Props = {
   getNotificationsPromise: Promise<
@@ -39,7 +40,16 @@ export default function NotificationList({
   };
   const onSubmit = () => {
     if (!selectedBuilding) return;
-    toast.promise(newNotification({ userId, buildingId: selectedBuilding.id }));
+    toast.promise(
+      newNotification({ userId, buildingId: selectedBuilding.id }),
+      {
+        success: 'Success',
+        loading: 'Updating...',
+        error: (error) => {
+          return getErrorMessage(error);
+        },
+      },
+    );
   };
 
   return (

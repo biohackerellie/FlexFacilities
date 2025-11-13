@@ -54,7 +54,7 @@ export function proxy(req: NextRequest) {
 export const config = {
   matcher: [
     {
-      source: '/((?!api|trpc|_next/static|_next/image|favicon.ico).*)',
+      source: '/((?!api|trpc|_next/static|_next/image|favicon.ico|logo.png).*)',
       missing: [
         { type: 'header', key: 'next-router-prefetch' },
         { type: 'header', key: 'purpose', value: 'prefetch' },

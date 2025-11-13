@@ -86,7 +86,7 @@ func (a *UserHandler) GetNotifications(ctx context.Context, req *connect.Request
 func (a *UserHandler) GetUserNotifications(ctx context.Context, req *connect.Request[service.GetUserNotificationsRequest]) (*connect.Response[service.GetUserNotificationsResponse], error) {
 	notifications, err := a.userStore.GetUserNotifications(ctx, req.Msg.UserId)
 	if err != nil {
-		a.log.Error("Error getting user notifications", "error", err)
+		a.log.ErrorContext(ctx, "Error getting user notifications", "error", err)
 		return nil, err
 	}
 

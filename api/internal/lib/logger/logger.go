@@ -1,9 +1,13 @@
 package logger
 
 import (
+	"api/internal/auth"
+	"api/internal/lib/utils"
+	"context"
 	"fmt"
+	"log/slog"
 	log "log/slog"
-	"strconv"
+	// "strconv"
 )
 
 const (
@@ -44,27 +48,29 @@ func LogOptions(logLevel string, verbose bool, local bool) *log.HandlerOptions {
 		ReplaceAttr: func(groups []string, a log.Attr) log.Attr {
 			switch a.Key {
 			case log.TimeKey:
-				a.Value = log.StringValue(a.Value.Time().Format("01/02/2006 15:04:05"))
+				a.Value = log.StringValue(a.Value.Time().Local().Format("01/02/2006 15:04:05"))
 				if !verbose {
 					return log.Attr{}
 				}
 			case log.SourceKey:
 				source := a.Value.Any().(*log.Source)
-				if local && verbose {
-					// Use a different strategy for local logging
-					sourceInfo := fmt.Sprintf("%s:%s", CYAN+source.Function+RESET, GREEN+strconv.Itoa(source.Line)+RESET+"\n")
-					a.Value = log.StringValue(sourceInfo)
-					a.Key = "src"
-					return log.Attr{}
-				} else {
-					// For non-local or non-verbose, return plain source info
-					sourceInfo := fmt.Sprintf("%s:%d", source.Function, source.Line)
-					a.Value = log.StringValue(sourceInfo)
-					a.Key = "src"
-				}
 
 				if !verbose {
 					return log.Attr{}
+				}
+				if local && verbose {
+					// Use a different strategy for local logging
+
+					sourceInfo := fmt.Sprintf("%s:%d", source.Function, source.Line)
+					a.Value = log.StringValue(sourceInfo)
+					a.Key = "src"
+					fmt.Print(CYAN + " " + a.Value.String() + RESET + "\n")
+					return log.Attr{}
+				} else {
+					sourceInfo := fmt.Sprintf("%s:%d", source.Function, source.Line)
+					a.Value = log.StringValue(sourceInfo)
+					a.Key = "src"
+					return a
 				}
 			case log.LevelKey:
 				level := a.Value.Any().(log.Level)
@@ -73,7 +79,7 @@ func LogOptions(logLevel string, verbose bool, local bool) *log.HandlerOptions {
 				return log.Attr{}
 			case log.MessageKey:
 				if local {
-					fmt.Print(a.Value, RESET, " ")
+					fmt.Print(YELLOW+" "+"message: "+RESET+" "+a.Value.String()+RESET, "\n")
 					return log.Attr{}
 				}
 			}
@@ -81,4 +87,20 @@ func LogOptions(logLevel string, verbose bool, local bool) *log.HandlerOptions {
 		},
 	}
 	return config
+}
+
+type ContextLogger struct {
+	slog.Handler
+}
+
+func (c *ContextLogger) Handle(ctx context.Context, r slog.Record) error {
+	if user, ok := ctx.Value(utils.CtxKey("user")).(*auth.AuthCTX); ok {
+		r.AddAttrs(
+			slog.String("user_id", user.User.ID),
+			slog.String("user_email", user.User.Email),
+			slog.String("user_name", user.User.Name),
+			slog.String("user_role", user.User.Role.String()),
+		)
+	}
+	return c.Handler.Handle(ctx, r)
 }

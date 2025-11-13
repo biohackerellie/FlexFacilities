@@ -249,6 +249,9 @@ func (s *UserStore) GetUserNotifications(ctx context.Context, id string) ([]*mod
 			return nil, err
 		}
 	}
+	if len(notifications) == 0 {
+		return []*models.NotificationReadable{}, nil
+	}
 	ids := make([]int64, len(notifications))
 	for i, n := range notifications {
 		ids[i] = n.BuildingID

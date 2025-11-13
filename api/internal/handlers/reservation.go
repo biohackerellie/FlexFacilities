@@ -285,12 +285,17 @@ func (a *ReservationHandler) UpdateReservationStatus(ctx context.Context, req *c
 	status := models.ReservationApproved(req.Msg.GetStatus())
 	id := req.Msg.GetId()
 	resWrap, err := a.reservationStore.Get(ctx, id)
+
 	if err != nil {
 		a.log.Error("Reservation not found", "id", id)
 		return nil, err
 	}
 	res := resWrap.Reservation
-
+	reservationUser, err := a.userStore.Get(ctx, res.UserID)
+	if err != nil {
+		a.log.Error("User not found", "id", res.UserID)
+		return nil, err
+	}
 	if res.Approved == status && status != models.ReservationApprovedApproved {
 		return connect.NewResponse(&service.UpdateReservationResponse{}), nil
 	}
@@ -298,6 +303,18 @@ func (a *ReservationHandler) UpdateReservationStatus(ctx context.Context, req *c
 	if status != models.ReservationApprovedApproved {
 		if err := a.reservationStore.Update(ctx, &res); err != nil {
 			return nil, err
+		}
+		if status == models.ReservationApprovedDenied || status == models.ReservationApprovedCanceled {
+			emailData := &emails.EmailData{
+				To:       reservationUser.Email,
+				Template: "statusUpdate.html",
+				Subject:  "Reservation Status Update",
+				Data: map[string]any{
+					"Name":   res.EventName,
+					"Status": status,
+				},
+			}
+			go emails.Send(emailData)
 		}
 		return connect.NewResponse(&service.UpdateReservationResponse{}), nil
 	}
@@ -375,7 +392,16 @@ func (a *ReservationHandler) UpdateReservationStatus(ctx context.Context, req *c
 			}
 		}
 	}
-
+	emailData := &emails.EmailData{
+		To:       reservationUser.Email,
+		Template: "statusUpdate.html",
+		Subject:  "Reservation Status Update",
+		Data: map[string]any{
+			"Name":   res.EventName,
+			"Status": models.ReservationApprovedApproved,
+		},
+	}
+	go emails.Send(emailData)
 	if err := a.reservationStore.Update(ctx, &res); err != nil {
 		a.log.Error("Failed to update reservation after publish", "id", id, "err", err)
 		return nil, err

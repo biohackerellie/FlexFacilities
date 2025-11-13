@@ -268,10 +268,11 @@ func userFromClaims(t *jwt.Token) (*models.Users, error) {
 		return nil, errors.New("invalid token")
 	}
 	user := &models.Users{
-		ID:    claims.Subject,
-		Name:  claims.Name,
-		Email: claims.Email,
-		Role:  models.UserRole(claims.Role),
+		ID:       claims.Subject,
+		Name:     claims.Name,
+		Email:    claims.Email,
+		Provider: claims.Provider,
+		Role:     models.UserRole(claims.Role),
 	}
 	return user, nil
 }

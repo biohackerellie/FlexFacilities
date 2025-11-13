@@ -39,6 +39,7 @@ func Run(ctx context.Context, stdout io.Writer, getenv func(string, string) stri
 		logLevel = "info"
 	}
 	verboseLogging := config.VerboseLogging == "true"
+
 	local := config.AppEnv != "production"
 	if local {
 		err := godotenv.Load("../.env")
@@ -47,12 +48,17 @@ func Run(ctx context.Context, stdout io.Writer, getenv func(string, string) stri
 		}
 	}
 	logOptions := logger.LogOptions(strings.TrimSpace(strings.ToLower(logLevel)), verboseLogging, local)
-
+	var withContext *logger.ContextLogger
 	if local {
-		log = slog.New(slog.NewTextHandler(stdout, logOptions))
+		baselog := slog.NewTextHandler(stdout, logOptions)
+		withContext = &logger.ContextLogger{Handler: baselog}
 	} else {
-		log = slog.New(slog.NewJSONHandler(stdout, logOptions))
+		baselog := slog.NewJSONHandler(stdout, logOptions)
+		withContext = &logger.ContextLogger{Handler: baselog}
 	}
+
+	log = slog.New(withContext)
+	slog.SetDefault(log)
 
 	log.Info("Starting server", "local", local, "log_level", logLevel, "verbose_logging", verboseLogging)
 	db := repository.InitDB(ctx, config.DatabaseURL)
@@ -60,7 +66,7 @@ func Run(ctx context.Context, stdout io.Writer, getenv func(string, string) stri
 
 	dbService := repository.NewDBService(db, log)
 
-	cal, err := createCalendar(ctx, config)
+	cal, err := createCalendar(ctx, config, log)
 	if err != nil {
 		panic(err)
 	}
@@ -96,7 +102,7 @@ func Run(ctx context.Context, stdout io.Writer, getenv func(string, string) stri
 		calendarSync := workers.NewWorker(&workers.CalendarSync{
 			FacilityStore: dbService.FacilityStore,
 			Calendar:      cal,
-			Interval:      8 * time.Hour,
+			Interval:      2 * time.Hour,
 			Logger:        log,
 		})
 		mgr.Add(calendarSync)
@@ -109,14 +115,23 @@ func Run(ctx context.Context, stdout io.Writer, getenv func(string, string) stri
 	return nil
 }
 
-func createCalendar(ctx context.Context, config *config.Config) (*calendar.Calendar, error) {
-	return calendar.NewCalendar(
+func createCalendar(ctx context.Context, config *config.Config, log *slog.Logger) (*calendar.Calendar, error) {
+	// Configure rate limiting to prevent hitting Google Calendar API limits
+	// Google allows ~10 queries per second per user
+	rateLimitConfig := &calendar.RateLimitConfig{
+		MaxConcurrent: 5, // Limit to 5 concurrent API calls
+		MaxRetries:    5, // Retry up to 5 times with exponential backoff
+		Logger:        log,
+	}
+
+	return calendar.NewCalendarWithRateLimit(
 		ctx,
 		config.GoogleClientID,
 		config.GoogleClientSecret,
 		config.GoogleRefreshToken,
 		config.Location,
 		config.Timezone,
+		rateLimitConfig,
 	)
 }
 
