@@ -7,10 +7,9 @@ import { getCookies } from '@/lib/setHeader';
 import TableSkeleton from '../requests/skeleton';
 import { columns, type TableFacility } from './columns';
 
-async function getFacilities(session: string, token: string) {
+async function getFacilities() {
   'use cache';
-  const authed = client.withAuth(session, token);
-  const { data, error } = await authed.facilities().getAllFacilities({});
+  const { data, error } = await client.facilities().getAllFacilities({});
   if (error) {
     logger.error('error fetching facilities', { error: error });
     return [] as TableFacility[];
@@ -33,7 +32,7 @@ async function getFacilities(session: string, token: string) {
         imagePath: f.facility.imagePath,
         capacity: f.facility.capacity!,
         googleCalendarId: f.facility.googleCalendarId,
-        Category: f.categories.map((c) => c.id),
+        Category: f.categories.map((c) => String(c.price)),
       } as TableFacility;
       facilities.push(facility);
     }
@@ -43,11 +42,7 @@ async function getFacilities(session: string, token: string) {
 }
 
 export default async function adminFacilitiesPage() {
-  const { session, token } = await getCookies();
-  if (!session || !token) {
-    return null;
-  }
-  const data = await getFacilities(session, token);
+  const data = await getFacilities();
 
   return (
     <div className='space-y-7'>

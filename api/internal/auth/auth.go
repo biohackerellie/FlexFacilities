@@ -344,7 +344,7 @@ func (s *Auth) RefreshToken(ctx context.Context, session *models.Session, provid
 		ID:       u.ID,
 		Name:     u.Name,
 		Email:    u.Email,
-		Provider: providerName,
+		Provider: provider.Name(),
 	}
 	user, err := s.GetOrCreateAuthUser(ctx, authUser)
 	if err != nil {
@@ -368,6 +368,7 @@ func (s *Auth) RefreshToken(ctx context.Context, session *models.Session, provid
 		err = s.db.UpdateSession(ctx, &models.Session{
 			ID:           session.ID,
 			RefreshToken: &newAuthToken.RefreshToken,
+			Provider:     user.Provider,
 			ExpiresAt:    utils.TimeToPgTimestamptz(time.Now().Add(absoluteExpiration)),
 		})
 		if err != nil {

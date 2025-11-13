@@ -43,7 +43,7 @@ export default function RootLayout({
               </React.Suspense>
             </div>
             <div className='container py-8'>{children}</div>
-            <div className='fixed  align-bottom bottom-0 w-full'>
+            <div className='relative  align-bottom bottom-0 w-full'>
               <React.Suspense fallback={footerSkeleton()}>
                 <Footer />
               </React.Suspense>

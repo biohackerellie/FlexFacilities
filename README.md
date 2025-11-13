@@ -185,7 +185,6 @@ FlexFacilities uses a modern monorepo architecture:
 - **Database**: PostgreSQL with embedded migrations
 - **Protocol**: Protocol Buffers for type-safe API contracts
 
-For detailed architecture documentation, see [CLAUDE.md](./CLAUDE.md).
 
 ## Development Setup
 
@@ -204,10 +203,11 @@ For detailed architecture documentation, see [CLAUDE.md](./CLAUDE.md).
 git clone https://github.com/biohackerellie/FlexFacilities.git
 cd FlexFacilities
 
-# Install dependencies
-cd api && go mod download
-cd ../app && bun install
+# Install Task
+curl -L https://taskfile.dev/install.sh | bash
 
+# Install dependencies
+task install
 # Set up environment variables
 cp .env.example .env
 # Edit .env with your configuration
@@ -229,18 +229,6 @@ task gen:proto  # Regenerate Go + TypeScript code
 task gen:types  # Regenerate Next.js typed routes
 ```
 
-### Testing
-
-```bash
-# Frontend tests
-cd app && bun test
-
-# Backend tests
-cd api && go test ./...
-
-# Linting
-task lint
-```
 
 ## Roadmap
 
@@ -250,9 +238,6 @@ task lint
 - [ ] **Additional Auth Providers**: Google Workspace, SAML/SSO support
 - [ ] **Mobile App**: Native iOS/Android applications
 - [ ] **Advanced Reporting**: Analytics dashboard for facility usage
-- [ ] **Calendar Embedding**: Public calendar widgets for websites
-- [ ] **Equipment Reservations**: Support for equipment/resource booking
-- [ ] **Waitlist System**: Automated waitlist management for popular facilities
 
 ### Current Limitations
 
@@ -260,9 +245,6 @@ task lint
 - Authentication limited to Microsoft Entra ID and email/password with 2FA
 - Calendar sync requires Google Calendar API setup (optional)
 
-## Contributing
-
-Contributions are welcome! Please see [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines.
 
 ### Development Workflow
 
@@ -276,13 +258,12 @@ Contributions are welcome! Please see [CONTRIBUTING.md](./CONTRIBUTING.md) for g
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
+This project is licensed under the AGPL v3 License - see the [LICENSE](./LICENSE) file for details.
 
 ## Support
 
 - **Issues**: [GitHub Issues](https://github.com/biohackerellie/FlexFacilities/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/biohackerellie/FlexFacilities/discussions)
-- **Documentation**: See [CLAUDE.md](./CLAUDE.md) for technical details
 
 ## Acknowledgments
 

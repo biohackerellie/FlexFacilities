@@ -1,5 +1,5 @@
 'use server';
-import { cacheTag, revalidateTag } from 'next/cache';
+import { cacheTag, revalidatePath, revalidateTag } from 'next/cache';
 import { logger } from '@/lib/logger';
 import { client } from '@/lib/rpc';
 import { getCookies } from '../setHeader';
@@ -22,7 +22,7 @@ export async function getUserNotifications(
   session: string,
   token: string,
 ) {
-  'use cache';
+  'use cache: private';
   const authed = client.withAuth(session, token);
   const { data, error } = await authed
     .users()
@@ -30,7 +30,8 @@ export async function getUserNotifications(
   if (error) {
     logger.error(error.message);
   }
-  cacheTag('notifications');
+  cacheTag(`notifications-${id}`);
+
   return data?.notifications ?? [];
 }
 
@@ -46,5 +47,6 @@ export async function newNotification(notification: Partial<Notification>) {
     throw error;
   }
   revalidateTag('notifications', 'max');
-  revalidateTag(notification?.userId!, 'max');
+  revalidateTag(`notifications-${notification.userId}`, 'max');
+  revalidatePath(`/admin/users/${notification.userId}`, 'page');
 }

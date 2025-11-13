@@ -28,6 +28,7 @@ export const columns: ColumnDef<FullResWithFacilityName>[] = [
   },
   {
     accessorKey: 'reservationDate',
+    id: 'ReservationDate',
     header: ({ column }) => {
       return (
         <Button

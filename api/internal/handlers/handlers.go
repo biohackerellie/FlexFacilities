@@ -36,7 +36,7 @@ func New(dbService *repository.DBService, log *slog.Logger, config *config.Confi
 
 	entraProvider := entra.NewEntraProvider(entraconfig, config.EntraTenant)
 	authHandler := auth.NewAuth(dbService.UserStore, log, config)
-	authHandler.RegisterProvider("entra", entraProvider)
+	authHandler.RegisterProvider(entraProvider.Name(), entraProvider)
 
 	timezone, err := time.LoadLocation(config.Timezone)
 	if err != nil {

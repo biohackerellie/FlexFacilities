@@ -1,4 +1,5 @@
 output.sql
+.claude
 docker-compose.yml
 .cache
 www/
