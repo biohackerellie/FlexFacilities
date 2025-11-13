@@ -2,7 +2,7 @@
 
 > A free and open-source facility reservation system built for K-12 schools
 
-[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](LICENSE)(LICENSE)
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](LICENSE)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)](https://github.com/biohackerellie/FlexFacilities/pkgs/container/flexfacilities-api)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)](https://github.com/biohackerellie/FlexFacilities/pkgs/container/flexfacilities-web)
 
