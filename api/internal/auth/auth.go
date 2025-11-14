@@ -333,7 +333,7 @@ func (s *Auth) RefreshToken(ctx context.Context, session *models.Session) (*Refr
 		providerName = "entra"
 	}
 
-	if providerName == "email" {
+	if providerName == TwoProviderName {
 		parsed, err := VerifyToken(*session.RefreshToken, RefreshClaims{}, s.key)
 		if err != nil {
 			return nil, err
@@ -355,6 +355,9 @@ func (s *Auth) RefreshToken(ctx context.Context, session *models.Session) (*Refr
 			s.key,
 			sessionLife.Abs(),
 		)
+		if err != nil {
+			return nil, err
+		}
 
 		newRefreshToken, err := createToken(
 			user.ID,
@@ -365,7 +368,9 @@ func (s *Auth) RefreshToken(ctx context.Context, session *models.Session) (*Refr
 			s.key,
 			absoluteExpiration.Abs(),
 		)
-
+		if err != nil {
+			return nil, err
+		}
 		err = s.db.UpdateSession(ctx, &models.Session{
 			ID:           session.ID,
 			RefreshToken: &newRefreshToken,
