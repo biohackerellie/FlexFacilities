@@ -1,5 +1,5 @@
 'use server';
-import { cacheTag, revalidateTag } from 'next/cache';
+import { cacheTag, revalidatePath, revalidateTag } from 'next/cache';
 import { logger } from '@/lib/logger';
 import { client } from '@/lib/rpc';
 import type { FormData as CreateReservationSchema } from '../form-store';
@@ -72,7 +72,7 @@ export async function getReservation(
   session: string,
   token: string,
 ) {
-  'use cache';
+  'use cache: private';
   const authed = client.withAuth(session, token);
   const { data, error } = await authed
     .reservations()
@@ -245,4 +245,35 @@ export async function AggregateChartData(session: string, token: string) {
   }
   cacheTag('chartData');
   return data;
+}
+
+export async function uploadReservationDocument(
+  reservationID: string,
+  formData: FormData,
+) {
+  const { session, token } = await getCookies();
+  if (!session || !token) {
+    throw new Error('No session or token found');
+  }
+  const url = new URL(
+    `${process.env.FRONTEND_URL}/api/files/documents/${reservationID}`,
+  );
+
+  try {
+    await fetch(url, {
+      method: 'POST',
+      headers: {
+        // Don't set Content-Type manually - let fetch set it with boundary
+        'X-Session': session,
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
+  } catch (error) {
+    throw new Error('error uploading file', { cause: error });
+  }
+
+  revalidateTag('reservations', 'max');
+  revalidateTag(`reservation-${reservationID}`, 'max');
+  revalidatePath(`/reservation/${reservationID}/Insurance`, 'page');
 }

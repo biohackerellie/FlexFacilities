@@ -27,14 +27,13 @@ const getReservationQuery = "SELECT * FROM reservation WHERE id = $1 LIMIT 1"
 
 func (s *ReservationStore) Get(ctx context.Context, id int64) (*models.FullReservation, error) {
 	var reservation models.Reservation
-	stmt, _ := s.db.PreparexContext(ctx, getReservationQuery)
-	defer func() { _ = stmt.Close() }()
-	if err := stmt.GetContext(ctx, &reservation, id); err != nil {
+	if err := s.db.GetContext(ctx, &reservation, getReservationQuery, id); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, nil
 		}
 		return nil, err
 	}
+	s.log.Debug("got reservation", "res", reservation)
 	dates, err := s.GetDates(ctx, []int64{reservation.ID})
 	if err != nil {
 		return nil, err

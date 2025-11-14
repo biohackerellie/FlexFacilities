@@ -1,9 +1,30 @@
+import { cacheTag } from 'next/cache';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-
+import * as React from 'react';
+import { UploadFile } from '@/components/forms/uploadFile';
 import { Button } from '@/components/ui/button';
-import { getReservation } from '@/lib/actions/reservations';
+import { getBranding } from '@/lib/actions/utility';
+import { logger } from '@/lib/logger';
+import { client } from '@/lib/rpc';
 import { getCookies } from '@/lib/setHeader';
+
+async function getReservation(id: string, session: string, token: string) {
+  'use cache: private';
+  const authed = client.withAuth(session, token);
+  const { data, error } = await authed
+    .reservations()
+    .getReservation({ id: id });
+  if (error) {
+    logger.error('Error fetching reservation', { 'error ': error });
+    return null;
+  }
+
+  cacheTag(`reservation-${id}`, 'max');
+  cacheTag('reservations', 'max');
+
+  return data;
+}
 
 export default async function insurancePage({
   params,
@@ -11,16 +32,14 @@ export default async function insurancePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  const branding = await getBranding();
   const { session, token } = await getCookies();
   if (!session || !token) {
     return notFound();
   }
   const reservation = await getReservation(id, session, token);
   if (!reservation) return notFound();
-  let link;
-  if (reservation.reservation?.insuranceLink) {
-    link = reservation.reservation?.insuranceLink;
-  }
+  const link = reservation.reservation?.insuranceLink;
   return (
     <div className='space-y-7'>
       <div className=' '>
@@ -37,22 +56,27 @@ export default async function insurancePage({
                 <b className='underline decoration-red-500 decoration-8'>
                   Note:{' '}
                 </b>{' '}
-                Your policy must name <strong>{/* TODO: */}</strong> as an
-                additional insured.{' '}
+                <React.Suspense fallback={<h1>Loading...</h1>}>
+                  Your policy must name{' '}
+                  <strong>{branding?.organizationName}</strong> as an additional
+                  insured.{' '}
+                </React.Suspense>
               </h3>
               <div className='w-full'>
-                {link && (
+                <React.Activity mode={link ? 'visible' : 'hidden'}>
                   <div className='flex flex-row justify-between'>
                     <Button variant='outline' asChild>
-                      <Link href={link}>View Uploaded File</Link>
+                      <Link href={`/api/files/${link ?? ''}`}>
+                        View Uploaded File
+                      </Link>
                     </Button>
                   </div>
-                )}
+                </React.Activity>
               </div>
               <div className='my-3'>
-                {/* <React.Suspense fallback={<h1>Loading...</h1>}> */}
-                {/*   <UploadFile id={id} /> */}
-                {/* </React.Suspense> */}
+                <React.Suspense fallback={<h1>Loading...</h1>}>
+                  <UploadFile id={id} />
+                </React.Suspense>
                 Feature currently unavailable, please send insurance to the
                 school district
               </div>

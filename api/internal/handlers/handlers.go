@@ -26,7 +26,7 @@ type Handlers struct {
 func New(dbService *repository.DBService, log *slog.Logger, config *config.Config, cal *calendar.Calendar) *Handlers {
 
 	localFiles := files.NewLocalFileStorage(config.FilesPath, config.FrontendUrl)
-	filesHandler := NewFileHandler(localFiles, log)
+	filesHandler := NewFileHandler(localFiles, log, dbService.FacilityStore, dbService.ReservationStore)
 
 	entraconfig := flexauth.Config{
 		ClientID:     config.EntraClientID,

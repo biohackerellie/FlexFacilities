@@ -134,17 +134,24 @@ func (s *Auth) AuthMiddleware(next http.Handler) http.Handler {
 		var token *jwt.Token
 		var tokenErr error
 		jwtVal := ""
-		authHeader := r.Header.Get("Authorization")
-		sessVal := r.Header.Get("X-Session")
-		if authHeader == "" && sessVal == "" {
-			_ = s.ErrW.Write(w, r, connect.NewError(connect.CodeUnauthenticated, errors.New("unauthenticated")))
-			return
+		sessVal := ""
+		tokenCookie, err := r.Cookie(jwtCookieName)
+		if err != nil || tokenCookie == nil {
+			authHeader := r.Header.Get("Authorization")
+			splitToken := strings.Split(authHeader, " ")
+			if len(splitToken) > 1 {
+				jwtVal = splitToken[1]
+			}
+		} else {
+			jwtVal = tokenCookie.Value
 		}
-		splitToken := strings.Split(authHeader, " ")
-		if len(splitToken) > 1 {
-			jwtVal = splitToken[1]
+		sessionCookie, err := r.Cookie(sessionCookieName)
+		if err != nil || sessionCookie == nil {
+			sessVal = r.Header.Get("X-Session")
+		} else {
+			sessVal = sessionCookie.Value
 		}
-		if sessVal == "" {
+		if jwtVal == "" && sessVal == "" {
 			_ = s.ErrW.Write(w, r, connect.NewError(connect.CodeUnauthenticated, errors.New("unauthenticated")))
 			return
 		}
