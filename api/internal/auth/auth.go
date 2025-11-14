@@ -321,65 +321,117 @@ type RefreshTokenResponse struct {
 }
 
 func (s *Auth) RefreshToken(ctx context.Context, session *models.Session) (*RefreshTokenResponse, error) {
-	if session.RefreshToken == nil {
+	if session.RefreshToken == nil || session == nil {
 		return nil, errors.New("Invalid Refresh Token")
 	}
-	var providerName *string
-	providerName = &session.Provider
-	if providerName == nil {
-		providerName = new(string)
-		*providerName = "entra"
+
+	authUser := new(models.Users)
+	user := new(models.Users)
+	var newToken string
+	providerName := session.Provider
+	if providerName == "" {
+		providerName = "entra"
 	}
 
-	s.providerMu.Lock()
-	provider := s.providers[*providerName]
-	s.providerMu.Unlock()
-	if provider == nil {
-		s.logger.Error("Invalid Provider", "provider", *providerName)
-		provider = s.providers["entra"]
-	}
-	newAuthToken, err := provider.RefreshToken(ctx, *session.RefreshToken)
-	if err != nil {
-		return nil, err
-	}
+	if providerName == TwoProviderName {
+		parsed, err := VerifyToken(*session.RefreshToken, RefreshClaims{}, s.key)
+		if err != nil {
+			return nil, err
+		}
 
-	u, err := provider.GetUserInfo(ctx, newAuthToken.AccessToken)
-	if err != nil {
-		return nil, err
-	}
-	authUser := &models.Users{
-		ID:       u.ID,
-		Name:     u.Name,
-		Email:    u.Email,
-		Provider: provider.Name(),
-	}
-	user, err := s.GetOrCreateAuthUser(ctx, authUser)
-	if err != nil {
-		return nil, err
-	}
-	newToken, err := createToken(
-		user.ID,
-		user.Name,
-		user.Email,
-		user.Provider,
-		user.Role,
-		s.key,
-		time.Second*time.Duration(newAuthToken.ExpiresIn),
-	)
-	if err != nil {
-		return nil, err
-	}
+		authUser.Name = parsed.Claims.(RefreshClaims).Name
+		authUser.Email = parsed.Claims.(RefreshClaims).Email
+		authUser.Provider = "email"
+		user, err := s.GetOrCreateAuthUser(ctx, authUser)
+		if err != nil {
+			return nil, err
+		}
+		newToken, err = createToken(
+			user.ID,
+			user.Name,
+			user.Email,
+			user.Provider,
+			user.Role,
+			s.key,
+			sessionLife.Abs(),
+		)
+		if err != nil {
+			return nil, err
+		}
 
-	if newAuthToken.RefreshToken != "" {
-
+		newRefreshToken, err := createToken(
+			user.ID,
+			user.Name,
+			user.Email,
+			user.Provider,
+			user.Role,
+			s.key,
+			absoluteExpiration.Abs(),
+		)
+		if err != nil {
+			return nil, err
+		}
 		err = s.db.UpdateSession(ctx, &models.Session{
 			ID:           session.ID,
-			RefreshToken: &newAuthToken.RefreshToken,
+			RefreshToken: &newRefreshToken,
 			Provider:     user.Provider,
 			ExpiresAt:    utils.TimeToPgTimestamptz(time.Now().Add(absoluteExpiration)),
 		})
 		if err != nil {
 			return nil, err
+		}
+	} else {
+
+		s.providerMu.Lock()
+		provider := s.providers[providerName]
+		s.providerMu.Unlock()
+		if provider == nil {
+			s.logger.Error("Invalid Provider", "provider", providerName)
+			provider = s.providers["entra"]
+		}
+		newAuthToken, err := provider.RefreshToken(ctx, *session.RefreshToken)
+		if err != nil {
+			return nil, err
+		}
+
+		u, err := provider.GetUserInfo(ctx, newAuthToken.AccessToken)
+		if err != nil {
+			return nil, err
+		}
+		authUser = &models.Users{
+			ID:       u.ID,
+			Name:     u.Name,
+			Email:    u.Email,
+			Provider: provider.Name(),
+		}
+		user, err := s.GetOrCreateAuthUser(ctx, authUser)
+		if err != nil {
+			return nil, err
+		}
+		newToken, err = createToken(
+			user.ID,
+			user.Name,
+			user.Email,
+			user.Provider,
+			user.Role,
+			s.key,
+			time.Second*time.Duration(newAuthToken.ExpiresIn),
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		if newAuthToken.RefreshToken != "" {
+
+			err = s.db.UpdateSession(ctx, &models.Session{
+				ID:           session.ID,
+				RefreshToken: &newAuthToken.RefreshToken,
+				Provider:     user.Provider,
+				ExpiresAt:    utils.TimeToPgTimestamptz(time.Now().Add(absoluteExpiration)),
+			})
+			if err != nil {
+				return nil, err
+			}
 		}
 	}
 

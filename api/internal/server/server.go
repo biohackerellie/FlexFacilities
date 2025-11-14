@@ -51,9 +51,9 @@ func NewServer(handlers *handlers.Handlers, log *slog.Logger) *http.ServeMux {
 		r.Get("/images/{file}", handlers.FilesHandler.GetImage)
 		r.Get("/images/{building}/{file}", handlers.FilesHandler.GetFacilityImage)
 		r.Get("/images/{building}/{facility}/{file}", handlers.FilesHandler.GetFacilityImage)
-		r.Post("/images/{building}/{facility}", handlers.FilesHandler.UploadFacilityImage)
-		r.Get("/documents/{reservationID}/{file}", handlers.FilesHandler.GetReservationFile)
-		r.Post("/documents/{reservationID}", handlers.FilesHandler.UploadReservationFile)
+		r.With(handlers.Auth.AuthMiddleware).Post("/images/{building}/{facility}", handlers.FilesHandler.UploadFacilityImage)
+		r.With(handlers.Auth.AuthMiddleware).Get("/documents/{reservationID}/{file}", handlers.FilesHandler.GetReservationFile)
+		r.With(handlers.Auth.AuthMiddleware).Post("/documents/{reservationID}", handlers.FilesHandler.UploadReservationFile)
 	})
 	api.Handle("/", r)
 	return api

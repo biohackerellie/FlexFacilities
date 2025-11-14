@@ -374,9 +374,11 @@ type FullFacility struct {
 }
 
 func (f *FullFacility) ToProto() *pbFacilities.FullFacility {
-	protoCategories := make([]*pbFacilities.Category, len(f.Categories))
-	for i, category := range f.Categories {
-		protoCategories[i] = category.ToProto()
+	protoCategories := make([]*pbFacilities.Category, 0, len(f.Categories))
+	if f.Categories != nil || len(f.Categories) > 0 {
+		for _, category := range f.Categories {
+			protoCategories = append(protoCategories, category.ToProto())
+		}
 	}
 	return &pbFacilities.FullFacility{
 		Facility:      f.Facility.ToProto(),

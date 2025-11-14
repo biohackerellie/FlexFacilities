@@ -61,6 +61,9 @@ func (a *FacilityHandler) GetFacility(ctx context.Context, req *connect.Request[
 	if err != nil {
 		return nil, err
 	}
+	if res == nil {
+		return connect.NewResponse(&service.FullFacility{}), nil
+	}
 	facility := res.ToProto()
 	return connect.NewResponse(&service.FullFacility{
 		Facility:      facility.Facility,

@@ -183,6 +183,10 @@ func (s *Auth) Verify2FACode(ctx context.Context, req *connect.Request[service.V
 	if err != nil {
 		return nil, err
 	}
+	refreshToken, err := createToken(user.ID, user.Name, user.Email, user.Provider, user.Role, s.key, absoluteExpiration.Abs())
+	if err != nil {
+		return nil, err
+	}
 	response := &service.VerifyResponse{
 		Authorized: true,
 	}
@@ -202,7 +206,7 @@ func (s *Auth) Verify2FACode(ctx context.Context, req *connect.Request[service.V
 	sessionID := utils.GenerateRandomID()
 
 	session := &models.Session{
-		RefreshToken: &accessToken,
+		RefreshToken: &refreshToken,
 		UserID:       user.ID,
 		Provider:     user.Provider,
 		CreatedAt:    utils.TimeToPgTimestamptz(time.Now()),

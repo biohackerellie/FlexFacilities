@@ -30,7 +30,8 @@ async function getFacility(id: string) {
     logger.error('Error fetching facilities', { 'error ': error });
     return null;
   }
-  cacheTag('facility', id);
+  cacheTag(`facility-${id}`);
+  cacheTag('facilities');
   logger.debug('building', { building: facility?.building });
   return facility;
 }
@@ -173,6 +174,9 @@ export default async function FacilityPage({
                             </p>
                           </TooltipContent>
                         </Tooltip>
+                        <p className='col-span-1 col-start-3 text-right text-lg font-semibold'>
+                          ${category.price}/hr
+                        </p>
                       </div>
                     ))}
                   </div>

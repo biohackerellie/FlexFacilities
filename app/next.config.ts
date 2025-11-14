@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
   experimental: {
     turbopackFileSystemCacheForDev: true,
-    browserDebugInfoInTerminal: true
+    browserDebugInfoInTerminal: true,
   },
   pageExtensions: ["js", "jsx", "ts", "tsx", "md", "mdx"],
 };
