@@ -736,7 +736,8 @@ func (a *ReservationHandler) DeleteReservationFee(ctx context.Context, req *conn
 
 // Get the total cost of the reservation, rounded to 2 decimal places
 func (a *ReservationHandler) CostReducer(ctx context.Context, req *connect.Request[service.CostReducerRequest]) (*connect.Response[service.CostReducerResponse], error) {
-	reservation, err := a.reservationStore.Get(ctx, req.Msg.GetId())
+	id := req.Msg.GetId()
+	reservation, err := a.reservationStore.Get(ctx, id)
 	if err != nil {
 		return nil, err
 	}
@@ -745,6 +746,18 @@ func (a *ReservationHandler) CostReducer(ctx context.Context, req *connect.Reque
 	if err != nil {
 		return nil, err
 	}
+
+	stringCost, err := reducer(ctx, category, reservation)
+	if err != nil {
+		return nil, err
+	}
+	return connect.NewResponse(&service.CostReducerResponse{
+		Cost: stringCost,
+	}), nil
+}
+
+func reducer(ctx context.Context, category *models.Category, reservation *models.FullReservation) (string, error) {
+
 	var total time.Duration
 	for _, date := range reservation.Dates {
 		if date.Approved != models.ReservationDateApprovedApproved {
@@ -753,7 +766,7 @@ func (a *ReservationHandler) CostReducer(ctx context.Context, req *connect.Reque
 		start := date.LocalStart.Time
 		end := date.LocalEnd.Time
 		if end.Before(start) {
-			return nil, fmt.Errorf("end before start for date id %d", date.ID)
+			return "", fmt.Errorf("end before start for date id %d", date.ID)
 		}
 		total += end.Sub(start)
 	}
@@ -767,10 +780,7 @@ func (a *ReservationHandler) CostReducer(ctx context.Context, req *connect.Reque
 	feeCents := int64(math.Round(fees * 100))
 	costCents := int64(math.Round(float64(pricePerHourCents) * float64(totalMinutes) / 60.0))
 	totalCents := max(costCents+feeCents, 0)
-	stringCost := fmt.Sprintf("%.2f", float64(totalCents)/100.0)
-	return connect.NewResponse(&service.CostReducerResponse{
-		Cost: stringCost,
-	}), nil
+	return fmt.Sprintf("%.2f", float64(totalCents)/100.0), nil
 }
 
 func (a *ReservationHandler) GetAllPending(ctx context.Context, req *connect.Request[service.GetAllReservationsRequest]) (*connect.Response[service.AllPendingResponse], error) {
