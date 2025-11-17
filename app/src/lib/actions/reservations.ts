@@ -103,7 +103,7 @@ export async function getReservationCategory(
 }
 
 export async function costReducer(id: string, session: string, token: string) {
-  'use cache';
+  'use cache: private';
   const authed = client.withAuth(session, token);
   const { data, error } = await authed.reservations().costReducer({ id: id });
 
@@ -130,6 +130,10 @@ export async function updateReservation(reservation: Reservation) {
     return { message: error.message };
   }
   revalidateTag('reservations', 'max');
+  revalidateTag(`reservation-${reservation.id}`, 'max');
+  revalidatePath(`/reservation/${reservation.id}`, 'layout');
+  revalidatePath(`/admin/reservations`, 'page');
+
   return { message: 'success' };
 }
 
@@ -215,6 +219,7 @@ export async function DeleteReservation(id: string) {
     throw error;
   }
   revalidateTag('reservations', 'max');
+  revalidatePath('/admin/reservations', 'page');
 }
 
 export async function DeleteDates(ids: string[]) {

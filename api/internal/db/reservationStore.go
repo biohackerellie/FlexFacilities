@@ -484,3 +484,16 @@ func (s *ReservationStore) Aggregate(ctx context.Context) ([]models.Aggregate, e
 	}
 	return aggregates, nil
 }
+
+const updatePaymentIDQuery = `UPDATE reservation SET payment_id = :payment_id WHERE id = :id`
+
+func (s *ReservationStore) UpdatePaymentIntent(ctx context.Context, id int64, paymentID string) error {
+	params := map[string]any{
+		"payment_id": paymentID,
+		"id":         id,
+	}
+	if _, err := s.db.NamedExecContext(ctx, updatePaymentIDQuery, params); err != nil {
+		return err
+	}
+	return nil
+}

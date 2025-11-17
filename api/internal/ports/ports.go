@@ -61,6 +61,7 @@ type ReservationStore interface {
 	GetFees(ctx context.Context, ids []int64) ([]models.ReservationFee, error)
 	GetFutureDates(ctx context.Context) ([]models.ReservationDate, error)
 	Aggregate(ctx context.Context) ([]models.Aggregate, error)
+	UpdatePaymentIntent(ctx context.Context, id int64, paymentID string) error
 }
 
 type BrandingStore interface {

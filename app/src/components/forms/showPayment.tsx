@@ -1,71 +1,69 @@
-// @ts-nocheck
 'use client';
 
+import {
+  Elements,
+  PaymentElement,
+  useElements,
+  useStripe,
+} from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+import { env } from 'next-runtime-env';
 import * as React from 'react';
-import { toast } from 'sonner';
-import { ReservationContext } from '@/app/reservation/[id]/_components/context';
-import { GeneratePaymentLink } from '@/functions/other/payments';
-import { updateReservation } from '@/lib/actions/reservations';
-import { logger } from '@/lib/logger';
-import { Button } from '../ui/button';
 
 interface feeProps {
   fees: number;
 }
 
-export default function ShowPayment({ fees }: feeProps) {
-  const [isLoading, startTransition] = React.useTransition();
-  const data = React.use(ReservationContext);
-  const facility = data?.facility!;
-  const user = data?.user!;
-  const reservation = data?.reservation!;
-  const email = user?.email || '';
+const stripePubKey = env('NEXT_PUBLIC_STRIPE_PUBLIC_KEY') ?? '';
+const frontendUrl = env('NEXT_PUBLIC_FRONTEND_URL');
+const stripePromise = loadStripe(stripePubKey);
 
-  const description = `${reservation.eventName} at ${facility?.building} ${facility.name} by ${user?.name}`;
-  const PayOnline = (id: string, fees: number, email: string) => {
-    startTransition(() => {
-      toast.promise(GeneratePaymentLink(id, fees, description, email), {
-        loading: 'Creating payment link...',
-        success: () => {
-          return 'success!';
-        },
-        error: (error) => {
-          logger.error('Error creating payment link', { 'error ': error });
-          return 'something went wrong';
-        },
-      });
+export default function CheckoutForm(reservationId: string) {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [message, setMessage] = React.useState<string | null>(null);
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!stripe || !elements) {
+      return;
+    }
+
+    setIsLoading(true);
+
+    const { error } = await stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        return_url: `${frontendUrl}/reservation/${reservationId}/pricing/checkout/success`,
+      },
     });
+
+    if (error?.type === 'card_error' || error?.type === 'validation_error') {
+      setMessage(error.message ?? 'An unexpected error occurred.');
+    } else {
+      setMessage('An unexpected error occurred.');
+    }
+    setIsLoading(false);
   };
-  const PayinPerson = () => {
-    startTransition(() => {
-      toast.promise(updateReservation({ ...reservation, paid: true }), {
-        loading: 'loading...',
-        success: () => {
-          return 'success!';
-        },
-        error: (error) => {
-          return error.message;
-        },
-      });
-    });
+
+  const paymentElementOptions = {
+    layout: 'accordion',
   };
+
   return (
-    <div className='block gap-x-2 p-2'>
-      <Button
-        disabled={isLoading}
-        variant='outline'
-        onClick={() => PayinPerson()}
-      >
-        Pay in Person
-      </Button>
+    <form id='payment-form' onSubmit={handleSubmit}>
+      <PaymentElement id='payment-element' options={paymentElementOptions} />
+      <button disabled={isLoading || !stripe || !elements} id='submit'>
+        <span id="button-text">
+          {isLoading ? <div className='spinner' id='spinner'></div> : 'Pay Now'}
+        </span>
+      </button>
+      {message && <div id='payment-message'>{message}</div>}
+    </form>
+  )
+}
 
-      <Button
-        disabled={isLoading}
-        variant='outline'
-        onClick={() => PayOnline(reservation.id, fees, email)}
-      >
-        Pay Online
-      </Button>
-    </div>
-  );
+export default function CheckoutForm({ clientSecret }: { clientSecret: string }) {
+
 }

@@ -21,6 +21,7 @@ type Handlers struct {
 	UtilityHandler     *UtilityHandler
 	Auth               *auth.Auth
 	FilesHandler       *FileHandler
+	PaymentHandler     *PaymentHandler
 }
 
 func New(dbService *repository.DBService, log *slog.Logger, config *config.Config, cal *calendar.Calendar) *Handlers {
@@ -47,6 +48,7 @@ func New(dbService *repository.DBService, log *slog.Logger, config *config.Confi
 	facilityHandler := NewFacilityHandler(dbService.FacilityStore, log, cal)
 	reservationHandler := NewReservationHandler(dbService.ReservationStore, dbService.UserStore, dbService.FacilityStore, log, timezone, config, cal)
 	utilityHandler := NewUtilityHandler(dbService.ReservationStore, dbService.BrandingStore, log, timezone)
+	paymentHandler := NewPaymentHandler(log, config, dbService.FacilityStore, dbService.ReservationStore)
 
 	return &Handlers{
 		UserHandler:        userHandler,
@@ -55,5 +57,6 @@ func New(dbService *repository.DBService, log *slog.Logger, config *config.Confi
 		UtilityHandler:     utilityHandler,
 		Auth:               authHandler,
 		FilesHandler:       filesHandler,
+		PaymentHandler:     paymentHandler,
 	}
 }

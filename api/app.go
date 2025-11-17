@@ -60,7 +60,7 @@ func Run(ctx context.Context, stdout io.Writer, getenv func(string, string) stri
 	log = slog.New(withContext)
 	slog.SetDefault(log)
 
-	log.Info("Starting server", "local", local, "log_level", logLevel, "verbose_logging", verboseLogging)
+	log.Info("Starting server", "local", local, "app_env", config.AppEnv, "log_level", logLevel, "verbose_logging", verboseLogging)
 	db := repository.InitDB(ctx, config.DatabaseURL)
 	defer db.Close()
 

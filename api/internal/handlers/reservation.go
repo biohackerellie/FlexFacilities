@@ -266,7 +266,9 @@ func (a *ReservationHandler) CreateReservation(ctx context.Context, req *connect
 				"URL":      fmt.Sprintf("%s/reservation/%v", a.config.FrontendUrl, id),
 			},
 		}
-		go emails.Send(emailData)
+		if a.config.AppEnv == "production" {
+			go emails.Send(emailData)
+		}
 	}
 	return connect.NewResponse(&service.CreateReservationResponse{
 		Id: id,
@@ -314,7 +316,9 @@ func (a *ReservationHandler) UpdateReservationStatus(ctx context.Context, req *c
 					"Status": status,
 				},
 			}
-			go emails.Send(emailData)
+			if a.config.AppEnv == "production" {
+				go emails.Send(emailData)
+			}
 		}
 		return connect.NewResponse(&service.UpdateReservationResponse{}), nil
 	}
@@ -401,7 +405,10 @@ func (a *ReservationHandler) UpdateReservationStatus(ctx context.Context, req *c
 			"Status": models.ReservationApprovedApproved,
 		},
 	}
-	go emails.Send(emailData)
+	if a.config.AppEnv == "production" {
+		go emails.Send(emailData)
+
+	}
 	if err := a.reservationStore.Update(ctx, &res); err != nil {
 		a.log.Error("Failed to update reservation after publish", "id", id, "err", err)
 		return nil, err
@@ -760,7 +767,7 @@ func reducer(ctx context.Context, category *models.Category, reservation *models
 
 	var total time.Duration
 	for _, date := range reservation.Dates {
-		if date.Approved != models.ReservationDateApprovedApproved {
+		if date.Approved == models.ReservationDateApprovedDenied || date.Approved == models.ReservationDateApprovedCanceled {
 			continue
 		}
 		start := date.LocalStart.Time
@@ -775,12 +782,40 @@ func reducer(ctx context.Context, category *models.Category, reservation *models
 	for _, fee := range reservation.Fees {
 		fees += utils.PGNumericToFloat64(fee.AdditionalFees)
 	}
-
 	pricePerHourCents := int64(category.Price * 100)
 	feeCents := int64(math.Round(fees * 100))
 	costCents := int64(math.Round(float64(pricePerHourCents) * float64(totalMinutes) / 60.0))
 	totalCents := max(costCents+feeCents, 0)
-	return fmt.Sprintf("%.2f", float64(totalCents)/100.0), nil
+	result := fmt.Sprintf("%.2f", float64(totalCents)/100.0)
+	slog.Debug(
+		"Cost Reducer",
+		slog.Int64(
+			"reservation_id", reservation.Reservation.ID,
+		),
+		slog.Any(
+			"total duration", total,
+		),
+		slog.Int64(
+			"price_per_hour_cents", pricePerHourCents,
+		),
+		slog.Int64(
+			"total_minutes", totalMinutes,
+		),
+		slog.Float64(
+			"fees", fees,
+		),
+		slog.Int64(
+			"fee_cents", feeCents,
+		),
+		slog.Int64(
+			"cost_cents", costCents,
+		),
+		slog.Int64(
+			"total_cents", totalCents,
+		),
+		slog.String("cost", result),
+	)
+	return result, nil
 }
 
 func (a *ReservationHandler) GetAllPending(ctx context.Context, req *connect.Request[service.GetAllReservationsRequest]) (*connect.Response[service.AllPendingResponse], error) {

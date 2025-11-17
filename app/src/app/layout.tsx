@@ -1,9 +1,9 @@
 import { Inter, JetBrains_Mono } from 'next/font/google';
+import { PublicEnvScript } from 'next-runtime-env';
 import * as React from 'react';
 import { ThemeProviders } from '@/components/contexts/providers/ThemeProvider';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
-
 import './styles/globals.css';
 import { Toaster } from 'sonner';
 import Footer from '@/components/ui/footer';
@@ -28,6 +28,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en' suppressHydrationWarning={true}>
+      <head>
+        <PublicEnvScript />
+      </head>
       <body
         className={cn(
           'min-h-screen font-sans antialiased',

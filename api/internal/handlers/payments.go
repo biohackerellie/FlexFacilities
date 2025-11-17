@@ -3,12 +3,13 @@ package handlers
 import (
 	"api/internal/config"
 	"api/internal/ports"
-	"encoding/json"
-	"github.com/stripe/stripe-go/v83"
-	"github.com/stripe/stripe-go/v83/paymentintent"
+	service "api/internal/proto/payments"
+	"context"
 	"log/slog"
-	"net/http"
 	"strconv"
+
+	"connectrpc.com/connect"
+	"github.com/stripe/stripe-go/v83"
 )
 
 type PaymentHandler struct {
@@ -16,79 +17,65 @@ type PaymentHandler struct {
 	config           *config.Config
 	facilityStore    ports.FacilityStore
 	reservationStore ports.ReservationStore
+	sc               *stripe.Client
 }
 
 func NewPaymentHandler(log *slog.Logger, config *config.Config, facilityStore ports.FacilityStore, reservationStore ports.ReservationStore) *PaymentHandler {
+	client := stripe.NewClient(config.StripeKey)
 	return &PaymentHandler{
 		log:              log,
 		config:           config,
 		facilityStore:    facilityStore,
 		reservationStore: reservationStore,
+		sc:               client,
 	}
 }
 
-func (p *PaymentHandler) HandleCreatePaymentIntent(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "POST" {
-		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
-		return
-	}
-	var req struct {
-		ID string `json:"ID"`
-	}
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-	parsedID, err := strconv.ParseInt(req.ID, 10, 64)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-	ctx := r.Context()
+func (p *PaymentHandler) CreatePaymentIntent(ctx context.Context, req *connect.Request[service.CreatePaymentIntentRequest]) (*connect.Response[service.CreatePaymentIntentResponse], error) {
+	reservationID := req.Msg.ReservationId
 
-	reservation, err := p.reservationStore.Get(ctx, parsedID)
+	reservation, err := p.reservationStore.Get(ctx, reservationID)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
+		p.log.Error("failed to get reservation", "error", err)
+		return nil, err
 	}
 
 	category, err := p.facilityStore.GetCategory(ctx, reservation.Reservation.CategoryID)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
+		p.log.Error("failed to get category", "error", err)
+		return nil, err
 	}
 
 	stringCost, err := reducer(ctx, category, reservation)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
+		p.log.Error("failed to calculate cost", "error", err)
+		return nil, err
 	}
 
 	costInt, err := strconv.ParseInt(stringCost, 10, 64)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
+		p.log.Error("failed to parse cost", "error", err)
+		return nil, err
 	}
 
-	params := &stripe.PaymentIntentParams{
+	params := &stripe.PaymentIntentCreateParams{
 		Amount:   stripe.Int64(costInt),
 		Currency: stripe.String(string(stripe.CurrencyUSD)),
+		AutomaticPaymentMethods: &stripe.PaymentIntentCreateAutomaticPaymentMethodsParams{
+			Enabled: stripe.Bool(true),
+		},
 	}
-
-	pi, err := paymentintent.New(params)
+	pi, err := p.sc.V1PaymentIntents.Create(ctx, params)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
+		p.log.Error("failed to create payment intent", "error", err)
+		return nil, err
 	}
-	resp := struct {
-		ClientSecret string `json:"clientSecret"`
-	}{
+	err = p.reservationStore.UpdatePaymentIntent(ctx, reservationID, pi.ID)
+	if err != nil {
+		p.log.Error("failed to update payment intent", "error", err)
+		return nil, err
+	}
+	return connect.NewResponse(&service.CreatePaymentIntentResponse{
 		ClientSecret: pi.ClientSecret,
-	}
-	w.Header().Set("Content-Type", "application/json")
-	if err := json.NewEncoder(w).Encode(resp); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-
+	}), nil
 }

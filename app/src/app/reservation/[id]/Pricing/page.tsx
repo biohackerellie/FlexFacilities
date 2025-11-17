@@ -1,6 +1,6 @@
+import { Elements } from '@stripe/react-stripe-js';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
-
 import EditPricing from '@/components/forms/paymentModal';
 import { Spinner } from '@/components/spinner';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -57,7 +57,7 @@ export default async function paymentPage({
   let totalCost = 0.0;
   const tcData = await costReducer(id, sessionId, token);
   if (tcData) {
-    totalCost = parseFloat(tcData.cost);
+    totalCost = Number(tcData.cost);
   }
 
   return (
