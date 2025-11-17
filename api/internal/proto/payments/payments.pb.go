@@ -109,6 +109,86 @@ func (x *CreatePaymentIntentResponse) GetClientSecret() string {
 	return ""
 }
 
+type GetStripePublicKeyRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetStripePublicKeyRequest) Reset() {
+	*x = GetStripePublicKeyRequest{}
+	mi := &file_proto_payments_payments_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetStripePublicKeyRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetStripePublicKeyRequest) ProtoMessage() {}
+
+func (x *GetStripePublicKeyRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_payments_payments_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetStripePublicKeyRequest.ProtoReflect.Descriptor instead.
+func (*GetStripePublicKeyRequest) Descriptor() ([]byte, []int) {
+	return file_proto_payments_payments_proto_rawDescGZIP(), []int{2}
+}
+
+type GetStripePublicKeyResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PublicKey     string                 `protobuf:"bytes,1,opt,name=public_key,json=publicKey,proto3" json:"public_key,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetStripePublicKeyResponse) Reset() {
+	*x = GetStripePublicKeyResponse{}
+	mi := &file_proto_payments_payments_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetStripePublicKeyResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetStripePublicKeyResponse) ProtoMessage() {}
+
+func (x *GetStripePublicKeyResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_payments_payments_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetStripePublicKeyResponse.ProtoReflect.Descriptor instead.
+func (*GetStripePublicKeyResponse) Descriptor() ([]byte, []int) {
+	return file_proto_payments_payments_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *GetStripePublicKeyResponse) GetPublicKey() string {
+	if x != nil {
+		return x.PublicKey
+	}
+	return ""
+}
+
 var File_proto_payments_payments_proto protoreflect.FileDescriptor
 
 const file_proto_payments_payments_proto_rawDesc = "" +
@@ -117,9 +197,14 @@ const file_proto_payments_payments_proto_rawDesc = "" +
 	"\x1aCreatePaymentIntentRequest\x12)\n" +
 	"\x0ereservation_id\x18\x01 \x01(\x03B\x020\x01R\rreservationId\"B\n" +
 	"\x1bCreatePaymentIntentResponse\x12#\n" +
-	"\rclient_secret\x18\x01 \x01(\tR\fclientSecret2}\n" +
+	"\rclient_secret\x18\x01 \x01(\tR\fclientSecret\"\x1b\n" +
+	"\x19GetStripePublicKeyRequest\";\n" +
+	"\x1aGetStripePublicKeyResponse\x12\x1d\n" +
+	"\n" +
+	"public_key\x18\x01 \x01(\tR\tpublicKey2\xe6\x01\n" +
 	"\x0fPaymentsService\x12j\n" +
-	"\x13CreatePaymentIntent\x12(.api.payments.CreatePaymentIntentRequest\x1a).api.payments.CreatePaymentIntentResponseB\x9f\x01\n" +
+	"\x13CreatePaymentIntent\x12(.api.payments.CreatePaymentIntentRequest\x1a).api.payments.CreatePaymentIntentResponse\x12g\n" +
+	"\x12GetStripePublicKey\x12'.api.payments.GetStripePublicKeyRequest\x1a(.api.payments.GetStripePublicKeyResponseB\x9f\x01\n" +
 	"\x10com.api.paymentsB\rPaymentsProtoP\x01Z+api/internal/proto/payments;paymentsservice\xa2\x02\x03APX\xaa\x02\fApi.Payments\xca\x02\fApi\\Payments\xe2\x02\x18Api\\Payments\\GPBMetadata\xea\x02\rApi::Paymentsb\x06proto3"
 
 var (
@@ -134,16 +219,20 @@ func file_proto_payments_payments_proto_rawDescGZIP() []byte {
 	return file_proto_payments_payments_proto_rawDescData
 }
 
-var file_proto_payments_payments_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_proto_payments_payments_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_proto_payments_payments_proto_goTypes = []any{
 	(*CreatePaymentIntentRequest)(nil),  // 0: api.payments.CreatePaymentIntentRequest
 	(*CreatePaymentIntentResponse)(nil), // 1: api.payments.CreatePaymentIntentResponse
+	(*GetStripePublicKeyRequest)(nil),   // 2: api.payments.GetStripePublicKeyRequest
+	(*GetStripePublicKeyResponse)(nil),  // 3: api.payments.GetStripePublicKeyResponse
 }
 var file_proto_payments_payments_proto_depIdxs = []int32{
 	0, // 0: api.payments.PaymentsService.CreatePaymentIntent:input_type -> api.payments.CreatePaymentIntentRequest
-	1, // 1: api.payments.PaymentsService.CreatePaymentIntent:output_type -> api.payments.CreatePaymentIntentResponse
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
+	2, // 1: api.payments.PaymentsService.GetStripePublicKey:input_type -> api.payments.GetStripePublicKeyRequest
+	1, // 2: api.payments.PaymentsService.CreatePaymentIntent:output_type -> api.payments.CreatePaymentIntentResponse
+	3, // 3: api.payments.PaymentsService.GetStripePublicKey:output_type -> api.payments.GetStripePublicKeyResponse
+	2, // [2:4] is the sub-list for method output_type
+	0, // [0:2] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -160,7 +249,7 @@ func file_proto_payments_payments_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_payments_payments_proto_rawDesc), len(file_proto_payments_payments_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

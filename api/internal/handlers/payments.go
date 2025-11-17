@@ -21,7 +21,7 @@ type PaymentHandler struct {
 }
 
 func NewPaymentHandler(log *slog.Logger, config *config.Config, facilityStore ports.FacilityStore, reservationStore ports.ReservationStore) *PaymentHandler {
-	client := stripe.NewClient(config.StripeKey)
+	client := stripe.NewClient(config.StripeSecretKey)
 	return &PaymentHandler{
 		log:              log,
 		config:           config,
@@ -52,14 +52,14 @@ func (p *PaymentHandler) CreatePaymentIntent(ctx context.Context, req *connect.R
 		return nil, err
 	}
 
-	costInt, err := strconv.ParseInt(stringCost, 10, 64)
+	costInt, err := strconv.ParseFloat(stringCost, 10)
 	if err != nil {
 		p.log.Error("failed to parse cost", "error", err)
 		return nil, err
 	}
 
 	params := &stripe.PaymentIntentCreateParams{
-		Amount:   stripe.Int64(costInt),
+		Amount:   stripe.Int64(int64(costInt * 100)),
 		Currency: stripe.String(string(stripe.CurrencyUSD)),
 		AutomaticPaymentMethods: &stripe.PaymentIntentCreateAutomaticPaymentMethodsParams{
 			Enabled: stripe.Bool(true),
@@ -70,12 +70,18 @@ func (p *PaymentHandler) CreatePaymentIntent(ctx context.Context, req *connect.R
 		p.log.Error("failed to create payment intent", "error", err)
 		return nil, err
 	}
-	err = p.reservationStore.UpdatePaymentIntent(ctx, reservationID, pi.ID)
-	if err != nil {
-		p.log.Error("failed to update payment intent", "error", err)
-		return nil, err
-	}
+	// err = p.reservationStore.UpdatePaymentIntent(ctx, reservationID, pi.ID)
+	// if err != nil {
+	// 	p.log.Error("failed to update payment intent", "error", err)
+	// 	return nil, err
+	// }
 	return connect.NewResponse(&service.CreatePaymentIntentResponse{
 		ClientSecret: pi.ClientSecret,
+	}), nil
+}
+
+func (p *PaymentHandler) GetStripePublicKey(ctx context.Context, req *connect.Request[service.GetStripePublicKeyRequest]) (*connect.Response[service.GetStripePublicKeyResponse], error) {
+	return connect.NewResponse(&service.GetStripePublicKeyResponse{
+		PublicKey: p.config.StripePublicKey,
 	}), nil
 }

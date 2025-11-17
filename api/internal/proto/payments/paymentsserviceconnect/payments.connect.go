@@ -36,11 +36,15 @@ const (
 	// PaymentsServiceCreatePaymentIntentProcedure is the fully-qualified name of the PaymentsService's
 	// CreatePaymentIntent RPC.
 	PaymentsServiceCreatePaymentIntentProcedure = "/api.payments.PaymentsService/CreatePaymentIntent"
+	// PaymentsServiceGetStripePublicKeyProcedure is the fully-qualified name of the PaymentsService's
+	// GetStripePublicKey RPC.
+	PaymentsServiceGetStripePublicKeyProcedure = "/api.payments.PaymentsService/GetStripePublicKey"
 )
 
 // PaymentsServiceClient is a client for the api.payments.PaymentsService service.
 type PaymentsServiceClient interface {
 	CreatePaymentIntent(context.Context, *connect.Request[payments.CreatePaymentIntentRequest]) (*connect.Response[payments.CreatePaymentIntentResponse], error)
+	GetStripePublicKey(context.Context, *connect.Request[payments.GetStripePublicKeyRequest]) (*connect.Response[payments.GetStripePublicKeyResponse], error)
 }
 
 // NewPaymentsServiceClient constructs a client for the api.payments.PaymentsService service. By
@@ -60,12 +64,19 @@ func NewPaymentsServiceClient(httpClient connect.HTTPClient, baseURL string, opt
 			connect.WithSchema(paymentsServiceMethods.ByName("CreatePaymentIntent")),
 			connect.WithClientOptions(opts...),
 		),
+		getStripePublicKey: connect.NewClient[payments.GetStripePublicKeyRequest, payments.GetStripePublicKeyResponse](
+			httpClient,
+			baseURL+PaymentsServiceGetStripePublicKeyProcedure,
+			connect.WithSchema(paymentsServiceMethods.ByName("GetStripePublicKey")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
 // paymentsServiceClient implements PaymentsServiceClient.
 type paymentsServiceClient struct {
 	createPaymentIntent *connect.Client[payments.CreatePaymentIntentRequest, payments.CreatePaymentIntentResponse]
+	getStripePublicKey  *connect.Client[payments.GetStripePublicKeyRequest, payments.GetStripePublicKeyResponse]
 }
 
 // CreatePaymentIntent calls api.payments.PaymentsService.CreatePaymentIntent.
@@ -73,9 +84,15 @@ func (c *paymentsServiceClient) CreatePaymentIntent(ctx context.Context, req *co
 	return c.createPaymentIntent.CallUnary(ctx, req)
 }
 
+// GetStripePublicKey calls api.payments.PaymentsService.GetStripePublicKey.
+func (c *paymentsServiceClient) GetStripePublicKey(ctx context.Context, req *connect.Request[payments.GetStripePublicKeyRequest]) (*connect.Response[payments.GetStripePublicKeyResponse], error) {
+	return c.getStripePublicKey.CallUnary(ctx, req)
+}
+
 // PaymentsServiceHandler is an implementation of the api.payments.PaymentsService service.
 type PaymentsServiceHandler interface {
 	CreatePaymentIntent(context.Context, *connect.Request[payments.CreatePaymentIntentRequest]) (*connect.Response[payments.CreatePaymentIntentResponse], error)
+	GetStripePublicKey(context.Context, *connect.Request[payments.GetStripePublicKeyRequest]) (*connect.Response[payments.GetStripePublicKeyResponse], error)
 }
 
 // NewPaymentsServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -91,10 +108,18 @@ func NewPaymentsServiceHandler(svc PaymentsServiceHandler, opts ...connect.Handl
 		connect.WithSchema(paymentsServiceMethods.ByName("CreatePaymentIntent")),
 		connect.WithHandlerOptions(opts...),
 	)
+	paymentsServiceGetStripePublicKeyHandler := connect.NewUnaryHandler(
+		PaymentsServiceGetStripePublicKeyProcedure,
+		svc.GetStripePublicKey,
+		connect.WithSchema(paymentsServiceMethods.ByName("GetStripePublicKey")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/api.payments.PaymentsService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case PaymentsServiceCreatePaymentIntentProcedure:
 			paymentsServiceCreatePaymentIntentHandler.ServeHTTP(w, r)
+		case PaymentsServiceGetStripePublicKeyProcedure:
+			paymentsServiceGetStripePublicKeyHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -106,4 +131,8 @@ type UnimplementedPaymentsServiceHandler struct{}
 
 func (UnimplementedPaymentsServiceHandler) CreatePaymentIntent(context.Context, *connect.Request[payments.CreatePaymentIntentRequest]) (*connect.Response[payments.CreatePaymentIntentResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.payments.PaymentsService.CreatePaymentIntent is not implemented"))
+}
+
+func (UnimplementedPaymentsServiceHandler) GetStripePublicKey(context.Context, *connect.Request[payments.GetStripePublicKeyRequest]) (*connect.Response[payments.GetStripePublicKeyResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.payments.PaymentsService.GetStripePublicKey is not implemented"))
 }

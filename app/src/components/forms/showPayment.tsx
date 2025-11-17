@@ -6,19 +6,14 @@ import {
   useElements,
   useStripe,
 } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
-import { env } from 'next-runtime-env';
+import {
+  loadStripe,
+  type Stripe,
+  type StripePaymentElementOptions,
+} from '@stripe/stripe-js';
 import * as React from 'react';
 
-interface feeProps {
-  fees: number;
-}
-
-const stripePubKey = env('NEXT_PUBLIC_STRIPE_PUBLIC_KEY') ?? '';
-const frontendUrl = env('NEXT_PUBLIC_FRONTEND_URL');
-const stripePromise = loadStripe(stripePubKey);
-
-export default function CheckoutForm(reservationId: string) {
+function PaymentForm() {
   const stripe = useStripe();
   const elements = useElements();
   const [message, setMessage] = React.useState<string | null>(null);
@@ -35,19 +30,18 @@ export default function CheckoutForm(reservationId: string) {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${frontendUrl}/reservation/${reservationId}/pricing/checkout/success`,
+        return_url: `${window.location.origin}/checkout/success`,
       },
     });
-
-    if (error?.type === 'card_error' || error?.type === 'validation_error') {
-      setMessage(error.message ?? 'An unexpected error occurred.');
+    if (error.type === 'card_error' || error.type === 'validation_error') {
+      setMessage(error.message!);
     } else {
-      setMessage('An unexpected error occurred.');
+      setMessage('An unexpected error occured.');
     }
     setIsLoading(false);
   };
 
-  const paymentElementOptions = {
+  const paymentElementOptions: StripePaymentElementOptions = {
     layout: 'accordion',
   };
 
@@ -55,15 +49,37 @@ export default function CheckoutForm(reservationId: string) {
     <form id='payment-form' onSubmit={handleSubmit}>
       <PaymentElement id='payment-element' options={paymentElementOptions} />
       <button disabled={isLoading || !stripe || !elements} id='submit'>
-        <span id="button-text">
+        <span id='button-text'>
           {isLoading ? <div className='spinner' id='spinner'></div> : 'Pay Now'}
         </span>
       </button>
       {message && <div id='payment-message'>{message}</div>}
     </form>
-  )
+  );
 }
 
-export default function CheckoutForm({ clientSecret }: { clientSecret: string }) {
-
+export default function CheckoutForm({
+  clientSecret,
+  publicKey,
+}: {
+  clientSecret: string | null;
+  publicKey: string | null;
+}) {
+  if (!clientSecret || !publicKey) {
+    return null;
+  }
+  const [stripePromise, setStripePromise] = React.useState<
+    Promise<Stripe | null>
+  >(Promise.resolve(null));
+  React.useEffect(() => {
+    setStripePromise(loadStripe(publicKey));
+  }, [publicKey]);
+  return (
+    <Elements
+      stripe={stripePromise}
+      options={{ appearance: { theme: 'stripe' }, clientSecret }}
+    >
+      <PaymentForm />
+    </Elements>
+  );
 }

@@ -26,7 +26,8 @@ type Config struct {
 	FilesPath          string        `mapstructure:"FILES_PATH"`
 	Timezone           string        `mapstructure:"TIMEZONE"`
 	Location           time.Location `mapstructure:"-"`
-	StripeKey          string        `mapstructure:"STRIPE_KEY"`
+	StripeSecretKey    string        `mapstructure:"STRIPE_SECRET_KEY"`
+	StripePublicKey    string        `mapstructure:"STRIPE_PUBLIC_KEY"`
 }
 
 func New(getenv func(string, string) string) (*Config, error) {
@@ -50,7 +51,8 @@ func New(getenv func(string, string) string) (*Config, error) {
 		FrontendUrl:        getenv("FRONTEND_URL", "http://localhost:3000"),
 		FilesPath:          getenv("FILES_PATH", "data"),
 		Timezone:           getenv("TIMEZONE", "America/Denver"),
-		StripeKey:          getenv("STRIPE_KEY", ""),
+		StripeSecretKey:    getenv("STRIPE_SECRET_KEY", ""),
+		StripePublicKey:    getenv("STRIPE_PUBLIC_KEY", ""),
 	}
 	loc, err := time.LoadLocation(cfg.Timezone)
 	if err != nil {

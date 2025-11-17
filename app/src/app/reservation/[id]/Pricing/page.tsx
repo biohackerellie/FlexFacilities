@@ -1,4 +1,5 @@
 import { Elements } from '@stripe/react-stripe-js';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 import EditPricing from '@/components/forms/paymentModal';
@@ -46,12 +47,12 @@ export default async function paymentPage({
   const CategoryPrice = category?.price;
   const mappedFees = data.fees
     ? data.fees.map((fee) => {
-        return {
-          additionalFees: parseFloat(fee.additionalFees) ?? 0.0,
-          feesType: fee.feesType ?? '',
-          options: fee.id,
-        };
-      })
+      return {
+        additionalFees: parseFloat(fee.additionalFees) ?? 0.0,
+        feesType: fee.feesType ?? '',
+        options: fee.id,
+      };
+    })
     : [];
 
   let totalCost = 0.0;
@@ -116,23 +117,15 @@ export default async function paymentPage({
 
           <div className='flex justify-end text-justify text-xl'>
             <Suspense fallback={<Spinner />}>
-              {!reservation.paid &&
-                (totalCost > 0 ||
-                  (reservation.costOverride &&
-                    parseFloat(reservation.costOverride) > 0)) &&
-                (isAdmin ? (
-                  <Paid reservation={reservation} />
-                ) : (
-                  <>
-                    {/* <ShowPayment */}
-                    {/*   fees={ */}
-                    {/*     reservation.costOverride */}
-                    {/*       ? parseFloat(reservation.costOverride) */}
-                    {/*       : totalCost */}
-                    {/*   } */}
-                    {/* /> */}
-                  </>
-                ))}
+              {/*   {/*   <Paid reservation={reservation} /> */}
+              <Link
+                href={{
+                  pathname: '/reservation/Checkout',
+                  query: { reservationId: id },
+                }}
+              >
+                Pay Now
+              </Link>
             </Suspense>
           </div>
         </div>

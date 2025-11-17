@@ -10,7 +10,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file proto/payments/payments.proto.
  */
 export const file_proto_payments_payments: GenFile = /*@__PURE__*/
-  fileDesc("Ch1wcm90by9wYXltZW50cy9wYXltZW50cy5wcm90bxIMYXBpLnBheW1lbnRzIjgKGkNyZWF0ZVBheW1lbnRJbnRlbnRSZXF1ZXN0EhoKDnJlc2VydmF0aW9uX2lkGAEgASgDQgIwASI0ChtDcmVhdGVQYXltZW50SW50ZW50UmVzcG9uc2USFQoNY2xpZW50X3NlY3JldBgBIAEoCTJ9Cg9QYXltZW50c1NlcnZpY2USagoTQ3JlYXRlUGF5bWVudEludGVudBIoLmFwaS5wYXltZW50cy5DcmVhdGVQYXltZW50SW50ZW50UmVxdWVzdBopLmFwaS5wYXltZW50cy5DcmVhdGVQYXltZW50SW50ZW50UmVzcG9uc2VCnwEKEGNvbS5hcGkucGF5bWVudHNCDVBheW1lbnRzUHJvdG9QAVorYXBpL2ludGVybmFsL3Byb3RvL3BheW1lbnRzO3BheW1lbnRzc2VydmljZaICA0FQWKoCDEFwaS5QYXltZW50c8oCDEFwaVxQYXltZW50c+ICGEFwaVxQYXltZW50c1xHUEJNZXRhZGF0YeoCDUFwaTo6UGF5bWVudHNiBnByb3RvMw");
+  fileDesc("Ch1wcm90by9wYXltZW50cy9wYXltZW50cy5wcm90bxIMYXBpLnBheW1lbnRzIjgKGkNyZWF0ZVBheW1lbnRJbnRlbnRSZXF1ZXN0EhoKDnJlc2VydmF0aW9uX2lkGAEgASgDQgIwASI0ChtDcmVhdGVQYXltZW50SW50ZW50UmVzcG9uc2USFQoNY2xpZW50X3NlY3JldBgBIAEoCSIbChlHZXRTdHJpcGVQdWJsaWNLZXlSZXF1ZXN0IjAKGkdldFN0cmlwZVB1YmxpY0tleVJlc3BvbnNlEhIKCnB1YmxpY19rZXkYASABKAky5gEKD1BheW1lbnRzU2VydmljZRJqChNDcmVhdGVQYXltZW50SW50ZW50EiguYXBpLnBheW1lbnRzLkNyZWF0ZVBheW1lbnRJbnRlbnRSZXF1ZXN0GikuYXBpLnBheW1lbnRzLkNyZWF0ZVBheW1lbnRJbnRlbnRSZXNwb25zZRJnChJHZXRTdHJpcGVQdWJsaWNLZXkSJy5hcGkucGF5bWVudHMuR2V0U3RyaXBlUHVibGljS2V5UmVxdWVzdBooLmFwaS5wYXltZW50cy5HZXRTdHJpcGVQdWJsaWNLZXlSZXNwb25zZUKfAQoQY29tLmFwaS5wYXltZW50c0INUGF5bWVudHNQcm90b1ABWithcGkvaW50ZXJuYWwvcHJvdG8vcGF5bWVudHM7cGF5bWVudHNzZXJ2aWNlogIDQVBYqgIMQXBpLlBheW1lbnRzygIMQXBpXFBheW1lbnRz4gIYQXBpXFBheW1lbnRzXEdQQk1ldGFkYXRh6gINQXBpOjpQYXltZW50c2IGcHJvdG8z");
 
 /**
  * @generated from message api.payments.CreatePaymentIntentRequest
@@ -47,6 +47,36 @@ export const CreatePaymentIntentResponseSchema: GenMessage<CreatePaymentIntentRe
   messageDesc(file_proto_payments_payments, 1);
 
 /**
+ * @generated from message api.payments.GetStripePublicKeyRequest
+ */
+export type GetStripePublicKeyRequest = Message<"api.payments.GetStripePublicKeyRequest"> & {
+};
+
+/**
+ * Describes the message api.payments.GetStripePublicKeyRequest.
+ * Use `create(GetStripePublicKeyRequestSchema)` to create a new message.
+ */
+export const GetStripePublicKeyRequestSchema: GenMessage<GetStripePublicKeyRequest> = /*@__PURE__*/
+  messageDesc(file_proto_payments_payments, 2);
+
+/**
+ * @generated from message api.payments.GetStripePublicKeyResponse
+ */
+export type GetStripePublicKeyResponse = Message<"api.payments.GetStripePublicKeyResponse"> & {
+  /**
+   * @generated from field: string public_key = 1;
+   */
+  publicKey: string;
+};
+
+/**
+ * Describes the message api.payments.GetStripePublicKeyResponse.
+ * Use `create(GetStripePublicKeyResponseSchema)` to create a new message.
+ */
+export const GetStripePublicKeyResponseSchema: GenMessage<GetStripePublicKeyResponse> = /*@__PURE__*/
+  messageDesc(file_proto_payments_payments, 3);
+
+/**
  * @generated from service api.payments.PaymentsService
  */
 export const PaymentsService: GenService<{
@@ -57,6 +87,14 @@ export const PaymentsService: GenService<{
     methodKind: "unary";
     input: typeof CreatePaymentIntentRequestSchema;
     output: typeof CreatePaymentIntentResponseSchema;
+  },
+  /**
+   * @generated from rpc api.payments.PaymentsService.GetStripePublicKey
+   */
+  getStripePublicKey: {
+    methodKind: "unary";
+    input: typeof GetStripePublicKeyRequestSchema;
+    output: typeof GetStripePublicKeyResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_proto_payments_payments, 0);

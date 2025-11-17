@@ -12,6 +12,13 @@ message CreatePaymentIntentResponse {
   string client_secret = 1;
 }
 
+message GetStripePublicKeyRequest {}
+
+message GetStripePublicKeyResponse {
+  string public_key = 1;
+}
+
 service PaymentsService {
   rpc CreatePaymentIntent(CreatePaymentIntentRequest) returns (CreatePaymentIntentResponse);
+  rpc GetStripePublicKey (GetStripePublicKeyRequest) returns (GetStripePublicKeyResponse);
 }
