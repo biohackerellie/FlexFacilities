@@ -30,11 +30,11 @@ type Config struct {
 	StripePublicKey    string        `mapstructure:"STRIPE_PUBLIC_KEY"`
 }
 
-func New(getenv func(string, string) string) (*Config, error) {
+func New(getenv func(string, string) string, AppEnv string) (*Config, error) {
 	cfg := &Config{
 		LogLevel:           getenv("LOG_LEVEL", "debug"),
 		VerboseLogging:     getenv("VERBOSE_LOGGING", "true"),
-		AppEnv:             getenv("APP_ENV", "development"),
+		AppEnv:             getenv("APP_ENV", AppEnv),
 		EntraClientID:      getenv("ENTRA_CLIENT_ID", ""),
 		EntraClientSecret:  getenv("ENTRA_CLIENT_SECRET", ""),
 		EntraTenant:        getenv("ENTRA_TENANT_ID", ""),

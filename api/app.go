@@ -24,29 +24,36 @@ import (
 	"github.com/joho/godotenv"
 )
 
-var log *slog.Logger
+var (
+	log    *slog.Logger
+	AppEnv = "development"
+)
 
 func Run(ctx context.Context, stdout io.Writer, getenv func(string, string) string) error {
 
-	ctx, cancel := context.WithCancel(ctx)
-	defer cancel()
-	config, err := config.New(getenv)
-	if err != nil {
-		return err
-	}
-	logLevel := config.LogLevel
-	if logLevel == "" {
-		logLevel = "info"
-	}
-	verboseLogging := config.VerboseLogging == "true"
-
-	local := config.AppEnv != "production"
+	local := AppEnv != "production"
 	if local {
 		err := godotenv.Load("../.env")
 		if err != nil {
 			return err
 		}
 	}
+
+	config, err := config.New(getenv, AppEnv)
+	if err != nil {
+		return err
+	}
+	if config.AppEnv != "production" {
+		local = true
+	}
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
+	logLevel := config.LogLevel
+	if logLevel == "" {
+		logLevel = "info"
+	}
+	verboseLogging := config.VerboseLogging == "true"
+
 	logOptions := logger.LogOptions(strings.TrimSpace(strings.ToLower(logLevel)), verboseLogging, local)
 	var withContext *logger.ContextLogger
 	if local {

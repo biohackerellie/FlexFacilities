@@ -221,6 +221,14 @@ func (c *Category) ToProto() *pbFacilities.Category {
 	}
 }
 
+type Pricing struct {
+	ID         string  `db:"id" json:"id"`
+	ProductID  *string `db:"product_id" json:"product_id"`
+	Price      float64 `db:"-" json:"price"`
+	CategoryID int64   `db:"category_id" json:"category_id"`
+	UnitLabel  string  `db:"unit_label" json:"unit_label"`
+}
+
 func ToProtoCategories(categories []Category) []*pbFacilities.Category {
 	var result []*pbFacilities.Category
 	for _, category := range categories {
@@ -317,6 +325,7 @@ type Facility struct {
 	UpdatedAt        pgtype.Timestamptz `db:"updated_at" json:"updated_at"`
 	GoogleCalendarID string             `db:"google_calendar_id" json:"google_calendar_id"`
 	BuildingID       int64              `db:"building_id" json:"building_id"`
+	ProductID        *string            `db:"product_id" json:"product_id"`
 }
 
 func (f *Facility) ToProto() *pbFacilities.Facility {
