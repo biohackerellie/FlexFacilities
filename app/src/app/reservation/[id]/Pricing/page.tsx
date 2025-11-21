@@ -1,4 +1,3 @@
-import { Elements } from '@stripe/react-stripe-js';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
@@ -15,7 +14,6 @@ import {
 import { auth } from '@/lib/auth';
 import { getCookies } from '@/lib/setHeader';
 import Options from '../_components/options';
-import Paid from '../_components/paid';
 import { adminColumns } from './adminColumns';
 import { columns } from './columns';
 
@@ -47,12 +45,12 @@ export default async function paymentPage({
   const CategoryPrice = category?.price;
   const mappedFees = data.fees
     ? data.fees.map((fee) => {
-      return {
-        additionalFees: parseFloat(fee.additionalFees) ?? 0.0,
-        feesType: fee.feesType ?? '',
-        options: fee.id,
-      };
-    })
+        return {
+          additionalFees: parseFloat(fee.additionalFees) ?? 0.0,
+          feesType: fee.feesType ?? '',
+          options: fee.id,
+        };
+      })
     : [];
 
   let totalCost = 0.0;

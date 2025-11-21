@@ -111,7 +111,6 @@ func (f *FacilityStore) GetBuilding(ctx context.Context, id int64) (*models.Buil
 }
 
 const getAllCategoriesQuery = `SELECT * FROM category`
-const getPricingByProductID = `SELECT * FROM pricing WHERE product_id = $1`
 const getAllFacilitiesForBuildingQuery = `SELECT * FROM facility WHERE building_id = $1`
 const getAllFacilitiesQuery = `SELECT * FROM facility`
 
@@ -210,13 +209,6 @@ const createFacilityQuery = `INSERT INTO facility (
 	building_id,
 	product_id
 ) VALUES (:name, :image_path, :capacity, :google_calendar_id, :building_id, :product_id) RETURNING *`
-const createCategoryQuery = `INSERT INTO category (
-	name,
-	description,
-	price,
-	facility_id
-) VALUES (:name, :description, :price, :facility_id)
-`
 
 func (f *FacilityStore) Create(ctx context.Context, input *models.Facility) error {
 	params := map[string]any{

@@ -152,7 +152,7 @@ func (a *Auth) AuthCallback(w http.ResponseWriter, r *http.Request) {
 	sessionID := utils.GenerateRandomID()
 	session := &models.Session{
 		ID:           sessionID,
-		RefreshToken: &tokens.RefreshToken,
+		RefreshToken: models.CheckNullString(tokens.RefreshToken),
 		UserID:       user.ID,
 		Provider:     user.Provider,
 		CreatedAt:    utils.TimeToPgTimestamptz(time.Now()),
@@ -321,7 +321,7 @@ type RefreshTokenResponse struct {
 }
 
 func (s *Auth) RefreshToken(ctx context.Context, session *models.Session) (*RefreshTokenResponse, error) {
-	if session.RefreshToken == nil || session == nil {
+	if session == nil || !session.RefreshToken.Valid {
 		return nil, errors.New("Invalid Refresh Token")
 	}
 
@@ -334,7 +334,7 @@ func (s *Auth) RefreshToken(ctx context.Context, session *models.Session) (*Refr
 	}
 
 	if providerName == TwoProviderName {
-		parsed, err := VerifyToken(*session.RefreshToken, RefreshClaims{}, s.key)
+		parsed, err := VerifyToken(session.RefreshToken.String, RefreshClaims{}, s.key)
 		if err != nil {
 			return nil, err
 		}
@@ -373,7 +373,7 @@ func (s *Auth) RefreshToken(ctx context.Context, session *models.Session) (*Refr
 		}
 		err = s.db.UpdateSession(ctx, &models.Session{
 			ID:           session.ID,
-			RefreshToken: &newRefreshToken,
+			RefreshToken: models.CheckNullString(newRefreshToken),
 			Provider:     user.Provider,
 			ExpiresAt:    utils.TimeToPgTimestamptz(time.Now().Add(absoluteExpiration)),
 		})
@@ -389,7 +389,7 @@ func (s *Auth) RefreshToken(ctx context.Context, session *models.Session) (*Refr
 			s.logger.Error("Invalid Provider", "provider", providerName)
 			provider = s.providers["entra"]
 		}
-		newAuthToken, err := provider.RefreshToken(ctx, *session.RefreshToken)
+		newAuthToken, err := provider.RefreshToken(ctx, session.RefreshToken.String)
 		if err != nil {
 			return nil, err
 		}
@@ -425,7 +425,7 @@ func (s *Auth) RefreshToken(ctx context.Context, session *models.Session) (*Refr
 
 			err = s.db.UpdateSession(ctx, &models.Session{
 				ID:           session.ID,
-				RefreshToken: &newAuthToken.RefreshToken,
+				RefreshToken: models.CheckNullString(newAuthToken.RefreshToken), //newAuthToken.RefreshToken,
 				Provider:     user.Provider,
 				ExpiresAt:    utils.TimeToPgTimestamptz(time.Now().Add(absoluteExpiration)),
 			})

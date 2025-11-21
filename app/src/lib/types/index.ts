@@ -7,7 +7,6 @@ import type {
   Category as PBCategory,
   CreateReservationRequest as PBCreateReservationRequest,
   Facility as PBFacility,
-  FacilityWithCategories as PBFacilityWithCategories,
   FullFacility as PBFulFacility,
   FullReservation as PBFullReservation,
   FullResWithFacilityName as PBFullResWithFacilityName,
@@ -32,7 +31,6 @@ export type FullFacility = ProtoType<PBFulFacility>;
 export type FullReservation = ProtoType<PBFullReservation>;
 export type Building = ProtoType<PBBuilding>;
 export type BuildingWithFacilities = ProtoType<PBBuildingWithFacilities>;
-export type FacilityWithCategories = ProtoType<PBFacilityWithCategories>;
 export type FullResWithFacilityName = ProtoType<PBFullResWithFacilityName>;
 export type Notification = ProtoType<PBNotification>;
 export type NotificationReadable = ProtoType<PBNotificationReadable>;

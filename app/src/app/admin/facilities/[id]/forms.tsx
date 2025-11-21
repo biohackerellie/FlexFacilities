@@ -46,7 +46,7 @@ const ImageUploadForm = ({ facilityID, buildingID }: UploadFormProps) => {
         id='file'
         accept='.jpg, .png'
         onChange={(e) => setHasFile(e.target.files?.length! > 0)}
-        // className='w-full text-sm text-slate-500 file:mr-4 file:rounded-full file:border-0 file:bg-violet-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-violet-700 hover:file:bg-violet-100'
+      // className='w-full text-sm text-slate-500 file:mr-4 file:rounded-full file:border-0 file:bg-violet-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-violet-700 hover:file:bg-violet-100'
       />
       <Button variant='outline' type='submit' disabled={!hasFile}>
         Upload
@@ -57,20 +57,9 @@ const ImageUploadForm = ({ facilityID, buildingID }: UploadFormProps) => {
 
 export default function Forms({ data }: FormProps) {
   const facility = data?.facility!;
-  const categories = data?.categories!;
   const [fac, setFac] = React.useState(facility);
-  const [categoriesState, setCategories] = React.useState(categories);
   const handleUpdateFacility = () => {
     toast.promise(updateFacility(fac), {
-      success: 'Success',
-      loading: 'Updating...',
-      error: (error) => {
-        return getErrorMessage(error);
-      },
-    });
-  };
-  const handleUpdateCategories = (index: number) => {
-    toast.promise(updateCategory(categoriesState[index]!), {
       success: 'Success',
       loading: 'Updating...',
       error: (error) => {
@@ -122,41 +111,6 @@ export default function Forms({ data }: FormProps) {
             <Button onClick={() => handleUpdateFacility()} variant='outline'>
               Update
             </Button>
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value='item-3'>
-          <AccordionTrigger className='w-full'>Prices</AccordionTrigger>
-          <AccordionContent>
-            {categories?.map((category, index) => (
-              <div key={index}>
-                <label
-                  htmlFor='Category'
-                  className='overflow-hidden text-ellipsis'
-                >
-                  {category.name}
-                </label>
-                <Input
-                  type='number'
-                  name='price'
-                  id='price'
-                  placeholder={category.price?.toString() ?? ''}
-                  onChange={(e) => {
-                    const newCategories = [...categoriesState];
-                    newCategories[index] = {
-                      ...category,
-                      price: parseFloat(e.target.value),
-                    };
-                    setCategories(newCategories);
-                  }}
-                />
-                <Button
-                  variant='outline'
-                  onClick={() => handleUpdateCategories(index)}
-                >
-                  Update
-                </Button>
-              </div>
-            ))}
           </AccordionContent>
         </AccordionItem>
       </Accordion>

@@ -275,7 +275,7 @@ func (a *ReservationHandler) CreateReservation(ctx context.Context, req *connect
 				"URL":      fmt.Sprintf("%s/reservation/%v", a.config.FrontendUrl, id),
 			},
 		}
-		if a.config.AppEnv == "production" {
+		if a.config.AppEnv == config.PROD {
 			go emails.Send(emailData)
 		}
 	}
@@ -325,7 +325,7 @@ func (a *ReservationHandler) UpdateReservationStatus(ctx context.Context, req *c
 					"Status": status,
 				},
 			}
-			if a.config.AppEnv == "production" {
+			if a.config.AppEnv == config.PROD {
 				go emails.Send(emailData)
 			}
 		}
@@ -413,9 +413,8 @@ func (a *ReservationHandler) UpdateReservationStatus(ctx context.Context, req *c
 			"Status": models.ReservationApprovedApproved,
 		},
 	}
-	if a.config.AppEnv == "production" {
+	if a.config.AppEnv == config.PROD {
 		go emails.Send(emailData)
-
 	}
 	if err := a.reservationStore.Update(ctx, &res); err != nil {
 		a.log.Error("Failed to update reservation after publish", "id", id, "err", err)
@@ -765,6 +764,9 @@ func (a *ReservationHandler) CostReducer(ctx context.Context, req *connect.Reque
 	}
 
 	price, err := a.sc.V1Prices.Retrieve(ctx, priceID.String, nil)
+	if err != nil {
+		return nil, err
+	}
 
 	stringCost, err := reducer(ctx, category, reservation, price)
 	if err != nil {

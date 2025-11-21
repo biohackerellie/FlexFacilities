@@ -44,7 +44,13 @@ func (p *PaymentHandler) CreatePaymentIntent(ctx context.Context, req *connect.R
 		return nil, err
 	}
 
-	stringCost, err := reducer(ctx, category, reservation)
+	price, err := p.sc.V1Prices.Retrieve(ctx, reservation.Reservation.PriceID.String, nil)
+	if err != nil {
+		p.log.Error("failed to get price", "error", err)
+		return nil, err
+	}
+
+	stringCost, err := reducer(ctx, category, reservation, price)
 	if err != nil {
 		p.log.Error("failed to calculate cost", "error", err)
 		return nil, err

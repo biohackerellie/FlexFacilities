@@ -244,6 +244,16 @@ func (a *FacilityHandler) GetCategory(ctx context.Context, req *connect.Request[
 	return connect.NewResponse(category.ToProto()), nil
 }
 
+func (a *FacilityHandler) GetCategories(ctx context.Context, req *connect.Request[service.GetCategoriesRequest]) (*connect.Response[service.GetCategoriesResponse], error) {
+	categories, err := a.facilityStore.GetCategories(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return connect.NewResponse(&service.GetCategoriesResponse{
+		Categories: models.ToProtoCategories(categories),
+	}), nil
+}
+
 func (a *FacilityHandler) GetAllCoords(ctx context.Context, req *connect.Request[service.GetAllCoordsRequest]) (*connect.Response[service.GetAllCoordsResponse], error) {
 	coords, err := a.facilityStore.GetBuildingCoordinates(ctx)
 	if err != nil {

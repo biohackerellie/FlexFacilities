@@ -15,7 +15,7 @@ import { PaymentsService } from './proto/payments/payments_pb';
 import { UtilityService } from './proto/utility/utility_pb';
 
 export class RPC {
-  constructor(private transport: Transport) { }
+  constructor(private transport: Transport) {}
   private cache = new WeakMap<DescService, any>();
 
   private getWrapped<T extends DescService>(
@@ -95,7 +95,7 @@ export class RPCResponse<T> {
   constructor(
     public data: T | null,
     public error: ConnectError | null,
-  ) { }
+  ) {}
   isSuccess(): boolean {
     return this.error === null;
   }

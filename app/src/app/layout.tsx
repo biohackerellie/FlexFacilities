@@ -1,5 +1,4 @@
 import { Inter, JetBrains_Mono } from 'next/font/google';
-import { PublicEnvScript } from 'next-runtime-env';
 import * as React from 'react';
 import { ThemeProviders } from '@/components/contexts/providers/ThemeProvider';
 import { Skeleton } from '@/components/ui/skeleton';

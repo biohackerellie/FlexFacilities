@@ -2,20 +2,31 @@
 // @generated from file proto/reservation/reservation.proto (package api.reservation, syntax proto3)
 /* eslint-disable */
 
-import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
-import { fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
-import type { Message } from "@bufbuild/protobuf";
+import type { Message } from '@bufbuild/protobuf';
+import type {
+  GenFile,
+  GenMessage,
+  GenService,
+} from '@bufbuild/protobuf/codegenv2';
+import {
+  fileDesc,
+  messageDesc,
+  serviceDesc,
+} from '@bufbuild/protobuf/codegenv2';
 
 /**
  * Describes the file proto/reservation/reservation.proto.
  */
-export const file_proto_reservation_reservation: GenFile = /*@__PURE__*/
-  fileDesc("CiNwcm90by9yZXNlcnZhdGlvbi9yZXNlcnZhdGlvbi5wcm90bxIPYXBpLnJlc2VydmF0aW9uIsAECgtSZXNlcnZhdGlvbhIOCgJpZBgBIAEoA0ICMAESDwoHdXNlcl9pZBgCIAEoCRISCgpldmVudF9uYW1lGAMgASgJEhcKC2ZhY2lsaXR5X2lkGAQgASgDQgIwARIQCghhcHByb3ZlZBgFIAEoCRISCgpjcmVhdGVkX2F0GAYgASgJEhIKCnVwZGF0ZWRfYXQYByABKAkSDwoHZGV0YWlscxgIIAEoCRIMCgRmZWVzGAkgASgJEhEKCWluc3VyYW5jZRgKIAEoCBITCgtkb29yX2FjY2VzcxgLIAEoCBIVCg1kb29yc19kZXRhaWxzGAwgASgJEgwKBG5hbWUYDSABKAkSFAoMdGVjaF9kZXRhaWxzGA4gASgJEhQKDHRlY2hfc3VwcG9ydBgPIAEoCBINCgVwaG9uZRgQIAEoCRIXCgtjYXRlZ29yeV9pZBgRIAEoA0ICMAESEwoLdG90YWxfaG91cnMYEiABKAESEQoJaW5fcGVyc29uGBMgASgIEgwKBHBhaWQYFCABKAgSEwoLcGF5bWVudF91cmwYFSABKAkSFwoPcGF5bWVudF9saW5rX2lkGBYgASgJEhYKDmluc3VyYW5jZV9saW5rGBcgASgJEhUKDWNvc3Rfb3ZlcnJpZGUYGCABKAkSDQoFcnJ1bGUYGSABKAkSDgoGcmRhdGVzGBogAygJEg8KB2V4ZGF0ZXMYGyADKAkSFAoMZ2NhbF9ldmVudGlkGBwgASgJEhAKCHByaWNlX2lkGB0gASgJIo0BCg9SZXNlcnZhdGlvbkRhdGUSDgoCaWQYASABKANCAjABEhoKDnJlc2VydmF0aW9uX2lkGAIgASgDQgIwARIQCghhcHByb3ZlZBgDIAEoCRIUCgxnY2FsX2V2ZW50aWQYBCABKAkSEwoLbG9jYWxfc3RhcnQYBSABKAkSEQoJbG9jYWxfZW5kGAYgASgJIlMKEVJlY3VycmVuY2VQYXR0ZXJuEgwKBGZyZXEYASABKAkSEgoKYnlfd2Vla2RheRgCIAMoCRINCgV1bnRpbBgDIAEoCRINCgVjb3VudBgEIAEoBSIoCgpPY2N1cnJlbmNlEg0KBXN0YXJ0GAEgASgJEgsKA2VuZBgCIAEoCSJoCg5SZXNlcnZhdGlvbkZlZRIOCgJpZBgBIAEoA0ICMAESFwoPYWRkaXRpb25hbF9mZWVzGAIgASgJEhEKCWZlZXNfdHlwZRgDIAEoCRIaCg5yZXNlcnZhdGlvbl9pZBgEIAEoA0ICMAEipAEKD0Z1bGxSZXNlcnZhdGlvbhIxCgtyZXNlcnZhdGlvbhgBIAEoCzIcLmFwaS5yZXNlcnZhdGlvbi5SZXNlcnZhdGlvbhIvCgVkYXRlcxgCIAMoCzIgLmFwaS5yZXNlcnZhdGlvbi5SZXNlcnZhdGlvbkRhdGUSLQoEZmVlcxgDIAMoCzIfLmFwaS5yZXNlcnZhdGlvbi5SZXNlcnZhdGlvbkZlZSKfAQoXRnVsbFJlc1dpdGhGYWNpbGl0eU5hbWUSEgoKZXZlbnRfbmFtZRgBIAEoCRIVCg1mYWNpbGl0eV9uYW1lGAIgASgJEhgKEHJlc2VydmF0aW9uX2RhdGUYAyABKAkSEAoIYXBwcm92ZWQYBCABKAkSEQoJdXNlcl9uYW1lGAUgASgJEhoKDnJlc2VydmF0aW9uX2lkGAYgASgDQgIwASJMChJBbGxQZW5kaW5nUmVzcG9uc2USNgoEZGF0YRgBIAMoCzIoLmFwaS5yZXNlcnZhdGlvbi5GdWxsUmVzV2l0aEZhY2lsaXR5TmFtZSKFAQoRQWxsU29ydGVkUmVzcG9uc2USNgoEcGFzdBgBIAMoCzIoLmFwaS5yZXNlcnZhdGlvbi5GdWxsUmVzV2l0aEZhY2lsaXR5TmFtZRI4CgZmdXR1cmUYAiADKAsyKC5hcGkucmVzZXJ2YXRpb24uRnVsbFJlc1dpdGhGYWNpbGl0eU5hbWUiQAoeVXBkYXRlUmVzZXJ2YXRpb25TdGF0dXNSZXF1ZXN0Eg4KAmlkGAEgASgDQgIwARIOCgZzdGF0dXMYAiABKAkiRgojVXBkYXRlUmVzZXJ2YXRpb25EYXRlc1N0YXR1c1JlcXVlc3QSDwoDaWRzGAEgAygDQgIwARIOCgZzdGF0dXMYAiABKAkiJgokVXBkYXRlUmVzZXJ2YXRpb25EYXRlc1N0YXR1c1Jlc3BvbnNlIlEKF0FsbFJlc2VydmF0aW9uc1Jlc3BvbnNlEjYKDHJlc2VydmF0aW9ucxgBIAMoCzIgLmFwaS5yZXNlcnZhdGlvbi5GdWxsUmVzZXJ2YXRpb24iUQoXUmVxdWVzdFRoaXNXZWVrUmVzcG9uc2USNgoMcmVzZXJ2YXRpb25zGAEgAygLMiAuYXBpLnJlc2VydmF0aW9uLkZ1bGxSZXNlcnZhdGlvbiJWChxBcHByb3ZlZFJlc2VydmF0aW9uc1Jlc3BvbnNlEjYKDHJlc2VydmF0aW9ucxgBIAMoCzIgLmFwaS5yZXNlcnZhdGlvbi5GdWxsUmVzZXJ2YXRpb24iVQobUGVuZGluZ1Jlc2VydmF0aW9uc1Jlc3BvbnNlEjYKDHJlc2VydmF0aW9ucxgBIAMoCzIgLmFwaS5yZXNlcnZhdGlvbi5GdWxsUmVzZXJ2YXRpb24iWgoYVXNlclJlc2VydmF0aW9uc1Jlc3BvbnNlEj4KDHJlc2VydmF0aW9ucxgBIAMoCzIoLmFwaS5yZXNlcnZhdGlvbi5GdWxsUmVzV2l0aEZhY2lsaXR5TmFtZSIbChlHZXRBbGxSZXNlcnZhdGlvbnNSZXF1ZXN0IicKFUdldFJlc2VydmF0aW9uUmVxdWVzdBIOCgJpZBgBIAEoA0ICMAEiFQoTUmVxdWVzdENvdW50UmVxdWVzdCIpChRSZXF1ZXN0Q291bnRSZXNwb25zZRIRCgVjb3VudBgBIAEoA0ICMAEiHAoaR2V0UmVxdWVzdHNUaGlzV2Vla1JlcXVlc3QiywMKGENyZWF0ZVJlc2VydmF0aW9uUmVxdWVzdBIPCgd1c2VyX2lkGAEgASgJEhIKCmV2ZW50X25hbWUYAiABKAkSFwoLZmFjaWxpdHlfaWQYAyABKANCAjABEg8KB2RldGFpbHMYBCABKAkSFwoLY2F0ZWdvcnlfaWQYBSABKANCAjABEgwKBG5hbWUYBiABKAkSDQoFcGhvbmUYByABKAkSFAoMdGVjaF9zdXBwb3J0GAggASgIEhQKDHRlY2hfZGV0YWlscxgJIAEoCRITCgtkb29yX2FjY2VzcxgKIAEoCBIVCg1kb29yc19kZXRhaWxzGAsgASgJEjAKC29jY3VycmVuY2VzGAwgAygLMhsuYXBpLnJlc2VydmF0aW9uLk9jY3VycmVuY2USEgoKc3RhcnRfZGF0ZRgNIAEoCRISCgpzdGFydF90aW1lGA4gASgJEhAKCGVuZF9kYXRlGA8gASgJEhAKCGVuZF90aW1lGBAgASgJEjMKB3BhdHRlcm4YESABKAsyIi5hcGkucmVzZXJ2YXRpb24uUmVjdXJyZW5jZVBhdHRlcm4SDgoGcmRhdGVzGBIgAygJEg8KB2V4ZGF0ZXMYEyADKAkiKwoZQ3JlYXRlUmVzZXJ2YXRpb25SZXNwb25zZRIOCgJpZBgBIAEoA0ICMAEiTQoYVXBkYXRlUmVzZXJ2YXRpb25SZXF1ZXN0EjEKC3Jlc2VydmF0aW9uGAEgASgLMhwuYXBpLnJlc2VydmF0aW9uLlJlc2VydmF0aW9uIhsKGVVwZGF0ZVJlc2VydmF0aW9uUmVzcG9uc2UiKgoYRGVsZXRlUmVzZXJ2YXRpb25SZXF1ZXN0Eg4KAmlkGAEgASgDQgIwASIbChlEZWxldGVSZXNlcnZhdGlvblJlc3BvbnNlIioKF1VzZXJSZXNlcnZhdGlvbnNSZXF1ZXN0Eg8KB3VzZXJfaWQYASABKAkiTwodQ3JlYXRlUmVzZXJ2YXRpb25EYXRlc1JlcXVlc3QSLgoEZGF0ZRgBIAMoCzIgLmFwaS5yZXNlcnZhdGlvbi5SZXNlcnZhdGlvbkRhdGUiIAoeQ3JlYXRlUmVzZXJ2YXRpb25EYXRlc1Jlc3BvbnNlIiAKHlVwZGF0ZVJlc2VydmF0aW9uRGF0ZXNSZXNwb25zZSIgCh5EZWxldGVSZXNlcnZhdGlvbkRhdGVzUmVzcG9uc2UiHgocQ3JlYXRlUmVzZXJ2YXRpb25GZWVSZXNwb25zZSIeChxVcGRhdGVSZXNlcnZhdGlvbkZlZVJlc3BvbnNlIh4KHERlbGV0ZVJlc2VydmF0aW9uRmVlUmVzcG9uc2UiTwodVXBkYXRlUmVzZXJ2YXRpb25EYXRlc1JlcXVlc3QSLgoEZGF0ZRgBIAMoCzIgLmFwaS5yZXNlcnZhdGlvbi5SZXNlcnZhdGlvbkRhdGUiLwodRGVsZXRlUmVzZXJ2YXRpb25EYXRlc1JlcXVlc3QSDgoCaWQYASADKANCAjABIksKG0NyZWF0ZVJlc2VydmF0aW9uRmVlUmVxdWVzdBIsCgNmZWUYASADKAsyHy5hcGkucmVzZXJ2YXRpb24uUmVzZXJ2YXRpb25GZWUiSwobVXBkYXRlUmVzZXJ2YXRpb25GZWVSZXF1ZXN0EiwKA2ZlZRgBIAEoCzIfLmFwaS5yZXNlcnZhdGlvbi5SZXNlcnZhdGlvbkZlZSItChtEZWxldGVSZXNlcnZhdGlvbkZlZVJlcXVlc3QSDgoCaWQYASABKANCAjABIiQKEkNvc3RSZWR1Y2VyUmVxdWVzdBIOCgJpZBgBIAEoA0ICMAEiIwoTQ29zdFJlZHVjZXJSZXNwb25zZRIMCgRjb3N0GAEgASgJMvIQChJSZXNlcnZhdGlvblNlcnZpY2USbwoSR2V0QWxsUmVzZXJ2YXRpb25zEiouYXBpLnJlc2VydmF0aW9uLkdldEFsbFJlc2VydmF0aW9uc1JlcXVlc3QaKC5hcGkucmVzZXJ2YXRpb24uQWxsUmVzZXJ2YXRpb25zUmVzcG9uc2UiA5ACARJfCg5HZXRSZXNlcnZhdGlvbhImLmFwaS5yZXNlcnZhdGlvbi5HZXRSZXNlcnZhdGlvblJlcXVlc3QaIC5hcGkucmVzZXJ2YXRpb24uRnVsbFJlc2VydmF0aW9uIgOQAgESYAoMUmVxdWVzdENvdW50EiQuYXBpLnJlc2VydmF0aW9uLlJlcXVlc3RDb3VudFJlcXVlc3QaJS5hcGkucmVzZXJ2YXRpb24uUmVxdWVzdENvdW50UmVzcG9uc2UiA5ACARJxChNHZXRSZXF1ZXN0c1RoaXNXZWVrEisuYXBpLnJlc2VydmF0aW9uLkdldFJlcXVlc3RzVGhpc1dlZWtSZXF1ZXN0GiguYXBpLnJlc2VydmF0aW9uLlJlcXVlc3RUaGlzV2Vla1Jlc3BvbnNlIgOQAgESagoRQ3JlYXRlUmVzZXJ2YXRpb24SKS5hcGkucmVzZXJ2YXRpb24uQ3JlYXRlUmVzZXJ2YXRpb25SZXF1ZXN0GiouYXBpLnJlc2VydmF0aW9uLkNyZWF0ZVJlc2VydmF0aW9uUmVzcG9uc2USagoRVXBkYXRlUmVzZXJ2YXRpb24SKS5hcGkucmVzZXJ2YXRpb24uVXBkYXRlUmVzZXJ2YXRpb25SZXF1ZXN0GiouYXBpLnJlc2VydmF0aW9uLlVwZGF0ZVJlc2VydmF0aW9uUmVzcG9uc2USdgoXVXBkYXRlUmVzZXJ2YXRpb25TdGF0dXMSLy5hcGkucmVzZXJ2YXRpb24uVXBkYXRlUmVzZXJ2YXRpb25TdGF0dXNSZXF1ZXN0GiouYXBpLnJlc2VydmF0aW9uLlVwZGF0ZVJlc2VydmF0aW9uUmVzcG9uc2USagoRRGVsZXRlUmVzZXJ2YXRpb24SKS5hcGkucmVzZXJ2YXRpb24uRGVsZXRlUmVzZXJ2YXRpb25SZXF1ZXN0GiouYXBpLnJlc2VydmF0aW9uLkRlbGV0ZVJlc2VydmF0aW9uUmVzcG9uc2USbAoQVXNlclJlc2VydmF0aW9ucxIoLmFwaS5yZXNlcnZhdGlvbi5Vc2VyUmVzZXJ2YXRpb25zUmVxdWVzdBopLmFwaS5yZXNlcnZhdGlvbi5Vc2VyUmVzZXJ2YXRpb25zUmVzcG9uc2UiA5ACARJ5ChZDcmVhdGVSZXNlcnZhdGlvbkRhdGVzEi4uYXBpLnJlc2VydmF0aW9uLkNyZWF0ZVJlc2VydmF0aW9uRGF0ZXNSZXF1ZXN0Gi8uYXBpLnJlc2VydmF0aW9uLkNyZWF0ZVJlc2VydmF0aW9uRGF0ZXNSZXNwb25zZRJ5ChZVcGRhdGVSZXNlcnZhdGlvbkRhdGVzEi4uYXBpLnJlc2VydmF0aW9uLlVwZGF0ZVJlc2VydmF0aW9uRGF0ZXNSZXF1ZXN0Gi8uYXBpLnJlc2VydmF0aW9uLlVwZGF0ZVJlc2VydmF0aW9uRGF0ZXNSZXNwb25zZRKLAQocVXBkYXRlUmVzZXJ2YXRpb25EYXRlc1N0YXR1cxI0LmFwaS5yZXNlcnZhdGlvbi5VcGRhdGVSZXNlcnZhdGlvbkRhdGVzU3RhdHVzUmVxdWVzdBo1LmFwaS5yZXNlcnZhdGlvbi5VcGRhdGVSZXNlcnZhdGlvbkRhdGVzU3RhdHVzUmVzcG9uc2USeQoWRGVsZXRlUmVzZXJ2YXRpb25EYXRlcxIuLmFwaS5yZXNlcnZhdGlvbi5EZWxldGVSZXNlcnZhdGlvbkRhdGVzUmVxdWVzdBovLmFwaS5yZXNlcnZhdGlvbi5EZWxldGVSZXNlcnZhdGlvbkRhdGVzUmVzcG9uc2UScwoUQ3JlYXRlUmVzZXJ2YXRpb25GZWUSLC5hcGkucmVzZXJ2YXRpb24uQ3JlYXRlUmVzZXJ2YXRpb25GZWVSZXF1ZXN0Gi0uYXBpLnJlc2VydmF0aW9uLkNyZWF0ZVJlc2VydmF0aW9uRmVlUmVzcG9uc2UScwoUVXBkYXRlUmVzZXJ2YXRpb25GZWUSLC5hcGkucmVzZXJ2YXRpb24uVXBkYXRlUmVzZXJ2YXRpb25GZWVSZXF1ZXN0Gi0uYXBpLnJlc2VydmF0aW9uLlVwZGF0ZVJlc2VydmF0aW9uRmVlUmVzcG9uc2UScwoURGVsZXRlUmVzZXJ2YXRpb25GZWUSLC5hcGkucmVzZXJ2YXRpb24uRGVsZXRlUmVzZXJ2YXRpb25GZWVSZXF1ZXN0Gi0uYXBpLnJlc2VydmF0aW9uLkRlbGV0ZVJlc2VydmF0aW9uRmVlUmVzcG9uc2USWAoLQ29zdFJlZHVjZXISIy5hcGkucmVzZXJ2YXRpb24uQ29zdFJlZHVjZXJSZXF1ZXN0GiQuYXBpLnJlc2VydmF0aW9uLkNvc3RSZWR1Y2VyUmVzcG9uc2USZQoNR2V0QWxsUGVuZGluZxIqLmFwaS5yZXNlcnZhdGlvbi5HZXRBbGxSZXNlcnZhdGlvbnNSZXF1ZXN0GiMuYXBpLnJlc2VydmF0aW9uLkFsbFBlbmRpbmdSZXNwb25zZSIDkAIBEmwKFUFsbFNvcnRlZFJlc2VydmF0aW9ucxIqLmFwaS5yZXNlcnZhdGlvbi5HZXRBbGxSZXNlcnZhdGlvbnNSZXF1ZXN0GiIuYXBpLnJlc2VydmF0aW9uLkFsbFNvcnRlZFJlc3BvbnNlIgOQAgFCtwEKE2NvbS5hcGkucmVzZXJ2YXRpb25CEFJlc2VydmF0aW9uUHJvdG9QAVoxYXBpL2ludGVybmFsL3Byb3RvL3Jlc2VydmF0aW9uO3Jlc2VydmF0aW9uc2VydmljZaICA0FSWKoCD0FwaS5SZXNlcnZhdGlvbsoCD0FwaVxSZXNlcnZhdGlvbuICG0FwaVxSZXNlcnZhdGlvblxHUEJNZXRhZGF0YeoCEEFwaTo6UmVzZXJ2YXRpb25iBnByb3RvMw");
+export const file_proto_reservation_reservation: GenFile =
+  /*@__PURE__*/
+  fileDesc(
+    'CiNwcm90by9yZXNlcnZhdGlvbi9yZXNlcnZhdGlvbi5wcm90bxIPYXBpLnJlc2VydmF0aW9uIsAECgtSZXNlcnZhdGlvbhIOCgJpZBgBIAEoA0ICMAESDwoHdXNlcl9pZBgCIAEoCRISCgpldmVudF9uYW1lGAMgASgJEhcKC2ZhY2lsaXR5X2lkGAQgASgDQgIwARIQCghhcHByb3ZlZBgFIAEoCRISCgpjcmVhdGVkX2F0GAYgASgJEhIKCnVwZGF0ZWRfYXQYByABKAkSDwoHZGV0YWlscxgIIAEoCRIMCgRmZWVzGAkgASgJEhEKCWluc3VyYW5jZRgKIAEoCBITCgtkb29yX2FjY2VzcxgLIAEoCBIVCg1kb29yc19kZXRhaWxzGAwgASgJEgwKBG5hbWUYDSABKAkSFAoMdGVjaF9kZXRhaWxzGA4gASgJEhQKDHRlY2hfc3VwcG9ydBgPIAEoCBINCgVwaG9uZRgQIAEoCRIXCgtjYXRlZ29yeV9pZBgRIAEoA0ICMAESEwoLdG90YWxfaG91cnMYEiABKAESEQoJaW5fcGVyc29uGBMgASgIEgwKBHBhaWQYFCABKAgSEwoLcGF5bWVudF91cmwYFSABKAkSFwoPcGF5bWVudF9saW5rX2lkGBYgASgJEhYKDmluc3VyYW5jZV9saW5rGBcgASgJEhUKDWNvc3Rfb3ZlcnJpZGUYGCABKAkSDQoFcnJ1bGUYGSABKAkSDgoGcmRhdGVzGBogAygJEg8KB2V4ZGF0ZXMYGyADKAkSFAoMZ2NhbF9ldmVudGlkGBwgASgJEhAKCHByaWNlX2lkGB0gASgJIo0BCg9SZXNlcnZhdGlvbkRhdGUSDgoCaWQYASABKANCAjABEhoKDnJlc2VydmF0aW9uX2lkGAIgASgDQgIwARIQCghhcHByb3ZlZBgDIAEoCRIUCgxnY2FsX2V2ZW50aWQYBCABKAkSEwoLbG9jYWxfc3RhcnQYBSABKAkSEQoJbG9jYWxfZW5kGAYgASgJIlMKEVJlY3VycmVuY2VQYXR0ZXJuEgwKBGZyZXEYASABKAkSEgoKYnlfd2Vla2RheRgCIAMoCRINCgV1bnRpbBgDIAEoCRINCgVjb3VudBgEIAEoBSIoCgpPY2N1cnJlbmNlEg0KBXN0YXJ0GAEgASgJEgsKA2VuZBgCIAEoCSJoCg5SZXNlcnZhdGlvbkZlZRIOCgJpZBgBIAEoA0ICMAESFwoPYWRkaXRpb25hbF9mZWVzGAIgASgJEhEKCWZlZXNfdHlwZRgDIAEoCRIaCg5yZXNlcnZhdGlvbl9pZBgEIAEoA0ICMAEipAEKD0Z1bGxSZXNlcnZhdGlvbhIxCgtyZXNlcnZhdGlvbhgBIAEoCzIcLmFwaS5yZXNlcnZhdGlvbi5SZXNlcnZhdGlvbhIvCgVkYXRlcxgCIAMoCzIgLmFwaS5yZXNlcnZhdGlvbi5SZXNlcnZhdGlvbkRhdGUSLQoEZmVlcxgDIAMoCzIfLmFwaS5yZXNlcnZhdGlvbi5SZXNlcnZhdGlvbkZlZSKfAQoXRnVsbFJlc1dpdGhGYWNpbGl0eU5hbWUSEgoKZXZlbnRfbmFtZRgBIAEoCRIVCg1mYWNpbGl0eV9uYW1lGAIgASgJEhgKEHJlc2VydmF0aW9uX2RhdGUYAyABKAkSEAoIYXBwcm92ZWQYBCABKAkSEQoJdXNlcl9uYW1lGAUgASgJEhoKDnJlc2VydmF0aW9uX2lkGAYgASgDQgIwASJMChJBbGxQZW5kaW5nUmVzcG9uc2USNgoEZGF0YRgBIAMoCzIoLmFwaS5yZXNlcnZhdGlvbi5GdWxsUmVzV2l0aEZhY2lsaXR5TmFtZSKFAQoRQWxsU29ydGVkUmVzcG9uc2USNgoEcGFzdBgBIAMoCzIoLmFwaS5yZXNlcnZhdGlvbi5GdWxsUmVzV2l0aEZhY2lsaXR5TmFtZRI4CgZmdXR1cmUYAiADKAsyKC5hcGkucmVzZXJ2YXRpb24uRnVsbFJlc1dpdGhGYWNpbGl0eU5hbWUiQAoeVXBkYXRlUmVzZXJ2YXRpb25TdGF0dXNSZXF1ZXN0Eg4KAmlkGAEgASgDQgIwARIOCgZzdGF0dXMYAiABKAkiRgojVXBkYXRlUmVzZXJ2YXRpb25EYXRlc1N0YXR1c1JlcXVlc3QSDwoDaWRzGAEgAygDQgIwARIOCgZzdGF0dXMYAiABKAkiJgokVXBkYXRlUmVzZXJ2YXRpb25EYXRlc1N0YXR1c1Jlc3BvbnNlIlEKF0FsbFJlc2VydmF0aW9uc1Jlc3BvbnNlEjYKDHJlc2VydmF0aW9ucxgBIAMoCzIgLmFwaS5yZXNlcnZhdGlvbi5GdWxsUmVzZXJ2YXRpb24iUQoXUmVxdWVzdFRoaXNXZWVrUmVzcG9uc2USNgoMcmVzZXJ2YXRpb25zGAEgAygLMiAuYXBpLnJlc2VydmF0aW9uLkZ1bGxSZXNlcnZhdGlvbiJWChxBcHByb3ZlZFJlc2VydmF0aW9uc1Jlc3BvbnNlEjYKDHJlc2VydmF0aW9ucxgBIAMoCzIgLmFwaS5yZXNlcnZhdGlvbi5GdWxsUmVzZXJ2YXRpb24iVQobUGVuZGluZ1Jlc2VydmF0aW9uc1Jlc3BvbnNlEjYKDHJlc2VydmF0aW9ucxgBIAMoCzIgLmFwaS5yZXNlcnZhdGlvbi5GdWxsUmVzZXJ2YXRpb24iWgoYVXNlclJlc2VydmF0aW9uc1Jlc3BvbnNlEj4KDHJlc2VydmF0aW9ucxgBIAMoCzIoLmFwaS5yZXNlcnZhdGlvbi5GdWxsUmVzV2l0aEZhY2lsaXR5TmFtZSIbChlHZXRBbGxSZXNlcnZhdGlvbnNSZXF1ZXN0IicKFUdldFJlc2VydmF0aW9uUmVxdWVzdBIOCgJpZBgBIAEoA0ICMAEiFQoTUmVxdWVzdENvdW50UmVxdWVzdCIpChRSZXF1ZXN0Q291bnRSZXNwb25zZRIRCgVjb3VudBgBIAEoA0ICMAEiHAoaR2V0UmVxdWVzdHNUaGlzV2Vla1JlcXVlc3QiywMKGENyZWF0ZVJlc2VydmF0aW9uUmVxdWVzdBIPCgd1c2VyX2lkGAEgASgJEhIKCmV2ZW50X25hbWUYAiABKAkSFwoLZmFjaWxpdHlfaWQYAyABKANCAjABEg8KB2RldGFpbHMYBCABKAkSFwoLY2F0ZWdvcnlfaWQYBSABKANCAjABEgwKBG5hbWUYBiABKAkSDQoFcGhvbmUYByABKAkSFAoMdGVjaF9zdXBwb3J0GAggASgIEhQKDHRlY2hfZGV0YWlscxgJIAEoCRITCgtkb29yX2FjY2VzcxgKIAEoCBIVCg1kb29yc19kZXRhaWxzGAsgASgJEjAKC29jY3VycmVuY2VzGAwgAygLMhsuYXBpLnJlc2VydmF0aW9uLk9jY3VycmVuY2USEgoKc3RhcnRfZGF0ZRgNIAEoCRISCgpzdGFydF90aW1lGA4gASgJEhAKCGVuZF9kYXRlGA8gASgJEhAKCGVuZF90aW1lGBAgASgJEjMKB3BhdHRlcm4YESABKAsyIi5hcGkucmVzZXJ2YXRpb24uUmVjdXJyZW5jZVBhdHRlcm4SDgoGcmRhdGVzGBIgAygJEg8KB2V4ZGF0ZXMYEyADKAkiKwoZQ3JlYXRlUmVzZXJ2YXRpb25SZXNwb25zZRIOCgJpZBgBIAEoA0ICMAEiTQoYVXBkYXRlUmVzZXJ2YXRpb25SZXF1ZXN0EjEKC3Jlc2VydmF0aW9uGAEgASgLMhwuYXBpLnJlc2VydmF0aW9uLlJlc2VydmF0aW9uIhsKGVVwZGF0ZVJlc2VydmF0aW9uUmVzcG9uc2UiKgoYRGVsZXRlUmVzZXJ2YXRpb25SZXF1ZXN0Eg4KAmlkGAEgASgDQgIwASIbChlEZWxldGVSZXNlcnZhdGlvblJlc3BvbnNlIioKF1VzZXJSZXNlcnZhdGlvbnNSZXF1ZXN0Eg8KB3VzZXJfaWQYASABKAkiTwodQ3JlYXRlUmVzZXJ2YXRpb25EYXRlc1JlcXVlc3QSLgoEZGF0ZRgBIAMoCzIgLmFwaS5yZXNlcnZhdGlvbi5SZXNlcnZhdGlvbkRhdGUiIAoeQ3JlYXRlUmVzZXJ2YXRpb25EYXRlc1Jlc3BvbnNlIiAKHlVwZGF0ZVJlc2VydmF0aW9uRGF0ZXNSZXNwb25zZSIgCh5EZWxldGVSZXNlcnZhdGlvbkRhdGVzUmVzcG9uc2UiHgocQ3JlYXRlUmVzZXJ2YXRpb25GZWVSZXNwb25zZSIeChxVcGRhdGVSZXNlcnZhdGlvbkZlZVJlc3BvbnNlIh4KHERlbGV0ZVJlc2VydmF0aW9uRmVlUmVzcG9uc2UiTwodVXBkYXRlUmVzZXJ2YXRpb25EYXRlc1JlcXVlc3QSLgoEZGF0ZRgBIAMoCzIgLmFwaS5yZXNlcnZhdGlvbi5SZXNlcnZhdGlvbkRhdGUiLwodRGVsZXRlUmVzZXJ2YXRpb25EYXRlc1JlcXVlc3QSDgoCaWQYASADKANCAjABIksKG0NyZWF0ZVJlc2VydmF0aW9uRmVlUmVxdWVzdBIsCgNmZWUYASADKAsyHy5hcGkucmVzZXJ2YXRpb24uUmVzZXJ2YXRpb25GZWUiSwobVXBkYXRlUmVzZXJ2YXRpb25GZWVSZXF1ZXN0EiwKA2ZlZRgBIAEoCzIfLmFwaS5yZXNlcnZhdGlvbi5SZXNlcnZhdGlvbkZlZSItChtEZWxldGVSZXNlcnZhdGlvbkZlZVJlcXVlc3QSDgoCaWQYASABKANCAjABIiQKEkNvc3RSZWR1Y2VyUmVxdWVzdBIOCgJpZBgBIAEoA0ICMAEiIwoTQ29zdFJlZHVjZXJSZXNwb25zZRIMCgRjb3N0GAEgASgJMvIQChJSZXNlcnZhdGlvblNlcnZpY2USbwoSR2V0QWxsUmVzZXJ2YXRpb25zEiouYXBpLnJlc2VydmF0aW9uLkdldEFsbFJlc2VydmF0aW9uc1JlcXVlc3QaKC5hcGkucmVzZXJ2YXRpb24uQWxsUmVzZXJ2YXRpb25zUmVzcG9uc2UiA5ACARJfCg5HZXRSZXNlcnZhdGlvbhImLmFwaS5yZXNlcnZhdGlvbi5HZXRSZXNlcnZhdGlvblJlcXVlc3QaIC5hcGkucmVzZXJ2YXRpb24uRnVsbFJlc2VydmF0aW9uIgOQAgESYAoMUmVxdWVzdENvdW50EiQuYXBpLnJlc2VydmF0aW9uLlJlcXVlc3RDb3VudFJlcXVlc3QaJS5hcGkucmVzZXJ2YXRpb24uUmVxdWVzdENvdW50UmVzcG9uc2UiA5ACARJxChNHZXRSZXF1ZXN0c1RoaXNXZWVrEisuYXBpLnJlc2VydmF0aW9uLkdldFJlcXVlc3RzVGhpc1dlZWtSZXF1ZXN0GiguYXBpLnJlc2VydmF0aW9uLlJlcXVlc3RUaGlzV2Vla1Jlc3BvbnNlIgOQAgESagoRQ3JlYXRlUmVzZXJ2YXRpb24SKS5hcGkucmVzZXJ2YXRpb24uQ3JlYXRlUmVzZXJ2YXRpb25SZXF1ZXN0GiouYXBpLnJlc2VydmF0aW9uLkNyZWF0ZVJlc2VydmF0aW9uUmVzcG9uc2USagoRVXBkYXRlUmVzZXJ2YXRpb24SKS5hcGkucmVzZXJ2YXRpb24uVXBkYXRlUmVzZXJ2YXRpb25SZXF1ZXN0GiouYXBpLnJlc2VydmF0aW9uLlVwZGF0ZVJlc2VydmF0aW9uUmVzcG9uc2USdgoXVXBkYXRlUmVzZXJ2YXRpb25TdGF0dXMSLy5hcGkucmVzZXJ2YXRpb24uVXBkYXRlUmVzZXJ2YXRpb25TdGF0dXNSZXF1ZXN0GiouYXBpLnJlc2VydmF0aW9uLlVwZGF0ZVJlc2VydmF0aW9uUmVzcG9uc2USagoRRGVsZXRlUmVzZXJ2YXRpb24SKS5hcGkucmVzZXJ2YXRpb24uRGVsZXRlUmVzZXJ2YXRpb25SZXF1ZXN0GiouYXBpLnJlc2VydmF0aW9uLkRlbGV0ZVJlc2VydmF0aW9uUmVzcG9uc2USbAoQVXNlclJlc2VydmF0aW9ucxIoLmFwaS5yZXNlcnZhdGlvbi5Vc2VyUmVzZXJ2YXRpb25zUmVxdWVzdBopLmFwaS5yZXNlcnZhdGlvbi5Vc2VyUmVzZXJ2YXRpb25zUmVzcG9uc2UiA5ACARJ5ChZDcmVhdGVSZXNlcnZhdGlvbkRhdGVzEi4uYXBpLnJlc2VydmF0aW9uLkNyZWF0ZVJlc2VydmF0aW9uRGF0ZXNSZXF1ZXN0Gi8uYXBpLnJlc2VydmF0aW9uLkNyZWF0ZVJlc2VydmF0aW9uRGF0ZXNSZXNwb25zZRJ5ChZVcGRhdGVSZXNlcnZhdGlvbkRhdGVzEi4uYXBpLnJlc2VydmF0aW9uLlVwZGF0ZVJlc2VydmF0aW9uRGF0ZXNSZXF1ZXN0Gi8uYXBpLnJlc2VydmF0aW9uLlVwZGF0ZVJlc2VydmF0aW9uRGF0ZXNSZXNwb25zZRKLAQocVXBkYXRlUmVzZXJ2YXRpb25EYXRlc1N0YXR1cxI0LmFwaS5yZXNlcnZhdGlvbi5VcGRhdGVSZXNlcnZhdGlvbkRhdGVzU3RhdHVzUmVxdWVzdBo1LmFwaS5yZXNlcnZhdGlvbi5VcGRhdGVSZXNlcnZhdGlvbkRhdGVzU3RhdHVzUmVzcG9uc2USeQoWRGVsZXRlUmVzZXJ2YXRpb25EYXRlcxIuLmFwaS5yZXNlcnZhdGlvbi5EZWxldGVSZXNlcnZhdGlvbkRhdGVzUmVxdWVzdBovLmFwaS5yZXNlcnZhdGlvbi5EZWxldGVSZXNlcnZhdGlvbkRhdGVzUmVzcG9uc2UScwoUQ3JlYXRlUmVzZXJ2YXRpb25GZWUSLC5hcGkucmVzZXJ2YXRpb24uQ3JlYXRlUmVzZXJ2YXRpb25GZWVSZXF1ZXN0Gi0uYXBpLnJlc2VydmF0aW9uLkNyZWF0ZVJlc2VydmF0aW9uRmVlUmVzcG9uc2UScwoUVXBkYXRlUmVzZXJ2YXRpb25GZWUSLC5hcGkucmVzZXJ2YXRpb24uVXBkYXRlUmVzZXJ2YXRpb25GZWVSZXF1ZXN0Gi0uYXBpLnJlc2VydmF0aW9uLlVwZGF0ZVJlc2VydmF0aW9uRmVlUmVzcG9uc2UScwoURGVsZXRlUmVzZXJ2YXRpb25GZWUSLC5hcGkucmVzZXJ2YXRpb24uRGVsZXRlUmVzZXJ2YXRpb25GZWVSZXF1ZXN0Gi0uYXBpLnJlc2VydmF0aW9uLkRlbGV0ZVJlc2VydmF0aW9uRmVlUmVzcG9uc2USWAoLQ29zdFJlZHVjZXISIy5hcGkucmVzZXJ2YXRpb24uQ29zdFJlZHVjZXJSZXF1ZXN0GiQuYXBpLnJlc2VydmF0aW9uLkNvc3RSZWR1Y2VyUmVzcG9uc2USZQoNR2V0QWxsUGVuZGluZxIqLmFwaS5yZXNlcnZhdGlvbi5HZXRBbGxSZXNlcnZhdGlvbnNSZXF1ZXN0GiMuYXBpLnJlc2VydmF0aW9uLkFsbFBlbmRpbmdSZXNwb25zZSIDkAIBEmwKFUFsbFNvcnRlZFJlc2VydmF0aW9ucxIqLmFwaS5yZXNlcnZhdGlvbi5HZXRBbGxSZXNlcnZhdGlvbnNSZXF1ZXN0GiIuYXBpLnJlc2VydmF0aW9uLkFsbFNvcnRlZFJlc3BvbnNlIgOQAgFCtwEKE2NvbS5hcGkucmVzZXJ2YXRpb25CEFJlc2VydmF0aW9uUHJvdG9QAVoxYXBpL2ludGVybmFsL3Byb3RvL3Jlc2VydmF0aW9uO3Jlc2VydmF0aW9uc2VydmljZaICA0FSWKoCD0FwaS5SZXNlcnZhdGlvbsoCD0FwaVxSZXNlcnZhdGlvbuICG0FwaVxSZXNlcnZhdGlvblxHUEJNZXRhZGF0YeoCEEFwaTo6UmVzZXJ2YXRpb25iBnByb3RvMw',
+  );
 
 /**
  * @generated from message api.reservation.Reservation
  */
-export type Reservation = Message<"api.reservation.Reservation"> & {
+export type Reservation = Message<'api.reservation.Reservation'> & {
   /**
    * @generated from field: int64 id = 1 [jstype = JS_STRING];
    */
@@ -170,13 +181,14 @@ export type Reservation = Message<"api.reservation.Reservation"> & {
  * Describes the message api.reservation.Reservation.
  * Use `create(ReservationSchema)` to create a new message.
  */
-export const ReservationSchema: GenMessage<Reservation> = /*@__PURE__*/
+export const ReservationSchema: GenMessage<Reservation> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 0);
 
 /**
  * @generated from message api.reservation.ReservationDate
  */
-export type ReservationDate = Message<"api.reservation.ReservationDate"> & {
+export type ReservationDate = Message<'api.reservation.ReservationDate'> & {
   /**
    * @generated from field: int64 id = 1 [jstype = JS_STRING];
    */
@@ -212,13 +224,14 @@ export type ReservationDate = Message<"api.reservation.ReservationDate"> & {
  * Describes the message api.reservation.ReservationDate.
  * Use `create(ReservationDateSchema)` to create a new message.
  */
-export const ReservationDateSchema: GenMessage<ReservationDate> = /*@__PURE__*/
+export const ReservationDateSchema: GenMessage<ReservationDate> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 1);
 
 /**
  * @generated from message api.reservation.RecurrencePattern
  */
-export type RecurrencePattern = Message<"api.reservation.RecurrencePattern"> & {
+export type RecurrencePattern = Message<'api.reservation.RecurrencePattern'> & {
   /**
    * @generated from field: string freq = 1;
    */
@@ -244,13 +257,14 @@ export type RecurrencePattern = Message<"api.reservation.RecurrencePattern"> & {
  * Describes the message api.reservation.RecurrencePattern.
  * Use `create(RecurrencePatternSchema)` to create a new message.
  */
-export const RecurrencePatternSchema: GenMessage<RecurrencePattern> = /*@__PURE__*/
+export const RecurrencePatternSchema: GenMessage<RecurrencePattern> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 2);
 
 /**
  * @generated from message api.reservation.Occurrence
  */
-export type Occurrence = Message<"api.reservation.Occurrence"> & {
+export type Occurrence = Message<'api.reservation.Occurrence'> & {
   /**
    * "YYYY-MM-DDTHH:mm"
    *
@@ -270,13 +284,14 @@ export type Occurrence = Message<"api.reservation.Occurrence"> & {
  * Describes the message api.reservation.Occurrence.
  * Use `create(OccurrenceSchema)` to create a new message.
  */
-export const OccurrenceSchema: GenMessage<Occurrence> = /*@__PURE__*/
+export const OccurrenceSchema: GenMessage<Occurrence> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 3);
 
 /**
  * @generated from message api.reservation.ReservationFee
  */
-export type ReservationFee = Message<"api.reservation.ReservationFee"> & {
+export type ReservationFee = Message<'api.reservation.ReservationFee'> & {
   /**
    * @generated from field: int64 id = 1 [jstype = JS_STRING];
    */
@@ -304,13 +319,14 @@ export type ReservationFee = Message<"api.reservation.ReservationFee"> & {
  * Describes the message api.reservation.ReservationFee.
  * Use `create(ReservationFeeSchema)` to create a new message.
  */
-export const ReservationFeeSchema: GenMessage<ReservationFee> = /*@__PURE__*/
+export const ReservationFeeSchema: GenMessage<ReservationFee> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 4);
 
 /**
  * @generated from message api.reservation.FullReservation
  */
-export type FullReservation = Message<"api.reservation.FullReservation"> & {
+export type FullReservation = Message<'api.reservation.FullReservation'> & {
   /**
    * @generated from field: api.reservation.Reservation reservation = 1;
    */
@@ -331,72 +347,77 @@ export type FullReservation = Message<"api.reservation.FullReservation"> & {
  * Describes the message api.reservation.FullReservation.
  * Use `create(FullReservationSchema)` to create a new message.
  */
-export const FullReservationSchema: GenMessage<FullReservation> = /*@__PURE__*/
+export const FullReservationSchema: GenMessage<FullReservation> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 5);
 
 /**
  * @generated from message api.reservation.FullResWithFacilityName
  */
-export type FullResWithFacilityName = Message<"api.reservation.FullResWithFacilityName"> & {
-  /**
-   * @generated from field: string event_name = 1;
-   */
-  eventName: string;
+export type FullResWithFacilityName =
+  Message<'api.reservation.FullResWithFacilityName'> & {
+    /**
+     * @generated from field: string event_name = 1;
+     */
+    eventName: string;
 
-  /**
-   * @generated from field: string facility_name = 2;
-   */
-  facilityName: string;
+    /**
+     * @generated from field: string facility_name = 2;
+     */
+    facilityName: string;
 
-  /**
-   * @generated from field: string reservation_date = 3;
-   */
-  reservationDate: string;
+    /**
+     * @generated from field: string reservation_date = 3;
+     */
+    reservationDate: string;
 
-  /**
-   * @generated from field: string approved = 4;
-   */
-  approved: string;
+    /**
+     * @generated from field: string approved = 4;
+     */
+    approved: string;
 
-  /**
-   * @generated from field: string user_name = 5;
-   */
-  userName: string;
+    /**
+     * @generated from field: string user_name = 5;
+     */
+    userName: string;
 
-  /**
-   * @generated from field: int64 reservation_id = 6 [jstype = JS_STRING];
-   */
-  reservationId: string;
-};
+    /**
+     * @generated from field: int64 reservation_id = 6 [jstype = JS_STRING];
+     */
+    reservationId: string;
+  };
 
 /**
  * Describes the message api.reservation.FullResWithFacilityName.
  * Use `create(FullResWithFacilityNameSchema)` to create a new message.
  */
-export const FullResWithFacilityNameSchema: GenMessage<FullResWithFacilityName> = /*@__PURE__*/
+export const FullResWithFacilityNameSchema: GenMessage<FullResWithFacilityName> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 6);
 
 /**
  * @generated from message api.reservation.AllPendingResponse
  */
-export type AllPendingResponse = Message<"api.reservation.AllPendingResponse"> & {
-  /**
-   * @generated from field: repeated api.reservation.FullResWithFacilityName data = 1;
-   */
-  data: FullResWithFacilityName[];
-};
+export type AllPendingResponse =
+  Message<'api.reservation.AllPendingResponse'> & {
+    /**
+     * @generated from field: repeated api.reservation.FullResWithFacilityName data = 1;
+     */
+    data: FullResWithFacilityName[];
+  };
 
 /**
  * Describes the message api.reservation.AllPendingResponse.
  * Use `create(AllPendingResponseSchema)` to create a new message.
  */
-export const AllPendingResponseSchema: GenMessage<AllPendingResponse> = /*@__PURE__*/
+export const AllPendingResponseSchema: GenMessage<AllPendingResponse> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 7);
 
 /**
  * @generated from message api.reservation.AllSortedResponse
  */
-export type AllSortedResponse = Message<"api.reservation.AllSortedResponse"> & {
+export type AllSortedResponse = Message<'api.reservation.AllSortedResponse'> & {
   /**
    * @generated from field: repeated api.reservation.FullResWithFacilityName past = 1;
    */
@@ -412,637 +433,694 @@ export type AllSortedResponse = Message<"api.reservation.AllSortedResponse"> & {
  * Describes the message api.reservation.AllSortedResponse.
  * Use `create(AllSortedResponseSchema)` to create a new message.
  */
-export const AllSortedResponseSchema: GenMessage<AllSortedResponse> = /*@__PURE__*/
+export const AllSortedResponseSchema: GenMessage<AllSortedResponse> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 8);
 
 /**
  * @generated from message api.reservation.UpdateReservationStatusRequest
  */
-export type UpdateReservationStatusRequest = Message<"api.reservation.UpdateReservationStatusRequest"> & {
-  /**
-   * @generated from field: int64 id = 1 [jstype = JS_STRING];
-   */
-  id: string;
+export type UpdateReservationStatusRequest =
+  Message<'api.reservation.UpdateReservationStatusRequest'> & {
+    /**
+     * @generated from field: int64 id = 1 [jstype = JS_STRING];
+     */
+    id: string;
 
-  /**
-   * @generated from field: string status = 2;
-   */
-  status: string;
-};
+    /**
+     * @generated from field: string status = 2;
+     */
+    status: string;
+  };
 
 /**
  * Describes the message api.reservation.UpdateReservationStatusRequest.
  * Use `create(UpdateReservationStatusRequestSchema)` to create a new message.
  */
-export const UpdateReservationStatusRequestSchema: GenMessage<UpdateReservationStatusRequest> = /*@__PURE__*/
+export const UpdateReservationStatusRequestSchema: GenMessage<UpdateReservationStatusRequest> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 9);
 
 /**
  * @generated from message api.reservation.UpdateReservationDatesStatusRequest
  */
-export type UpdateReservationDatesStatusRequest = Message<"api.reservation.UpdateReservationDatesStatusRequest"> & {
-  /**
-   * @generated from field: repeated int64 ids = 1 [jstype = JS_STRING];
-   */
-  ids: string[];
+export type UpdateReservationDatesStatusRequest =
+  Message<'api.reservation.UpdateReservationDatesStatusRequest'> & {
+    /**
+     * @generated from field: repeated int64 ids = 1 [jstype = JS_STRING];
+     */
+    ids: string[];
 
-  /**
-   * @generated from field: string status = 2;
-   */
-  status: string;
-};
+    /**
+     * @generated from field: string status = 2;
+     */
+    status: string;
+  };
 
 /**
  * Describes the message api.reservation.UpdateReservationDatesStatusRequest.
  * Use `create(UpdateReservationDatesStatusRequestSchema)` to create a new message.
  */
-export const UpdateReservationDatesStatusRequestSchema: GenMessage<UpdateReservationDatesStatusRequest> = /*@__PURE__*/
+export const UpdateReservationDatesStatusRequestSchema: GenMessage<UpdateReservationDatesStatusRequest> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 10);
 
 /**
  * @generated from message api.reservation.UpdateReservationDatesStatusResponse
  */
-export type UpdateReservationDatesStatusResponse = Message<"api.reservation.UpdateReservationDatesStatusResponse"> & {
-};
+export type UpdateReservationDatesStatusResponse =
+  Message<'api.reservation.UpdateReservationDatesStatusResponse'> & {};
 
 /**
  * Describes the message api.reservation.UpdateReservationDatesStatusResponse.
  * Use `create(UpdateReservationDatesStatusResponseSchema)` to create a new message.
  */
-export const UpdateReservationDatesStatusResponseSchema: GenMessage<UpdateReservationDatesStatusResponse> = /*@__PURE__*/
+export const UpdateReservationDatesStatusResponseSchema: GenMessage<UpdateReservationDatesStatusResponse> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 11);
 
 /**
  * @generated from message api.reservation.AllReservationsResponse
  */
-export type AllReservationsResponse = Message<"api.reservation.AllReservationsResponse"> & {
-  /**
-   * @generated from field: repeated api.reservation.FullReservation reservations = 1;
-   */
-  reservations: FullReservation[];
-};
+export type AllReservationsResponse =
+  Message<'api.reservation.AllReservationsResponse'> & {
+    /**
+     * @generated from field: repeated api.reservation.FullReservation reservations = 1;
+     */
+    reservations: FullReservation[];
+  };
 
 /**
  * Describes the message api.reservation.AllReservationsResponse.
  * Use `create(AllReservationsResponseSchema)` to create a new message.
  */
-export const AllReservationsResponseSchema: GenMessage<AllReservationsResponse> = /*@__PURE__*/
+export const AllReservationsResponseSchema: GenMessage<AllReservationsResponse> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 12);
 
 /**
  * @generated from message api.reservation.RequestThisWeekResponse
  */
-export type RequestThisWeekResponse = Message<"api.reservation.RequestThisWeekResponse"> & {
-  /**
-   * @generated from field: repeated api.reservation.FullReservation reservations = 1;
-   */
-  reservations: FullReservation[];
-};
+export type RequestThisWeekResponse =
+  Message<'api.reservation.RequestThisWeekResponse'> & {
+    /**
+     * @generated from field: repeated api.reservation.FullReservation reservations = 1;
+     */
+    reservations: FullReservation[];
+  };
 
 /**
  * Describes the message api.reservation.RequestThisWeekResponse.
  * Use `create(RequestThisWeekResponseSchema)` to create a new message.
  */
-export const RequestThisWeekResponseSchema: GenMessage<RequestThisWeekResponse> = /*@__PURE__*/
+export const RequestThisWeekResponseSchema: GenMessage<RequestThisWeekResponse> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 13);
 
 /**
  * @generated from message api.reservation.ApprovedReservationsResponse
  */
-export type ApprovedReservationsResponse = Message<"api.reservation.ApprovedReservationsResponse"> & {
-  /**
-   * @generated from field: repeated api.reservation.FullReservation reservations = 1;
-   */
-  reservations: FullReservation[];
-};
+export type ApprovedReservationsResponse =
+  Message<'api.reservation.ApprovedReservationsResponse'> & {
+    /**
+     * @generated from field: repeated api.reservation.FullReservation reservations = 1;
+     */
+    reservations: FullReservation[];
+  };
 
 /**
  * Describes the message api.reservation.ApprovedReservationsResponse.
  * Use `create(ApprovedReservationsResponseSchema)` to create a new message.
  */
-export const ApprovedReservationsResponseSchema: GenMessage<ApprovedReservationsResponse> = /*@__PURE__*/
+export const ApprovedReservationsResponseSchema: GenMessage<ApprovedReservationsResponse> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 14);
 
 /**
  * @generated from message api.reservation.PendingReservationsResponse
  */
-export type PendingReservationsResponse = Message<"api.reservation.PendingReservationsResponse"> & {
-  /**
-   * @generated from field: repeated api.reservation.FullReservation reservations = 1;
-   */
-  reservations: FullReservation[];
-};
+export type PendingReservationsResponse =
+  Message<'api.reservation.PendingReservationsResponse'> & {
+    /**
+     * @generated from field: repeated api.reservation.FullReservation reservations = 1;
+     */
+    reservations: FullReservation[];
+  };
 
 /**
  * Describes the message api.reservation.PendingReservationsResponse.
  * Use `create(PendingReservationsResponseSchema)` to create a new message.
  */
-export const PendingReservationsResponseSchema: GenMessage<PendingReservationsResponse> = /*@__PURE__*/
+export const PendingReservationsResponseSchema: GenMessage<PendingReservationsResponse> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 15);
 
 /**
  * @generated from message api.reservation.UserReservationsResponse
  */
-export type UserReservationsResponse = Message<"api.reservation.UserReservationsResponse"> & {
-  /**
-   * @generated from field: repeated api.reservation.FullResWithFacilityName reservations = 1;
-   */
-  reservations: FullResWithFacilityName[];
-};
+export type UserReservationsResponse =
+  Message<'api.reservation.UserReservationsResponse'> & {
+    /**
+     * @generated from field: repeated api.reservation.FullResWithFacilityName reservations = 1;
+     */
+    reservations: FullResWithFacilityName[];
+  };
 
 /**
  * Describes the message api.reservation.UserReservationsResponse.
  * Use `create(UserReservationsResponseSchema)` to create a new message.
  */
-export const UserReservationsResponseSchema: GenMessage<UserReservationsResponse> = /*@__PURE__*/
+export const UserReservationsResponseSchema: GenMessage<UserReservationsResponse> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 16);
 
 /**
  * @generated from message api.reservation.GetAllReservationsRequest
  */
-export type GetAllReservationsRequest = Message<"api.reservation.GetAllReservationsRequest"> & {
-};
+export type GetAllReservationsRequest =
+  Message<'api.reservation.GetAllReservationsRequest'> & {};
 
 /**
  * Describes the message api.reservation.GetAllReservationsRequest.
  * Use `create(GetAllReservationsRequestSchema)` to create a new message.
  */
-export const GetAllReservationsRequestSchema: GenMessage<GetAllReservationsRequest> = /*@__PURE__*/
+export const GetAllReservationsRequestSchema: GenMessage<GetAllReservationsRequest> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 17);
 
 /**
  * @generated from message api.reservation.GetReservationRequest
  */
-export type GetReservationRequest = Message<"api.reservation.GetReservationRequest"> & {
-  /**
-   * @generated from field: int64 id = 1 [jstype = JS_STRING];
-   */
-  id: string;
-};
+export type GetReservationRequest =
+  Message<'api.reservation.GetReservationRequest'> & {
+    /**
+     * @generated from field: int64 id = 1 [jstype = JS_STRING];
+     */
+    id: string;
+  };
 
 /**
  * Describes the message api.reservation.GetReservationRequest.
  * Use `create(GetReservationRequestSchema)` to create a new message.
  */
-export const GetReservationRequestSchema: GenMessage<GetReservationRequest> = /*@__PURE__*/
+export const GetReservationRequestSchema: GenMessage<GetReservationRequest> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 18);
 
 /**
  * @generated from message api.reservation.RequestCountRequest
  */
-export type RequestCountRequest = Message<"api.reservation.RequestCountRequest"> & {
-};
+export type RequestCountRequest =
+  Message<'api.reservation.RequestCountRequest'> & {};
 
 /**
  * Describes the message api.reservation.RequestCountRequest.
  * Use `create(RequestCountRequestSchema)` to create a new message.
  */
-export const RequestCountRequestSchema: GenMessage<RequestCountRequest> = /*@__PURE__*/
+export const RequestCountRequestSchema: GenMessage<RequestCountRequest> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 19);
 
 /**
  * @generated from message api.reservation.RequestCountResponse
  */
-export type RequestCountResponse = Message<"api.reservation.RequestCountResponse"> & {
-  /**
-   * @generated from field: int64 count = 1 [jstype = JS_STRING];
-   */
-  count: string;
-};
+export type RequestCountResponse =
+  Message<'api.reservation.RequestCountResponse'> & {
+    /**
+     * @generated from field: int64 count = 1 [jstype = JS_STRING];
+     */
+    count: string;
+  };
 
 /**
  * Describes the message api.reservation.RequestCountResponse.
  * Use `create(RequestCountResponseSchema)` to create a new message.
  */
-export const RequestCountResponseSchema: GenMessage<RequestCountResponse> = /*@__PURE__*/
+export const RequestCountResponseSchema: GenMessage<RequestCountResponse> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 20);
 
 /**
  * @generated from message api.reservation.GetRequestsThisWeekRequest
  */
-export type GetRequestsThisWeekRequest = Message<"api.reservation.GetRequestsThisWeekRequest"> & {
-};
+export type GetRequestsThisWeekRequest =
+  Message<'api.reservation.GetRequestsThisWeekRequest'> & {};
 
 /**
  * Describes the message api.reservation.GetRequestsThisWeekRequest.
  * Use `create(GetRequestsThisWeekRequestSchema)` to create a new message.
  */
-export const GetRequestsThisWeekRequestSchema: GenMessage<GetRequestsThisWeekRequest> = /*@__PURE__*/
+export const GetRequestsThisWeekRequestSchema: GenMessage<GetRequestsThisWeekRequest> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 21);
 
 /**
  * @generated from message api.reservation.CreateReservationRequest
  */
-export type CreateReservationRequest = Message<"api.reservation.CreateReservationRequest"> & {
-  /**
-   * @generated from field: string user_id = 1;
-   */
-  userId: string;
+export type CreateReservationRequest =
+  Message<'api.reservation.CreateReservationRequest'> & {
+    /**
+     * @generated from field: string user_id = 1;
+     */
+    userId: string;
 
-  /**
-   * @generated from field: string event_name = 2;
-   */
-  eventName: string;
+    /**
+     * @generated from field: string event_name = 2;
+     */
+    eventName: string;
 
-  /**
-   * @generated from field: int64 facility_id = 3 [jstype = JS_STRING];
-   */
-  facilityId: string;
+    /**
+     * @generated from field: int64 facility_id = 3 [jstype = JS_STRING];
+     */
+    facilityId: string;
 
-  /**
-   * @generated from field: string details = 4;
-   */
-  details: string;
+    /**
+     * @generated from field: string details = 4;
+     */
+    details: string;
 
-  /**
-   * @generated from field: int64 category_id = 5 [jstype = JS_STRING];
-   */
-  categoryId: string;
+    /**
+     * @generated from field: int64 category_id = 5 [jstype = JS_STRING];
+     */
+    categoryId: string;
 
-  /**
-   * @generated from field: string name = 6;
-   */
-  name: string;
+    /**
+     * @generated from field: string name = 6;
+     */
+    name: string;
 
-  /**
-   * @generated from field: string phone = 7;
-   */
-  phone: string;
+    /**
+     * @generated from field: string phone = 7;
+     */
+    phone: string;
 
-  /**
-   * @generated from field: bool tech_support = 8;
-   */
-  techSupport: boolean;
+    /**
+     * @generated from field: bool tech_support = 8;
+     */
+    techSupport: boolean;
 
-  /**
-   * @generated from field: string tech_details = 9;
-   */
-  techDetails: string;
+    /**
+     * @generated from field: string tech_details = 9;
+     */
+    techDetails: string;
 
-  /**
-   * @generated from field: bool door_access = 10;
-   */
-  doorAccess: boolean;
+    /**
+     * @generated from field: bool door_access = 10;
+     */
+    doorAccess: boolean;
 
-  /**
-   * @generated from field: string doors_details = 11;
-   */
-  doorsDetails: string;
+    /**
+     * @generated from field: string doors_details = 11;
+     */
+    doorsDetails: string;
 
-  /**
-   * @generated from field: repeated api.reservation.Occurrence occurrences = 12;
-   */
-  occurrences: Occurrence[];
+    /**
+     * @generated from field: repeated api.reservation.Occurrence occurrences = 12;
+     */
+    occurrences: Occurrence[];
 
-  /**
-   * @generated from field: string start_date = 13;
-   */
-  startDate: string;
+    /**
+     * @generated from field: string start_date = 13;
+     */
+    startDate: string;
 
-  /**
-   * @generated from field: string start_time = 14;
-   */
-  startTime: string;
+    /**
+     * @generated from field: string start_time = 14;
+     */
+    startTime: string;
 
-  /**
-   * @generated from field: string end_date = 15;
-   */
-  endDate: string;
+    /**
+     * @generated from field: string end_date = 15;
+     */
+    endDate: string;
 
-  /**
-   * @generated from field: string end_time = 16;
-   */
-  endTime: string;
+    /**
+     * @generated from field: string end_time = 16;
+     */
+    endTime: string;
 
-  /**
-   * @generated from field: api.reservation.RecurrencePattern pattern = 17;
-   */
-  pattern?: RecurrencePattern;
+    /**
+     * @generated from field: api.reservation.RecurrencePattern pattern = 17;
+     */
+    pattern?: RecurrencePattern;
 
-  /**
-   * @generated from field: repeated string rdates = 18;
-   */
-  rdates: string[];
+    /**
+     * @generated from field: repeated string rdates = 18;
+     */
+    rdates: string[];
 
-  /**
-   * @generated from field: repeated string exdates = 19;
-   */
-  exdates: string[];
-};
+    /**
+     * @generated from field: repeated string exdates = 19;
+     */
+    exdates: string[];
+  };
 
 /**
  * Describes the message api.reservation.CreateReservationRequest.
  * Use `create(CreateReservationRequestSchema)` to create a new message.
  */
-export const CreateReservationRequestSchema: GenMessage<CreateReservationRequest> = /*@__PURE__*/
+export const CreateReservationRequestSchema: GenMessage<CreateReservationRequest> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 22);
 
 /**
  * @generated from message api.reservation.CreateReservationResponse
  */
-export type CreateReservationResponse = Message<"api.reservation.CreateReservationResponse"> & {
-  /**
-   * @generated from field: int64 id = 1 [jstype = JS_STRING];
-   */
-  id: string;
-};
+export type CreateReservationResponse =
+  Message<'api.reservation.CreateReservationResponse'> & {
+    /**
+     * @generated from field: int64 id = 1 [jstype = JS_STRING];
+     */
+    id: string;
+  };
 
 /**
  * Describes the message api.reservation.CreateReservationResponse.
  * Use `create(CreateReservationResponseSchema)` to create a new message.
  */
-export const CreateReservationResponseSchema: GenMessage<CreateReservationResponse> = /*@__PURE__*/
+export const CreateReservationResponseSchema: GenMessage<CreateReservationResponse> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 23);
 
 /**
  * @generated from message api.reservation.UpdateReservationRequest
  */
-export type UpdateReservationRequest = Message<"api.reservation.UpdateReservationRequest"> & {
-  /**
-   * @generated from field: api.reservation.Reservation reservation = 1;
-   */
-  reservation?: Reservation;
-};
+export type UpdateReservationRequest =
+  Message<'api.reservation.UpdateReservationRequest'> & {
+    /**
+     * @generated from field: api.reservation.Reservation reservation = 1;
+     */
+    reservation?: Reservation;
+  };
 
 /**
  * Describes the message api.reservation.UpdateReservationRequest.
  * Use `create(UpdateReservationRequestSchema)` to create a new message.
  */
-export const UpdateReservationRequestSchema: GenMessage<UpdateReservationRequest> = /*@__PURE__*/
+export const UpdateReservationRequestSchema: GenMessage<UpdateReservationRequest> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 24);
 
 /**
  * @generated from message api.reservation.UpdateReservationResponse
  */
-export type UpdateReservationResponse = Message<"api.reservation.UpdateReservationResponse"> & {
-};
+export type UpdateReservationResponse =
+  Message<'api.reservation.UpdateReservationResponse'> & {};
 
 /**
  * Describes the message api.reservation.UpdateReservationResponse.
  * Use `create(UpdateReservationResponseSchema)` to create a new message.
  */
-export const UpdateReservationResponseSchema: GenMessage<UpdateReservationResponse> = /*@__PURE__*/
+export const UpdateReservationResponseSchema: GenMessage<UpdateReservationResponse> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 25);
 
 /**
  * @generated from message api.reservation.DeleteReservationRequest
  */
-export type DeleteReservationRequest = Message<"api.reservation.DeleteReservationRequest"> & {
-  /**
-   * @generated from field: int64 id = 1 [jstype = JS_STRING];
-   */
-  id: string;
-};
+export type DeleteReservationRequest =
+  Message<'api.reservation.DeleteReservationRequest'> & {
+    /**
+     * @generated from field: int64 id = 1 [jstype = JS_STRING];
+     */
+    id: string;
+  };
 
 /**
  * Describes the message api.reservation.DeleteReservationRequest.
  * Use `create(DeleteReservationRequestSchema)` to create a new message.
  */
-export const DeleteReservationRequestSchema: GenMessage<DeleteReservationRequest> = /*@__PURE__*/
+export const DeleteReservationRequestSchema: GenMessage<DeleteReservationRequest> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 26);
 
 /**
  * @generated from message api.reservation.DeleteReservationResponse
  */
-export type DeleteReservationResponse = Message<"api.reservation.DeleteReservationResponse"> & {
-};
+export type DeleteReservationResponse =
+  Message<'api.reservation.DeleteReservationResponse'> & {};
 
 /**
  * Describes the message api.reservation.DeleteReservationResponse.
  * Use `create(DeleteReservationResponseSchema)` to create a new message.
  */
-export const DeleteReservationResponseSchema: GenMessage<DeleteReservationResponse> = /*@__PURE__*/
+export const DeleteReservationResponseSchema: GenMessage<DeleteReservationResponse> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 27);
 
 /**
  * @generated from message api.reservation.UserReservationsRequest
  */
-export type UserReservationsRequest = Message<"api.reservation.UserReservationsRequest"> & {
-  /**
-   * @generated from field: string user_id = 1;
-   */
-  userId: string;
-};
+export type UserReservationsRequest =
+  Message<'api.reservation.UserReservationsRequest'> & {
+    /**
+     * @generated from field: string user_id = 1;
+     */
+    userId: string;
+  };
 
 /**
  * Describes the message api.reservation.UserReservationsRequest.
  * Use `create(UserReservationsRequestSchema)` to create a new message.
  */
-export const UserReservationsRequestSchema: GenMessage<UserReservationsRequest> = /*@__PURE__*/
+export const UserReservationsRequestSchema: GenMessage<UserReservationsRequest> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 28);
 
 /**
  * @generated from message api.reservation.CreateReservationDatesRequest
  */
-export type CreateReservationDatesRequest = Message<"api.reservation.CreateReservationDatesRequest"> & {
-  /**
-   * @generated from field: repeated api.reservation.ReservationDate date = 1;
-   */
-  date: ReservationDate[];
-};
+export type CreateReservationDatesRequest =
+  Message<'api.reservation.CreateReservationDatesRequest'> & {
+    /**
+     * @generated from field: repeated api.reservation.ReservationDate date = 1;
+     */
+    date: ReservationDate[];
+  };
 
 /**
  * Describes the message api.reservation.CreateReservationDatesRequest.
  * Use `create(CreateReservationDatesRequestSchema)` to create a new message.
  */
-export const CreateReservationDatesRequestSchema: GenMessage<CreateReservationDatesRequest> = /*@__PURE__*/
+export const CreateReservationDatesRequestSchema: GenMessage<CreateReservationDatesRequest> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 29);
 
 /**
  * @generated from message api.reservation.CreateReservationDatesResponse
  */
-export type CreateReservationDatesResponse = Message<"api.reservation.CreateReservationDatesResponse"> & {
-};
+export type CreateReservationDatesResponse =
+  Message<'api.reservation.CreateReservationDatesResponse'> & {};
 
 /**
  * Describes the message api.reservation.CreateReservationDatesResponse.
  * Use `create(CreateReservationDatesResponseSchema)` to create a new message.
  */
-export const CreateReservationDatesResponseSchema: GenMessage<CreateReservationDatesResponse> = /*@__PURE__*/
+export const CreateReservationDatesResponseSchema: GenMessage<CreateReservationDatesResponse> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 30);
 
 /**
  * @generated from message api.reservation.UpdateReservationDatesResponse
  */
-export type UpdateReservationDatesResponse = Message<"api.reservation.UpdateReservationDatesResponse"> & {
-};
+export type UpdateReservationDatesResponse =
+  Message<'api.reservation.UpdateReservationDatesResponse'> & {};
 
 /**
  * Describes the message api.reservation.UpdateReservationDatesResponse.
  * Use `create(UpdateReservationDatesResponseSchema)` to create a new message.
  */
-export const UpdateReservationDatesResponseSchema: GenMessage<UpdateReservationDatesResponse> = /*@__PURE__*/
+export const UpdateReservationDatesResponseSchema: GenMessage<UpdateReservationDatesResponse> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 31);
 
 /**
  * @generated from message api.reservation.DeleteReservationDatesResponse
  */
-export type DeleteReservationDatesResponse = Message<"api.reservation.DeleteReservationDatesResponse"> & {
-};
+export type DeleteReservationDatesResponse =
+  Message<'api.reservation.DeleteReservationDatesResponse'> & {};
 
 /**
  * Describes the message api.reservation.DeleteReservationDatesResponse.
  * Use `create(DeleteReservationDatesResponseSchema)` to create a new message.
  */
-export const DeleteReservationDatesResponseSchema: GenMessage<DeleteReservationDatesResponse> = /*@__PURE__*/
+export const DeleteReservationDatesResponseSchema: GenMessage<DeleteReservationDatesResponse> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 32);
 
 /**
  * @generated from message api.reservation.CreateReservationFeeResponse
  */
-export type CreateReservationFeeResponse = Message<"api.reservation.CreateReservationFeeResponse"> & {
-};
+export type CreateReservationFeeResponse =
+  Message<'api.reservation.CreateReservationFeeResponse'> & {};
 
 /**
  * Describes the message api.reservation.CreateReservationFeeResponse.
  * Use `create(CreateReservationFeeResponseSchema)` to create a new message.
  */
-export const CreateReservationFeeResponseSchema: GenMessage<CreateReservationFeeResponse> = /*@__PURE__*/
+export const CreateReservationFeeResponseSchema: GenMessage<CreateReservationFeeResponse> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 33);
 
 /**
  * @generated from message api.reservation.UpdateReservationFeeResponse
  */
-export type UpdateReservationFeeResponse = Message<"api.reservation.UpdateReservationFeeResponse"> & {
-};
+export type UpdateReservationFeeResponse =
+  Message<'api.reservation.UpdateReservationFeeResponse'> & {};
 
 /**
  * Describes the message api.reservation.UpdateReservationFeeResponse.
  * Use `create(UpdateReservationFeeResponseSchema)` to create a new message.
  */
-export const UpdateReservationFeeResponseSchema: GenMessage<UpdateReservationFeeResponse> = /*@__PURE__*/
+export const UpdateReservationFeeResponseSchema: GenMessage<UpdateReservationFeeResponse> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 34);
 
 /**
  * @generated from message api.reservation.DeleteReservationFeeResponse
  */
-export type DeleteReservationFeeResponse = Message<"api.reservation.DeleteReservationFeeResponse"> & {
-};
+export type DeleteReservationFeeResponse =
+  Message<'api.reservation.DeleteReservationFeeResponse'> & {};
 
 /**
  * Describes the message api.reservation.DeleteReservationFeeResponse.
  * Use `create(DeleteReservationFeeResponseSchema)` to create a new message.
  */
-export const DeleteReservationFeeResponseSchema: GenMessage<DeleteReservationFeeResponse> = /*@__PURE__*/
+export const DeleteReservationFeeResponseSchema: GenMessage<DeleteReservationFeeResponse> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 35);
 
 /**
  * @generated from message api.reservation.UpdateReservationDatesRequest
  */
-export type UpdateReservationDatesRequest = Message<"api.reservation.UpdateReservationDatesRequest"> & {
-  /**
-   * @generated from field: repeated api.reservation.ReservationDate date = 1;
-   */
-  date: ReservationDate[];
-};
+export type UpdateReservationDatesRequest =
+  Message<'api.reservation.UpdateReservationDatesRequest'> & {
+    /**
+     * @generated from field: repeated api.reservation.ReservationDate date = 1;
+     */
+    date: ReservationDate[];
+  };
 
 /**
  * Describes the message api.reservation.UpdateReservationDatesRequest.
  * Use `create(UpdateReservationDatesRequestSchema)` to create a new message.
  */
-export const UpdateReservationDatesRequestSchema: GenMessage<UpdateReservationDatesRequest> = /*@__PURE__*/
+export const UpdateReservationDatesRequestSchema: GenMessage<UpdateReservationDatesRequest> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 36);
 
 /**
  * @generated from message api.reservation.DeleteReservationDatesRequest
  */
-export type DeleteReservationDatesRequest = Message<"api.reservation.DeleteReservationDatesRequest"> & {
-  /**
-   * @generated from field: repeated int64 id = 1 [jstype = JS_STRING];
-   */
-  id: string[];
-};
+export type DeleteReservationDatesRequest =
+  Message<'api.reservation.DeleteReservationDatesRequest'> & {
+    /**
+     * @generated from field: repeated int64 id = 1 [jstype = JS_STRING];
+     */
+    id: string[];
+  };
 
 /**
  * Describes the message api.reservation.DeleteReservationDatesRequest.
  * Use `create(DeleteReservationDatesRequestSchema)` to create a new message.
  */
-export const DeleteReservationDatesRequestSchema: GenMessage<DeleteReservationDatesRequest> = /*@__PURE__*/
+export const DeleteReservationDatesRequestSchema: GenMessage<DeleteReservationDatesRequest> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 37);
 
 /**
  * @generated from message api.reservation.CreateReservationFeeRequest
  */
-export type CreateReservationFeeRequest = Message<"api.reservation.CreateReservationFeeRequest"> & {
-  /**
-   * @generated from field: repeated api.reservation.ReservationFee fee = 1;
-   */
-  fee: ReservationFee[];
-};
+export type CreateReservationFeeRequest =
+  Message<'api.reservation.CreateReservationFeeRequest'> & {
+    /**
+     * @generated from field: repeated api.reservation.ReservationFee fee = 1;
+     */
+    fee: ReservationFee[];
+  };
 
 /**
  * Describes the message api.reservation.CreateReservationFeeRequest.
  * Use `create(CreateReservationFeeRequestSchema)` to create a new message.
  */
-export const CreateReservationFeeRequestSchema: GenMessage<CreateReservationFeeRequest> = /*@__PURE__*/
+export const CreateReservationFeeRequestSchema: GenMessage<CreateReservationFeeRequest> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 38);
 
 /**
  * @generated from message api.reservation.UpdateReservationFeeRequest
  */
-export type UpdateReservationFeeRequest = Message<"api.reservation.UpdateReservationFeeRequest"> & {
-  /**
-   * @generated from field: api.reservation.ReservationFee fee = 1;
-   */
-  fee?: ReservationFee;
-};
+export type UpdateReservationFeeRequest =
+  Message<'api.reservation.UpdateReservationFeeRequest'> & {
+    /**
+     * @generated from field: api.reservation.ReservationFee fee = 1;
+     */
+    fee?: ReservationFee;
+  };
 
 /**
  * Describes the message api.reservation.UpdateReservationFeeRequest.
  * Use `create(UpdateReservationFeeRequestSchema)` to create a new message.
  */
-export const UpdateReservationFeeRequestSchema: GenMessage<UpdateReservationFeeRequest> = /*@__PURE__*/
+export const UpdateReservationFeeRequestSchema: GenMessage<UpdateReservationFeeRequest> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 39);
 
 /**
  * @generated from message api.reservation.DeleteReservationFeeRequest
  */
-export type DeleteReservationFeeRequest = Message<"api.reservation.DeleteReservationFeeRequest"> & {
-  /**
-   * @generated from field: int64 id = 1 [jstype = JS_STRING];
-   */
-  id: string;
-};
+export type DeleteReservationFeeRequest =
+  Message<'api.reservation.DeleteReservationFeeRequest'> & {
+    /**
+     * @generated from field: int64 id = 1 [jstype = JS_STRING];
+     */
+    id: string;
+  };
 
 /**
  * Describes the message api.reservation.DeleteReservationFeeRequest.
  * Use `create(DeleteReservationFeeRequestSchema)` to create a new message.
  */
-export const DeleteReservationFeeRequestSchema: GenMessage<DeleteReservationFeeRequest> = /*@__PURE__*/
+export const DeleteReservationFeeRequestSchema: GenMessage<DeleteReservationFeeRequest> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 40);
 
 /**
  * @generated from message api.reservation.CostReducerRequest
  */
-export type CostReducerRequest = Message<"api.reservation.CostReducerRequest"> & {
-  /**
-   * @generated from field: int64 id = 1 [jstype = JS_STRING];
-   */
-  id: string;
-};
+export type CostReducerRequest =
+  Message<'api.reservation.CostReducerRequest'> & {
+    /**
+     * @generated from field: int64 id = 1 [jstype = JS_STRING];
+     */
+    id: string;
+  };
 
 /**
  * Describes the message api.reservation.CostReducerRequest.
  * Use `create(CostReducerRequestSchema)` to create a new message.
  */
-export const CostReducerRequestSchema: GenMessage<CostReducerRequest> = /*@__PURE__*/
+export const CostReducerRequestSchema: GenMessage<CostReducerRequest> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 41);
 
 /**
  * @generated from message api.reservation.CostReducerResponse
  */
-export type CostReducerResponse = Message<"api.reservation.CostReducerResponse"> & {
-  /**
-   * @generated from field: string cost = 1;
-   */
-  cost: string;
-};
+export type CostReducerResponse =
+  Message<'api.reservation.CostReducerResponse'> & {
+    /**
+     * @generated from field: string cost = 1;
+     */
+    cost: string;
+  };
 
 /**
  * Describes the message api.reservation.CostReducerResponse.
  * Use `create(CostReducerResponseSchema)` to create a new message.
  */
-export const CostReducerResponseSchema: GenMessage<CostReducerResponse> = /*@__PURE__*/
+export const CostReducerResponseSchema: GenMessage<CostReducerResponse> =
+  /*@__PURE__*/
   messageDesc(file_proto_reservation_reservation, 42);
 
 /**
@@ -1053,154 +1131,152 @@ export const ReservationService: GenService<{
    * @generated from rpc api.reservation.ReservationService.GetAllReservations
    */
   getAllReservations: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof GetAllReservationsRequestSchema;
     output: typeof AllReservationsResponseSchema;
-  },
+  };
   /**
    * @generated from rpc api.reservation.ReservationService.GetReservation
    */
   getReservation: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof GetReservationRequestSchema;
     output: typeof FullReservationSchema;
-  },
+  };
   /**
    * @generated from rpc api.reservation.ReservationService.RequestCount
    */
   requestCount: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof RequestCountRequestSchema;
     output: typeof RequestCountResponseSchema;
-  },
+  };
   /**
    * @generated from rpc api.reservation.ReservationService.GetRequestsThisWeek
    */
   getRequestsThisWeek: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof GetRequestsThisWeekRequestSchema;
     output: typeof RequestThisWeekResponseSchema;
-  },
+  };
   /**
    * @generated from rpc api.reservation.ReservationService.CreateReservation
    */
   createReservation: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof CreateReservationRequestSchema;
     output: typeof CreateReservationResponseSchema;
-  },
+  };
   /**
    * @generated from rpc api.reservation.ReservationService.UpdateReservation
    */
   updateReservation: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof UpdateReservationRequestSchema;
     output: typeof UpdateReservationResponseSchema;
-  },
+  };
   /**
    * @generated from rpc api.reservation.ReservationService.UpdateReservationStatus
    */
   updateReservationStatus: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof UpdateReservationStatusRequestSchema;
     output: typeof UpdateReservationResponseSchema;
-  },
+  };
   /**
    * @generated from rpc api.reservation.ReservationService.DeleteReservation
    */
   deleteReservation: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof DeleteReservationRequestSchema;
     output: typeof DeleteReservationResponseSchema;
-  },
+  };
   /**
    * @generated from rpc api.reservation.ReservationService.UserReservations
    */
   userReservations: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof UserReservationsRequestSchema;
     output: typeof UserReservationsResponseSchema;
-  },
+  };
   /**
    * @generated from rpc api.reservation.ReservationService.CreateReservationDates
    */
   createReservationDates: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof CreateReservationDatesRequestSchema;
     output: typeof CreateReservationDatesResponseSchema;
-  },
+  };
   /**
    * @generated from rpc api.reservation.ReservationService.UpdateReservationDates
    */
   updateReservationDates: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof UpdateReservationDatesRequestSchema;
     output: typeof UpdateReservationDatesResponseSchema;
-  },
+  };
   /**
    * @generated from rpc api.reservation.ReservationService.UpdateReservationDatesStatus
    */
   updateReservationDatesStatus: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof UpdateReservationDatesStatusRequestSchema;
     output: typeof UpdateReservationDatesStatusResponseSchema;
-  },
+  };
   /**
    * @generated from rpc api.reservation.ReservationService.DeleteReservationDates
    */
   deleteReservationDates: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof DeleteReservationDatesRequestSchema;
     output: typeof DeleteReservationDatesResponseSchema;
-  },
+  };
   /**
    * @generated from rpc api.reservation.ReservationService.CreateReservationFee
    */
   createReservationFee: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof CreateReservationFeeRequestSchema;
     output: typeof CreateReservationFeeResponseSchema;
-  },
+  };
   /**
    * @generated from rpc api.reservation.ReservationService.UpdateReservationFee
    */
   updateReservationFee: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof UpdateReservationFeeRequestSchema;
     output: typeof UpdateReservationFeeResponseSchema;
-  },
+  };
   /**
    * @generated from rpc api.reservation.ReservationService.DeleteReservationFee
    */
   deleteReservationFee: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof DeleteReservationFeeRequestSchema;
     output: typeof DeleteReservationFeeResponseSchema;
-  },
+  };
   /**
    * @generated from rpc api.reservation.ReservationService.CostReducer
    */
   costReducer: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof CostReducerRequestSchema;
     output: typeof CostReducerResponseSchema;
-  },
+  };
   /**
    * @generated from rpc api.reservation.ReservationService.GetAllPending
    */
   getAllPending: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof GetAllReservationsRequestSchema;
     output: typeof AllPendingResponseSchema;
-  },
+  };
   /**
    * @generated from rpc api.reservation.ReservationService.AllSortedReservations
    */
   allSortedReservations: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof GetAllReservationsRequestSchema;
     output: typeof AllSortedResponseSchema;
-  },
-}> = /*@__PURE__*/
-  serviceDesc(file_proto_reservation_reservation, 0);
-
+  };
+}> = /*@__PURE__*/ serviceDesc(file_proto_reservation_reservation, 0);

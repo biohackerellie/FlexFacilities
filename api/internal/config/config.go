@@ -5,10 +5,21 @@ import (
 	"time"
 )
 
+type Env string
+
+func (e Env) String() string {
+	return string(e)
+}
+
+const (
+	PROD Env = "production"
+	DEV  Env = "development"
+)
+
 type Config struct {
 	LogLevel           string        `mapstructure:"LOG_LEVEL"`
 	VerboseLogging     string        `mapstructure:"VERBOSE_LOGGING"`
-	AppEnv             string        `mapstructure:"APP_ENV"`
+	AppEnv             Env           `mapstructure:"APP_ENV"`
 	EntraClientID      string        `mapstructure:"ENTRA_CLIENT_ID"`
 	EntraClientSecret  string        `mapstructure:"ENTRA_CLIENT_SECRET"`
 	EntraTenant        string        `mapstructure:"ENTRA_TENANT_ID"`
@@ -34,7 +45,7 @@ func New(getenv func(string, string) string, AppEnv string) (*Config, error) {
 	cfg := &Config{
 		LogLevel:           getenv("LOG_LEVEL", "debug"),
 		VerboseLogging:     getenv("VERBOSE_LOGGING", "true"),
-		AppEnv:             getenv("APP_ENV", AppEnv),
+		AppEnv:             Env(getenv("APP_ENV", "development")),
 		EntraClientID:      getenv("ENTRA_CLIENT_ID", ""),
 		EntraClientSecret:  getenv("ENTRA_CLIENT_SECRET", ""),
 		EntraTenant:        getenv("ENTRA_TENANT_ID", ""),
