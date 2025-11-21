@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"api/internal/models"
-	"errors"
 
 	"api/internal/ports"
 	service "api/internal/proto/facilities"
@@ -67,14 +66,13 @@ func (a *FacilityHandler) GetFacility(ctx context.Context, req *connect.Request[
 	facility := res.ToProto()
 	return connect.NewResponse(&service.FullFacility{
 		Facility:      facility.Facility,
-		Categories:    facility.Categories,
+		Pricing:       facility.Pricing,
 		ReservationId: facility.ReservationId,
 		Building:      facility.Building,
 	}), nil
 }
 func (a *FacilityHandler) GetFacilityCategories(ctx context.Context, req *connect.Request[service.GetFacilityCategoriesRequest]) (*connect.Response[service.GetFacilityCategoriesResponse], error) {
-	ids := []int64{req.Msg.GetId()}
-	res, err := a.facilityStore.GetCategories(ctx, ids)
+	res, err := a.facilityStore.GetCategories(ctx)
 
 	if err != nil {
 		return nil, err
@@ -99,12 +97,8 @@ func (a *FacilityHandler) GetBuildingFacilities(ctx context.Context, req *connec
 }
 func (a *FacilityHandler) CreateFacility(ctx context.Context, req *connect.Request[service.CreateFacilityRequest]) (*connect.Response[service.CreateFacilityResponse], error) {
 	facility := models.ToFacility(req.Msg.GetFacility())
-	categories := models.ToCategories(req.Msg.GetCategories())
 
-	err := a.facilityStore.Create(ctx, &models.FacilityWithCategories{
-		Facility:   *facility,
-		Categories: categories,
-	})
+	err := a.facilityStore.Create(ctx, facility)
 
 	if err != nil {
 		return nil, err
@@ -145,14 +139,13 @@ func (a *FacilityHandler) GetAllEvents(ctx context.Context, req *connect.Request
 
 	result := make([]*service.BuildingWithEvents, len(buildings))
 	for i, building := range buildings {
-
-		calId := building.GoogleCalendarID
-		if calId == nil || *calId == "" {
+		if !building.GoogleCalendarID.Valid {
 			continue
 		}
+		calId := building.GoogleCalendarID.String
 
-		a.log.Debug("GetAllEvents", "calId", *calId)
-		res, err := a.calendar.ListEvents(*calId)
+		a.log.Debug("GetAllEvents", "calId", calId)
+		res, err := a.calendar.ListEvents(calId)
 		if err != nil {
 
 			continue
@@ -216,11 +209,14 @@ func (a *FacilityHandler) GetEventsByBuilding(ctx context.Context, req *connect.
 	if err != nil {
 		return nil, err
 	}
+
 	calendarID := building.GoogleCalendarID
-	if calendarID == nil {
-		return nil, errors.New("building has no calendar")
+	if !calendarID.Valid {
+		return connect.NewResponse(&service.GetEventsByBuildingResponse{
+			Events: []*service.Event{},
+		}), nil
 	}
-	res, err := a.calendar.ListEvents(*calendarID)
+	res, err := a.calendar.ListEvents(calendarID.String)
 	if err != nil {
 		return nil, err
 	}

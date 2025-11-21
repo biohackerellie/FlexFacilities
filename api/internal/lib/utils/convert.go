@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"database/sql"
 	"math/big"
 	"strconv"
 	"time"
@@ -88,12 +89,38 @@ func StringToPgDate(s string) pgtype.Date {
 	return pgtype.Date{Time: t, Valid: true}
 }
 
+func NullDatesArrayToTimes(dates []sql.NullTime) []time.Time {
+	times := make([]time.Time, 0, len(dates))
+	for _, date := range dates {
+		if date.Valid {
+			times = append(times, date.Time)
+		}
+	}
+	return times
+}
+
 func DatesArrayToString(dates []time.Time) []string {
 	strDates := make([]string, len(dates))
 	for i, date := range dates {
 		strDates[i] = date.String()
 	}
 	return strDates
+}
+
+func StringToFloat64(s string) float64 {
+	f, err := strconv.ParseFloat(s, 64)
+	if err != nil {
+		return 0
+	}
+	return f
+}
+
+func StringToInt64(s string) int64 {
+	i, err := strconv.ParseInt(s, 10, 64)
+	if err != nil {
+		return 0
+	}
+	return i
 }
 
 func StringArrayToDates(strDates []string) []time.Time {

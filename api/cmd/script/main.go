@@ -4,13 +4,13 @@ import (
 	"api/internal/config"
 	repository "api/internal/db"
 	"api/internal/lib/logger"
-	"api/internal/models"
 	"context"
 	"flag"
 	"log/slog"
 	"os"
 	"slices"
 
+	"github.com/jackc/pgx/v5/pgtype"
 	"github.com/jmoiron/sqlx"
 	"github.com/stripe/stripe-go/v83"
 	"golang.org/x/sync/errgroup"
@@ -23,6 +23,33 @@ import (
 )
 
 type categoryID int64
+
+type Pricing struct {
+	ID         string  `db:"id" json:"id"`
+	ProductID  string  `db:"product_id" json:"product_id"`
+	Price      float64 `db:"-" json:"price"`
+	CategoryID int64   `db:"category_id" json:"category_id"`
+	UnitLabel  string  `db:"unit_label" json:"unit_label"`
+}
+type Facility struct {
+	ID               int64              `db:"id" json:"id"`
+	Name             string             `db:"name" json:"name"`
+	ImagePath        *string            `db:"image_path" json:"image_path"`
+	Capacity         *int64             `db:"capacity" json:"capacity"`
+	CreatedAt        pgtype.Timestamptz `db:"created_at" json:"created_at"`
+	UpdatedAt        pgtype.Timestamptz `db:"updated_at" json:"updated_at"`
+	GoogleCalendarID string             `db:"google_calendar_id" json:"google_calendar_id"`
+	BuildingID       int64              `db:"building_id" json:"building_id"`
+	// ProductID        *string            `db:"product_id" json:"product_id"`
+}
+
+type Category struct {
+	ID          int64   `db:"id" json:"id"`
+	Name        string  `db:"name" json:"name"`
+	Description string  `db:"description" json:"description"`
+	Price       float64 `db:"price" json:"price"`
+	FacilityID  int64   `db:"facility_id" json:"facility_id"`
+}
 
 var priceGroups = [][]int64{
 	{0, 0, 2500, 5000},     // (0, 0, 25, 50)
@@ -82,20 +109,20 @@ func main() {
 	priceParams.Limit = stripe.Int64(100)
 	allPrices := price.List(priceParams).PriceList().Data
 	slog.Debug("Got prices", "count", len(allPrices))
-	var facilities []models.Facility
+	var facilities []Facility
 	err = db.SelectContext(ctx, &facilities, `select * from facility;`)
 	if err != nil {
 		log.Error("failed to get facilities", "error", err)
 		os.Exit(1)
 	}
-	var categories []models.Category
+	var categories []Category
 	err = db.SelectContext(ctx, &categories, `select * from category;`)
 	if err != nil {
 		log.Error("failed to get categories", "error", err)
 		os.Exit(1)
 	}
 
-	facilityCategories := make(map[int64][]models.Category)
+	facilityCategories := make(map[int64][]Category)
 	for _, category := range categories {
 		facilityCategories[category.FacilityID] = append(facilityCategories[category.FacilityID], category)
 	}
@@ -117,19 +144,21 @@ func main() {
 	}
 
 	tx, err := db.Beginx()
-	defer tx.Rollback()
-
 	if err != nil {
 		log.Error("failed to begin transaction", "error", err)
 		os.Exit(1)
 	}
-
+	defer func() {
+		if err != nil {
+			tx.Rollback()
+		}
+	}()
 	g, gctx := errgroup.WithContext(ctx)
 
 	g.Go(func() error {
 
 		slog.Debug("Routine A started")
-		defer gctx.Done()
+		defer slog.Debug("Routine A finished")
 
 		for _, facility := range facilities {
 			p := mapping[facility.ID]
@@ -147,7 +176,6 @@ func main() {
 				}
 			}
 		}
-		slog.Debug("Routine A finished")
 		return nil
 	})
 
@@ -159,7 +187,7 @@ func main() {
 	g.Go(func() error {
 
 		slog.Debug("Routine B started")
-		defer gctx.Done()
+		defer slog.Info("routine B finished")
 		for _, r := range reservations {
 			switch getNewCategoryID(r.CategoryID) {
 			case 1:
@@ -181,7 +209,7 @@ func main() {
 		query = tx.Rebind(query)
 		slog.Debug("Updating reservation", "query", query, "args", args)
 		if !dryRun {
-			_, err = tx.ExecContext(ctx, query, args...)
+			_, err = tx.ExecContext(gctx, query, args...)
 			if err != nil {
 				log.Error("failed to update reservation", "error", err)
 				return err
@@ -195,7 +223,7 @@ func main() {
 		query = tx.Rebind(query)
 		slog.Debug("Updating reservation", "query", query, "args", args)
 		if !dryRun {
-			_, err = tx.ExecContext(ctx, query, args...)
+			_, err = tx.ExecContext(gctx, query, args...)
 			if err != nil {
 				log.Error("failed to update reservation", "error", err)
 				return err
@@ -209,7 +237,7 @@ func main() {
 		query = tx.Rebind(query)
 		slog.Debug("Updating reservation", "query", query, "args", args)
 		if !dryRun {
-			_, err = tx.ExecContext(ctx, query, args...)
+			_, err = tx.ExecContext(gctx, query, args...)
 			if err != nil {
 				log.Error("failed to update reservation", "error", err)
 				return err
@@ -223,18 +251,17 @@ func main() {
 		query = tx.Rebind(query)
 		slog.Debug("Updating reservation", "query", query, "args", args)
 		if !dryRun {
-			_, err = tx.ExecContext(ctx, query, args...)
+			_, err = tx.ExecContext(gctx, query, args...)
 			if err != nil {
 				log.Error("failed to update reservation", "error", err)
 				return err
 			}
 		}
-		slog.Info("routine B finished")
 		return nil
 	})
 	g.Go(func() error {
 		slog.Debug("Routine C started")
-		defer gctx.Done()
+		defer slog.Debug("Routine C finished")
 		for _, p := range pricing {
 			_, err := tx.ExecContext(gctx, `insert into pricing (id, product_id, category_id, unit_label) values ($1, $2, $3, $4)`, p.ID, p.ProductID, p.CategoryID, p.UnitLabel)
 			if err != nil {
@@ -242,13 +269,12 @@ func main() {
 				return err
 			}
 		}
-		slog.Debug("Routine C finished")
 		return nil
 	})
 
 	if err := g.Wait(); err != nil {
 		log.Error("failed to update product", "error", err)
-		tx.Rollback()
+		return
 	}
 
 	if !dryRun {
@@ -283,17 +309,16 @@ func getNewCategoryID(id int64) int64 {
 }
 
 func mapFacilityToStripeProduct(
-	facilities []models.Facility,
-	categories map[int64][]models.Category,
+	facilities []Facility,
+	categories map[int64][]Category,
 	stripeProducts []*stripe.Product,
 	allPrices []*stripe.Price,
-) (map[int64]*stripe.Product, []models.Pricing) {
+) (map[int64]*stripe.Product, []Pricing) {
 	mapping := make(map[int64]*stripe.Product)
-	finalPricing := make([]models.Pricing, 0, len(allPrices))
+	finalPricing := make([]Pricing, 0, len(allPrices))
 	productPrices := make(map[string][]*stripe.Price)
 	products := make(map[string]*stripe.Product)
 
-	slog.Info("test length", "length", len(finalPricing))
 	for _, p := range allPrices {
 		productPrices[p.Product.ID] = append(productPrices[p.Product.ID], p)
 	}
@@ -332,7 +357,7 @@ func mapFacilityToStripeProduct(
 		}
 
 		if !matched {
-			slog.Error("No matching stripe product found", "facility", facility.Name, "group", group)
+			slog.Error("No matching stripe product found", "facility", facility.Name, "group", group, "prices", prices)
 		}
 
 	}
@@ -355,9 +380,9 @@ func mapFacilityToStripeProduct(
 			slog.Error("Unknown order idx", "order_idx", spr.Metadata["order_idx"])
 		}
 		ul := products[spr.Product.ID].UnitLabel
-		finalPricing = append(finalPricing, models.Pricing{
+		finalPricing = append(finalPricing, Pricing{
 			ID:         spr.ID,
-			ProductID:  &spr.Product.ID,
+			ProductID:  spr.Product.ID,
 			CategoryID: int64(catID),
 			UnitLabel:  ul,
 		})

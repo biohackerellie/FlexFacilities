@@ -61,12 +61,12 @@ func (cs *CalendarSync) syncCalendars(ctx context.Context) error {
 	errorCount := 0
 	for _, building := range buildings {
 		// Skip buildings without a calendar ID
-		if building.GoogleCalendarID == nil || *building.GoogleCalendarID == "" {
+		if !building.GoogleCalendarID.Valid {
 			cs.Logger.Debug("Skipping building without calendar ID", "building_id", building.ID, "building_name", building.Name)
 			continue
 		}
 
-		if err := cs.syncBuildingCalendar(ctx, building.ID, building.Name, *building.GoogleCalendarID); err != nil {
+		if err := cs.syncBuildingCalendar(ctx, building.ID, building.Name, building.GoogleCalendarID.String); err != nil {
 			cs.Logger.Error("Failed to sync building calendar",
 				"building_id", building.ID,
 				"building_name", building.Name,
@@ -119,9 +119,7 @@ func (cs *CalendarSync) syncBuildingCalendar(ctx context.Context, buildingID int
 	eventsChan := make(chan facilityEvents, len(buildingWithFacilities.Facilities))
 	var wg sync.WaitGroup
 
-	for _, facilityWithCats := range buildingWithFacilities.Facilities {
-		facility := facilityWithCats.Facility
-
+	for _, facility := range buildingWithFacilities.Facilities {
 		// Skip facilities without a calendar ID
 		if facility.GoogleCalendarID == "" {
 			cs.Logger.Debug("Skipping facility without calendar ID",

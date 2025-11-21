@@ -30,17 +30,18 @@ type UserStore interface {
 type FacilityStore interface {
 	Get(ctx context.Context, id int64) (*models.FullFacility, error)
 	GetAllBuildings(ctx context.Context) ([]*models.Building, error)
-	GetAll(ctx context.Context) ([]*models.BuildingWithFacilities, error)
+	GetAll(ctx context.Context) ([]models.BuildingWithFacilities, error)
 	GetAllFacilities(ctx context.Context) ([]*models.Facility, error)
 	GetByBuilding(ctx context.Context, buildingID int64) (*models.BuildingWithFacilities, error)
 	GetBuilding(ctx context.Context, id int64) (*models.Building, error)
-	GetCategories(ctx context.Context, ids []int64) ([]models.Category, error)
-	Create(ctx context.Context, input *models.FacilityWithCategories) error
+	GetCategories(ctx context.Context) ([]models.Category, error)
+	Create(ctx context.Context, input *models.Facility) error
 	Update(ctx context.Context, input *models.Facility) error
 	Delete(ctx context.Context, id int64) error
 	EditCategory(ctx context.Context, category *models.Category) error
 	GetCategory(ctx context.Context, id int64) (*models.Category, error)
 	GetBuildingCoordinates(ctx context.Context) ([]models.BuildingCoords, error)
+	GetPricingByFacilityAndCategory(ctx context.Context, faciltyID, categoryID int64) (models.Pricing, error)
 }
 
 type ReservationStore interface {

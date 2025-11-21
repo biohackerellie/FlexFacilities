@@ -30,27 +30,28 @@ type Reservation struct {
 	Approved      string                 `protobuf:"bytes,5,opt,name=approved,proto3" json:"approved,omitempty"`
 	CreatedAt     string                 `protobuf:"bytes,6,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	UpdatedAt     string                 `protobuf:"bytes,7,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
-	Details       *string                `protobuf:"bytes,8,opt,name=details,proto3,oneof" json:"details,omitempty"`
+	Details       string                 `protobuf:"bytes,8,opt,name=details,proto3" json:"details,omitempty"`
 	Fees          string                 `protobuf:"bytes,9,opt,name=fees,proto3" json:"fees,omitempty"` // pgtype.Numeric as string
 	Insurance     bool                   `protobuf:"varint,10,opt,name=insurance,proto3" json:"insurance,omitempty"`
-	DoorAccess    *bool                  `protobuf:"varint,11,opt,name=door_access,json=doorAccess,proto3,oneof" json:"door_access,omitempty"`
-	DoorsDetails  *string                `protobuf:"bytes,12,opt,name=doors_details,json=doorsDetails,proto3,oneof" json:"doors_details,omitempty"`
+	DoorAccess    bool                   `protobuf:"varint,11,opt,name=door_access,json=doorAccess,proto3" json:"door_access,omitempty"`
+	DoorsDetails  string                 `protobuf:"bytes,12,opt,name=doors_details,json=doorsDetails,proto3" json:"doors_details,omitempty"`
 	Name          string                 `protobuf:"bytes,13,opt,name=name,proto3" json:"name,omitempty"`
-	TechDetails   *string                `protobuf:"bytes,14,opt,name=tech_details,json=techDetails,proto3,oneof" json:"tech_details,omitempty"`
-	TechSupport   *bool                  `protobuf:"varint,15,opt,name=tech_support,json=techSupport,proto3,oneof" json:"tech_support,omitempty"`
-	Phone         *string                `protobuf:"bytes,16,opt,name=phone,proto3,oneof" json:"phone,omitempty"`
+	TechDetails   string                 `protobuf:"bytes,14,opt,name=tech_details,json=techDetails,proto3" json:"tech_details,omitempty"`
+	TechSupport   bool                   `protobuf:"varint,15,opt,name=tech_support,json=techSupport,proto3" json:"tech_support,omitempty"`
+	Phone         string                 `protobuf:"bytes,16,opt,name=phone,proto3" json:"phone,omitempty"`
 	CategoryId    int64                  `protobuf:"varint,17,opt,name=category_id,json=categoryId,proto3" json:"category_id,omitempty"`
-	TotalHours    *float64               `protobuf:"fixed64,18,opt,name=total_hours,json=totalHours,proto3,oneof" json:"total_hours,omitempty"`
+	TotalHours    float64                `protobuf:"fixed64,18,opt,name=total_hours,json=totalHours,proto3" json:"total_hours,omitempty"`
 	InPerson      bool                   `protobuf:"varint,19,opt,name=in_person,json=inPerson,proto3" json:"in_person,omitempty"`
 	Paid          bool                   `protobuf:"varint,20,opt,name=paid,proto3" json:"paid,omitempty"`
-	PaymentUrl    *string                `protobuf:"bytes,21,opt,name=payment_url,json=paymentUrl,proto3,oneof" json:"payment_url,omitempty"`
-	PaymentLinkId *string                `protobuf:"bytes,22,opt,name=payment_link_id,json=paymentLinkId,proto3,oneof" json:"payment_link_id,omitempty"`
-	InsuranceLink *string                `protobuf:"bytes,23,opt,name=insurance_link,json=insuranceLink,proto3,oneof" json:"insurance_link,omitempty"`
+	PaymentUrl    string                 `protobuf:"bytes,21,opt,name=payment_url,json=paymentUrl,proto3" json:"payment_url,omitempty"`
+	PaymentLinkId string                 `protobuf:"bytes,22,opt,name=payment_link_id,json=paymentLinkId,proto3" json:"payment_link_id,omitempty"`
+	InsuranceLink string                 `protobuf:"bytes,23,opt,name=insurance_link,json=insuranceLink,proto3" json:"insurance_link,omitempty"`
 	CostOverride  string                 `protobuf:"bytes,24,opt,name=cost_override,json=costOverride,proto3" json:"cost_override,omitempty"` // pgtype.Numeric as string
-	Rrule         *string                `protobuf:"bytes,25,opt,name=rrule,proto3,oneof" json:"rrule,omitempty"`
+	Rrule         string                 `protobuf:"bytes,25,opt,name=rrule,proto3" json:"rrule,omitempty"`
 	Rdates        []string               `protobuf:"bytes,26,rep,name=rdates,proto3" json:"rdates,omitempty"`
 	Exdates       []string               `protobuf:"bytes,27,rep,name=exdates,proto3" json:"exdates,omitempty"`
-	GcalEventid   *string                `protobuf:"bytes,28,opt,name=gcal_eventid,json=gcalEventid,proto3,oneof" json:"gcal_eventid,omitempty"`
+	GcalEventid   string                 `protobuf:"bytes,28,opt,name=gcal_eventid,json=gcalEventid,proto3" json:"gcal_eventid,omitempty"`
+	PriceId       string                 `protobuf:"bytes,29,opt,name=price_id,json=priceId,proto3" json:"price_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -135,8 +136,8 @@ func (x *Reservation) GetUpdatedAt() string {
 }
 
 func (x *Reservation) GetDetails() string {
-	if x != nil && x.Details != nil {
-		return *x.Details
+	if x != nil {
+		return x.Details
 	}
 	return ""
 }
@@ -156,15 +157,15 @@ func (x *Reservation) GetInsurance() bool {
 }
 
 func (x *Reservation) GetDoorAccess() bool {
-	if x != nil && x.DoorAccess != nil {
-		return *x.DoorAccess
+	if x != nil {
+		return x.DoorAccess
 	}
 	return false
 }
 
 func (x *Reservation) GetDoorsDetails() string {
-	if x != nil && x.DoorsDetails != nil {
-		return *x.DoorsDetails
+	if x != nil {
+		return x.DoorsDetails
 	}
 	return ""
 }
@@ -177,22 +178,22 @@ func (x *Reservation) GetName() string {
 }
 
 func (x *Reservation) GetTechDetails() string {
-	if x != nil && x.TechDetails != nil {
-		return *x.TechDetails
+	if x != nil {
+		return x.TechDetails
 	}
 	return ""
 }
 
 func (x *Reservation) GetTechSupport() bool {
-	if x != nil && x.TechSupport != nil {
-		return *x.TechSupport
+	if x != nil {
+		return x.TechSupport
 	}
 	return false
 }
 
 func (x *Reservation) GetPhone() string {
-	if x != nil && x.Phone != nil {
-		return *x.Phone
+	if x != nil {
+		return x.Phone
 	}
 	return ""
 }
@@ -205,8 +206,8 @@ func (x *Reservation) GetCategoryId() int64 {
 }
 
 func (x *Reservation) GetTotalHours() float64 {
-	if x != nil && x.TotalHours != nil {
-		return *x.TotalHours
+	if x != nil {
+		return x.TotalHours
 	}
 	return 0
 }
@@ -226,22 +227,22 @@ func (x *Reservation) GetPaid() bool {
 }
 
 func (x *Reservation) GetPaymentUrl() string {
-	if x != nil && x.PaymentUrl != nil {
-		return *x.PaymentUrl
+	if x != nil {
+		return x.PaymentUrl
 	}
 	return ""
 }
 
 func (x *Reservation) GetPaymentLinkId() string {
-	if x != nil && x.PaymentLinkId != nil {
-		return *x.PaymentLinkId
+	if x != nil {
+		return x.PaymentLinkId
 	}
 	return ""
 }
 
 func (x *Reservation) GetInsuranceLink() string {
-	if x != nil && x.InsuranceLink != nil {
-		return *x.InsuranceLink
+	if x != nil {
+		return x.InsuranceLink
 	}
 	return ""
 }
@@ -254,8 +255,8 @@ func (x *Reservation) GetCostOverride() string {
 }
 
 func (x *Reservation) GetRrule() string {
-	if x != nil && x.Rrule != nil {
-		return *x.Rrule
+	if x != nil {
+		return x.Rrule
 	}
 	return ""
 }
@@ -275,8 +276,15 @@ func (x *Reservation) GetExdates() []string {
 }
 
 func (x *Reservation) GetGcalEventid() string {
-	if x != nil && x.GcalEventid != nil {
-		return *x.GcalEventid
+	if x != nil {
+		return x.GcalEventid
+	}
+	return ""
+}
+
+func (x *Reservation) GetPriceId() string {
+	if x != nil {
+		return x.PriceId
 	}
 	return ""
 }
@@ -286,7 +294,7 @@ type ReservationDate struct {
 	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	ReservationId int64                  `protobuf:"varint,2,opt,name=reservation_id,json=reservationId,proto3" json:"reservation_id,omitempty"`
 	Approved      string                 `protobuf:"bytes,3,opt,name=approved,proto3" json:"approved,omitempty"`
-	GcalEventid   *string                `protobuf:"bytes,4,opt,name=gcal_eventid,json=gcalEventid,proto3,oneof" json:"gcal_eventid,omitempty"`
+	GcalEventid   string                 `protobuf:"bytes,4,opt,name=gcal_eventid,json=gcalEventid,proto3" json:"gcal_eventid,omitempty"`
 	LocalStart    string                 `protobuf:"bytes,5,opt,name=local_start,json=localStart,proto3" json:"local_start,omitempty"`
 	LocalEnd      string                 `protobuf:"bytes,6,opt,name=local_end,json=localEnd,proto3" json:"local_end,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -345,8 +353,8 @@ func (x *ReservationDate) GetApproved() string {
 }
 
 func (x *ReservationDate) GetGcalEventid() string {
-	if x != nil && x.GcalEventid != nil {
-		return *x.GcalEventid
+	if x != nil {
+		return x.GcalEventid
 	}
 	return ""
 }
@@ -489,7 +497,7 @@ type ReservationFee struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
 	Id             int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	AdditionalFees string                 `protobuf:"bytes,2,opt,name=additional_fees,json=additionalFees,proto3" json:"additional_fees,omitempty"` // pgtype.Numeric as string
-	FeesType       *string                `protobuf:"bytes,3,opt,name=fees_type,json=feesType,proto3,oneof" json:"fees_type,omitempty"`
+	FeesType       string                 `protobuf:"bytes,3,opt,name=fees_type,json=feesType,proto3" json:"fees_type,omitempty"`
 	ReservationId  int64                  `protobuf:"varint,4,opt,name=reservation_id,json=reservationId,proto3" json:"reservation_id,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
@@ -540,8 +548,8 @@ func (x *ReservationFee) GetAdditionalFees() string {
 }
 
 func (x *ReservationFee) GetFeesType() string {
-	if x != nil && x.FeesType != nil {
-		return *x.FeesType
+	if x != nil {
+		return x.FeesType
 	}
 	return ""
 }
@@ -1359,15 +1367,15 @@ type CreateReservationRequest struct {
 	Name          string                 `protobuf:"bytes,6,opt,name=name,proto3" json:"name,omitempty"`
 	Phone         string                 `protobuf:"bytes,7,opt,name=phone,proto3" json:"phone,omitempty"`
 	TechSupport   bool                   `protobuf:"varint,8,opt,name=tech_support,json=techSupport,proto3" json:"tech_support,omitempty"`
-	TechDetails   *string                `protobuf:"bytes,9,opt,name=tech_details,json=techDetails,proto3,oneof" json:"tech_details,omitempty"`
+	TechDetails   string                 `protobuf:"bytes,9,opt,name=tech_details,json=techDetails,proto3" json:"tech_details,omitempty"`
 	DoorAccess    bool                   `protobuf:"varint,10,opt,name=door_access,json=doorAccess,proto3" json:"door_access,omitempty"`
-	DoorsDetails  *string                `protobuf:"bytes,11,opt,name=doors_details,json=doorsDetails,proto3,oneof" json:"doors_details,omitempty"`
+	DoorsDetails  string                 `protobuf:"bytes,11,opt,name=doors_details,json=doorsDetails,proto3" json:"doors_details,omitempty"`
 	Occurrences   []*Occurrence          `protobuf:"bytes,12,rep,name=occurrences,proto3" json:"occurrences,omitempty"`
-	StartDate     *string                `protobuf:"bytes,13,opt,name=start_date,json=startDate,proto3,oneof" json:"start_date,omitempty"`
-	StartTime     *string                `protobuf:"bytes,14,opt,name=start_time,json=startTime,proto3,oneof" json:"start_time,omitempty"`
-	EndDate       *string                `protobuf:"bytes,15,opt,name=end_date,json=endDate,proto3,oneof" json:"end_date,omitempty"`
-	EndTime       *string                `protobuf:"bytes,16,opt,name=end_time,json=endTime,proto3,oneof" json:"end_time,omitempty"`
-	Pattern       *RecurrencePattern     `protobuf:"bytes,17,opt,name=pattern,proto3,oneof" json:"pattern,omitempty"`
+	StartDate     string                 `protobuf:"bytes,13,opt,name=start_date,json=startDate,proto3" json:"start_date,omitempty"`
+	StartTime     string                 `protobuf:"bytes,14,opt,name=start_time,json=startTime,proto3" json:"start_time,omitempty"`
+	EndDate       string                 `protobuf:"bytes,15,opt,name=end_date,json=endDate,proto3" json:"end_date,omitempty"`
+	EndTime       string                 `protobuf:"bytes,16,opt,name=end_time,json=endTime,proto3" json:"end_time,omitempty"`
+	Pattern       *RecurrencePattern     `protobuf:"bytes,17,opt,name=pattern,proto3" json:"pattern,omitempty"`
 	Rdates        []string               `protobuf:"bytes,18,rep,name=rdates,proto3" json:"rdates,omitempty"`
 	Exdates       []string               `protobuf:"bytes,19,rep,name=exdates,proto3" json:"exdates,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -1461,8 +1469,8 @@ func (x *CreateReservationRequest) GetTechSupport() bool {
 }
 
 func (x *CreateReservationRequest) GetTechDetails() string {
-	if x != nil && x.TechDetails != nil {
-		return *x.TechDetails
+	if x != nil {
+		return x.TechDetails
 	}
 	return ""
 }
@@ -1475,8 +1483,8 @@ func (x *CreateReservationRequest) GetDoorAccess() bool {
 }
 
 func (x *CreateReservationRequest) GetDoorsDetails() string {
-	if x != nil && x.DoorsDetails != nil {
-		return *x.DoorsDetails
+	if x != nil {
+		return x.DoorsDetails
 	}
 	return ""
 }
@@ -1489,29 +1497,29 @@ func (x *CreateReservationRequest) GetOccurrences() []*Occurrence {
 }
 
 func (x *CreateReservationRequest) GetStartDate() string {
-	if x != nil && x.StartDate != nil {
-		return *x.StartDate
+	if x != nil {
+		return x.StartDate
 	}
 	return ""
 }
 
 func (x *CreateReservationRequest) GetStartTime() string {
-	if x != nil && x.StartTime != nil {
-		return *x.StartTime
+	if x != nil {
+		return x.StartTime
 	}
 	return ""
 }
 
 func (x *CreateReservationRequest) GetEndDate() string {
-	if x != nil && x.EndDate != nil {
-		return *x.EndDate
+	if x != nil {
+		return x.EndDate
 	}
 	return ""
 }
 
 func (x *CreateReservationRequest) GetEndTime() string {
-	if x != nil && x.EndTime != nil {
-		return *x.EndTime
+	if x != nil {
+		return x.EndTime
 	}
 	return ""
 }
@@ -2357,7 +2365,7 @@ var File_proto_reservation_reservation_proto protoreflect.FileDescriptor
 
 const file_proto_reservation_reservation_proto_rawDesc = "" +
 	"\n" +
-	"#proto/reservation/reservation.proto\x12\x0fapi.reservation\"\xc9\b\n" +
+	"#proto/reservation/reservation.proto\x12\x0fapi.reservation\"\xec\x06\n" +
 	"\vReservation\x12\x12\n" +
 	"\x02id\x18\x01 \x01(\x03B\x020\x01R\x02id\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x1d\n" +
@@ -2369,56 +2377,42 @@ const file_proto_reservation_reservation_proto_rawDesc = "" +
 	"\n" +
 	"created_at\x18\x06 \x01(\tR\tcreatedAt\x12\x1d\n" +
 	"\n" +
-	"updated_at\x18\a \x01(\tR\tupdatedAt\x12\x1d\n" +
-	"\adetails\x18\b \x01(\tH\x00R\adetails\x88\x01\x01\x12\x12\n" +
+	"updated_at\x18\a \x01(\tR\tupdatedAt\x12\x18\n" +
+	"\adetails\x18\b \x01(\tR\adetails\x12\x12\n" +
 	"\x04fees\x18\t \x01(\tR\x04fees\x12\x1c\n" +
 	"\tinsurance\x18\n" +
-	" \x01(\bR\tinsurance\x12$\n" +
-	"\vdoor_access\x18\v \x01(\bH\x01R\n" +
-	"doorAccess\x88\x01\x01\x12(\n" +
-	"\rdoors_details\x18\f \x01(\tH\x02R\fdoorsDetails\x88\x01\x01\x12\x12\n" +
-	"\x04name\x18\r \x01(\tR\x04name\x12&\n" +
-	"\ftech_details\x18\x0e \x01(\tH\x03R\vtechDetails\x88\x01\x01\x12&\n" +
-	"\ftech_support\x18\x0f \x01(\bH\x04R\vtechSupport\x88\x01\x01\x12\x19\n" +
-	"\x05phone\x18\x10 \x01(\tH\x05R\x05phone\x88\x01\x01\x12#\n" +
+	" \x01(\bR\tinsurance\x12\x1f\n" +
+	"\vdoor_access\x18\v \x01(\bR\n" +
+	"doorAccess\x12#\n" +
+	"\rdoors_details\x18\f \x01(\tR\fdoorsDetails\x12\x12\n" +
+	"\x04name\x18\r \x01(\tR\x04name\x12!\n" +
+	"\ftech_details\x18\x0e \x01(\tR\vtechDetails\x12!\n" +
+	"\ftech_support\x18\x0f \x01(\bR\vtechSupport\x12\x14\n" +
+	"\x05phone\x18\x10 \x01(\tR\x05phone\x12#\n" +
 	"\vcategory_id\x18\x11 \x01(\x03B\x020\x01R\n" +
-	"categoryId\x12$\n" +
-	"\vtotal_hours\x18\x12 \x01(\x01H\x06R\n" +
-	"totalHours\x88\x01\x01\x12\x1b\n" +
+	"categoryId\x12\x1f\n" +
+	"\vtotal_hours\x18\x12 \x01(\x01R\n" +
+	"totalHours\x12\x1b\n" +
 	"\tin_person\x18\x13 \x01(\bR\binPerson\x12\x12\n" +
-	"\x04paid\x18\x14 \x01(\bR\x04paid\x12$\n" +
-	"\vpayment_url\x18\x15 \x01(\tH\aR\n" +
-	"paymentUrl\x88\x01\x01\x12+\n" +
-	"\x0fpayment_link_id\x18\x16 \x01(\tH\bR\rpaymentLinkId\x88\x01\x01\x12*\n" +
-	"\x0einsurance_link\x18\x17 \x01(\tH\tR\rinsuranceLink\x88\x01\x01\x12#\n" +
-	"\rcost_override\x18\x18 \x01(\tR\fcostOverride\x12\x19\n" +
-	"\x05rrule\x18\x19 \x01(\tH\n" +
-	"R\x05rrule\x88\x01\x01\x12\x16\n" +
+	"\x04paid\x18\x14 \x01(\bR\x04paid\x12\x1f\n" +
+	"\vpayment_url\x18\x15 \x01(\tR\n" +
+	"paymentUrl\x12&\n" +
+	"\x0fpayment_link_id\x18\x16 \x01(\tR\rpaymentLinkId\x12%\n" +
+	"\x0einsurance_link\x18\x17 \x01(\tR\rinsuranceLink\x12#\n" +
+	"\rcost_override\x18\x18 \x01(\tR\fcostOverride\x12\x14\n" +
+	"\x05rrule\x18\x19 \x01(\tR\x05rrule\x12\x16\n" +
 	"\x06rdates\x18\x1a \x03(\tR\x06rdates\x12\x18\n" +
-	"\aexdates\x18\x1b \x03(\tR\aexdates\x12&\n" +
-	"\fgcal_eventid\x18\x1c \x01(\tH\vR\vgcalEventid\x88\x01\x01B\n" +
-	"\n" +
-	"\b_detailsB\x0e\n" +
-	"\f_door_accessB\x10\n" +
-	"\x0e_doors_detailsB\x0f\n" +
-	"\r_tech_detailsB\x0f\n" +
-	"\r_tech_supportB\b\n" +
-	"\x06_phoneB\x0e\n" +
-	"\f_total_hoursB\x0e\n" +
-	"\f_payment_urlB\x12\n" +
-	"\x10_payment_link_idB\x11\n" +
-	"\x0f_insurance_linkB\b\n" +
-	"\x06_rruleB\x0f\n" +
-	"\r_gcal_eventid\"\xe3\x01\n" +
+	"\aexdates\x18\x1b \x03(\tR\aexdates\x12!\n" +
+	"\fgcal_eventid\x18\x1c \x01(\tR\vgcalEventid\x12\x19\n" +
+	"\bprice_id\x18\x1d \x01(\tR\apriceId\"\xcd\x01\n" +
 	"\x0fReservationDate\x12\x12\n" +
 	"\x02id\x18\x01 \x01(\x03B\x020\x01R\x02id\x12)\n" +
 	"\x0ereservation_id\x18\x02 \x01(\x03B\x020\x01R\rreservationId\x12\x1a\n" +
-	"\bapproved\x18\x03 \x01(\tR\bapproved\x12&\n" +
-	"\fgcal_eventid\x18\x04 \x01(\tH\x00R\vgcalEventid\x88\x01\x01\x12\x1f\n" +
+	"\bapproved\x18\x03 \x01(\tR\bapproved\x12!\n" +
+	"\fgcal_eventid\x18\x04 \x01(\tR\vgcalEventid\x12\x1f\n" +
 	"\vlocal_start\x18\x05 \x01(\tR\n" +
 	"localStart\x12\x1b\n" +
-	"\tlocal_end\x18\x06 \x01(\tR\blocalEndB\x0f\n" +
-	"\r_gcal_eventid\"r\n" +
+	"\tlocal_end\x18\x06 \x01(\tR\blocalEnd\"r\n" +
 	"\x11RecurrencePattern\x12\x12\n" +
 	"\x04freq\x18\x01 \x01(\tR\x04freq\x12\x1d\n" +
 	"\n" +
@@ -2428,14 +2422,12 @@ const file_proto_reservation_reservation_proto_rawDesc = "" +
 	"\n" +
 	"Occurrence\x12\x14\n" +
 	"\x05start\x18\x01 \x01(\tR\x05start\x12\x10\n" +
-	"\x03end\x18\x02 \x01(\tR\x03end\"\xa8\x01\n" +
+	"\x03end\x18\x02 \x01(\tR\x03end\"\x95\x01\n" +
 	"\x0eReservationFee\x12\x12\n" +
 	"\x02id\x18\x01 \x01(\x03B\x020\x01R\x02id\x12'\n" +
-	"\x0fadditional_fees\x18\x02 \x01(\tR\x0eadditionalFees\x12 \n" +
-	"\tfees_type\x18\x03 \x01(\tH\x00R\bfeesType\x88\x01\x01\x12)\n" +
-	"\x0ereservation_id\x18\x04 \x01(\x03B\x020\x01R\rreservationIdB\f\n" +
-	"\n" +
-	"_fees_type\"\xbe\x01\n" +
+	"\x0fadditional_fees\x18\x02 \x01(\tR\x0eadditionalFees\x12\x1b\n" +
+	"\tfees_type\x18\x03 \x01(\tR\bfeesType\x12)\n" +
+	"\x0ereservation_id\x18\x04 \x01(\x03B\x020\x01R\rreservationId\"\xbe\x01\n" +
 	"\x0fFullReservation\x12>\n" +
 	"\vreservation\x18\x01 \x01(\v2\x1c.api.reservation.ReservationR\vreservation\x126\n" +
 	"\x05dates\x18\x02 \x03(\v2 .api.reservation.ReservationDateR\x05dates\x123\n" +
@@ -2476,7 +2468,7 @@ const file_proto_reservation_reservation_proto_rawDesc = "" +
 	"\x13RequestCountRequest\"0\n" +
 	"\x14RequestCountResponse\x12\x18\n" +
 	"\x05count\x18\x01 \x01(\x03B\x020\x01R\x05count\"\x1c\n" +
-	"\x1aGetRequestsThisWeekRequest\"\x99\x06\n" +
+	"\x1aGetRequestsThisWeekRequest\"\x8f\x05\n" +
 	"\x18CreateReservationRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x1d\n" +
 	"\n" +
@@ -2488,30 +2480,22 @@ const file_proto_reservation_reservation_proto_rawDesc = "" +
 	"categoryId\x12\x12\n" +
 	"\x04name\x18\x06 \x01(\tR\x04name\x12\x14\n" +
 	"\x05phone\x18\a \x01(\tR\x05phone\x12!\n" +
-	"\ftech_support\x18\b \x01(\bR\vtechSupport\x12&\n" +
-	"\ftech_details\x18\t \x01(\tH\x00R\vtechDetails\x88\x01\x01\x12\x1f\n" +
+	"\ftech_support\x18\b \x01(\bR\vtechSupport\x12!\n" +
+	"\ftech_details\x18\t \x01(\tR\vtechDetails\x12\x1f\n" +
 	"\vdoor_access\x18\n" +
 	" \x01(\bR\n" +
-	"doorAccess\x12(\n" +
-	"\rdoors_details\x18\v \x01(\tH\x01R\fdoorsDetails\x88\x01\x01\x12=\n" +
-	"\voccurrences\x18\f \x03(\v2\x1b.api.reservation.OccurrenceR\voccurrences\x12\"\n" +
+	"doorAccess\x12#\n" +
+	"\rdoors_details\x18\v \x01(\tR\fdoorsDetails\x12=\n" +
+	"\voccurrences\x18\f \x03(\v2\x1b.api.reservation.OccurrenceR\voccurrences\x12\x1d\n" +
 	"\n" +
-	"start_date\x18\r \x01(\tH\x02R\tstartDate\x88\x01\x01\x12\"\n" +
+	"start_date\x18\r \x01(\tR\tstartDate\x12\x1d\n" +
 	"\n" +
-	"start_time\x18\x0e \x01(\tH\x03R\tstartTime\x88\x01\x01\x12\x1e\n" +
-	"\bend_date\x18\x0f \x01(\tH\x04R\aendDate\x88\x01\x01\x12\x1e\n" +
-	"\bend_time\x18\x10 \x01(\tH\x05R\aendTime\x88\x01\x01\x12A\n" +
-	"\apattern\x18\x11 \x01(\v2\".api.reservation.RecurrencePatternH\x06R\apattern\x88\x01\x01\x12\x16\n" +
+	"start_time\x18\x0e \x01(\tR\tstartTime\x12\x19\n" +
+	"\bend_date\x18\x0f \x01(\tR\aendDate\x12\x19\n" +
+	"\bend_time\x18\x10 \x01(\tR\aendTime\x12<\n" +
+	"\apattern\x18\x11 \x01(\v2\".api.reservation.RecurrencePatternR\apattern\x12\x16\n" +
 	"\x06rdates\x18\x12 \x03(\tR\x06rdates\x12\x18\n" +
-	"\aexdates\x18\x13 \x03(\tR\aexdatesB\x0f\n" +
-	"\r_tech_detailsB\x10\n" +
-	"\x0e_doors_detailsB\r\n" +
-	"\v_start_dateB\r\n" +
-	"\v_start_timeB\v\n" +
-	"\t_end_dateB\v\n" +
-	"\t_end_timeB\n" +
-	"\n" +
-	"\b_pattern\"/\n" +
+	"\aexdates\x18\x13 \x03(\tR\aexdates\"/\n" +
 	"\x19CreateReservationResponse\x12\x12\n" +
 	"\x02id\x18\x01 \x01(\x03B\x020\x01R\x02id\"Z\n" +
 	"\x18UpdateReservationRequest\x12>\n" +
@@ -2693,10 +2677,6 @@ func file_proto_reservation_reservation_proto_init() {
 	if File_proto_reservation_reservation_proto != nil {
 		return
 	}
-	file_proto_reservation_reservation_proto_msgTypes[0].OneofWrappers = []any{}
-	file_proto_reservation_reservation_proto_msgTypes[1].OneofWrappers = []any{}
-	file_proto_reservation_reservation_proto_msgTypes[4].OneofWrappers = []any{}
-	file_proto_reservation_reservation_proto_msgTypes[22].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

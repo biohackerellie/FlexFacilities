@@ -10,6 +10,7 @@ import (
 	service "api/internal/proto/reservation"
 	"api/pkg/calendar"
 	"context"
+	"database/sql"
 	"errors"
 	"fmt"
 	"log/slog"
@@ -20,6 +21,7 @@ import (
 	"time"
 
 	"connectrpc.com/connect"
+	"github.com/stripe/stripe-go/v83"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -31,6 +33,7 @@ type ReservationHandler struct {
 	timezone         *time.Location
 	calendar         *calendar.Calendar
 	config           *config.Config
+	sc               *stripe.Client
 }
 
 func NewReservationHandler(
@@ -41,6 +44,7 @@ func NewReservationHandler(
 	timezone *time.Location,
 	config *config.Config,
 	calendar *calendar.Calendar,
+	sc *stripe.Client,
 ) *ReservationHandler {
 	log.With(slog.Group("Core_ReservationHandler", slog.String("name", "reservation")))
 	return &ReservationHandler{
@@ -51,6 +55,7 @@ func NewReservationHandler(
 		timezone:         timezone,
 		config:           config,
 		calendar:         calendar,
+		sc:               sc,
 	}
 }
 func (a *ReservationHandler) GetAllReservations(ctx context.Context, req *connect.Request[service.GetAllReservationsRequest]) (*connect.Response[service.AllReservationsResponse], error) {
@@ -125,6 +130,10 @@ func (a *ReservationHandler) CreateReservation(ctx context.Context, req *connect
 	hasRec := (req.Msg.Pattern != nil && req.Msg.Pattern.Freq != "") ||
 		len(req.Msg.Rdates) > 0 || len(req.Msg.Exdates) > 0
 
+	pricing, err := a.facilityStore.GetPricingByFacilityAndCategory(ctx, req.Msg.FacilityId, req.Msg.CategoryId)
+	if err != nil {
+		return nil, err
+	}
 	var pat recur.RecurrencePattern
 	if req.Msg.Pattern != nil {
 		pat = recur.RecurrencePattern{
@@ -137,7 +146,6 @@ func (a *ReservationHandler) CreateReservation(ctx context.Context, req *connect
 	if hasOcc == hasRec {
 		return nil, errors.New("invalid request, must have either occurrences or recurrence, not both.")
 	}
-
 	var rruleStr *string
 	var rdatesLocal, exdatesLocal []time.Time
 	var occ []recur.Occ
@@ -153,10 +161,10 @@ func (a *ReservationHandler) CreateReservation(ctx context.Context, req *connect
 		}
 	} else {
 		p := recur.Payload{
-			StartDate: *req.Msg.StartDate,
-			EndDate:   *req.Msg.EndDate,
-			StartTime: *req.Msg.StartTime,
-			EndTime:   *req.Msg.EndTime,
+			StartDate: req.Msg.StartDate,
+			EndDate:   req.Msg.EndDate,
+			StartTime: req.Msg.StartTime,
+			EndTime:   req.Msg.EndTime,
 			Pattern:   pat,
 			RDates:    req.Msg.Rdates,
 			EXDates:   req.Msg.Exdates,
@@ -205,18 +213,19 @@ func (a *ReservationHandler) CreateReservation(ctx context.Context, req *connect
 		EventName:    req.Msg.EventName,
 		FacilityID:   req.Msg.FacilityId,
 		Approved:     models.ReservationApprovedPending,
-		Details:      &req.Msg.Details,
+		Details:      models.CheckNullString(req.Msg.Details),
 		Insurance:    false,
 		CategoryID:   req.Msg.CategoryId,
 		Name:         req.Msg.Name,
-		Phone:        &req.Msg.Phone,
-		TechSupport:  &req.Msg.TechSupport,
-		TechDetails:  req.Msg.TechDetails,
-		DoorAccess:   &req.Msg.DoorAccess,
-		DoorsDetails: req.Msg.DoorsDetails,
-		RRule:        rruleStr,
-		RDates:       &rdatesLocal,
-		EXDates:      &exdatesLocal,
+		Phone:        models.CheckNullString(req.Msg.Phone),
+		TechSupport:  req.Msg.TechSupport,
+		TechDetails:  models.CheckNullString(req.Msg.TechDetails),
+		DoorAccess:   req.Msg.DoorAccess,
+		DoorsDetails: models.CheckNullString(req.Msg.DoorsDetails),
+		RRule:        models.CheckNullString(rruleStr),
+		RDates:       models.DatesArrayToNullDates(rdatesLocal),
+		EXDates:      models.DatesArrayToNullDates(exdatesLocal),
+		PriceID:      models.CheckNullString(pricing.ID),
 	})
 	if err != nil {
 		return nil, err
@@ -331,7 +340,7 @@ func (a *ReservationHandler) UpdateReservationStatus(ctx context.Context, req *c
 		return nil, err
 	}
 	plan := buildPublishPlan(res, resWrap.Dates, true)
-	if plan.Mode == calendar.ModeSeries && res.GCalEventID != nil && *res.GCalEventID != "" {
+	if plan.Mode == calendar.ModeSeries && res.GCalEventID.Valid {
 		a.log.Warn("Reservation already published", "id", id)
 		for i := range resWrap.Dates {
 			if resWrap.Dates[i].Approved != models.ReservationDateApprovedApproved {
@@ -346,10 +355,7 @@ func (a *ReservationHandler) UpdateReservationStatus(ctx context.Context, req *c
 		}
 		return connect.NewResponse(&service.UpdateReservationResponse{}), nil
 	}
-	description := ""
-	if res.Details != nil {
-		description = *res.Details
-	}
+	description := res.Details.String
 	pubRes, err := a.calendar.Publish(ctx, plan, calendar.PublishOptions{
 		CalendarID:  facility.Facility.GoogleCalendarID,
 		Summary:     res.EventName,
@@ -375,10 +381,11 @@ func (a *ReservationHandler) UpdateReservationStatus(ctx context.Context, req *c
 				a.log.Warn("Publish returned event for unknown date id", "refID", refID)
 				continue
 			}
-			if d.GcalEventid != nil && *d.GcalEventid == eventID && d.Approved == models.ReservationDateApprovedApproved {
+			if d.GcalEventid.Valid && d.GcalEventid.String == eventID && d.Approved == models.ReservationDateApprovedApproved {
 				continue
 			}
-			d.GcalEventid = &eventID
+			d.GcalEventid = models.CheckNullString(eventID)
+
 			d.Approved = models.ReservationDateApprovedApproved
 			if err := a.reservationStore.UpdateDate(ctx, d); err != nil {
 				a.log.Error("Failed to update approval for date", slog.Int64("date_id", d.ID), "err", err)
@@ -386,11 +393,12 @@ func (a *ReservationHandler) UpdateReservationStatus(ctx context.Context, req *c
 		}
 	case calendar.ModeSeries:
 		if pubRes.MasterEventID != nil && *pubRes.MasterEventID != "" {
-			res.GCalEventID = pubRes.MasterEventID
+			res.GCalEventID.String = *pubRes.MasterEventID
+			res.GCalEventID.Valid = true
 		}
 		for i := range resWrap.Dates {
 			resWrap.Dates[i].Approved = models.ReservationDateApprovedApproved
-			resWrap.Dates[i].GcalEventid = pubRes.MasterEventID
+			resWrap.Dates[i].GcalEventid = models.CheckNullString(pubRes.MasterEventID)
 			if err := a.reservationStore.UpdateDate(ctx, &resWrap.Dates[i]); err != nil {
 				a.log.Error("Failed to update date after series published", "date_id", resWrap.Dates[i].ID, "err", err)
 			}
@@ -489,12 +497,12 @@ func (a *ReservationHandler) CreateReservationDates(ctx context.Context, req *co
 		return nil, err
 	}
 	reservation := resWrap.Reservation
-	rdates := *reservation.RDates
-	if reservation.RRule == nil || *reservation.RRule == "" {
+	rdates := reservation.RDates
+	if !reservation.RRule.Valid {
 		for _, d := range dates {
-			rdates = append(rdates, d.LocalStart.Time)
+			rdates = append(rdates, sql.NullTime{Time: d.LocalStart.Time, Valid: true})
 		}
-		reservation.RDates = &rdates
+		reservation.RDates = rdates
 		err = a.reservationStore.Update(ctx, &reservation)
 		if err != nil {
 			return nil, err
@@ -556,14 +564,14 @@ func (a *ReservationHandler) UpdateReservationDatesStatus(
 	}
 
 	// Guard: if a series was already published for this reservation, disallow per-date changes (or handle via EXDATE in a separate flow)
-	if res.GCalEventID != nil && *res.GCalEventID != "" {
+	if res.GCalEventID.Valid {
 		if targetStatus != models.ReservationDateApprovedApproved {
 			exdates := []time.Time{}
 			for _, r := range rows {
 				exdates = append(exdates, r.LocalStart.Time)
 			}
 			if len(exdates) > 0 {
-				err = a.calendar.AddExdatesToMaster(ctx, facility.Facility.GoogleCalendarID, *res.GCalEventID, *res.RRule, exdates)
+				err = a.calendar.AddExdatesToMaster(ctx, facility.Facility.GoogleCalendarID, res.GCalEventID.String, res.RRule.String, exdates)
 				if err != nil {
 					return nil, err
 				}
@@ -573,17 +581,14 @@ func (a *ReservationHandler) UpdateReservationDatesStatus(
 
 	calendarID := facility.Facility.GoogleCalendarID
 	summary := res.EventName
-	description := ""
-	if res.Details != nil {
-		description = *res.Details
-	}
+	description := res.Details.String
 	location := fmt.Sprintf("%s %s", facility.Building.Name, facility.Facility.Name)
 
 	switch targetStatus {
 	case models.ReservationDateApprovedApproved:
 		var singles []calendar.OccSpec
 		for _, r := range rows {
-			if r.GcalEventid != nil && *r.GcalEventid != "" {
+			if r.GcalEventid.Valid {
 				continue // already published
 			}
 			singles = append(singles, calendar.OccSpec{
@@ -621,7 +626,7 @@ func (a *ReservationHandler) UpdateReservationDatesStatus(
 			r.Approved = models.ReservationDateApprovedApproved
 			if pubRes != nil {
 				if evID, ok := pubRes.SingleEventID[r.ID]; ok {
-					r.GcalEventid = &evID
+					r.GcalEventid = models.CheckNullString(evID)
 				}
 			}
 			if err = a.reservationStore.UpdateDate(ctx, r); err != nil {
@@ -639,9 +644,9 @@ func (a *ReservationHandler) UpdateReservationDatesStatus(
 	case models.ReservationDateApprovedDenied, models.ReservationDateApprovedPending:
 		// For deny/pending: delete Google events if present, then update rows
 		for _, r := range rows {
-			if r.GcalEventid != nil && *r.GcalEventid != "" {
-				if err = a.calendar.DeleteEvent(calendarID, *r.GcalEventid); err != nil {
-					a.log.Error("Failed to delete event", "id", *r.GcalEventid, "err", err)
+			if r.GcalEventid.Valid {
+				if err = a.calendar.DeleteEvent(calendarID, r.GcalEventid.String); err != nil {
+					a.log.Error("Failed to delete event", "id", r.GcalEventid.String, "err", err)
 				}
 			}
 		}
@@ -649,8 +654,8 @@ func (a *ReservationHandler) UpdateReservationDatesStatus(
 			r := &rows[i]
 			r.Approved = targetStatus
 			// Clear gcal id if we deleted it
-			if r.GcalEventid != nil {
-				r.GcalEventid = nil
+			if r.GcalEventid.Valid {
+				r.GcalEventid = models.CheckNullString("")
 			}
 			if err = a.reservationStore.UpdateDate(ctx, r); err != nil {
 				return nil, err
@@ -683,29 +688,29 @@ func (a *ReservationHandler) DeleteReservationDates(ctx context.Context, req *co
 	}
 
 	datesToDelete := make([]models.ReservationDate, 0)
-	exDates := *reservation.EXDates
+	exDates := reservation.EXDates
 
 	for _, d := range dates {
 
-		if reservation.RRule != nil && *reservation.RRule != "" {
-			exDates = append(exDates, d.LocalStart.Time)
+		if reservation.RRule.Valid {
+			exDates = append(exDates, sql.NullTime{Time: d.LocalStart.Time, Valid: true})
 			continue
-		} else if d.GcalEventid != nil && *d.GcalEventid != "" {
+		} else if d.GcalEventid.Valid {
 			datesToDelete = append(datesToDelete, d)
 			continue
 		}
 	}
 	if len(datesToDelete) > 0 {
 		for _, d := range datesToDelete {
-			if err := a.calendar.DeleteEvent(facility.Facility.GoogleCalendarID, *d.GcalEventid); err != nil {
-				a.log.Error("Failed to delete event", "id", *d.GcalEventid, "err", err)
+			if err := a.calendar.DeleteEvent(facility.Facility.GoogleCalendarID, d.GcalEventid.String); err != nil {
+				a.log.Error("Failed to delete event", "id", d.GcalEventid.String, "err", err)
 				return nil, err
 			}
 		}
 	}
 	if len(exDates) > 0 {
-		if err := a.calendar.AddExdatesToMaster(ctx, facility.Facility.GoogleCalendarID, *reservation.GCalEventID, *reservation.RRule, exDates); err != nil {
-			a.log.Error("Failed to delete event", "id", *reservation.GCalEventID, "err", err)
+		if err := a.calendar.AddExdatesToMaster(ctx, facility.Facility.GoogleCalendarID, reservation.GCalEventID.String, reservation.RRule.String, utils.NullDatesArrayToTimes(exDates)); err != nil {
+			a.log.Error("Failed to delete event", "id", reservation.GCalEventID.String, "err", err)
 			return nil, err
 		}
 	}
@@ -754,7 +759,14 @@ func (a *ReservationHandler) CostReducer(ctx context.Context, req *connect.Reque
 		return nil, err
 	}
 
-	stringCost, err := reducer(ctx, category, reservation)
+	priceID := reservation.Reservation.PriceID
+	if !priceID.Valid {
+		return connect.NewResponse(&service.CostReducerResponse{Cost: "0.00"}), nil
+	}
+
+	price, err := a.sc.V1Prices.Retrieve(ctx, priceID.String, nil)
+
+	stringCost, err := reducer(ctx, category, reservation, price)
 	if err != nil {
 		return nil, err
 	}
@@ -763,7 +775,7 @@ func (a *ReservationHandler) CostReducer(ctx context.Context, req *connect.Reque
 	}), nil
 }
 
-func reducer(ctx context.Context, category *models.Category, reservation *models.FullReservation) (string, error) {
+func reducer(ctx context.Context, category *models.Category, reservation *models.FullReservation, price *stripe.Price) (string, error) {
 
 	var total time.Duration
 	for _, date := range reservation.Dates {
@@ -777,14 +789,20 @@ func reducer(ctx context.Context, category *models.Category, reservation *models
 		}
 		total += end.Sub(start)
 	}
-	totalMinutes := int64(total / time.Minute)
+	totalHours := int64(total / time.Hour)
+	if totalHours == 0 {
+		totalHours = 1
+	}
+
 	fees := 0.0
 	for _, fee := range reservation.Fees {
 		fees += utils.PGNumericToFloat64(fee.AdditionalFees)
 	}
-	pricePerHourCents := int64(category.Price * 100)
+
+	pricePerHourCents := price.UnitAmount
+
 	feeCents := int64(math.Round(fees * 100))
-	costCents := int64(math.Round(float64(pricePerHourCents) * float64(totalMinutes) / 60.0))
+	costCents := int64(math.Round(float64(pricePerHourCents) * float64(totalHours)))
 	totalCents := max(costCents+feeCents, 0)
 	result := fmt.Sprintf("%.2f", float64(totalCents)/100.0)
 	slog.Debug(
@@ -799,7 +817,7 @@ func reducer(ctx context.Context, category *models.Category, reservation *models
 			"price_per_hour_cents", pricePerHourCents,
 		),
 		slog.Int64(
-			"total_minutes", totalMinutes,
+			"total_hours", totalHours,
 		),
 		slog.Float64(
 			"fees", fees,
@@ -993,16 +1011,16 @@ func (a *ReservationHandler) AllSortedReservations(ctx context.Context, req *con
 }
 
 func buildPublishPlan(res models.Reservation, occs []models.ReservationDate, approveAll bool) *calendar.PublishPlan {
-	if approveAll && res.RRule != nil {
+	if approveAll && res.RRule.Valid {
 		first := occs[0]
 		return &calendar.PublishPlan{
 			Mode: "series",
 			Series: &calendar.SeriesSpec{
 				Start:       first.LocalStart.Time,
 				End:         first.LocalEnd.Time,
-				RRULE:       *res.RRule,
+				RRULE:       res.RRule.String,
 				Summary:     res.EventName,
-				Description: *res.Details,
+				Description: res.Details.String,
 			},
 		}
 	}
@@ -1013,7 +1031,7 @@ func buildPublishPlan(res models.Reservation, occs []models.ReservationDate, app
 			End:         occ.LocalEnd.Time,
 			RefID:       occ.ID,
 			Summary:     res.EventName,
-			Description: *res.Details,
+			Description: res.Details.String,
 		}
 	}
 	return &calendar.PublishPlan{

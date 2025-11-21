@@ -12,6 +12,7 @@ import (
 
 	"github.com/biohackerellie/flexauth"
 	"github.com/biohackerellie/flexauth/providers/entra"
+	"github.com/stripe/stripe-go/v83"
 )
 
 type Handlers struct {
@@ -28,7 +29,7 @@ func New(dbService *repository.DBService, log *slog.Logger, config *config.Confi
 
 	localFiles := files.NewLocalFileStorage(config.FilesPath, config.FrontendUrl)
 	filesHandler := NewFileHandler(localFiles, log, dbService.FacilityStore, dbService.ReservationStore)
-
+	stripeClient := stripe.NewClient(config.StripeSecretKey)
 	entraconfig := flexauth.Config{
 		ClientID:     config.EntraClientID,
 		ClientSecret: config.EntraClientSecret,
@@ -46,9 +47,9 @@ func New(dbService *repository.DBService, log *slog.Logger, config *config.Confi
 	}
 	userHandler := NewUserHandler(dbService.UserStore, log)
 	facilityHandler := NewFacilityHandler(dbService.FacilityStore, log, cal)
-	reservationHandler := NewReservationHandler(dbService.ReservationStore, dbService.UserStore, dbService.FacilityStore, log, timezone, config, cal)
+	reservationHandler := NewReservationHandler(dbService.ReservationStore, dbService.UserStore, dbService.FacilityStore, log, timezone, config, cal, stripeClient)
 	utilityHandler := NewUtilityHandler(dbService.ReservationStore, dbService.BrandingStore, log, timezone)
-	paymentHandler := NewPaymentHandler(log, config, dbService.FacilityStore, dbService.ReservationStore)
+	paymentHandler := NewPaymentHandler(log, config, dbService.FacilityStore, dbService.ReservationStore, stripeClient)
 
 	return &Handlers{
 		UserHandler:        userHandler,

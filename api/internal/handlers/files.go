@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"api/internal/models"
 	"api/internal/ports"
 	"api/pkg/files"
 	"fmt"
@@ -58,7 +59,7 @@ func (a *FileHandler) UploadReservationFile(w http.ResponseWriter, r *http.Reque
 		return
 	}
 	dbPath := fmt.Sprintf("%s/%s", path, header.Filename)
-	reservation.Reservation.InsuranceLink = &dbPath
+	reservation.Reservation.InsuranceLink = models.CheckNullString(dbPath)
 	a.log.DebugContext(r.Context(), "Updated reservation", "reservation", reservation, "path", dbPath)
 
 	err = a.reservationStore.Update(r.Context(), &reservation.Reservation)
@@ -155,7 +156,7 @@ func (a *FileHandler) UploadFacilityImage(w http.ResponseWriter, r *http.Request
 		http.Error(w, "failed to get facility", http.StatusBadRequest)
 		return
 	}
-	facility.Facility.ImagePath = &path
+	facility.Facility.ImagePath = models.CheckNullString(path) //nolint:errcheck // path
 	err = a.facilityStore.Update(r.Context(), facility.Facility)
 	if err != nil {
 		a.log.Error("Failed to update facility", "err", err)

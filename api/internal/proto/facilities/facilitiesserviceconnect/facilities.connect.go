@@ -69,6 +69,9 @@ const (
 	// FacilitiesServiceUpdateFacilityCategoryProcedure is the fully-qualified name of the
 	// FacilitiesService's UpdateFacilityCategory RPC.
 	FacilitiesServiceUpdateFacilityCategoryProcedure = "/api.facilities.FacilitiesService/UpdateFacilityCategory"
+	// FacilitiesServiceGetCategoriesProcedure is the fully-qualified name of the FacilitiesService's
+	// GetCategories RPC.
+	FacilitiesServiceGetCategoriesProcedure = "/api.facilities.FacilitiesService/GetCategories"
 	// FacilitiesServiceGetCategoryProcedure is the fully-qualified name of the FacilitiesService's
 	// GetCategory RPC.
 	FacilitiesServiceGetCategoryProcedure = "/api.facilities.FacilitiesService/GetCategory"
@@ -91,6 +94,7 @@ type FacilitiesServiceClient interface {
 	UpdateFacility(context.Context, *connect.Request[facilities.UpdateFacilityRequest]) (*connect.Response[facilities.UpdateFacilityResponse], error)
 	DeleteFacility(context.Context, *connect.Request[facilities.DeleteFacilityRequest]) (*connect.Response[facilities.DeleteFacilityResponse], error)
 	UpdateFacilityCategory(context.Context, *connect.Request[facilities.UpdateFacilityCategoryRequest]) (*connect.Response[facilities.Category], error)
+	GetCategories(context.Context, *connect.Request[facilities.GetCategoriesRequest]) (*connect.Response[facilities.GetCategoriesResponse], error)
 	GetCategory(context.Context, *connect.Request[facilities.GetCategoryRequest]) (*connect.Response[facilities.Category], error)
 	GetAllCoords(context.Context, *connect.Request[facilities.GetAllCoordsRequest]) (*connect.Response[facilities.GetAllCoordsResponse], error)
 }
@@ -186,6 +190,13 @@ func NewFacilitiesServiceClient(httpClient connect.HTTPClient, baseURL string, o
 			connect.WithSchema(facilitiesServiceMethods.ByName("UpdateFacilityCategory")),
 			connect.WithClientOptions(opts...),
 		),
+		getCategories: connect.NewClient[facilities.GetCategoriesRequest, facilities.GetCategoriesResponse](
+			httpClient,
+			baseURL+FacilitiesServiceGetCategoriesProcedure,
+			connect.WithSchema(facilitiesServiceMethods.ByName("GetCategories")),
+			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
+			connect.WithClientOptions(opts...),
+		),
 		getCategory: connect.NewClient[facilities.GetCategoryRequest, facilities.Category](
 			httpClient,
 			baseURL+FacilitiesServiceGetCategoryProcedure,
@@ -217,6 +228,7 @@ type facilitiesServiceClient struct {
 	updateFacility         *connect.Client[facilities.UpdateFacilityRequest, facilities.UpdateFacilityResponse]
 	deleteFacility         *connect.Client[facilities.DeleteFacilityRequest, facilities.DeleteFacilityResponse]
 	updateFacilityCategory *connect.Client[facilities.UpdateFacilityCategoryRequest, facilities.Category]
+	getCategories          *connect.Client[facilities.GetCategoriesRequest, facilities.GetCategoriesResponse]
 	getCategory            *connect.Client[facilities.GetCategoryRequest, facilities.Category]
 	getAllCoords           *connect.Client[facilities.GetAllCoordsRequest, facilities.GetAllCoordsResponse]
 }
@@ -281,6 +293,11 @@ func (c *facilitiesServiceClient) UpdateFacilityCategory(ctx context.Context, re
 	return c.updateFacilityCategory.CallUnary(ctx, req)
 }
 
+// GetCategories calls api.facilities.FacilitiesService.GetCategories.
+func (c *facilitiesServiceClient) GetCategories(ctx context.Context, req *connect.Request[facilities.GetCategoriesRequest]) (*connect.Response[facilities.GetCategoriesResponse], error) {
+	return c.getCategories.CallUnary(ctx, req)
+}
+
 // GetCategory calls api.facilities.FacilitiesService.GetCategory.
 func (c *facilitiesServiceClient) GetCategory(ctx context.Context, req *connect.Request[facilities.GetCategoryRequest]) (*connect.Response[facilities.Category], error) {
 	return c.getCategory.CallUnary(ctx, req)
@@ -305,6 +322,7 @@ type FacilitiesServiceHandler interface {
 	UpdateFacility(context.Context, *connect.Request[facilities.UpdateFacilityRequest]) (*connect.Response[facilities.UpdateFacilityResponse], error)
 	DeleteFacility(context.Context, *connect.Request[facilities.DeleteFacilityRequest]) (*connect.Response[facilities.DeleteFacilityResponse], error)
 	UpdateFacilityCategory(context.Context, *connect.Request[facilities.UpdateFacilityCategoryRequest]) (*connect.Response[facilities.Category], error)
+	GetCategories(context.Context, *connect.Request[facilities.GetCategoriesRequest]) (*connect.Response[facilities.GetCategoriesResponse], error)
 	GetCategory(context.Context, *connect.Request[facilities.GetCategoryRequest]) (*connect.Response[facilities.Category], error)
 	GetAllCoords(context.Context, *connect.Request[facilities.GetAllCoordsRequest]) (*connect.Response[facilities.GetAllCoordsResponse], error)
 }
@@ -396,6 +414,13 @@ func NewFacilitiesServiceHandler(svc FacilitiesServiceHandler, opts ...connect.H
 		connect.WithSchema(facilitiesServiceMethods.ByName("UpdateFacilityCategory")),
 		connect.WithHandlerOptions(opts...),
 	)
+	facilitiesServiceGetCategoriesHandler := connect.NewUnaryHandler(
+		FacilitiesServiceGetCategoriesProcedure,
+		svc.GetCategories,
+		connect.WithSchema(facilitiesServiceMethods.ByName("GetCategories")),
+		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
+		connect.WithHandlerOptions(opts...),
+	)
 	facilitiesServiceGetCategoryHandler := connect.NewUnaryHandler(
 		FacilitiesServiceGetCategoryProcedure,
 		svc.GetCategory,
@@ -436,6 +461,8 @@ func NewFacilitiesServiceHandler(svc FacilitiesServiceHandler, opts ...connect.H
 			facilitiesServiceDeleteFacilityHandler.ServeHTTP(w, r)
 		case FacilitiesServiceUpdateFacilityCategoryProcedure:
 			facilitiesServiceUpdateFacilityCategoryHandler.ServeHTTP(w, r)
+		case FacilitiesServiceGetCategoriesProcedure:
+			facilitiesServiceGetCategoriesHandler.ServeHTTP(w, r)
 		case FacilitiesServiceGetCategoryProcedure:
 			facilitiesServiceGetCategoryHandler.ServeHTTP(w, r)
 		case FacilitiesServiceGetAllCoordsProcedure:
@@ -495,6 +522,10 @@ func (UnimplementedFacilitiesServiceHandler) DeleteFacility(context.Context, *co
 
 func (UnimplementedFacilitiesServiceHandler) UpdateFacilityCategory(context.Context, *connect.Request[facilities.UpdateFacilityCategoryRequest]) (*connect.Response[facilities.Category], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.facilities.FacilitiesService.UpdateFacilityCategory is not implemented"))
+}
+
+func (UnimplementedFacilitiesServiceHandler) GetCategories(context.Context, *connect.Request[facilities.GetCategoriesRequest]) (*connect.Response[facilities.GetCategoriesResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.facilities.FacilitiesService.GetCategories is not implemented"))
 }
 
 func (UnimplementedFacilitiesServiceHandler) GetCategory(context.Context, *connect.Request[facilities.GetCategoryRequest]) (*connect.Response[facilities.Category], error) {

@@ -20,20 +20,18 @@ type PaymentHandler struct {
 	sc               *stripe.Client
 }
 
-func NewPaymentHandler(log *slog.Logger, config *config.Config, facilityStore ports.FacilityStore, reservationStore ports.ReservationStore) *PaymentHandler {
-	client := stripe.NewClient(config.StripeSecretKey)
+func NewPaymentHandler(log *slog.Logger, config *config.Config, facilityStore ports.FacilityStore, reservationStore ports.ReservationStore, sc *stripe.Client) *PaymentHandler {
 	return &PaymentHandler{
 		log:              log,
 		config:           config,
 		facilityStore:    facilityStore,
 		reservationStore: reservationStore,
-		sc:               client,
+		sc:               sc,
 	}
 }
 
 func (p *PaymentHandler) CreatePaymentIntent(ctx context.Context, req *connect.Request[service.CreatePaymentIntentRequest]) (*connect.Response[service.CreatePaymentIntentResponse], error) {
 	reservationID := req.Msg.ReservationId
-
 	reservation, err := p.reservationStore.Get(ctx, reservationID)
 	if err != nil {
 		p.log.Error("failed to get reservation", "error", err)

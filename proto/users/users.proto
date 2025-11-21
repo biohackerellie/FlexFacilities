@@ -20,15 +20,14 @@ message NotificationsReadable {
 message Users {
   string id = 1;
   string name = 2;
-  optional string image = 3;
+  string image = 3;
   string email = 4;
   string email_verified = 5; // RFC3339 string
-  optional string password = 6;
-  string provider = 7;
-  bool external_user = 8;
-  string role = 9;
-  string created_at = 10; // RFC3339 string
-  bool tos = 11;
+  string provider = 6;
+  bool external_user = 7;
+  string role = 8;
+  string created_at = 9; // RFC3339 string
+  bool tos = 10;
 }
 
 message VerificationToken {

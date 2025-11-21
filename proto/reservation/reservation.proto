@@ -13,27 +13,28 @@ message Reservation {
   string approved = 5;
   string created_at = 6;
   string updated_at = 7;
-  optional string details = 8;
+   string details = 8;
   string fees = 9;                // pgtype.Numeric as string
   bool insurance = 10;
-  optional bool door_access = 11;
-  optional string doors_details = 12;
+  bool door_access = 11;
+  string doors_details = 12;
   string name = 13;
-  optional string tech_details = 14;
-  optional bool tech_support = 15;
-  optional string phone = 16;
+  string tech_details = 14;
+  bool tech_support = 15;
+  string phone = 16;
   int64 category_id = 17;
-  optional double total_hours = 18;
+  double total_hours = 18;
   bool in_person = 19;
   bool paid = 20;
-  optional string payment_url = 21;
-  optional string payment_link_id = 22;
-  optional string insurance_link = 23;
+  string payment_url = 21;
+  string payment_link_id = 22;
+  string insurance_link = 23;
   string cost_override = 24;      // pgtype.Numeric as string
-  optional string rrule = 25;
+  string rrule = 25;
   repeated string rdates = 26;
   repeated string exdates = 27;
-  optional string gcal_eventid = 28;
+  string gcal_eventid = 28;
+  string price_id = 29;
 }
 
 
@@ -42,7 +43,7 @@ message ReservationDate {
   int64 id = 1;
   int64 reservation_id = 2;
   string approved = 3;
-  optional string gcal_eventid = 4;
+  string gcal_eventid = 4;
   string local_start = 5;
   string local_end = 6;
 }
@@ -62,7 +63,7 @@ message Occurrence {
 message ReservationFee {
   int64 id = 1;
   string additional_fees = 2;             // pgtype.Numeric as string
-  optional string fees_type = 3;
+  string fees_type = 3;
   int64 reservation_id = 4;
 }
 
@@ -178,17 +179,17 @@ message CreateReservationRequest {
   string name = 6;
   string phone = 7;
   bool tech_support = 8;
-  optional string tech_details = 9;
+  string tech_details = 9;
   bool door_access = 10;
-  optional string doors_details = 11;
+  string doors_details = 11;
   
   repeated Occurrence occurrences = 12;
   
-  optional string start_date = 13;
-  optional string start_time = 14;
-  optional string end_date = 15;
-  optional string end_time = 16;
-  optional RecurrencePattern pattern = 17;
+  string start_date = 13;
+  string start_time = 14;
+  string end_date = 15;
+  string end_time = 16;
+  RecurrencePattern pattern = 17;
   repeated string rdates = 18;
   repeated string exdates = 19;
 }

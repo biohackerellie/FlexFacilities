@@ -155,7 +155,8 @@ INSERT INTO reservation (
     category_id,
 		rrule,
 		rdates,
-		exdates
+		exdates,
+		price_id
 ) VALUES (
     :user_id,
     :event_name,
@@ -172,7 +173,8 @@ INSERT INTO reservation (
     :category_id,
 		:rrule,
 		:rdates,
-		:exdates
+		:exdates,
+		:price_id
 )
 RETURNING id`
 
@@ -194,14 +196,9 @@ func (s *ReservationStore) Create(ctx context.Context, reservation *models.Reser
 		"phone":         reservation.Phone,
 		"category_id":   reservation.CategoryID,
 		"rrule":         reservation.RRule,
-		"rdates":        nil,
-		"exdates":       nil,
-	}
-	if reservation.RDates != nil && len(*reservation.RDates) > 0 {
-		args["rdates"] = reservation.RDates
-	}
-	if reservation.EXDates != nil && len(*reservation.EXDates) > 0 {
-		args["exdates"] = reservation.EXDates
+		"rdates":        reservation.RDates,
+		"exdates":       reservation.EXDates,
+		"price_id":      reservation.PriceID,
 	}
 	rows, err := s.db.NamedQueryContext(ctx, createReservationQuery, args)
 	if err != nil {
@@ -370,13 +367,9 @@ const updateReservationDatesQuery = `UPDATE reservation_date SET
 	WHERE id = :id`
 
 func (s *ReservationStore) UpdateDate(ctx context.Context, date *models.ReservationDate) error {
-	var calId string
-	if date.GcalEventid != nil {
-		calId = *date.GcalEventid
-	}
 	params := map[string]any{
 		"approved":     date.Approved.String(),
-		"gcal_eventid": calId,
+		"gcal_eventid": date.GcalEventid,
 		"local_start":  date.LocalStart,
 		"local_end":    date.LocalEnd,
 		"id":           date.ID,

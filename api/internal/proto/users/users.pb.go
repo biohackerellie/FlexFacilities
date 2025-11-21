@@ -161,15 +161,14 @@ type Users struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Image         *string                `protobuf:"bytes,3,opt,name=image,proto3,oneof" json:"image,omitempty"`
+	Image         string                 `protobuf:"bytes,3,opt,name=image,proto3" json:"image,omitempty"`
 	Email         string                 `protobuf:"bytes,4,opt,name=email,proto3" json:"email,omitempty"`
 	EmailVerified string                 `protobuf:"bytes,5,opt,name=email_verified,json=emailVerified,proto3" json:"email_verified,omitempty"` // RFC3339 string
-	Password      *string                `protobuf:"bytes,6,opt,name=password,proto3,oneof" json:"password,omitempty"`
-	Provider      string                 `protobuf:"bytes,7,opt,name=provider,proto3" json:"provider,omitempty"`
-	ExternalUser  bool                   `protobuf:"varint,8,opt,name=external_user,json=externalUser,proto3" json:"external_user,omitempty"`
-	Role          string                 `protobuf:"bytes,9,opt,name=role,proto3" json:"role,omitempty"`
-	CreatedAt     string                 `protobuf:"bytes,10,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"` // RFC3339 string
-	Tos           bool                   `protobuf:"varint,11,opt,name=tos,proto3" json:"tos,omitempty"`
+	Provider      string                 `protobuf:"bytes,6,opt,name=provider,proto3" json:"provider,omitempty"`
+	ExternalUser  bool                   `protobuf:"varint,7,opt,name=external_user,json=externalUser,proto3" json:"external_user,omitempty"`
+	Role          string                 `protobuf:"bytes,8,opt,name=role,proto3" json:"role,omitempty"`
+	CreatedAt     string                 `protobuf:"bytes,9,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"` // RFC3339 string
+	Tos           bool                   `protobuf:"varint,10,opt,name=tos,proto3" json:"tos,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -219,8 +218,8 @@ func (x *Users) GetName() string {
 }
 
 func (x *Users) GetImage() string {
-	if x != nil && x.Image != nil {
-		return *x.Image
+	if x != nil {
+		return x.Image
 	}
 	return ""
 }
@@ -235,13 +234,6 @@ func (x *Users) GetEmail() string {
 func (x *Users) GetEmailVerified() string {
 	if x != nil {
 		return x.EmailVerified
-	}
-	return ""
-}
-
-func (x *Users) GetPassword() string {
-	if x != nil && x.Password != nil {
-		return *x.Password
 	}
 	return ""
 }
@@ -1029,23 +1021,20 @@ const file_proto_users_users_proto_rawDesc = "" +
 	"buildingId\x12#\n" +
 	"\rbuilding_name\x18\x03 \x01(\tR\fbuildingName\x12\x17\n" +
 	"\auser_id\x18\x04 \x01(\tR\x06userId\x12\x1b\n" +
-	"\tuser_name\x18\x05 \x01(\tR\buserName\"\xc1\x02\n" +
+	"\tuser_name\x18\x05 \x01(\tR\buserName\"\x84\x02\n" +
 	"\x05Users\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
-	"\x04name\x18\x02 \x01(\tR\x04name\x12\x19\n" +
-	"\x05image\x18\x03 \x01(\tH\x00R\x05image\x88\x01\x01\x12\x14\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12\x14\n" +
+	"\x05image\x18\x03 \x01(\tR\x05image\x12\x14\n" +
 	"\x05email\x18\x04 \x01(\tR\x05email\x12%\n" +
-	"\x0eemail_verified\x18\x05 \x01(\tR\remailVerified\x12\x1f\n" +
-	"\bpassword\x18\x06 \x01(\tH\x01R\bpassword\x88\x01\x01\x12\x1a\n" +
-	"\bprovider\x18\a \x01(\tR\bprovider\x12#\n" +
-	"\rexternal_user\x18\b \x01(\bR\fexternalUser\x12\x12\n" +
-	"\x04role\x18\t \x01(\tR\x04role\x12\x1d\n" +
+	"\x0eemail_verified\x18\x05 \x01(\tR\remailVerified\x12\x1a\n" +
+	"\bprovider\x18\x06 \x01(\tR\bprovider\x12#\n" +
+	"\rexternal_user\x18\a \x01(\bR\fexternalUser\x12\x12\n" +
+	"\x04role\x18\b \x01(\tR\x04role\x12\x1d\n" +
 	"\n" +
-	"created_at\x18\n" +
-	" \x01(\tR\tcreatedAt\x12\x10\n" +
-	"\x03tos\x18\v \x01(\bR\x03tosB\b\n" +
-	"\x06_imageB\v\n" +
-	"\t_password\"c\n" +
+	"created_at\x18\t \x01(\tR\tcreatedAt\x12\x10\n" +
+	"\x03tos\x18\n" +
+	" \x01(\bR\x03tos\"c\n" +
 	"\x11VerificationToken\x12\x1e\n" +
 	"\n" +
 	"identifier\x18\x01 \x01(\tR\n" +
@@ -1176,7 +1165,6 @@ func file_proto_users_users_proto_init() {
 	if File_proto_users_users_proto != nil {
 		return
 	}
-	file_proto_users_users_proto_msgTypes[2].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

@@ -78,11 +78,11 @@ type Branding struct {
 	Id                         int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	OrganizationName           string                 `protobuf:"bytes,2,opt,name=organization_name,json=organizationName,proto3" json:"organization_name,omitempty"`
 	OrganizationLogoPath       string                 `protobuf:"bytes,3,opt,name=organization_logo_path,json=organizationLogoPath,proto3" json:"organization_logo_path,omitempty"`
-	OrganizationPrimaryColor   *string                `protobuf:"bytes,4,opt,name=organization_primary_color,json=organizationPrimaryColor,proto3,oneof" json:"organization_primary_color,omitempty"`
-	OrganizationSecondaryColor *string                `protobuf:"bytes,5,opt,name=organization_secondary_color,json=organizationSecondaryColor,proto3,oneof" json:"organization_secondary_color,omitempty"`
-	OrganizationUrl            *string                `protobuf:"bytes,6,opt,name=organization_url,json=organizationUrl,proto3,oneof" json:"organization_url,omitempty"`
-	OrganizationDescription    *string                `protobuf:"bytes,7,opt,name=organization_description,json=organizationDescription,proto3,oneof" json:"organization_description,omitempty"`
-	OrganizationEmail          *string                `protobuf:"bytes,8,opt,name=organization_email,json=organizationEmail,proto3,oneof" json:"organization_email,omitempty"`
+	OrganizationPrimaryColor   string                 `protobuf:"bytes,4,opt,name=organization_primary_color,json=organizationPrimaryColor,proto3" json:"organization_primary_color,omitempty"`
+	OrganizationSecondaryColor string                 `protobuf:"bytes,5,opt,name=organization_secondary_color,json=organizationSecondaryColor,proto3" json:"organization_secondary_color,omitempty"`
+	OrganizationUrl            string                 `protobuf:"bytes,6,opt,name=organization_url,json=organizationUrl,proto3" json:"organization_url,omitempty"`
+	OrganizationDescription    string                 `protobuf:"bytes,7,opt,name=organization_description,json=organizationDescription,proto3" json:"organization_description,omitempty"`
+	OrganizationEmail          string                 `protobuf:"bytes,8,opt,name=organization_email,json=organizationEmail,proto3" json:"organization_email,omitempty"`
 	unknownFields              protoimpl.UnknownFields
 	sizeCache                  protoimpl.SizeCache
 }
@@ -139,36 +139,36 @@ func (x *Branding) GetOrganizationLogoPath() string {
 }
 
 func (x *Branding) GetOrganizationPrimaryColor() string {
-	if x != nil && x.OrganizationPrimaryColor != nil {
-		return *x.OrganizationPrimaryColor
+	if x != nil {
+		return x.OrganizationPrimaryColor
 	}
 	return ""
 }
 
 func (x *Branding) GetOrganizationSecondaryColor() string {
-	if x != nil && x.OrganizationSecondaryColor != nil {
-		return *x.OrganizationSecondaryColor
+	if x != nil {
+		return x.OrganizationSecondaryColor
 	}
 	return ""
 }
 
 func (x *Branding) GetOrganizationUrl() string {
-	if x != nil && x.OrganizationUrl != nil {
-		return *x.OrganizationUrl
+	if x != nil {
+		return x.OrganizationUrl
 	}
 	return ""
 }
 
 func (x *Branding) GetOrganizationDescription() string {
-	if x != nil && x.OrganizationDescription != nil {
-		return *x.OrganizationDescription
+	if x != nil {
+		return x.OrganizationDescription
 	}
 	return ""
 }
 
 func (x *Branding) GetOrganizationEmail() string {
-	if x != nil && x.OrganizationEmail != nil {
-		return *x.OrganizationEmail
+	if x != nil {
+		return x.OrganizationEmail
 	}
 	return ""
 }
@@ -335,21 +335,16 @@ const file_proto_utility_utility_proto_rawDesc = "" +
 	"\x06values\x18\x02 \x03(\v2%.api.utility.RPMDataEntry.ValuesEntryR\x06values\x1a9\n" +
 	"\vValuesEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\x05R\x05value:\x028\x01\"\xb8\x04\n" +
+	"\x05value\x18\x02 \x01(\x05R\x05value:\x028\x01\"\x96\x03\n" +
 	"\bBranding\x12\x12\n" +
 	"\x02id\x18\x01 \x01(\x03B\x020\x01R\x02id\x12+\n" +
 	"\x11organization_name\x18\x02 \x01(\tR\x10organizationName\x124\n" +
-	"\x16organization_logo_path\x18\x03 \x01(\tR\x14organizationLogoPath\x12A\n" +
-	"\x1aorganization_primary_color\x18\x04 \x01(\tH\x00R\x18organizationPrimaryColor\x88\x01\x01\x12E\n" +
-	"\x1corganization_secondary_color\x18\x05 \x01(\tH\x01R\x1aorganizationSecondaryColor\x88\x01\x01\x12.\n" +
-	"\x10organization_url\x18\x06 \x01(\tH\x02R\x0forganizationUrl\x88\x01\x01\x12>\n" +
-	"\x18organization_description\x18\a \x01(\tH\x03R\x17organizationDescription\x88\x01\x01\x122\n" +
-	"\x12organization_email\x18\b \x01(\tH\x04R\x11organizationEmail\x88\x01\x01B\x1d\n" +
-	"\x1b_organization_primary_colorB\x1f\n" +
-	"\x1d_organization_secondary_colorB\x13\n" +
-	"\x11_organization_urlB\x1b\n" +
-	"\x19_organization_descriptionB\x15\n" +
-	"\x13_organization_email\"\x1b\n" +
+	"\x16organization_logo_path\x18\x03 \x01(\tR\x14organizationLogoPath\x12<\n" +
+	"\x1aorganization_primary_color\x18\x04 \x01(\tR\x18organizationPrimaryColor\x12@\n" +
+	"\x1corganization_secondary_color\x18\x05 \x01(\tR\x1aorganizationSecondaryColor\x12)\n" +
+	"\x10organization_url\x18\x06 \x01(\tR\x0forganizationUrl\x129\n" +
+	"\x18organization_description\x18\a \x01(\tR\x17organizationDescription\x12-\n" +
+	"\x12organization_email\x18\b \x01(\tR\x11organizationEmail\"\x1b\n" +
 	"\x19AggregateChartDataRequest\"K\n" +
 	"\x1aAggregateChartDataResponse\x12-\n" +
 	"\x04data\x18\x01 \x03(\v2\x19.api.utility.RPMDataEntryR\x04data\"\x14\n" +
@@ -404,7 +399,6 @@ func file_proto_utility_utility_proto_init() {
 	if File_proto_utility_utility_proto != nil {
 		return
 	}
-	file_proto_utility_utility_proto_msgTypes[1].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

@@ -10,7 +10,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file proto/utility/utility.proto.
  */
 export const file_proto_utility_utility: GenFile = /*@__PURE__*/
-  fileDesc("Chtwcm90by91dGlsaXR5L3V0aWxpdHkucHJvdG8SC2FwaS51dGlsaXR5IoMBCgxSUE1EYXRhRW50cnkSDQoFbW9udGgYASABKAkSNQoGdmFsdWVzGAIgAygLMiUuYXBpLnV0aWxpdHkuUlBNRGF0YUVudHJ5LlZhbHVlc0VudHJ5Gi0KC1ZhbHVlc0VudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoBToCOAEimQMKCEJyYW5kaW5nEg4KAmlkGAEgASgDQgIwARIZChFvcmdhbml6YXRpb25fbmFtZRgCIAEoCRIeChZvcmdhbml6YXRpb25fbG9nb19wYXRoGAMgASgJEicKGm9yZ2FuaXphdGlvbl9wcmltYXJ5X2NvbG9yGAQgASgJSACIAQESKQocb3JnYW5pemF0aW9uX3NlY29uZGFyeV9jb2xvchgFIAEoCUgBiAEBEh0KEG9yZ2FuaXphdGlvbl91cmwYBiABKAlIAogBARIlChhvcmdhbml6YXRpb25fZGVzY3JpcHRpb24YByABKAlIA4gBARIfChJvcmdhbml6YXRpb25fZW1haWwYCCABKAlIBIgBAUIdChtfb3JnYW5pemF0aW9uX3ByaW1hcnlfY29sb3JCHwodX29yZ2FuaXphdGlvbl9zZWNvbmRhcnlfY29sb3JCEwoRX29yZ2FuaXphdGlvbl91cmxCGwoZX29yZ2FuaXphdGlvbl9kZXNjcmlwdGlvbkIVChNfb3JnYW5pemF0aW9uX2VtYWlsIhsKGUFnZ3JlZ2F0ZUNoYXJ0RGF0YVJlcXVlc3QiRQoaQWdncmVnYXRlQ2hhcnREYXRhUmVzcG9uc2USJwoEZGF0YRgBIAMoCzIZLmFwaS51dGlsaXR5LlJQTURhdGFFbnRyeSIUChJHZXRCcmFuZGluZ1JlcXVlc3QiGAoWVXBkYXRlQnJhbmRpbmdSZXNwb25zZTKWAgoOVXRpbGl0eVNlcnZpY2USagoSQWdncmVnYXRlQ2hhcnREYXRhEiYuYXBpLnV0aWxpdHkuQWdncmVnYXRlQ2hhcnREYXRhUmVxdWVzdBonLmFwaS51dGlsaXR5LkFnZ3JlZ2F0ZUNoYXJ0RGF0YVJlc3BvbnNlIgOQAgESSgoLR2V0QnJhbmRpbmcSHy5hcGkudXRpbGl0eS5HZXRCcmFuZGluZ1JlcXVlc3QaFS5hcGkudXRpbGl0eS5CcmFuZGluZyIDkAIBEkwKDlVwZGF0ZUJyYW5kaW5nEhUuYXBpLnV0aWxpdHkuQnJhbmRpbmcaIy5hcGkudXRpbGl0eS5VcGRhdGVCcmFuZGluZ1Jlc3BvbnNlQpcBCg9jb20uYXBpLnV0aWxpdHlCDFV0aWxpdHlQcm90b1ABWilhcGkvaW50ZXJuYWwvcHJvdG8vdXRpbGl0eTt1dGlsaXR5c2VydmljZaICA0FVWKoCC0FwaS5VdGlsaXR5ygILQXBpXFV0aWxpdHniAhdBcGlcVXRpbGl0eVxHUEJNZXRhZGF0YeoCDEFwaTo6VXRpbGl0eWIGcHJvdG8z");
+  fileDesc("Chtwcm90by91dGlsaXR5L3V0aWxpdHkucHJvdG8SC2FwaS51dGlsaXR5IoMBCgxSUE1EYXRhRW50cnkSDQoFbW9udGgYASABKAkSNQoGdmFsdWVzGAIgAygLMiUuYXBpLnV0aWxpdHkuUlBNRGF0YUVudHJ5LlZhbHVlc0VudHJ5Gi0KC1ZhbHVlc0VudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoBToCOAEi9wEKCEJyYW5kaW5nEg4KAmlkGAEgASgDQgIwARIZChFvcmdhbml6YXRpb25fbmFtZRgCIAEoCRIeChZvcmdhbml6YXRpb25fbG9nb19wYXRoGAMgASgJEiIKGm9yZ2FuaXphdGlvbl9wcmltYXJ5X2NvbG9yGAQgASgJEiQKHG9yZ2FuaXphdGlvbl9zZWNvbmRhcnlfY29sb3IYBSABKAkSGAoQb3JnYW5pemF0aW9uX3VybBgGIAEoCRIgChhvcmdhbml6YXRpb25fZGVzY3JpcHRpb24YByABKAkSGgoSb3JnYW5pemF0aW9uX2VtYWlsGAggASgJIhsKGUFnZ3JlZ2F0ZUNoYXJ0RGF0YVJlcXVlc3QiRQoaQWdncmVnYXRlQ2hhcnREYXRhUmVzcG9uc2USJwoEZGF0YRgBIAMoCzIZLmFwaS51dGlsaXR5LlJQTURhdGFFbnRyeSIUChJHZXRCcmFuZGluZ1JlcXVlc3QiGAoWVXBkYXRlQnJhbmRpbmdSZXNwb25zZTKWAgoOVXRpbGl0eVNlcnZpY2USagoSQWdncmVnYXRlQ2hhcnREYXRhEiYuYXBpLnV0aWxpdHkuQWdncmVnYXRlQ2hhcnREYXRhUmVxdWVzdBonLmFwaS51dGlsaXR5LkFnZ3JlZ2F0ZUNoYXJ0RGF0YVJlc3BvbnNlIgOQAgESSgoLR2V0QnJhbmRpbmcSHy5hcGkudXRpbGl0eS5HZXRCcmFuZGluZ1JlcXVlc3QaFS5hcGkudXRpbGl0eS5CcmFuZGluZyIDkAIBEkwKDlVwZGF0ZUJyYW5kaW5nEhUuYXBpLnV0aWxpdHkuQnJhbmRpbmcaIy5hcGkudXRpbGl0eS5VcGRhdGVCcmFuZGluZ1Jlc3BvbnNlQpcBCg9jb20uYXBpLnV0aWxpdHlCDFV0aWxpdHlQcm90b1ABWilhcGkvaW50ZXJuYWwvcHJvdG8vdXRpbGl0eTt1dGlsaXR5c2VydmljZaICA0FVWKoCC0FwaS5VdGlsaXR5ygILQXBpXFV0aWxpdHniAhdBcGlcVXRpbGl0eVxHUEJNZXRhZGF0YeoCDEFwaTo6VXRpbGl0eWIGcHJvdG8z");
 
 /**
  * @generated from message api.utility.RPMDataEntry
@@ -54,29 +54,29 @@ export type Branding = Message<"api.utility.Branding"> & {
   organizationLogoPath: string;
 
   /**
-   * @generated from field: optional string organization_primary_color = 4;
+   * @generated from field: string organization_primary_color = 4;
    */
-  organizationPrimaryColor?: string;
+  organizationPrimaryColor: string;
 
   /**
-   * @generated from field: optional string organization_secondary_color = 5;
+   * @generated from field: string organization_secondary_color = 5;
    */
-  organizationSecondaryColor?: string;
+  organizationSecondaryColor: string;
 
   /**
-   * @generated from field: optional string organization_url = 6;
+   * @generated from field: string organization_url = 6;
    */
-  organizationUrl?: string;
+  organizationUrl: string;
 
   /**
-   * @generated from field: optional string organization_description = 7;
+   * @generated from field: string organization_description = 7;
    */
-  organizationDescription?: string;
+  organizationDescription: string;
 
   /**
-   * @generated from field: optional string organization_email = 8;
+   * @generated from field: string organization_email = 8;
    */
-  organizationEmail?: string;
+  organizationEmail: string;
 };
 
 /**

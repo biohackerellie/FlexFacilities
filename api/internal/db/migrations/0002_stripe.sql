@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS pricing (
   product_id TEXT NOT NULL, -- product id from stripe
   category_id BIGINT NOT NULL, -- pricing category
   unit_label TEXT DEFAULT 'hour'::text NOT NULL
+  CONSTRAINT unique_product_category UNIQUE (product_id, category_id)
 );
 
 ALTER TABLE facility 
@@ -21,3 +22,9 @@ ADD COLUMN IF NOT EXISTS product_id TEXT;
 
 ALTER TABLE reservation
 ADD COLUMN IF NOT EXISTS price_id TEXT;
+
+ALTER TABLE category
+DROP COLUMN IF EXISTS price;
+
+ALTER TABLE category
+DROP COLUMN IF EXISTS facility_id;
