@@ -319,3 +319,38 @@ func (f *FacilityStore) GetPricingByFacilityAndCategory(ctx context.Context, fac
 	err := f.db.GetContext(ctx, &pricing, getPricingFromFacilityAndCategoryQuery, args)
 	return pricing, err
 }
+
+func (f *FacilityStore) GetProductPricingWithCategories(ctx context.Context, productID string) ([]models.PricingWithCategory, error) {
+	var pricing []models.Pricing
+	if err := f.db.SelectContext(ctx, &pricing, "SELECT * FROM pricing WHERE product_id = $1", productID); err != nil {
+		return nil, err
+	}
+	if len(pricing) == 0 {
+		return nil, errors.New("no pricing found")
+	}
+
+	var categories []models.Category
+	if err := f.db.SelectContext(ctx, &categories, "SELECT * FROM category"); err != nil {
+		return nil, err
+	}
+	catMap := make(map[int64]models.Category, len(categories))
+	for _, cat := range categories {
+		catMap[cat.ID] = cat
+	}
+	var finalPricing []models.PricingWithCategory
+	for _, pricing := range pricing {
+		finalPricing = append(finalPricing, models.PricingWithCategory{
+			Pricing:             pricing,
+			CategoryName:        catMap[pricing.CategoryID].Name,
+			CategoryDescription: catMap[pricing.CategoryID].Description,
+		})
+	}
+	return finalPricing, nil
+}
+func (f *FacilityStore) GetPricing(ctx context.Context, pricingID string) (models.Pricing, error) {
+	var pricing models.Pricing
+	if err := f.db.GetContext(ctx, &pricing, "SELECT * FROM pricing WHERE id = $1", pricingID); err != nil {
+		return models.Pricing{}, err
+	}
+	return pricing, nil
+}

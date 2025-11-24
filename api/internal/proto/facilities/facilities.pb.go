@@ -1905,6 +1905,146 @@ func (x *FullFacility) GetBuilding() *Building {
 	return nil
 }
 
+type GetProductsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetProductsRequest) Reset() {
+	*x = GetProductsRequest{}
+	mi := &file_proto_facilities_facilities_proto_msgTypes[37]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetProductsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetProductsRequest) ProtoMessage() {}
+
+func (x *GetProductsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_facilities_facilities_proto_msgTypes[37]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetProductsRequest.ProtoReflect.Descriptor instead.
+func (*GetProductsRequest) Descriptor() ([]byte, []int) {
+	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{37}
+}
+
+type ProductWithPricing struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ProductId     string                 `protobuf:"bytes,1,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
+	ProductName   string                 `protobuf:"bytes,2,opt,name=product_name,json=productName,proto3" json:"product_name,omitempty"`
+	Pricing       []*PricingWithCategory `protobuf:"bytes,3,rep,name=pricing,proto3" json:"pricing,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ProductWithPricing) Reset() {
+	*x = ProductWithPricing{}
+	mi := &file_proto_facilities_facilities_proto_msgTypes[38]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ProductWithPricing) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ProductWithPricing) ProtoMessage() {}
+
+func (x *ProductWithPricing) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_facilities_facilities_proto_msgTypes[38]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ProductWithPricing.ProtoReflect.Descriptor instead.
+func (*ProductWithPricing) Descriptor() ([]byte, []int) {
+	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{38}
+}
+
+func (x *ProductWithPricing) GetProductId() string {
+	if x != nil {
+		return x.ProductId
+	}
+	return ""
+}
+
+func (x *ProductWithPricing) GetProductName() string {
+	if x != nil {
+		return x.ProductName
+	}
+	return ""
+}
+
+func (x *ProductWithPricing) GetPricing() []*PricingWithCategory {
+	if x != nil {
+		return x.Pricing
+	}
+	return nil
+}
+
+type GetProductsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Data          []*ProductWithPricing  `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetProductsResponse) Reset() {
+	*x = GetProductsResponse{}
+	mi := &file_proto_facilities_facilities_proto_msgTypes[39]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetProductsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetProductsResponse) ProtoMessage() {}
+
+func (x *GetProductsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_facilities_facilities_proto_msgTypes[39]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetProductsResponse.ProtoReflect.Descriptor instead.
+func (*GetProductsResponse) Descriptor() ([]byte, []int) {
+	return file_proto_facilities_facilities_proto_rawDescGZIP(), []int{39}
+}
+
+func (x *GetProductsResponse) GetData() []*ProductWithPricing {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
 var File_proto_facilities_facilities_proto protoreflect.FileDescriptor
 
 const file_proto_facilities_facilities_proto_rawDesc = "" +
@@ -2034,7 +2174,15 @@ const file_proto_facilities_facilities_proto_rawDesc = "" +
 	"\bfacility\x18\x01 \x01(\v2\x18.api.facilities.FacilityR\bfacility\x12=\n" +
 	"\apricing\x18\x02 \x03(\v2#.api.facilities.PricingWithCategoryR\apricing\x12)\n" +
 	"\x0ereservation_id\x18\x03 \x03(\x03B\x020\x01R\rreservationId\x124\n" +
-	"\bbuilding\x18\x04 \x01(\v2\x18.api.facilities.BuildingR\bbuilding2\x99\f\n" +
+	"\bbuilding\x18\x04 \x01(\v2\x18.api.facilities.BuildingR\bbuilding\"\x14\n" +
+	"\x12GetProductsRequest\"\x95\x01\n" +
+	"\x12ProductWithPricing\x12\x1d\n" +
+	"\n" +
+	"product_id\x18\x01 \x01(\tR\tproductId\x12!\n" +
+	"\fproduct_name\x18\x02 \x01(\tR\vproductName\x12=\n" +
+	"\apricing\x18\x03 \x03(\v2#.api.facilities.PricingWithCategoryR\apricing\"M\n" +
+	"\x13GetProductsResponse\x126\n" +
+	"\x04data\x18\x01 \x03(\v2\".api.facilities.ProductWithPricingR\x04data2\xf6\f\n" +
 	"\x11FacilitiesService\x12j\n" +
 	"\x10GetAllFacilities\x12'.api.facilities.GetAllFacilitiesRequest\x1a(.api.facilities.GetAllFacilitiesResponse\"\x03\x90\x02\x01\x12g\n" +
 	"\x0fGetAllBuildings\x12&.api.facilities.GetAllBuildingsRequest\x1a'.api.facilities.GetAllBuildingsResponse\"\x03\x90\x02\x01\x12T\n" +
@@ -2050,7 +2198,8 @@ const file_proto_facilities_facilities_proto_rawDesc = "" +
 	"\x16UpdateFacilityCategory\x12-.api.facilities.UpdateFacilityCategoryRequest\x1a\x18.api.facilities.Category\x12a\n" +
 	"\rGetCategories\x12$.api.facilities.GetCategoriesRequest\x1a%.api.facilities.GetCategoriesResponse\"\x03\x90\x02\x01\x12P\n" +
 	"\vGetCategory\x12\".api.facilities.GetCategoryRequest\x1a\x18.api.facilities.Category\"\x03\x90\x02\x01\x12^\n" +
-	"\fGetAllCoords\x12#.api.facilities.GetAllCoordsRequest\x1a$.api.facilities.GetAllCoordsResponse\"\x03\x90\x02\x01B\xaf\x01\n" +
+	"\fGetAllCoords\x12#.api.facilities.GetAllCoordsRequest\x1a$.api.facilities.GetAllCoordsResponse\"\x03\x90\x02\x01\x12[\n" +
+	"\vGetProducts\x12\".api.facilities.GetProductsRequest\x1a#.api.facilities.GetProductsResponse\"\x03\x90\x02\x01B\xaf\x01\n" +
 	"\x12com.api.facilitiesB\x0fFacilitiesProtoP\x01Z/api/internal/proto/facilities;facilitiesservice\xa2\x02\x03AFX\xaa\x02\x0eApi.Facilities\xca\x02\x0eApi\\Facilities\xe2\x02\x1aApi\\Facilities\\GPBMetadata\xea\x02\x0fApi::Facilitiesb\x06proto3"
 
 var (
@@ -2065,7 +2214,7 @@ func file_proto_facilities_facilities_proto_rawDescGZIP() []byte {
 	return file_proto_facilities_facilities_proto_rawDescData
 }
 
-var file_proto_facilities_facilities_proto_msgTypes = make([]protoimpl.MessageInfo, 37)
+var file_proto_facilities_facilities_proto_msgTypes = make([]protoimpl.MessageInfo, 40)
 var file_proto_facilities_facilities_proto_goTypes = []any{
 	(*Facility)(nil),                      // 0: api.facilities.Facility
 	(*Building)(nil),                      // 1: api.facilities.Building
@@ -2104,6 +2253,9 @@ var file_proto_facilities_facilities_proto_goTypes = []any{
 	(*UpdateFacilityResponse)(nil),        // 34: api.facilities.UpdateFacilityResponse
 	(*PricingWithCategory)(nil),           // 35: api.facilities.PricingWithCategory
 	(*FullFacility)(nil),                  // 36: api.facilities.FullFacility
+	(*GetProductsRequest)(nil),            // 37: api.facilities.GetProductsRequest
+	(*ProductWithPricing)(nil),            // 38: api.facilities.ProductWithPricing
+	(*GetProductsResponse)(nil),           // 39: api.facilities.GetProductsResponse
 }
 var file_proto_facilities_facilities_proto_depIdxs = []int32{
 	1,  // 0: api.facilities.BuildingWithFacilities.building:type_name -> api.facilities.Building
@@ -2125,41 +2277,45 @@ var file_proto_facilities_facilities_proto_depIdxs = []int32{
 	0,  // 16: api.facilities.FullFacility.facility:type_name -> api.facilities.Facility
 	35, // 17: api.facilities.FullFacility.pricing:type_name -> api.facilities.PricingWithCategory
 	1,  // 18: api.facilities.FullFacility.building:type_name -> api.facilities.Building
-	21, // 19: api.facilities.FacilitiesService.GetAllFacilities:input_type -> api.facilities.GetAllFacilitiesRequest
-	19, // 20: api.facilities.FacilitiesService.GetAllBuildings:input_type -> api.facilities.GetAllBuildingsRequest
-	22, // 21: api.facilities.FacilitiesService.GetFacility:input_type -> api.facilities.GetFacilityRequest
-	13, // 22: api.facilities.FacilitiesService.GetEventsByFacility:input_type -> api.facilities.GetEventsByFacilityRequest
-	15, // 23: api.facilities.FacilitiesService.GetEventsByBuilding:input_type -> api.facilities.GetEventsByBuildingRequest
-	17, // 24: api.facilities.FacilitiesService.GetAllEvents:input_type -> api.facilities.GetAllEventsRequest
-	23, // 25: api.facilities.FacilitiesService.GetFacilityCategories:input_type -> api.facilities.GetFacilityCategoriesRequest
-	24, // 26: api.facilities.FacilitiesService.GetBuildingFacilities:input_type -> api.facilities.GetBuildingFacilitiesRequest
-	28, // 27: api.facilities.FacilitiesService.CreateFacility:input_type -> api.facilities.CreateFacilityRequest
-	29, // 28: api.facilities.FacilitiesService.UpdateFacility:input_type -> api.facilities.UpdateFacilityRequest
-	30, // 29: api.facilities.FacilitiesService.DeleteFacility:input_type -> api.facilities.DeleteFacilityRequest
-	32, // 30: api.facilities.FacilitiesService.UpdateFacilityCategory:input_type -> api.facilities.UpdateFacilityCategoryRequest
-	7,  // 31: api.facilities.FacilitiesService.GetCategories:input_type -> api.facilities.GetCategoriesRequest
-	12, // 32: api.facilities.FacilitiesService.GetCategory:input_type -> api.facilities.GetCategoryRequest
-	10, // 33: api.facilities.FacilitiesService.GetAllCoords:input_type -> api.facilities.GetAllCoordsRequest
-	25, // 34: api.facilities.FacilitiesService.GetAllFacilities:output_type -> api.facilities.GetAllFacilitiesResponse
-	20, // 35: api.facilities.FacilitiesService.GetAllBuildings:output_type -> api.facilities.GetAllBuildingsResponse
-	36, // 36: api.facilities.FacilitiesService.GetFacility:output_type -> api.facilities.FullFacility
-	14, // 37: api.facilities.FacilitiesService.GetEventsByFacility:output_type -> api.facilities.GetEventsByFacilityResponse
-	16, // 38: api.facilities.FacilitiesService.GetEventsByBuilding:output_type -> api.facilities.GetEventsByBuildingResponse
-	18, // 39: api.facilities.FacilitiesService.GetAllEvents:output_type -> api.facilities.GetAllEventsResponse
-	26, // 40: api.facilities.FacilitiesService.GetFacilityCategories:output_type -> api.facilities.GetFacilityCategoriesResponse
-	27, // 41: api.facilities.FacilitiesService.GetBuildingFacilities:output_type -> api.facilities.GetBuildingFacilitiesResponse
-	33, // 42: api.facilities.FacilitiesService.CreateFacility:output_type -> api.facilities.CreateFacilityResponse
-	34, // 43: api.facilities.FacilitiesService.UpdateFacility:output_type -> api.facilities.UpdateFacilityResponse
-	31, // 44: api.facilities.FacilitiesService.DeleteFacility:output_type -> api.facilities.DeleteFacilityResponse
-	4,  // 45: api.facilities.FacilitiesService.UpdateFacilityCategory:output_type -> api.facilities.Category
-	8,  // 46: api.facilities.FacilitiesService.GetCategories:output_type -> api.facilities.GetCategoriesResponse
-	4,  // 47: api.facilities.FacilitiesService.GetCategory:output_type -> api.facilities.Category
-	11, // 48: api.facilities.FacilitiesService.GetAllCoords:output_type -> api.facilities.GetAllCoordsResponse
-	34, // [34:49] is the sub-list for method output_type
-	19, // [19:34] is the sub-list for method input_type
-	19, // [19:19] is the sub-list for extension type_name
-	19, // [19:19] is the sub-list for extension extendee
-	0,  // [0:19] is the sub-list for field type_name
+	35, // 19: api.facilities.ProductWithPricing.pricing:type_name -> api.facilities.PricingWithCategory
+	38, // 20: api.facilities.GetProductsResponse.data:type_name -> api.facilities.ProductWithPricing
+	21, // 21: api.facilities.FacilitiesService.GetAllFacilities:input_type -> api.facilities.GetAllFacilitiesRequest
+	19, // 22: api.facilities.FacilitiesService.GetAllBuildings:input_type -> api.facilities.GetAllBuildingsRequest
+	22, // 23: api.facilities.FacilitiesService.GetFacility:input_type -> api.facilities.GetFacilityRequest
+	13, // 24: api.facilities.FacilitiesService.GetEventsByFacility:input_type -> api.facilities.GetEventsByFacilityRequest
+	15, // 25: api.facilities.FacilitiesService.GetEventsByBuilding:input_type -> api.facilities.GetEventsByBuildingRequest
+	17, // 26: api.facilities.FacilitiesService.GetAllEvents:input_type -> api.facilities.GetAllEventsRequest
+	23, // 27: api.facilities.FacilitiesService.GetFacilityCategories:input_type -> api.facilities.GetFacilityCategoriesRequest
+	24, // 28: api.facilities.FacilitiesService.GetBuildingFacilities:input_type -> api.facilities.GetBuildingFacilitiesRequest
+	28, // 29: api.facilities.FacilitiesService.CreateFacility:input_type -> api.facilities.CreateFacilityRequest
+	29, // 30: api.facilities.FacilitiesService.UpdateFacility:input_type -> api.facilities.UpdateFacilityRequest
+	30, // 31: api.facilities.FacilitiesService.DeleteFacility:input_type -> api.facilities.DeleteFacilityRequest
+	32, // 32: api.facilities.FacilitiesService.UpdateFacilityCategory:input_type -> api.facilities.UpdateFacilityCategoryRequest
+	7,  // 33: api.facilities.FacilitiesService.GetCategories:input_type -> api.facilities.GetCategoriesRequest
+	12, // 34: api.facilities.FacilitiesService.GetCategory:input_type -> api.facilities.GetCategoryRequest
+	10, // 35: api.facilities.FacilitiesService.GetAllCoords:input_type -> api.facilities.GetAllCoordsRequest
+	37, // 36: api.facilities.FacilitiesService.GetProducts:input_type -> api.facilities.GetProductsRequest
+	25, // 37: api.facilities.FacilitiesService.GetAllFacilities:output_type -> api.facilities.GetAllFacilitiesResponse
+	20, // 38: api.facilities.FacilitiesService.GetAllBuildings:output_type -> api.facilities.GetAllBuildingsResponse
+	36, // 39: api.facilities.FacilitiesService.GetFacility:output_type -> api.facilities.FullFacility
+	14, // 40: api.facilities.FacilitiesService.GetEventsByFacility:output_type -> api.facilities.GetEventsByFacilityResponse
+	16, // 41: api.facilities.FacilitiesService.GetEventsByBuilding:output_type -> api.facilities.GetEventsByBuildingResponse
+	18, // 42: api.facilities.FacilitiesService.GetAllEvents:output_type -> api.facilities.GetAllEventsResponse
+	26, // 43: api.facilities.FacilitiesService.GetFacilityCategories:output_type -> api.facilities.GetFacilityCategoriesResponse
+	27, // 44: api.facilities.FacilitiesService.GetBuildingFacilities:output_type -> api.facilities.GetBuildingFacilitiesResponse
+	33, // 45: api.facilities.FacilitiesService.CreateFacility:output_type -> api.facilities.CreateFacilityResponse
+	34, // 46: api.facilities.FacilitiesService.UpdateFacility:output_type -> api.facilities.UpdateFacilityResponse
+	31, // 47: api.facilities.FacilitiesService.DeleteFacility:output_type -> api.facilities.DeleteFacilityResponse
+	4,  // 48: api.facilities.FacilitiesService.UpdateFacilityCategory:output_type -> api.facilities.Category
+	8,  // 49: api.facilities.FacilitiesService.GetCategories:output_type -> api.facilities.GetCategoriesResponse
+	4,  // 50: api.facilities.FacilitiesService.GetCategory:output_type -> api.facilities.Category
+	11, // 51: api.facilities.FacilitiesService.GetAllCoords:output_type -> api.facilities.GetAllCoordsResponse
+	39, // 52: api.facilities.FacilitiesService.GetProducts:output_type -> api.facilities.GetProductsResponse
+	37, // [37:53] is the sub-list for method output_type
+	21, // [21:37] is the sub-list for method input_type
+	21, // [21:21] is the sub-list for extension type_name
+	21, // [21:21] is the sub-list for extension extendee
+	0,  // [0:21] is the sub-list for field type_name
 }
 
 func init() { file_proto_facilities_facilities_proto_init() }
@@ -2173,7 +2329,7 @@ func file_proto_facilities_facilities_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_facilities_facilities_proto_rawDesc), len(file_proto_facilities_facilities_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   37,
+			NumMessages:   40,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

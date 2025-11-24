@@ -2,8 +2,9 @@ import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 import { MultiStepForm } from '@/components/multi-step-form';
 import { Skeleton } from '@/components/ui/skeleton';
-import { getFacilities } from '@/lib/actions/facilities';
+import { getAllProducts, getFacilities } from '@/lib/actions/facilities';
 import { auth } from '@/lib/auth';
+import { getCookies } from '@/lib/setHeader';
 
 const Loading = () => {
   return (
@@ -20,12 +21,15 @@ export default async function ReservationPage() {
   if (!session) {
     redirect('/login');
   }
+  const { session: sessionCookie, token } = await getCookies();
+
   return (
     <section className='my-4 flex flex-col justify-center sm:flex-row'>
       <Suspense fallback={<Loading />}>
         <MultiStepForm
           userID={session.userId}
           facilitiesPromise={getFacilities()}
+          getAllProductsPromise={getAllProducts(sessionCookie!, token!)}
         />
       </Suspense>
     </section>

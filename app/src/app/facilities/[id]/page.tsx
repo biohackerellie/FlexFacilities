@@ -32,20 +32,20 @@ async function getFacility(id: string) {
   }
   cacheTag(`facility-${id}`);
   cacheTag('facilities');
-  logger.debug('building', { building: facility?.building });
   return facility;
 }
 
 async function getEventsByFacility(id: string) {
   'use cache: private';
+
+  cacheTag(`events-${id}`);
   const { data: events, error } = await client
     .facilities()
     .getEventsByFacility({ id: id });
   if (error) {
-    logger.error('Error fetching facilities', { 'error ': error });
+    logger.error('Error fetching facility events', { 'error ': error });
     return null;
   }
-  cacheTag(`events-${id}`);
   return events;
 }
 
@@ -162,20 +162,20 @@ export default async function FacilityPage({
                 <div className=' block self-end  max-w-md items-end justify-end right-0 ml-4  border-4 p-4 '>
                   <div>
                     <h1 className='border-b-2 text-2xl font-bold'>Pricing</h1>
-                    {fac.categories.map((category) => (
+                    {fac.pricing.map((category) => (
                       <div key={category.id} className='grid grid-cols-3 p-4'>
                         <Tooltip>
                           <TooltipTrigger className='col-span-2 col-start-1 truncate text-left text-lg font-semibold'>
-                            {category.name}
+                            {category.categoryName}
                           </TooltipTrigger>
                           <TooltipContent>
                             <p className='flex w-[240px] flex-wrap'>
-                              {category.description}
+                              {category.categoryDescription}
                             </p>
                           </TooltipContent>
                         </Tooltip>
                         <p className='col-span-1 col-start-3 text-right text-lg font-semibold'>
-                          ${category.price}/hr
+                          ${category.price}/${category.unitLabel}
                         </p>
                       </div>
                     ))}
@@ -187,26 +187,28 @@ export default async function FacilityPage({
             <div className='col-span-3 rounded-md border p-4'>
               <h1 className='border-b-2 text-2xl font-bold'>Upcoming Events</h1>
               <React.Suspense fallback={<LoadingScreen />}>
-                <ScrollArea className='max-h-[30vh] min-h-[25vh] overflow-y-scroll w-full  '>
-                  {events &&
-                    [...events.events]
-                      .sort(
-                        (a, b) =>
-                          new Date(a.start).getTime() -
-                          new Date(b.start).getTime(),
-                      )
-                      .map((event) => (
-                        <div key={event.start}>
-                          <div className='grid grid-cols-2 border-b p-4'>
-                            <h3 className='col-start-1'>{event.title}</h3>
-                            <p className='bg-transparent text-sm'>
-                              {new Date(event.start).toLocaleString()} to{' '}
-                              {new Date(event.end).toLocaleString()}
-                            </p>
+                <React.Activity mode={events ? 'visible' : 'hidden'}>
+                  <ScrollArea className='max-h-[30vh] min-h-[25vh] overflow-y-scroll w-full  '>
+                    {events &&
+                      [...events.events]
+                        .sort(
+                          (a, b) =>
+                            new Date(a.start).getTime() -
+                            new Date(b.start).getTime(),
+                        )
+                        .map((event) => (
+                          <div key={event.start}>
+                            <div className='grid grid-cols-2 border-b p-4'>
+                              <h3 className='col-start-1'>{event.title}</h3>
+                              <p className='bg-transparent text-sm'>
+                                {new Date(event.start).toLocaleString()} to{' '}
+                                {new Date(event.end).toLocaleString()}
+                              </p>
+                            </div>
                           </div>
-                        </div>
-                      ))}
-                </ScrollArea>
+                        ))}
+                  </ScrollArea>
+                </React.Activity>
               </React.Suspense>
             </div>
           </div>

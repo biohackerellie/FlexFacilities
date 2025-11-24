@@ -42,6 +42,8 @@ type FacilityStore interface {
 	GetCategory(ctx context.Context, id int64) (*models.Category, error)
 	GetBuildingCoordinates(ctx context.Context) ([]models.BuildingCoords, error)
 	GetPricingByFacilityAndCategory(ctx context.Context, faciltyID, categoryID int64) (models.Pricing, error)
+	GetProductPricingWithCategories(ctx context.Context, productID string) ([]models.PricingWithCategory, error)
+	GetPricing(ctx context.Context, pricingID string) (models.Pricing, error)
 }
 
 type ReservationStore interface {

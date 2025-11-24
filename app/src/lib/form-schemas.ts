@@ -17,7 +17,7 @@ export const step1Schema = z.object({
   userID: z.string().min(2, 'You must be logged in to create a reservation'),
   facilityID: z.string().min(1, 'You must select a facility'),
 
-  categoryID: z.string().min(1, 'You must select a category'),
+  priceID: z.string().min(1, 'You must select a pricing category'),
 });
 
 export const step2Schema = z.object({

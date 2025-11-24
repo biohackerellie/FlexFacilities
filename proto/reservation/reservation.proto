@@ -175,7 +175,7 @@ message CreateReservationRequest {
   string event_name = 2;
   int64 facility_id = 3;
   string details = 4;
-  int64 category_id = 5;
+  string pricing_id = 5;
   string name = 6;
   string phone = 7;
   bool tech_support = 8;

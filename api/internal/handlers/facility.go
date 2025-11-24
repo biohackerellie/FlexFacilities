@@ -10,17 +10,20 @@ import (
 	"log/slog"
 
 	"connectrpc.com/connect"
+	"github.com/stripe/stripe-go/v83"
 )
 
 type FacilityHandler struct {
 	log           *slog.Logger
 	calendar      *calendar.Calendar
 	facilityStore ports.FacilityStore
+
+	sc *stripe.Client
 }
 
-func NewFacilityHandler(facilityStore ports.FacilityStore, log *slog.Logger, calendar *calendar.Calendar) *FacilityHandler {
+func NewFacilityHandler(facilityStore ports.FacilityStore, log *slog.Logger, calendar *calendar.Calendar, sc *stripe.Client) *FacilityHandler {
 	log.With(slog.Group("Core_Handler", slog.String("name", "facility")))
-	return &FacilityHandler{facilityStore: facilityStore, log: log, calendar: calendar}
+	return &FacilityHandler{facilityStore: facilityStore, log: log, calendar: calendar, sc: sc}
 }
 
 func (a *FacilityHandler) GetAllFacilities(ctx context.Context, req *connect.Request[service.GetAllFacilitiesRequest]) (*connect.Response[service.GetAllFacilitiesResponse], error) {
@@ -264,5 +267,39 @@ func (a *FacilityHandler) GetAllCoords(ctx context.Context, req *connect.Request
 	}
 	return connect.NewResponse(&service.GetAllCoordsResponse{
 		Data: models.CoordsToProto(coords),
+	}), nil
+}
+
+func (a *FacilityHandler) GetProducts(ctx context.Context, req *connect.Request[service.GetProductsRequest]) (*connect.Response[service.GetProductsResponse], error) {
+	params := &stripe.ProductListParams{}
+	params.Limit = stripe.Int64(100)
+
+	list := a.sc.V1Products.List(ctx, params)
+	productNames := make(map[string]string, 0)
+	for p := range list {
+		productNames[p.ID] = p.Name
+	}
+	var result []*service.ProductWithPricing
+	for _, productId := range productNames {
+		pricing, err := a.facilityStore.GetProductPricingWithCategories(ctx, productId)
+		if err != nil {
+			return nil, err
+		}
+		if len(pricing) == 0 {
+			continue
+		}
+		pricingProto := make([]*service.PricingWithCategory, len(pricing))
+		for i, p := range pricing {
+			pricingProto[i] = p.ToProto()
+		}
+		result = append(result, &service.ProductWithPricing{
+			ProductId:   productId,
+			ProductName: productNames[productId],
+			Pricing:     pricingProto,
+		})
+	}
+
+	return connect.NewResponse(&service.GetProductsResponse{
+		Data: result,
 	}), nil
 }

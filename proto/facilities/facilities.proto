@@ -101,6 +101,10 @@ service FacilitiesService {
   rpc GetAllCoords (GetAllCoordsRequest) returns (GetAllCoordsResponse){
     option idempotency_level = NO_SIDE_EFFECTS;
   };
+
+  rpc GetProducts (GetProductsRequest) returns (GetProductsResponse){
+    option idempotency_level = NO_SIDE_EFFECTS;
+  };
   
 }
 
@@ -211,4 +215,16 @@ message FullFacility {
   repeated PricingWithCategory pricing = 2;
   repeated int64 reservation_id = 3;
   Building building = 4;
+}
+
+
+message GetProductsRequest {}
+
+message ProductWithPricing {
+  string product_id = 1;
+  string product_name = 2;
+  repeated PricingWithCategory pricing = 3;
+}
+message GetProductsResponse {
+  repeated ProductWithPricing data = 1;
 }

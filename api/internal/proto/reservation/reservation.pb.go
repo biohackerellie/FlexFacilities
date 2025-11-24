@@ -1363,7 +1363,7 @@ type CreateReservationRequest struct {
 	EventName     string                 `protobuf:"bytes,2,opt,name=event_name,json=eventName,proto3" json:"event_name,omitempty"`
 	FacilityId    int64                  `protobuf:"varint,3,opt,name=facility_id,json=facilityId,proto3" json:"facility_id,omitempty"`
 	Details       string                 `protobuf:"bytes,4,opt,name=details,proto3" json:"details,omitempty"`
-	CategoryId    int64                  `protobuf:"varint,5,opt,name=category_id,json=categoryId,proto3" json:"category_id,omitempty"`
+	PricingId     string                 `protobuf:"bytes,5,opt,name=pricing_id,json=pricingId,proto3" json:"pricing_id,omitempty"`
 	Name          string                 `protobuf:"bytes,6,opt,name=name,proto3" json:"name,omitempty"`
 	Phone         string                 `protobuf:"bytes,7,opt,name=phone,proto3" json:"phone,omitempty"`
 	TechSupport   bool                   `protobuf:"varint,8,opt,name=tech_support,json=techSupport,proto3" json:"tech_support,omitempty"`
@@ -1440,11 +1440,11 @@ func (x *CreateReservationRequest) GetDetails() string {
 	return ""
 }
 
-func (x *CreateReservationRequest) GetCategoryId() int64 {
+func (x *CreateReservationRequest) GetPricingId() string {
 	if x != nil {
-		return x.CategoryId
+		return x.PricingId
 	}
-	return 0
+	return ""
 }
 
 func (x *CreateReservationRequest) GetName() string {
@@ -2468,16 +2468,16 @@ const file_proto_reservation_reservation_proto_rawDesc = "" +
 	"\x13RequestCountRequest\"0\n" +
 	"\x14RequestCountResponse\x12\x18\n" +
 	"\x05count\x18\x01 \x01(\x03B\x020\x01R\x05count\"\x1c\n" +
-	"\x1aGetRequestsThisWeekRequest\"\x8f\x05\n" +
+	"\x1aGetRequestsThisWeekRequest\"\x89\x05\n" +
 	"\x18CreateReservationRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x1d\n" +
 	"\n" +
 	"event_name\x18\x02 \x01(\tR\teventName\x12#\n" +
 	"\vfacility_id\x18\x03 \x01(\x03B\x020\x01R\n" +
 	"facilityId\x12\x18\n" +
-	"\adetails\x18\x04 \x01(\tR\adetails\x12#\n" +
-	"\vcategory_id\x18\x05 \x01(\x03B\x020\x01R\n" +
-	"categoryId\x12\x12\n" +
+	"\adetails\x18\x04 \x01(\tR\adetails\x12\x1d\n" +
+	"\n" +
+	"pricing_id\x18\x05 \x01(\tR\tpricingId\x12\x12\n" +
 	"\x04name\x18\x06 \x01(\tR\x04name\x12\x14\n" +
 	"\x05phone\x18\a \x01(\tR\x05phone\x12!\n" +
 	"\ftech_support\x18\b \x01(\bR\vtechSupport\x12!\n" +

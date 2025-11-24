@@ -4,44 +4,56 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Building2, ChevronRight, MapPin } from 'lucide-react';
 import Image from 'next/image';
-import { use, useEffect, useState } from 'react';
+import { Activity, use, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
-import type { getFacilities } from '@/lib/actions/facilities';
+import type { getAllProducts, getFacilities } from '@/lib/actions/facilities';
 import { type Step1Data, step1Schema } from '@/lib/form-schemas';
 import { useFormStore } from '@/lib/form-store';
-import type { Building, FacilityWithCategories } from '@/lib/types';
+import type { Building, Facility, ProductWithPricing } from '@/lib/types';
 import { Spinner } from '../spinner';
 
 interface Step1Props {
   onNext: () => void;
   facilitiesPromise: Promise<Awaited<ReturnType<typeof getFacilities>>>;
+  productsPromise: Promise<Awaited<ReturnType<typeof getAllProducts>>>;
   userID: string;
 }
 
-export function Step1({ onNext, facilitiesPromise, userID }: Step1Props) {
+export function Step1({
+  onNext,
+  facilitiesPromise,
+  productsPromise,
+  userID,
+}: Step1Props) {
   const { formData, updateFormData } = useFormStore();
   const [selectedBuilding, setSelectedBuilding] = useState<Building | null>(
     null,
   );
+  const [selectedProduct, setSelectedProduct] =
+    useState<ProductWithPricing | null>(null);
   const [selectedBuildingFacilities, setSelectedBuildingFacilities] = useState<
-    FacilityWithCategories[] | null
+    Facility[] | null
   >(null);
-  const [selectedFacility, setSelectedFacility] =
-    useState<FacilityWithCategories | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedFacility, setSelectedFacility] = useState<Facility | null>(
+    null,
+  );
+  const [selectedPrice, setSelectedPrice] = useState<string | null>(null);
   const [view, setView] = useState<'buildings' | 'facilities' | 'categories'>(
     'buildings',
   );
   const data = use(facilitiesPromise);
+  const prodData = use(productsPromise);
+
   const buildingsData = data?.buildings;
-  if (!buildingsData) {
+  if (!buildingsData || !prodData) {
     return (
       <div>
         <Spinner /> Loading...
       </div>
     );
   }
+  const products = prodData.data;
 
   const {
     setValue,
@@ -77,19 +89,24 @@ export function Step1({ onNext, facilitiesPromise, userID }: Step1Props) {
     setValue('facilityID', facilityId);
     updateFormData({ facilityID: facilityId }); // Declare facilityID variable here
     const facility = selectedBuildingFacilities?.find(
-      (f) => f.facility?.id === facilityId,
+      (f) => f.id === facilityId,
     );
-    if (!facility || !facility.facility) {
+    if (!facility) {
       return;
     }
+    const product = products.find((p) => p.productId === facility.productId);
+    if (!product) {
+      return;
+    }
+    setSelectedProduct(product);
     setSelectedFacility(facility);
     setView('categories');
   };
 
-  const handleCategorySelect = (categoryId: string) => {
-    setValue('categoryID', categoryId);
-    updateFormData({ categoryID: categoryId });
-    setSelectedCategory(categoryId);
+  const handleCategorySelect = (pricingId: string) => {
+    setValue('priceID', pricingId);
+    updateFormData({ pricingID: pricingId });
+    setSelectedPrice(pricingId);
   };
 
   const onSubmit = (data: Step1Data) => {
@@ -188,15 +205,13 @@ export function Step1({ onNext, facilitiesPromise, userID }: Step1Props) {
             </div>
 
             <div className='grid gap-3'>
-              {selectedBuildingFacilities.flatMap((facility, _i) => (
+              {selectedBuildingFacilities.map((facility) => (
                 <motion.button
-                  key={facility.facility?.id!}
+                  key={facility.id}
                   type='button'
-                  onClick={() =>
-                    handleFacilitySelect(facility.facility?.id ?? '')
-                  }
+                  onClick={() => handleFacilitySelect(facility.id)}
                   className={`group relative flex items-start gap-4 rounded-lg border bg-card p-4 text-left transition-all hover:border-primary hover:shadow-md ${
-                    selectedFacility?.facility?.id === facility.facility?.id
+                    selectedFacility?.id === facility.id
                       ? 'border-primary bg-primary/5'
                       : ''
                   }`}
@@ -204,9 +219,9 @@ export function Step1({ onNext, facilitiesPromise, userID }: Step1Props) {
                   whileTap={{ scale: 0.98 }}
                 >
                   <div className='flex-1 space-y-1'>
-                    <h4 className='font-semibold'>{facility.facility?.name}</h4>
+                    <h4 className='font-semibold'>{facility.name}</h4>
                   </div>
-                  {formData.facilityID === facility.facility?.id && (
+                  {formData.facilityID === facility.id && (
                     <div className='flex h-5 w-5 items-center justify-center rounded-full bg-primary text-primary-foreground'>
                       <svg
                         className='h-3 w-3'
@@ -233,7 +248,7 @@ export function Step1({ onNext, facilitiesPromise, userID }: Step1Props) {
             )}
           </motion.div>
         )}
-        {view === 'categories' && selectedFacility && (
+        {view === 'categories' && selectedProduct && (
           <motion.div
             key='categories'
             initial={{ opacity: 0, x: 20 }}
@@ -253,7 +268,7 @@ export function Step1({ onNext, facilitiesPromise, userID }: Step1Props) {
                 ← Back to Facilities
               </Button>
               <h3 className='text-lg font-semibold'>
-                {selectedFacility.facility?.name}
+                {selectedFacility?.name}
               </h3>
               <p className='text-sm text-muted-foreground'>
                 Select a category to reserve
@@ -261,13 +276,13 @@ export function Step1({ onNext, facilitiesPromise, userID }: Step1Props) {
             </div>
 
             <div className='grid gap-3'>
-              {selectedFacility.categories.map((category) => (
+              {selectedProduct.pricing.map((category) => (
                 <motion.button
                   key={category.id}
                   type='button'
                   onClick={() => handleCategorySelect(category.id)}
                   className={`group relative flex items-start gap-4 rounded-lg border bg-card p-4 text-left transition-all hover:border-primary hover:shadow-md ${
-                    selectedCategory === category.id
+                    selectedPrice === category.id
                       ? 'border-primary bg-primary/5'
                       : ''
                   }`}
@@ -275,12 +290,16 @@ export function Step1({ onNext, facilitiesPromise, userID }: Step1Props) {
                   whileTap={{ scale: 0.98 }}
                 >
                   <div className='flex-1 space-y-1'>
-                    <h4 className='font-semibold'>{category.name}</h4>
+                    <h4 className='font-semibold'>{category.categoryName}</h4>
                     <p className='text-sm text-muted-foreground'>
-                      {category.description}
+                      {category.categoryDescription}
                     </p>
                   </div>
-                  {formData.categoryID === category.id && (
+                  <Activity
+                    mode={
+                      formData.pricingID === category.id ? 'visible' : 'hidden'
+                    }
+                  >
                     <div className='flex h-5 w-5 items-center justify-center rounded-full bg-primary text-primary-foreground'>
                       <svg
                         className='h-3 w-3'
@@ -295,7 +314,7 @@ export function Step1({ onNext, facilitiesPromise, userID }: Step1Props) {
                         />
                       </svg>
                     </div>
-                  )}
+                  </Activity>
                 </motion.button>
               ))}
             </div>
@@ -303,7 +322,13 @@ export function Step1({ onNext, facilitiesPromise, userID }: Step1Props) {
         )}
       </AnimatePresence>
 
-      {view === 'categories' && formData.facilityID && formData.categoryID && (
+      <Activity
+        mode={
+          view === 'categories' && formData.facilityID && formData.pricingID
+            ? 'visible'
+            : 'hidden'
+        }
+      >
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -313,7 +338,7 @@ export function Step1({ onNext, facilitiesPromise, userID }: Step1Props) {
             Next
           </Button>
         </motion.div>
-      )}
+      </Activity>
     </motion.form>
   );
 }

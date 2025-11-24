@@ -46,7 +46,7 @@ func New(dbService *repository.DBService, log *slog.Logger, config *config.Confi
 		panic(err)
 	}
 	userHandler := NewUserHandler(dbService.UserStore, log)
-	facilityHandler := NewFacilityHandler(dbService.FacilityStore, log, cal)
+	facilityHandler := NewFacilityHandler(dbService.FacilityStore, log, cal, stripeClient)
 	reservationHandler := NewReservationHandler(dbService.ReservationStore, dbService.UserStore, dbService.FacilityStore, log, timezone, config, cal, stripeClient)
 	utilityHandler := NewUtilityHandler(dbService.ReservationStore, dbService.BrandingStore, log, timezone)
 	paymentHandler := NewPaymentHandler(log, config, dbService.FacilityStore, dbService.ReservationStore, stripeClient)

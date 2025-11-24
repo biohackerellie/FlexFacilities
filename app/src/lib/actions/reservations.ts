@@ -17,7 +17,7 @@ export async function createReservation(formData: CreateReservationSchema) {
     eventName: formData.eventName,
     facilityId: formData.facilityID,
     details: formData.details,
-    categoryId: formData.categoryID,
+    pricingId: formData.pricingID,
     name: formData.name,
     phone: formData.phone,
     techSupport: formData.techSupport,

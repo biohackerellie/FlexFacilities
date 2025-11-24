@@ -130,7 +130,7 @@ func (a *ReservationHandler) CreateReservation(ctx context.Context, req *connect
 	hasRec := (req.Msg.Pattern != nil && req.Msg.Pattern.Freq != "") ||
 		len(req.Msg.Rdates) > 0 || len(req.Msg.Exdates) > 0
 
-	pricing, err := a.facilityStore.GetPricingByFacilityAndCategory(ctx, req.Msg.FacilityId, req.Msg.CategoryId)
+	pricing, err := a.facilityStore.GetPricing(ctx, req.Msg.PricingId)
 	if err != nil {
 		return nil, err
 	}
@@ -215,9 +215,9 @@ func (a *ReservationHandler) CreateReservation(ctx context.Context, req *connect
 		Approved:     models.ReservationApprovedPending,
 		Details:      models.CheckNullString(req.Msg.Details),
 		Insurance:    false,
-		CategoryID:   req.Msg.CategoryId,
 		Name:         req.Msg.Name,
 		Phone:        models.CheckNullString(req.Msg.Phone),
+		CategoryID:   pricing.CategoryID,
 		TechSupport:  req.Msg.TechSupport,
 		TechDetails:  models.CheckNullString(req.Msg.TechDetails),
 		DoorAccess:   req.Msg.DoorAccess,
@@ -225,7 +225,7 @@ func (a *ReservationHandler) CreateReservation(ctx context.Context, req *connect
 		RRule:        models.CheckNullString(rruleStr),
 		RDates:       models.DatesArrayToNullDates(rdatesLocal),
 		EXDates:      models.DatesArrayToNullDates(exdatesLocal),
-		PriceID:      models.CheckNullString(pricing.ID),
+		PriceID:      models.CheckNullString(req.Msg.PricingId),
 	})
 	if err != nil {
 		return nil, err

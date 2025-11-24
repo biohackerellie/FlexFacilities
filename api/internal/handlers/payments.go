@@ -2,11 +2,13 @@ package handlers
 
 import (
 	"api/internal/config"
+	"api/internal/models"
 	"api/internal/ports"
 	service "api/internal/proto/payments"
 	"context"
 	"log/slog"
 	"strconv"
+	"time"
 
 	"connectrpc.com/connect"
 	"github.com/stripe/stripe-go/v83"
@@ -88,4 +90,49 @@ func (p *PaymentHandler) GetStripePublicKey(ctx context.Context, req *connect.Re
 	return connect.NewResponse(&service.GetStripePublicKeyResponse{
 		PublicKey: p.config.StripePublicKey,
 	}), nil
+}
+
+func (p *PaymentHandler) CreatePaymentSession(ctx context.Context, req *connect.Request[service.CreatePaymentIntentRequest]) (*connect.Response[service.CreatePaymentSessionResponse], error) {
+	reservation, err := p.reservationStore.Get(ctx, req.Msg.ReservationId)
+	if err != nil {
+		p.log.Error("failed to get reservation", "error", err)
+		return nil, err
+	}
+
+	var total time.Duration
+	for _, date := range reservation.Dates {
+		if date.Approved == models.ReservationDateApprovedDenied || date.Approved == models.ReservationDateApprovedCanceled {
+			continue
+		}
+		start := date.LocalStart.Time
+		end := date.LocalEnd.Time
+		if end.Before(start) {
+			return nil, connect.NewError(connect.CodeFailedPrecondition, err)
+		}
+		total += end.Sub(start)
+	}
+	totalHours := max(int64(total/time.Hour), 1)
+
+	domain := p.config.FrontendUrl
+	params := &stripe.CheckoutSessionCreateParams{
+		ReturnURL: stripe.String(domain + "/reservation/checkout/success"),
+		LineItems: []*stripe.CheckoutSessionCreateLineItemParams{
+			{
+				Price:    stripe.String(reservation.Reservation.PriceID.String),
+				Quantity: stripe.Int64(totalHours),
+			},
+		},
+		Mode: stripe.String(string(stripe.CheckoutSessionModePayment)),
+	}
+
+	s, err := p.sc.V1CheckoutSessions.Create(ctx, params)
+	if err != nil {
+		p.log.Error("failed to create checkout session", "error", err)
+		return nil, err
+	}
+
+	return connect.NewResponse(&service.CreatePaymentSessionResponse{
+		Url: s.URL,
+	}), nil
+
 }

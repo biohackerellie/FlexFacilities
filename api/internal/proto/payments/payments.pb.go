@@ -189,6 +189,50 @@ func (x *GetStripePublicKeyResponse) GetPublicKey() string {
 	return ""
 }
 
+type CreatePaymentSessionResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Url           string                 `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreatePaymentSessionResponse) Reset() {
+	*x = CreatePaymentSessionResponse{}
+	mi := &file_proto_payments_payments_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreatePaymentSessionResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreatePaymentSessionResponse) ProtoMessage() {}
+
+func (x *CreatePaymentSessionResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_payments_payments_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreatePaymentSessionResponse.ProtoReflect.Descriptor instead.
+func (*CreatePaymentSessionResponse) Descriptor() ([]byte, []int) {
+	return file_proto_payments_payments_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *CreatePaymentSessionResponse) GetUrl() string {
+	if x != nil {
+		return x.Url
+	}
+	return ""
+}
+
 var File_proto_payments_payments_proto protoreflect.FileDescriptor
 
 const file_proto_payments_payments_proto_rawDesc = "" +
@@ -201,10 +245,13 @@ const file_proto_payments_payments_proto_rawDesc = "" +
 	"\x19GetStripePublicKeyRequest\";\n" +
 	"\x1aGetStripePublicKeyResponse\x12\x1d\n" +
 	"\n" +
-	"public_key\x18\x01 \x01(\tR\tpublicKey2\xe6\x01\n" +
+	"public_key\x18\x01 \x01(\tR\tpublicKey\"0\n" +
+	"\x1cCreatePaymentSessionResponse\x12\x10\n" +
+	"\x03url\x18\x01 \x01(\tR\x03url2\xd3\x02\n" +
 	"\x0fPaymentsService\x12j\n" +
 	"\x13CreatePaymentIntent\x12(.api.payments.CreatePaymentIntentRequest\x1a).api.payments.CreatePaymentIntentResponse\x12g\n" +
-	"\x12GetStripePublicKey\x12'.api.payments.GetStripePublicKeyRequest\x1a(.api.payments.GetStripePublicKeyResponseB\x9f\x01\n" +
+	"\x12GetStripePublicKey\x12'.api.payments.GetStripePublicKeyRequest\x1a(.api.payments.GetStripePublicKeyResponse\x12k\n" +
+	"\x14CreatePaymentSession\x12(.api.payments.CreatePaymentIntentRequest\x1a).api.payments.CreatePaymentIntentResponseB\x9f\x01\n" +
 	"\x10com.api.paymentsB\rPaymentsProtoP\x01Z+api/internal/proto/payments;paymentsservice\xa2\x02\x03APX\xaa\x02\fApi.Payments\xca\x02\fApi\\Payments\xe2\x02\x18Api\\Payments\\GPBMetadata\xea\x02\rApi::Paymentsb\x06proto3"
 
 var (
@@ -219,20 +266,23 @@ func file_proto_payments_payments_proto_rawDescGZIP() []byte {
 	return file_proto_payments_payments_proto_rawDescData
 }
 
-var file_proto_payments_payments_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_proto_payments_payments_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_proto_payments_payments_proto_goTypes = []any{
-	(*CreatePaymentIntentRequest)(nil),  // 0: api.payments.CreatePaymentIntentRequest
-	(*CreatePaymentIntentResponse)(nil), // 1: api.payments.CreatePaymentIntentResponse
-	(*GetStripePublicKeyRequest)(nil),   // 2: api.payments.GetStripePublicKeyRequest
-	(*GetStripePublicKeyResponse)(nil),  // 3: api.payments.GetStripePublicKeyResponse
+	(*CreatePaymentIntentRequest)(nil),   // 0: api.payments.CreatePaymentIntentRequest
+	(*CreatePaymentIntentResponse)(nil),  // 1: api.payments.CreatePaymentIntentResponse
+	(*GetStripePublicKeyRequest)(nil),    // 2: api.payments.GetStripePublicKeyRequest
+	(*GetStripePublicKeyResponse)(nil),   // 3: api.payments.GetStripePublicKeyResponse
+	(*CreatePaymentSessionResponse)(nil), // 4: api.payments.CreatePaymentSessionResponse
 }
 var file_proto_payments_payments_proto_depIdxs = []int32{
 	0, // 0: api.payments.PaymentsService.CreatePaymentIntent:input_type -> api.payments.CreatePaymentIntentRequest
 	2, // 1: api.payments.PaymentsService.GetStripePublicKey:input_type -> api.payments.GetStripePublicKeyRequest
-	1, // 2: api.payments.PaymentsService.CreatePaymentIntent:output_type -> api.payments.CreatePaymentIntentResponse
-	3, // 3: api.payments.PaymentsService.GetStripePublicKey:output_type -> api.payments.GetStripePublicKeyResponse
-	2, // [2:4] is the sub-list for method output_type
-	0, // [0:2] is the sub-list for method input_type
+	0, // 2: api.payments.PaymentsService.CreatePaymentSession:input_type -> api.payments.CreatePaymentIntentRequest
+	1, // 3: api.payments.PaymentsService.CreatePaymentIntent:output_type -> api.payments.CreatePaymentIntentResponse
+	3, // 4: api.payments.PaymentsService.GetStripePublicKey:output_type -> api.payments.GetStripePublicKeyResponse
+	1, // 5: api.payments.PaymentsService.CreatePaymentSession:output_type -> api.payments.CreatePaymentIntentResponse
+	3, // [3:6] is the sub-list for method output_type
+	0, // [0:3] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -249,7 +299,7 @@ func file_proto_payments_payments_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_payments_payments_proto_rawDesc), len(file_proto_payments_payments_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

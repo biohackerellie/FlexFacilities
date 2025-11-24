@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { getErrorMessage } from '@/lib/errors';
 import type { FullFacility } from '@/lib/types';
-import { updateCategory, updateFacility, uploadImage } from './actions';
+import { updateFacility, uploadImage } from './actions';
 
 interface FormProps {
   data: FullFacility;
@@ -46,7 +46,7 @@ const ImageUploadForm = ({ facilityID, buildingID }: UploadFormProps) => {
         id='file'
         accept='.jpg, .png'
         onChange={(e) => setHasFile(e.target.files?.length! > 0)}
-      // className='w-full text-sm text-slate-500 file:mr-4 file:rounded-full file:border-0 file:bg-violet-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-violet-700 hover:file:bg-violet-100'
+        // className='w-full text-sm text-slate-500 file:mr-4 file:rounded-full file:border-0 file:bg-violet-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-violet-700 hover:file:bg-violet-100'
       />
       <Button variant='outline' type='submit' disabled={!hasFile}>
         Upload
