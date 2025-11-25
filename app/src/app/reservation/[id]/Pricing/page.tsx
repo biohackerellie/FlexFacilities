@@ -1,19 +1,21 @@
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { Suspense } from 'react';
+import { Activity, Suspense } from 'react';
 import EditPricing from '@/components/forms/paymentModal';
 import { Spinner } from '@/components/spinner';
+import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { DataTable } from '@/components/ui/tables/reservations/data-table';
 import { getFacilities } from '@/lib/actions/facilities';
+import { checkout } from '@/lib/actions/payments';
 import {
   costReducer,
   getReservation,
-  getReservationCategory,
+  getReservationPricing,
 } from '@/lib/actions/reservations';
 import { auth } from '@/lib/auth';
 import { getCookies } from '@/lib/setHeader';
 import Options from '../_components/options';
+import Paid from '../_components/paid';
 import { adminColumns } from './adminColumns';
 import { columns } from './columns';
 
@@ -36,13 +38,13 @@ export default async function paymentPage({
   if (!data) return notFound();
   const reservation = data.reservation;
   if (!reservation) return notFound();
-  const category = await getReservationCategory(
+  const pricing = await getReservationPricing(
     String(reservation.categoryId),
     sessionId,
     token,
   );
 
-  const CategoryPrice = category?.price;
+  const CategoryPrice = pricing?.price;
   const mappedFees = data.fees
     ? data.fees.map((fee) => {
         return {
@@ -58,6 +60,10 @@ export default async function paymentPage({
   if (tcData) {
     totalCost = Number(tcData.cost);
   }
+
+  const onCheckout = async () => {
+    await checkout(id);
+  };
 
   return (
     <div className='gap-2 flex  flex-col '>
@@ -114,17 +120,14 @@ export default async function paymentPage({
           </div>
 
           <div className='flex justify-end text-justify text-xl'>
-            <Suspense fallback={<Spinner />}>
-              {/*   {/*   <Paid reservation={reservation} /> */}
-              <Link
-                href={{
-                  pathname: '/reservation/Checkout',
-                  query: { reservationId: id },
-                }}
-              >
+            <Activity mode={reservation.paid && isAdmin ? 'visible' : 'hidden'}>
+              <Paid reservation={reservation} />
+            </Activity>
+            <form action={onCheckout} method='post'>
+              <Button type='submit' role='link'>
                 Pay Now
-              </Link>
-            </Suspense>
+              </Button>
+            </form>
           </div>
         </div>
       </div>

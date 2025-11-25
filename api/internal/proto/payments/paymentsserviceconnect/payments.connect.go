@@ -48,7 +48,7 @@ const (
 type PaymentsServiceClient interface {
 	CreatePaymentIntent(context.Context, *connect.Request[payments.CreatePaymentIntentRequest]) (*connect.Response[payments.CreatePaymentIntentResponse], error)
 	GetStripePublicKey(context.Context, *connect.Request[payments.GetStripePublicKeyRequest]) (*connect.Response[payments.GetStripePublicKeyResponse], error)
-	CreatePaymentSession(context.Context, *connect.Request[payments.CreatePaymentIntentRequest]) (*connect.Response[payments.CreatePaymentIntentResponse], error)
+	CreatePaymentSession(context.Context, *connect.Request[payments.CreatePaymentIntentRequest]) (*connect.Response[payments.CreatePaymentSessionResponse], error)
 }
 
 // NewPaymentsServiceClient constructs a client for the api.payments.PaymentsService service. By
@@ -74,7 +74,7 @@ func NewPaymentsServiceClient(httpClient connect.HTTPClient, baseURL string, opt
 			connect.WithSchema(paymentsServiceMethods.ByName("GetStripePublicKey")),
 			connect.WithClientOptions(opts...),
 		),
-		createPaymentSession: connect.NewClient[payments.CreatePaymentIntentRequest, payments.CreatePaymentIntentResponse](
+		createPaymentSession: connect.NewClient[payments.CreatePaymentIntentRequest, payments.CreatePaymentSessionResponse](
 			httpClient,
 			baseURL+PaymentsServiceCreatePaymentSessionProcedure,
 			connect.WithSchema(paymentsServiceMethods.ByName("CreatePaymentSession")),
@@ -87,7 +87,7 @@ func NewPaymentsServiceClient(httpClient connect.HTTPClient, baseURL string, opt
 type paymentsServiceClient struct {
 	createPaymentIntent  *connect.Client[payments.CreatePaymentIntentRequest, payments.CreatePaymentIntentResponse]
 	getStripePublicKey   *connect.Client[payments.GetStripePublicKeyRequest, payments.GetStripePublicKeyResponse]
-	createPaymentSession *connect.Client[payments.CreatePaymentIntentRequest, payments.CreatePaymentIntentResponse]
+	createPaymentSession *connect.Client[payments.CreatePaymentIntentRequest, payments.CreatePaymentSessionResponse]
 }
 
 // CreatePaymentIntent calls api.payments.PaymentsService.CreatePaymentIntent.
@@ -101,7 +101,7 @@ func (c *paymentsServiceClient) GetStripePublicKey(ctx context.Context, req *con
 }
 
 // CreatePaymentSession calls api.payments.PaymentsService.CreatePaymentSession.
-func (c *paymentsServiceClient) CreatePaymentSession(ctx context.Context, req *connect.Request[payments.CreatePaymentIntentRequest]) (*connect.Response[payments.CreatePaymentIntentResponse], error) {
+func (c *paymentsServiceClient) CreatePaymentSession(ctx context.Context, req *connect.Request[payments.CreatePaymentIntentRequest]) (*connect.Response[payments.CreatePaymentSessionResponse], error) {
 	return c.createPaymentSession.CallUnary(ctx, req)
 }
 
@@ -109,7 +109,7 @@ func (c *paymentsServiceClient) CreatePaymentSession(ctx context.Context, req *c
 type PaymentsServiceHandler interface {
 	CreatePaymentIntent(context.Context, *connect.Request[payments.CreatePaymentIntentRequest]) (*connect.Response[payments.CreatePaymentIntentResponse], error)
 	GetStripePublicKey(context.Context, *connect.Request[payments.GetStripePublicKeyRequest]) (*connect.Response[payments.GetStripePublicKeyResponse], error)
-	CreatePaymentSession(context.Context, *connect.Request[payments.CreatePaymentIntentRequest]) (*connect.Response[payments.CreatePaymentIntentResponse], error)
+	CreatePaymentSession(context.Context, *connect.Request[payments.CreatePaymentIntentRequest]) (*connect.Response[payments.CreatePaymentSessionResponse], error)
 }
 
 // NewPaymentsServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -162,6 +162,6 @@ func (UnimplementedPaymentsServiceHandler) GetStripePublicKey(context.Context, *
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.payments.PaymentsService.GetStripePublicKey is not implemented"))
 }
 
-func (UnimplementedPaymentsServiceHandler) CreatePaymentSession(context.Context, *connect.Request[payments.CreatePaymentIntentRequest]) (*connect.Response[payments.CreatePaymentIntentResponse], error) {
+func (UnimplementedPaymentsServiceHandler) CreatePaymentSession(context.Context, *connect.Request[payments.CreatePaymentIntentRequest]) (*connect.Response[payments.CreatePaymentSessionResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.payments.PaymentsService.CreatePaymentSession is not implemented"))
 }

@@ -303,3 +303,30 @@ func (a *FacilityHandler) GetProducts(ctx context.Context, req *connect.Request[
 		Data: result,
 	}), nil
 }
+
+func (a *FacilityHandler) GetPricing(ctx context.Context, req *connect.Request[service.GetPricingRequest]) (*connect.Response[service.PricingWithCategory], error) {
+	pricing, err := a.facilityStore.GetPricing(ctx, req.Msg.GetPricingId())
+	if err != nil {
+		a.log.Error("error getting pricing", "error", err)
+		return nil, err
+	}
+
+	price, err := a.sc.V1Prices.Retrieve(ctx, pricing.ID, nil)
+	if err != nil {
+		a.log.Error("error getting price", "error", err)
+		return nil, err
+	}
+	pricing.Price = float64(price.UnitAmount) / 100
+	category, err := a.facilityStore.GetCategory(ctx, pricing.CategoryID)
+	if err != nil {
+		a.log.Error("error getting category", "error", err)
+		return nil, err
+	}
+	result := models.PricingWithCategory{
+		Pricing:             pricing,
+		CategoryName:        category.Name,
+		CategoryDescription: category.Description,
+	}
+
+	return connect.NewResponse(result.ToProto()), nil
+}

@@ -81,6 +81,9 @@ const (
 	// FacilitiesServiceGetProductsProcedure is the fully-qualified name of the FacilitiesService's
 	// GetProducts RPC.
 	FacilitiesServiceGetProductsProcedure = "/api.facilities.FacilitiesService/GetProducts"
+	// FacilitiesServiceGetPricingProcedure is the fully-qualified name of the FacilitiesService's
+	// GetPricing RPC.
+	FacilitiesServiceGetPricingProcedure = "/api.facilities.FacilitiesService/GetPricing"
 )
 
 // FacilitiesServiceClient is a client for the api.facilities.FacilitiesService service.
@@ -101,6 +104,7 @@ type FacilitiesServiceClient interface {
 	GetCategory(context.Context, *connect.Request[facilities.GetCategoryRequest]) (*connect.Response[facilities.Category], error)
 	GetAllCoords(context.Context, *connect.Request[facilities.GetAllCoordsRequest]) (*connect.Response[facilities.GetAllCoordsResponse], error)
 	GetProducts(context.Context, *connect.Request[facilities.GetProductsRequest]) (*connect.Response[facilities.GetProductsResponse], error)
+	GetPricing(context.Context, *connect.Request[facilities.GetPricingRequest]) (*connect.Response[facilities.PricingWithCategory], error)
 }
 
 // NewFacilitiesServiceClient constructs a client for the api.facilities.FacilitiesService service.
@@ -222,6 +226,13 @@ func NewFacilitiesServiceClient(httpClient connect.HTTPClient, baseURL string, o
 			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 			connect.WithClientOptions(opts...),
 		),
+		getPricing: connect.NewClient[facilities.GetPricingRequest, facilities.PricingWithCategory](
+			httpClient,
+			baseURL+FacilitiesServiceGetPricingProcedure,
+			connect.WithSchema(facilitiesServiceMethods.ByName("GetPricing")),
+			connect.WithIdempotency(connect.IdempotencyNoSideEffects),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
@@ -243,6 +254,7 @@ type facilitiesServiceClient struct {
 	getCategory            *connect.Client[facilities.GetCategoryRequest, facilities.Category]
 	getAllCoords           *connect.Client[facilities.GetAllCoordsRequest, facilities.GetAllCoordsResponse]
 	getProducts            *connect.Client[facilities.GetProductsRequest, facilities.GetProductsResponse]
+	getPricing             *connect.Client[facilities.GetPricingRequest, facilities.PricingWithCategory]
 }
 
 // GetAllFacilities calls api.facilities.FacilitiesService.GetAllFacilities.
@@ -325,6 +337,11 @@ func (c *facilitiesServiceClient) GetProducts(ctx context.Context, req *connect.
 	return c.getProducts.CallUnary(ctx, req)
 }
 
+// GetPricing calls api.facilities.FacilitiesService.GetPricing.
+func (c *facilitiesServiceClient) GetPricing(ctx context.Context, req *connect.Request[facilities.GetPricingRequest]) (*connect.Response[facilities.PricingWithCategory], error) {
+	return c.getPricing.CallUnary(ctx, req)
+}
+
 // FacilitiesServiceHandler is an implementation of the api.facilities.FacilitiesService service.
 type FacilitiesServiceHandler interface {
 	GetAllFacilities(context.Context, *connect.Request[facilities.GetAllFacilitiesRequest]) (*connect.Response[facilities.GetAllFacilitiesResponse], error)
@@ -343,6 +360,7 @@ type FacilitiesServiceHandler interface {
 	GetCategory(context.Context, *connect.Request[facilities.GetCategoryRequest]) (*connect.Response[facilities.Category], error)
 	GetAllCoords(context.Context, *connect.Request[facilities.GetAllCoordsRequest]) (*connect.Response[facilities.GetAllCoordsResponse], error)
 	GetProducts(context.Context, *connect.Request[facilities.GetProductsRequest]) (*connect.Response[facilities.GetProductsResponse], error)
+	GetPricing(context.Context, *connect.Request[facilities.GetPricingRequest]) (*connect.Response[facilities.PricingWithCategory], error)
 }
 
 // NewFacilitiesServiceHandler builds an HTTP handler from the service implementation. It returns
@@ -460,6 +478,13 @@ func NewFacilitiesServiceHandler(svc FacilitiesServiceHandler, opts ...connect.H
 		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
 		connect.WithHandlerOptions(opts...),
 	)
+	facilitiesServiceGetPricingHandler := connect.NewUnaryHandler(
+		FacilitiesServiceGetPricingProcedure,
+		svc.GetPricing,
+		connect.WithSchema(facilitiesServiceMethods.ByName("GetPricing")),
+		connect.WithIdempotency(connect.IdempotencyNoSideEffects),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/api.facilities.FacilitiesService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case FacilitiesServiceGetAllFacilitiesProcedure:
@@ -494,6 +519,8 @@ func NewFacilitiesServiceHandler(svc FacilitiesServiceHandler, opts ...connect.H
 			facilitiesServiceGetAllCoordsHandler.ServeHTTP(w, r)
 		case FacilitiesServiceGetProductsProcedure:
 			facilitiesServiceGetProductsHandler.ServeHTTP(w, r)
+		case FacilitiesServiceGetPricingProcedure:
+			facilitiesServiceGetPricingHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -565,4 +592,8 @@ func (UnimplementedFacilitiesServiceHandler) GetAllCoords(context.Context, *conn
 
 func (UnimplementedFacilitiesServiceHandler) GetProducts(context.Context, *connect.Request[facilities.GetProductsRequest]) (*connect.Response[facilities.GetProductsResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.facilities.FacilitiesService.GetProducts is not implemented"))
+}
+
+func (UnimplementedFacilitiesServiceHandler) GetPricing(context.Context, *connect.Request[facilities.GetPricingRequest]) (*connect.Response[facilities.PricingWithCategory], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.facilities.FacilitiesService.GetPricing is not implemented"))
 }

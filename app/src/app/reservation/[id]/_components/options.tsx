@@ -25,12 +25,10 @@ export default function Options({
   const data = React.use(ReservationContext);
   const fac = React.use(facilitiesPromise);
   if (!data || !fac) return <div>no data</div>;
-  const facilitiesflat = fac?.buildings.flatMap((b) => b.facilities);
-  const facilities = facilitiesflat.map((f) => f.facility ?? ({} as Facility));
-  const categoriesflat = facilitiesflat?.filter(
-    (f) => f.facility?.id === data?.facility?.id,
-  );
-  const categories = categoriesflat?.flatMap((f) => f.categories);
+  const facilities = fac?.buildings.flatMap((b) => b.facilities);
+  // const categoriesflat = facilitiesflat?.filter(
+  //   (f) => f.facility?.id === data?.facility?.id,
+  // );
   const facility = data?.facility;
   const reservation = data?.reservation;
   let override = parseFloat(data?.reservation.costOverride);

@@ -20,18 +20,14 @@ async function getFacilities() {
   const facData = data.buildings;
   for (const building of facData) {
     for (const f of building.facilities) {
-      if (!f.facility) {
-        continue;
-      }
       const facility = {
-        id: f.facility.id,
-        name: f.facility.name,
+        id: f.id,
+        name: f.name,
         building: building.building?.name,
         address: building.building?.address,
-        imagePath: f.facility.imagePath,
-        capacity: f.facility.capacity!,
-        googleCalendarId: f.facility.googleCalendarId,
-        Category: f.categories.map((c) => String(c.price)),
+        imagePath: f.imagePath,
+        capacity: f.capacity!,
+        googleCalendarId: f.googleCalendarId,
       } as TableFacility;
       facilities.push(facility);
     }

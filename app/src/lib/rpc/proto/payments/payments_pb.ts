@@ -2,95 +2,115 @@
 // @generated from file proto/payments/payments.proto (package api.payments, syntax proto3)
 /* eslint-disable */
 
-import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
-import { fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
-import type { Message } from "@bufbuild/protobuf";
+import type { Message } from '@bufbuild/protobuf';
+import type {
+  GenFile,
+  GenMessage,
+  GenService,
+} from '@bufbuild/protobuf/codegenv2';
+import {
+  fileDesc,
+  messageDesc,
+  serviceDesc,
+} from '@bufbuild/protobuf/codegenv2';
 
 /**
  * Describes the file proto/payments/payments.proto.
  */
-export const file_proto_payments_payments: GenFile = /*@__PURE__*/
-  fileDesc("Ch1wcm90by9wYXltZW50cy9wYXltZW50cy5wcm90bxIMYXBpLnBheW1lbnRzIjgKGkNyZWF0ZVBheW1lbnRJbnRlbnRSZXF1ZXN0EhoKDnJlc2VydmF0aW9uX2lkGAEgASgDQgIwASI0ChtDcmVhdGVQYXltZW50SW50ZW50UmVzcG9uc2USFQoNY2xpZW50X3NlY3JldBgBIAEoCSIbChlHZXRTdHJpcGVQdWJsaWNLZXlSZXF1ZXN0IjAKGkdldFN0cmlwZVB1YmxpY0tleVJlc3BvbnNlEhIKCnB1YmxpY19rZXkYASABKAkiKwocQ3JlYXRlUGF5bWVudFNlc3Npb25SZXNwb25zZRILCgN1cmwYASABKAky0wIKD1BheW1lbnRzU2VydmljZRJqChNDcmVhdGVQYXltZW50SW50ZW50EiguYXBpLnBheW1lbnRzLkNyZWF0ZVBheW1lbnRJbnRlbnRSZXF1ZXN0GikuYXBpLnBheW1lbnRzLkNyZWF0ZVBheW1lbnRJbnRlbnRSZXNwb25zZRJnChJHZXRTdHJpcGVQdWJsaWNLZXkSJy5hcGkucGF5bWVudHMuR2V0U3RyaXBlUHVibGljS2V5UmVxdWVzdBooLmFwaS5wYXltZW50cy5HZXRTdHJpcGVQdWJsaWNLZXlSZXNwb25zZRJrChRDcmVhdGVQYXltZW50U2Vzc2lvbhIoLmFwaS5wYXltZW50cy5DcmVhdGVQYXltZW50SW50ZW50UmVxdWVzdBopLmFwaS5wYXltZW50cy5DcmVhdGVQYXltZW50SW50ZW50UmVzcG9uc2VCnwEKEGNvbS5hcGkucGF5bWVudHNCDVBheW1lbnRzUHJvdG9QAVorYXBpL2ludGVybmFsL3Byb3RvL3BheW1lbnRzO3BheW1lbnRzc2VydmljZaICA0FQWKoCDEFwaS5QYXltZW50c8oCDEFwaVxQYXltZW50c+ICGEFwaVxQYXltZW50c1xHUEJNZXRhZGF0YeoCDUFwaTo6UGF5bWVudHNiBnByb3RvMw");
+export const file_proto_payments_payments: GenFile =
+  /*@__PURE__*/
+  fileDesc(
+    'Ch1wcm90by9wYXltZW50cy9wYXltZW50cy5wcm90bxIMYXBpLnBheW1lbnRzIjgKGkNyZWF0ZVBheW1lbnRJbnRlbnRSZXF1ZXN0EhoKDnJlc2VydmF0aW9uX2lkGAEgASgDQgIwASI0ChtDcmVhdGVQYXltZW50SW50ZW50UmVzcG9uc2USFQoNY2xpZW50X3NlY3JldBgBIAEoCSIbChlHZXRTdHJpcGVQdWJsaWNLZXlSZXF1ZXN0IjAKGkdldFN0cmlwZVB1YmxpY0tleVJlc3BvbnNlEhIKCnB1YmxpY19rZXkYASABKAkiKwocQ3JlYXRlUGF5bWVudFNlc3Npb25SZXNwb25zZRILCgN1cmwYASABKAky1AIKD1BheW1lbnRzU2VydmljZRJqChNDcmVhdGVQYXltZW50SW50ZW50EiguYXBpLnBheW1lbnRzLkNyZWF0ZVBheW1lbnRJbnRlbnRSZXF1ZXN0GikuYXBpLnBheW1lbnRzLkNyZWF0ZVBheW1lbnRJbnRlbnRSZXNwb25zZRJnChJHZXRTdHJpcGVQdWJsaWNLZXkSJy5hcGkucGF5bWVudHMuR2V0U3RyaXBlUHVibGljS2V5UmVxdWVzdBooLmFwaS5wYXltZW50cy5HZXRTdHJpcGVQdWJsaWNLZXlSZXNwb25zZRJsChRDcmVhdGVQYXltZW50U2Vzc2lvbhIoLmFwaS5wYXltZW50cy5DcmVhdGVQYXltZW50SW50ZW50UmVxdWVzdBoqLmFwaS5wYXltZW50cy5DcmVhdGVQYXltZW50U2Vzc2lvblJlc3BvbnNlQp8BChBjb20uYXBpLnBheW1lbnRzQg1QYXltZW50c1Byb3RvUAFaK2FwaS9pbnRlcm5hbC9wcm90by9wYXltZW50cztwYXltZW50c3NlcnZpY2WiAgNBUFiqAgxBcGkuUGF5bWVudHPKAgxBcGlcUGF5bWVudHPiAhhBcGlcUGF5bWVudHNcR1BCTWV0YWRhdGHqAg1BcGk6OlBheW1lbnRzYgZwcm90bzM',
+  );
 
 /**
  * @generated from message api.payments.CreatePaymentIntentRequest
  */
-export type CreatePaymentIntentRequest = Message<"api.payments.CreatePaymentIntentRequest"> & {
-  /**
-   * @generated from field: int64 reservation_id = 1 [jstype = JS_STRING];
-   */
-  reservationId: string;
-};
+export type CreatePaymentIntentRequest =
+  Message<'api.payments.CreatePaymentIntentRequest'> & {
+    /**
+     * @generated from field: int64 reservation_id = 1 [jstype = JS_STRING];
+     */
+    reservationId: string;
+  };
 
 /**
  * Describes the message api.payments.CreatePaymentIntentRequest.
  * Use `create(CreatePaymentIntentRequestSchema)` to create a new message.
  */
-export const CreatePaymentIntentRequestSchema: GenMessage<CreatePaymentIntentRequest> = /*@__PURE__*/
+export const CreatePaymentIntentRequestSchema: GenMessage<CreatePaymentIntentRequest> =
+  /*@__PURE__*/
   messageDesc(file_proto_payments_payments, 0);
 
 /**
  * @generated from message api.payments.CreatePaymentIntentResponse
  */
-export type CreatePaymentIntentResponse = Message<"api.payments.CreatePaymentIntentResponse"> & {
-  /**
-   * @generated from field: string client_secret = 1;
-   */
-  clientSecret: string;
-};
+export type CreatePaymentIntentResponse =
+  Message<'api.payments.CreatePaymentIntentResponse'> & {
+    /**
+     * @generated from field: string client_secret = 1;
+     */
+    clientSecret: string;
+  };
 
 /**
  * Describes the message api.payments.CreatePaymentIntentResponse.
  * Use `create(CreatePaymentIntentResponseSchema)` to create a new message.
  */
-export const CreatePaymentIntentResponseSchema: GenMessage<CreatePaymentIntentResponse> = /*@__PURE__*/
+export const CreatePaymentIntentResponseSchema: GenMessage<CreatePaymentIntentResponse> =
+  /*@__PURE__*/
   messageDesc(file_proto_payments_payments, 1);
 
 /**
  * @generated from message api.payments.GetStripePublicKeyRequest
  */
-export type GetStripePublicKeyRequest = Message<"api.payments.GetStripePublicKeyRequest"> & {
-};
+export type GetStripePublicKeyRequest =
+  Message<'api.payments.GetStripePublicKeyRequest'> & {};
 
 /**
  * Describes the message api.payments.GetStripePublicKeyRequest.
  * Use `create(GetStripePublicKeyRequestSchema)` to create a new message.
  */
-export const GetStripePublicKeyRequestSchema: GenMessage<GetStripePublicKeyRequest> = /*@__PURE__*/
+export const GetStripePublicKeyRequestSchema: GenMessage<GetStripePublicKeyRequest> =
+  /*@__PURE__*/
   messageDesc(file_proto_payments_payments, 2);
 
 /**
  * @generated from message api.payments.GetStripePublicKeyResponse
  */
-export type GetStripePublicKeyResponse = Message<"api.payments.GetStripePublicKeyResponse"> & {
-  /**
-   * @generated from field: string public_key = 1;
-   */
-  publicKey: string;
-};
+export type GetStripePublicKeyResponse =
+  Message<'api.payments.GetStripePublicKeyResponse'> & {
+    /**
+     * @generated from field: string public_key = 1;
+     */
+    publicKey: string;
+  };
 
 /**
  * Describes the message api.payments.GetStripePublicKeyResponse.
  * Use `create(GetStripePublicKeyResponseSchema)` to create a new message.
  */
-export const GetStripePublicKeyResponseSchema: GenMessage<GetStripePublicKeyResponse> = /*@__PURE__*/
+export const GetStripePublicKeyResponseSchema: GenMessage<GetStripePublicKeyResponse> =
+  /*@__PURE__*/
   messageDesc(file_proto_payments_payments, 3);
 
 /**
  * @generated from message api.payments.CreatePaymentSessionResponse
  */
-export type CreatePaymentSessionResponse = Message<"api.payments.CreatePaymentSessionResponse"> & {
-  /**
-   * @generated from field: string url = 1;
-   */
-  url: string;
-};
+export type CreatePaymentSessionResponse =
+  Message<'api.payments.CreatePaymentSessionResponse'> & {
+    /**
+     * @generated from field: string url = 1;
+     */
+    url: string;
+  };
 
 /**
  * Describes the message api.payments.CreatePaymentSessionResponse.
  * Use `create(CreatePaymentSessionResponseSchema)` to create a new message.
  */
-export const CreatePaymentSessionResponseSchema: GenMessage<CreatePaymentSessionResponse> = /*@__PURE__*/
+export const CreatePaymentSessionResponseSchema: GenMessage<CreatePaymentSessionResponse> =
+  /*@__PURE__*/
   messageDesc(file_proto_payments_payments, 4);
 
 /**
@@ -101,26 +121,24 @@ export const PaymentsService: GenService<{
    * @generated from rpc api.payments.PaymentsService.CreatePaymentIntent
    */
   createPaymentIntent: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof CreatePaymentIntentRequestSchema;
     output: typeof CreatePaymentIntentResponseSchema;
-  },
+  };
   /**
    * @generated from rpc api.payments.PaymentsService.GetStripePublicKey
    */
   getStripePublicKey: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof GetStripePublicKeyRequestSchema;
     output: typeof GetStripePublicKeyResponseSchema;
-  },
+  };
   /**
    * @generated from rpc api.payments.PaymentsService.CreatePaymentSession
    */
   createPaymentSession: {
-    methodKind: "unary";
+    methodKind: 'unary';
     input: typeof CreatePaymentIntentRequestSchema;
-    output: typeof CreatePaymentIntentResponseSchema;
-  },
-}> = /*@__PURE__*/
-  serviceDesc(file_proto_payments_payments, 0);
-
+    output: typeof CreatePaymentSessionResponseSchema;
+  };
+}> = /*@__PURE__*/ serviceDesc(file_proto_payments_payments, 0);

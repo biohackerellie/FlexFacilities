@@ -247,11 +247,11 @@ const file_proto_payments_payments_proto_rawDesc = "" +
 	"\n" +
 	"public_key\x18\x01 \x01(\tR\tpublicKey\"0\n" +
 	"\x1cCreatePaymentSessionResponse\x12\x10\n" +
-	"\x03url\x18\x01 \x01(\tR\x03url2\xd3\x02\n" +
+	"\x03url\x18\x01 \x01(\tR\x03url2\xd4\x02\n" +
 	"\x0fPaymentsService\x12j\n" +
 	"\x13CreatePaymentIntent\x12(.api.payments.CreatePaymentIntentRequest\x1a).api.payments.CreatePaymentIntentResponse\x12g\n" +
-	"\x12GetStripePublicKey\x12'.api.payments.GetStripePublicKeyRequest\x1a(.api.payments.GetStripePublicKeyResponse\x12k\n" +
-	"\x14CreatePaymentSession\x12(.api.payments.CreatePaymentIntentRequest\x1a).api.payments.CreatePaymentIntentResponseB\x9f\x01\n" +
+	"\x12GetStripePublicKey\x12'.api.payments.GetStripePublicKeyRequest\x1a(.api.payments.GetStripePublicKeyResponse\x12l\n" +
+	"\x14CreatePaymentSession\x12(.api.payments.CreatePaymentIntentRequest\x1a*.api.payments.CreatePaymentSessionResponseB\x9f\x01\n" +
 	"\x10com.api.paymentsB\rPaymentsProtoP\x01Z+api/internal/proto/payments;paymentsservice\xa2\x02\x03APX\xaa\x02\fApi.Payments\xca\x02\fApi\\Payments\xe2\x02\x18Api\\Payments\\GPBMetadata\xea\x02\rApi::Paymentsb\x06proto3"
 
 var (
@@ -280,7 +280,7 @@ var file_proto_payments_payments_proto_depIdxs = []int32{
 	0, // 2: api.payments.PaymentsService.CreatePaymentSession:input_type -> api.payments.CreatePaymentIntentRequest
 	1, // 3: api.payments.PaymentsService.CreatePaymentIntent:output_type -> api.payments.CreatePaymentIntentResponse
 	3, // 4: api.payments.PaymentsService.GetStripePublicKey:output_type -> api.payments.GetStripePublicKeyResponse
-	1, // 5: api.payments.PaymentsService.CreatePaymentSession:output_type -> api.payments.CreatePaymentIntentResponse
+	4, // 5: api.payments.PaymentsService.CreatePaymentSession:output_type -> api.payments.CreatePaymentSessionResponse
 	3, // [3:6] is the sub-list for method output_type
 	0, // [0:3] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name

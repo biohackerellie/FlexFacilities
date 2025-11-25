@@ -87,14 +87,16 @@ export async function getReservation(
   return data;
 }
 
-export async function getReservationCategory(
+export async function getReservationPricing(
   id: string,
   session: string,
   token: string,
 ) {
   'use cache';
   const authed = client.withAuth(session, token);
-  const { data, error } = await authed.facilities().getCategory({ id: id });
+  const { data, error } = await authed
+    .facilities()
+    .getPricing({ pricingId: id });
   if (error) {
     logger.error('Error fetching reservation', { 'error ': error });
     return null;

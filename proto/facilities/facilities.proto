@@ -105,8 +105,15 @@ service FacilitiesService {
   rpc GetProducts (GetProductsRequest) returns (GetProductsResponse){
     option idempotency_level = NO_SIDE_EFFECTS;
   };
-  
+  rpc GetPricing (GetPricingRequest) returns (PricingWithCategory){
+    option idempotency_level = NO_SIDE_EFFECTS;
+  };
 }
+
+message GetPricingRequest {
+  string pricing_id = 1;
+}
+
 
 message GetCategoriesRequest {}
 message GetCategoriesResponse {

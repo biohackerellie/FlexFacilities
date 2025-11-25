@@ -22,7 +22,7 @@ message GetStripePublicKeyResponse {
 service PaymentsService {
   rpc CreatePaymentIntent(CreatePaymentIntentRequest) returns (CreatePaymentIntentResponse);
   rpc GetStripePublicKey (GetStripePublicKeyRequest) returns (GetStripePublicKeyResponse);
-  rpc CreatePaymentSession (CreatePaymentIntentRequest) returns (CreatePaymentIntentResponse);
+  rpc CreatePaymentSession (CreatePaymentIntentRequest) returns (CreatePaymentSessionResponse);
 }
 
 message CreatePaymentSessionResponse {
