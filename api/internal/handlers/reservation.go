@@ -496,12 +496,12 @@ func (a *ReservationHandler) CreateReservationDates(ctx context.Context, req *co
 		return nil, err
 	}
 	reservation := resWrap.Reservation
-	rdates := reservation.RDates
+	rdates := *reservation.RDates
 	if !reservation.RRule.Valid {
 		for _, d := range dates {
 			rdates = append(rdates, sql.NullTime{Time: d.LocalStart.Time, Valid: true})
 		}
-		reservation.RDates = rdates
+		reservation.RDates = &rdates
 		err = a.reservationStore.Update(ctx, &reservation)
 		if err != nil {
 			return nil, err
@@ -687,7 +687,7 @@ func (a *ReservationHandler) DeleteReservationDates(ctx context.Context, req *co
 	}
 
 	datesToDelete := make([]models.ReservationDate, 0)
-	exDates := reservation.EXDates
+	exDates := *reservation.EXDates
 
 	for _, d := range dates {
 

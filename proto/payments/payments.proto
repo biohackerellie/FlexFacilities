@@ -23,8 +23,18 @@ service PaymentsService {
   rpc CreatePaymentIntent(CreatePaymentIntentRequest) returns (CreatePaymentIntentResponse);
   rpc GetStripePublicKey (GetStripePublicKeyRequest) returns (GetStripePublicKeyResponse);
   rpc CreatePaymentSession (CreatePaymentIntentRequest) returns (CreatePaymentSessionResponse);
+  rpc ValidatePaymentSession (ValidatePaymentSessionRequest) returns (ValidatePaymentSessionResponse);
 }
 
 message CreatePaymentSessionResponse {
   string url = 1;
+}
+
+message ValidatePaymentSessionRequest {
+  string session_id = 1;
+  int64 reservation_id = 2;
+}
+
+message ValidatePaymentSessionResponse {
+  bool valid = 1;
 }

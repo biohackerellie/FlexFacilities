@@ -92,7 +92,7 @@ export async function getReservationPricing(
   session: string,
   token: string,
 ) {
-  'use cache';
+  'use cache: private';
   const authed = client.withAuth(session, token);
   const { data, error } = await authed
     .facilities()

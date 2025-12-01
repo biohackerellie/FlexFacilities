@@ -348,6 +348,7 @@ func (f *FacilityStore) GetProductPricingWithCategories(ctx context.Context, pro
 	return finalPricing, nil
 }
 func (f *FacilityStore) GetPricing(ctx context.Context, pricingID string) (models.Pricing, error) {
+	f.log.Debug("getting pricing", "pricing_id", pricingID)
 	var pricing models.Pricing
 	if err := f.db.GetContext(ctx, &pricing, "SELECT * FROM pricing WHERE id = $1", pricingID); err != nil {
 		return models.Pricing{}, err

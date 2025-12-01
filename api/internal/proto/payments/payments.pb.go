@@ -233,6 +233,102 @@ func (x *CreatePaymentSessionResponse) GetUrl() string {
 	return ""
 }
 
+type ValidatePaymentSessionRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	ReservationId int64                  `protobuf:"varint,2,opt,name=reservation_id,json=reservationId,proto3" json:"reservation_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ValidatePaymentSessionRequest) Reset() {
+	*x = ValidatePaymentSessionRequest{}
+	mi := &file_proto_payments_payments_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ValidatePaymentSessionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ValidatePaymentSessionRequest) ProtoMessage() {}
+
+func (x *ValidatePaymentSessionRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_payments_payments_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ValidatePaymentSessionRequest.ProtoReflect.Descriptor instead.
+func (*ValidatePaymentSessionRequest) Descriptor() ([]byte, []int) {
+	return file_proto_payments_payments_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *ValidatePaymentSessionRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
+func (x *ValidatePaymentSessionRequest) GetReservationId() int64 {
+	if x != nil {
+		return x.ReservationId
+	}
+	return 0
+}
+
+type ValidatePaymentSessionResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Valid         bool                   `protobuf:"varint,1,opt,name=valid,proto3" json:"valid,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ValidatePaymentSessionResponse) Reset() {
+	*x = ValidatePaymentSessionResponse{}
+	mi := &file_proto_payments_payments_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ValidatePaymentSessionResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ValidatePaymentSessionResponse) ProtoMessage() {}
+
+func (x *ValidatePaymentSessionResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_payments_payments_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ValidatePaymentSessionResponse.ProtoReflect.Descriptor instead.
+func (*ValidatePaymentSessionResponse) Descriptor() ([]byte, []int) {
+	return file_proto_payments_payments_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *ValidatePaymentSessionResponse) GetValid() bool {
+	if x != nil {
+		return x.Valid
+	}
+	return false
+}
+
 var File_proto_payments_payments_proto protoreflect.FileDescriptor
 
 const file_proto_payments_payments_proto_rawDesc = "" +
@@ -247,11 +343,18 @@ const file_proto_payments_payments_proto_rawDesc = "" +
 	"\n" +
 	"public_key\x18\x01 \x01(\tR\tpublicKey\"0\n" +
 	"\x1cCreatePaymentSessionResponse\x12\x10\n" +
-	"\x03url\x18\x01 \x01(\tR\x03url2\xd4\x02\n" +
+	"\x03url\x18\x01 \x01(\tR\x03url\"i\n" +
+	"\x1dValidatePaymentSessionRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18\x01 \x01(\tR\tsessionId\x12)\n" +
+	"\x0ereservation_id\x18\x02 \x01(\x03B\x020\x01R\rreservationId\"6\n" +
+	"\x1eValidatePaymentSessionResponse\x12\x14\n" +
+	"\x05valid\x18\x01 \x01(\bR\x05valid2\xc9\x03\n" +
 	"\x0fPaymentsService\x12j\n" +
 	"\x13CreatePaymentIntent\x12(.api.payments.CreatePaymentIntentRequest\x1a).api.payments.CreatePaymentIntentResponse\x12g\n" +
 	"\x12GetStripePublicKey\x12'.api.payments.GetStripePublicKeyRequest\x1a(.api.payments.GetStripePublicKeyResponse\x12l\n" +
-	"\x14CreatePaymentSession\x12(.api.payments.CreatePaymentIntentRequest\x1a*.api.payments.CreatePaymentSessionResponseB\x9f\x01\n" +
+	"\x14CreatePaymentSession\x12(.api.payments.CreatePaymentIntentRequest\x1a*.api.payments.CreatePaymentSessionResponse\x12s\n" +
+	"\x16ValidatePaymentSession\x12+.api.payments.ValidatePaymentSessionRequest\x1a,.api.payments.ValidatePaymentSessionResponseB\x9f\x01\n" +
 	"\x10com.api.paymentsB\rPaymentsProtoP\x01Z+api/internal/proto/payments;paymentsservice\xa2\x02\x03APX\xaa\x02\fApi.Payments\xca\x02\fApi\\Payments\xe2\x02\x18Api\\Payments\\GPBMetadata\xea\x02\rApi::Paymentsb\x06proto3"
 
 var (
@@ -266,23 +369,27 @@ func file_proto_payments_payments_proto_rawDescGZIP() []byte {
 	return file_proto_payments_payments_proto_rawDescData
 }
 
-var file_proto_payments_payments_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_proto_payments_payments_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_proto_payments_payments_proto_goTypes = []any{
-	(*CreatePaymentIntentRequest)(nil),   // 0: api.payments.CreatePaymentIntentRequest
-	(*CreatePaymentIntentResponse)(nil),  // 1: api.payments.CreatePaymentIntentResponse
-	(*GetStripePublicKeyRequest)(nil),    // 2: api.payments.GetStripePublicKeyRequest
-	(*GetStripePublicKeyResponse)(nil),   // 3: api.payments.GetStripePublicKeyResponse
-	(*CreatePaymentSessionResponse)(nil), // 4: api.payments.CreatePaymentSessionResponse
+	(*CreatePaymentIntentRequest)(nil),     // 0: api.payments.CreatePaymentIntentRequest
+	(*CreatePaymentIntentResponse)(nil),    // 1: api.payments.CreatePaymentIntentResponse
+	(*GetStripePublicKeyRequest)(nil),      // 2: api.payments.GetStripePublicKeyRequest
+	(*GetStripePublicKeyResponse)(nil),     // 3: api.payments.GetStripePublicKeyResponse
+	(*CreatePaymentSessionResponse)(nil),   // 4: api.payments.CreatePaymentSessionResponse
+	(*ValidatePaymentSessionRequest)(nil),  // 5: api.payments.ValidatePaymentSessionRequest
+	(*ValidatePaymentSessionResponse)(nil), // 6: api.payments.ValidatePaymentSessionResponse
 }
 var file_proto_payments_payments_proto_depIdxs = []int32{
 	0, // 0: api.payments.PaymentsService.CreatePaymentIntent:input_type -> api.payments.CreatePaymentIntentRequest
 	2, // 1: api.payments.PaymentsService.GetStripePublicKey:input_type -> api.payments.GetStripePublicKeyRequest
 	0, // 2: api.payments.PaymentsService.CreatePaymentSession:input_type -> api.payments.CreatePaymentIntentRequest
-	1, // 3: api.payments.PaymentsService.CreatePaymentIntent:output_type -> api.payments.CreatePaymentIntentResponse
-	3, // 4: api.payments.PaymentsService.GetStripePublicKey:output_type -> api.payments.GetStripePublicKeyResponse
-	4, // 5: api.payments.PaymentsService.CreatePaymentSession:output_type -> api.payments.CreatePaymentSessionResponse
-	3, // [3:6] is the sub-list for method output_type
-	0, // [0:3] is the sub-list for method input_type
+	5, // 3: api.payments.PaymentsService.ValidatePaymentSession:input_type -> api.payments.ValidatePaymentSessionRequest
+	1, // 4: api.payments.PaymentsService.CreatePaymentIntent:output_type -> api.payments.CreatePaymentIntentResponse
+	3, // 5: api.payments.PaymentsService.GetStripePublicKey:output_type -> api.payments.GetStripePublicKeyResponse
+	4, // 6: api.payments.PaymentsService.CreatePaymentSession:output_type -> api.payments.CreatePaymentSessionResponse
+	6, // 7: api.payments.PaymentsService.ValidatePaymentSession:output_type -> api.payments.ValidatePaymentSessionResponse
+	4, // [4:8] is the sub-list for method output_type
+	0, // [0:4] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -299,7 +406,7 @@ func file_proto_payments_payments_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_payments_payments_proto_rawDesc), len(file_proto_payments_payments_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   5,
+			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

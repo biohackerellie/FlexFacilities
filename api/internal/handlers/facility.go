@@ -279,10 +279,12 @@ func (a *FacilityHandler) GetProducts(ctx context.Context, req *connect.Request[
 	for p := range list {
 		productNames[p.ID] = p.Name
 	}
+	a.log.Debug("GetProducts", "products", productNames)
 	var result []*service.ProductWithPricing
 	for _, productId := range productNames {
 		pricing, err := a.facilityStore.GetProductPricingWithCategories(ctx, productId)
 		if err != nil {
+			a.log.Error("error getting pricing from db", "error", err)
 			return nil, err
 		}
 		if len(pricing) == 0 {
@@ -306,14 +308,15 @@ func (a *FacilityHandler) GetProducts(ctx context.Context, req *connect.Request[
 
 func (a *FacilityHandler) GetPricing(ctx context.Context, req *connect.Request[service.GetPricingRequest]) (*connect.Response[service.PricingWithCategory], error) {
 	pricing, err := a.facilityStore.GetPricing(ctx, req.Msg.GetPricingId())
+
 	if err != nil {
-		a.log.Error("error getting pricing", "error", err)
+		a.log.Error("error getting pricing from db", "error", err)
 		return nil, err
 	}
 
 	price, err := a.sc.V1Prices.Retrieve(ctx, pricing.ID, nil)
 	if err != nil {
-		a.log.Error("error getting price", "error", err)
+		a.log.Error("error getting price from stripe", "error", err)
 		return nil, err
 	}
 	pricing.Price = float64(price.UnitAmount) / 100

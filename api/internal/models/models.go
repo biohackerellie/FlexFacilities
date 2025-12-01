@@ -578,16 +578,16 @@ type Reservation struct {
 	InsuranceLink sql.NullString      `db:"insurance_link" json:"insurance_link"`
 	CostOverride  pgtype.Numeric      `db:"cost_override" json:"cost_override"`
 	RRule         sql.NullString      `db:"rrule" json:"rrule"`
-	RDates        []sql.NullTime      `db:"rdates" json:"rdates"`
-	EXDates       []sql.NullTime      `db:"exdates" json:"exdates"`
+	RDates        *[]sql.NullTime     `db:"rdates" json:"rdates"`
+	EXDates       *[]sql.NullTime     `db:"exdates" json:"exdates"`
 	GCalEventID   sql.NullString      `db:"gcal_eventid" json:"gcal_eventid"`
 	PriceID       sql.NullString      `db:"price_id" json:"price_id"`
 }
 
 func (r *Reservation) ToProto() *pbReservation.Reservation {
 	rdates := make([]string, 0)
-	if len(r.RDates) > 0 {
-		for _, date := range r.RDates {
+	if r.RDates != nil && len(*r.RDates) > 0 {
+		for _, date := range *r.RDates {
 			if date.Valid {
 				rdates = append(rdates, date.Time.String())
 			}
@@ -595,8 +595,8 @@ func (r *Reservation) ToProto() *pbReservation.Reservation {
 	}
 
 	exdates := make([]string, 0)
-	if len(r.EXDates) > 0 {
-		for _, date := range r.EXDates {
+	if r.EXDates != nil && len(*r.EXDates) > 0 {
+		for _, date := range *r.EXDates {
 			if date.Valid {
 				exdates = append(exdates, date.Time.String())
 			}
@@ -653,14 +653,14 @@ func StringArrayToNullDates(d []string) []sql.NullTime {
 	return dates
 }
 
-func DatesArrayToNullDates(d []time.Time) []sql.NullTime {
+func DatesArrayToNullDates(d []time.Time) *[]sql.NullTime {
 	dates := make([]sql.NullTime, 0, len(d))
 	if len(d) > 0 {
 		for _, date := range d {
 			dates = append(dates, sql.NullTime{Time: date, Valid: true})
 		}
 	}
-	return dates
+	return &dates
 }
 
 func ToReservation(reservation *pbReservation.Reservation) *Reservation {
@@ -692,8 +692,8 @@ func ToReservation(reservation *pbReservation.Reservation) *Reservation {
 		InsuranceLink: CheckNullString(reservation.InsuranceLink), //reservation.InsuranceLink,
 		CostOverride:  utils.StringToPgNumeric(reservation.CostOverride),
 		RRule:         CheckNullString(reservation.Rrule), //reservation.Rrule,
-		RDates:        rdates,
-		EXDates:       exdates,
+		RDates:        &rdates,
+		EXDates:       &exdates,
 		GCalEventID:   CheckNullString(reservation.GcalEventid),
 		PriceID:       CheckNullString(reservation.PriceId),
 	}

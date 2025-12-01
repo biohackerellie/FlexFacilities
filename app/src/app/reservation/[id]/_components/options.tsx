@@ -12,25 +12,35 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import type { getFacilities } from '@/lib/actions/facilities';
+import type { getAllProducts, getFacilities } from '@/lib/actions/facilities';
 import { updateReservation } from '@/lib/actions/reservations';
-import type { Facility } from '@/lib/types';
+import type { Facility, PricingWithCategory } from '@/lib/types';
 import { ReservationContext } from './context';
 
 export default function Options({
   facilitiesPromise,
+  productsPromise,
 }: {
   facilitiesPromise: Promise<Awaited<ReturnType<typeof getFacilities>>>;
+  productsPromise: Promise<Awaited<ReturnType<typeof getAllProducts>>>;
 }) {
   const data = React.use(ReservationContext);
   const fac = React.use(facilitiesPromise);
-  if (!data || !fac) return <div>no data</div>;
+
+  const catData = React.use(productsPromise);
+  if (!data || !fac || !catData) return <div>no data</div>;
   const facilities = fac?.buildings.flatMap((b) => b.facilities);
-  // const categoriesflat = facilitiesflat?.filter(
-  //   (f) => f.facility?.id === data?.facility?.id,
-  // );
   const facility = data?.facility;
   const reservation = data?.reservation;
+  const products = catData?.data.filter(
+    (c) => c.productId === facility?.productId,
+  );
+  let categories: PricingWithCategory[] = [];
+  if (products?.length > 1) {
+    categories = products.flatMap((p) => p.pricing);
+  } else if (products?.length === 1) {
+    categories = products[0]?.pricing ?? [];
+  }
   let override = parseFloat(data?.reservation.costOverride);
   if (Number.isNaN(override)) override = 0;
   const [costOverride, setCostOverride] = React.useState(override);
@@ -131,7 +141,7 @@ export default function Options({
             <SelectContent className='max-h-80 overflow-scroll'>
               {categories?.map((category) => (
                 <SelectItem key={category.id} value={String(category.id)}>
-                  {category.name}${category.price}
+                  {category.categoryName}${category.price}/{category.unitLabel}
                 </SelectItem>
               ))}
             </SelectContent>

@@ -20,7 +20,7 @@ import {
 export const file_proto_payments_payments: GenFile =
   /*@__PURE__*/
   fileDesc(
-    'Ch1wcm90by9wYXltZW50cy9wYXltZW50cy5wcm90bxIMYXBpLnBheW1lbnRzIjgKGkNyZWF0ZVBheW1lbnRJbnRlbnRSZXF1ZXN0EhoKDnJlc2VydmF0aW9uX2lkGAEgASgDQgIwASI0ChtDcmVhdGVQYXltZW50SW50ZW50UmVzcG9uc2USFQoNY2xpZW50X3NlY3JldBgBIAEoCSIbChlHZXRTdHJpcGVQdWJsaWNLZXlSZXF1ZXN0IjAKGkdldFN0cmlwZVB1YmxpY0tleVJlc3BvbnNlEhIKCnB1YmxpY19rZXkYASABKAkiKwocQ3JlYXRlUGF5bWVudFNlc3Npb25SZXNwb25zZRILCgN1cmwYASABKAky1AIKD1BheW1lbnRzU2VydmljZRJqChNDcmVhdGVQYXltZW50SW50ZW50EiguYXBpLnBheW1lbnRzLkNyZWF0ZVBheW1lbnRJbnRlbnRSZXF1ZXN0GikuYXBpLnBheW1lbnRzLkNyZWF0ZVBheW1lbnRJbnRlbnRSZXNwb25zZRJnChJHZXRTdHJpcGVQdWJsaWNLZXkSJy5hcGkucGF5bWVudHMuR2V0U3RyaXBlUHVibGljS2V5UmVxdWVzdBooLmFwaS5wYXltZW50cy5HZXRTdHJpcGVQdWJsaWNLZXlSZXNwb25zZRJsChRDcmVhdGVQYXltZW50U2Vzc2lvbhIoLmFwaS5wYXltZW50cy5DcmVhdGVQYXltZW50SW50ZW50UmVxdWVzdBoqLmFwaS5wYXltZW50cy5DcmVhdGVQYXltZW50U2Vzc2lvblJlc3BvbnNlQp8BChBjb20uYXBpLnBheW1lbnRzQg1QYXltZW50c1Byb3RvUAFaK2FwaS9pbnRlcm5hbC9wcm90by9wYXltZW50cztwYXltZW50c3NlcnZpY2WiAgNBUFiqAgxBcGkuUGF5bWVudHPKAgxBcGlcUGF5bWVudHPiAhhBcGlcUGF5bWVudHNcR1BCTWV0YWRhdGHqAg1BcGk6OlBheW1lbnRzYgZwcm90bzM',
+    'Ch1wcm90by9wYXltZW50cy9wYXltZW50cy5wcm90bxIMYXBpLnBheW1lbnRzIjgKGkNyZWF0ZVBheW1lbnRJbnRlbnRSZXF1ZXN0EhoKDnJlc2VydmF0aW9uX2lkGAEgASgDQgIwASI0ChtDcmVhdGVQYXltZW50SW50ZW50UmVzcG9uc2USFQoNY2xpZW50X3NlY3JldBgBIAEoCSIbChlHZXRTdHJpcGVQdWJsaWNLZXlSZXF1ZXN0IjAKGkdldFN0cmlwZVB1YmxpY0tleVJlc3BvbnNlEhIKCnB1YmxpY19rZXkYASABKAkiKwocQ3JlYXRlUGF5bWVudFNlc3Npb25SZXNwb25zZRILCgN1cmwYASABKAkiTwodVmFsaWRhdGVQYXltZW50U2Vzc2lvblJlcXVlc3QSEgoKc2Vzc2lvbl9pZBgBIAEoCRIaCg5yZXNlcnZhdGlvbl9pZBgCIAEoA0ICMAEiLwoeVmFsaWRhdGVQYXltZW50U2Vzc2lvblJlc3BvbnNlEg0KBXZhbGlkGAEgASgIMskDCg9QYXltZW50c1NlcnZpY2USagoTQ3JlYXRlUGF5bWVudEludGVudBIoLmFwaS5wYXltZW50cy5DcmVhdGVQYXltZW50SW50ZW50UmVxdWVzdBopLmFwaS5wYXltZW50cy5DcmVhdGVQYXltZW50SW50ZW50UmVzcG9uc2USZwoSR2V0U3RyaXBlUHVibGljS2V5EicuYXBpLnBheW1lbnRzLkdldFN0cmlwZVB1YmxpY0tleVJlcXVlc3QaKC5hcGkucGF5bWVudHMuR2V0U3RyaXBlUHVibGljS2V5UmVzcG9uc2USbAoUQ3JlYXRlUGF5bWVudFNlc3Npb24SKC5hcGkucGF5bWVudHMuQ3JlYXRlUGF5bWVudEludGVudFJlcXVlc3QaKi5hcGkucGF5bWVudHMuQ3JlYXRlUGF5bWVudFNlc3Npb25SZXNwb25zZRJzChZWYWxpZGF0ZVBheW1lbnRTZXNzaW9uEisuYXBpLnBheW1lbnRzLlZhbGlkYXRlUGF5bWVudFNlc3Npb25SZXF1ZXN0GiwuYXBpLnBheW1lbnRzLlZhbGlkYXRlUGF5bWVudFNlc3Npb25SZXNwb25zZUKfAQoQY29tLmFwaS5wYXltZW50c0INUGF5bWVudHNQcm90b1ABWithcGkvaW50ZXJuYWwvcHJvdG8vcGF5bWVudHM7cGF5bWVudHNzZXJ2aWNlogIDQVBYqgIMQXBpLlBheW1lbnRzygIMQXBpXFBheW1lbnRz4gIYQXBpXFBheW1lbnRzXEdQQk1ldGFkYXRh6gINQXBpOjpQYXltZW50c2IGcHJvdG8z',
   );
 
 /**
@@ -114,6 +114,49 @@ export const CreatePaymentSessionResponseSchema: GenMessage<CreatePaymentSession
   messageDesc(file_proto_payments_payments, 4);
 
 /**
+ * @generated from message api.payments.ValidatePaymentSessionRequest
+ */
+export type ValidatePaymentSessionRequest =
+  Message<'api.payments.ValidatePaymentSessionRequest'> & {
+    /**
+     * @generated from field: string session_id = 1;
+     */
+    sessionId: string;
+
+    /**
+     * @generated from field: int64 reservation_id = 2 [jstype = JS_STRING];
+     */
+    reservationId: string;
+  };
+
+/**
+ * Describes the message api.payments.ValidatePaymentSessionRequest.
+ * Use `create(ValidatePaymentSessionRequestSchema)` to create a new message.
+ */
+export const ValidatePaymentSessionRequestSchema: GenMessage<ValidatePaymentSessionRequest> =
+  /*@__PURE__*/
+  messageDesc(file_proto_payments_payments, 5);
+
+/**
+ * @generated from message api.payments.ValidatePaymentSessionResponse
+ */
+export type ValidatePaymentSessionResponse =
+  Message<'api.payments.ValidatePaymentSessionResponse'> & {
+    /**
+     * @generated from field: bool valid = 1;
+     */
+    valid: boolean;
+  };
+
+/**
+ * Describes the message api.payments.ValidatePaymentSessionResponse.
+ * Use `create(ValidatePaymentSessionResponseSchema)` to create a new message.
+ */
+export const ValidatePaymentSessionResponseSchema: GenMessage<ValidatePaymentSessionResponse> =
+  /*@__PURE__*/
+  messageDesc(file_proto_payments_payments, 6);
+
+/**
  * @generated from service api.payments.PaymentsService
  */
 export const PaymentsService: GenService<{
@@ -140,5 +183,13 @@ export const PaymentsService: GenService<{
     methodKind: 'unary';
     input: typeof CreatePaymentIntentRequestSchema;
     output: typeof CreatePaymentSessionResponseSchema;
+  };
+  /**
+   * @generated from rpc api.payments.PaymentsService.ValidatePaymentSession
+   */
+  validatePaymentSession: {
+    methodKind: 'unary';
+    input: typeof ValidatePaymentSessionRequestSchema;
+    output: typeof ValidatePaymentSessionResponseSchema;
   };
 }> = /*@__PURE__*/ serviceDesc(file_proto_payments_payments, 0);

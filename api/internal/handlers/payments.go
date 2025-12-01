@@ -6,6 +6,7 @@ import (
 	"api/internal/ports"
 	service "api/internal/proto/payments"
 	"context"
+	"fmt"
 	"log/slog"
 	"strconv"
 	"time"
@@ -114,8 +115,10 @@ func (p *PaymentHandler) CreatePaymentSession(ctx context.Context, req *connect.
 	totalHours := max(int64(total/time.Hour), 1)
 
 	domain := p.config.FrontendUrl
+	success := fmt.Sprintf("%s/reservation/%d/success", domain, reservation.Reservation.ID)
 	params := &stripe.CheckoutSessionCreateParams{
-		ReturnURL: stripe.String(domain + "/reservation/checkout/success"),
+		SuccessURL: stripe.String(success + "?session_id={CHECKOUT_SESSION_ID}"),
+		CancelURL:  stripe.String(domain + fmt.Sprintf("/reservation/%d", reservation.Reservation.ID)),
 		LineItems: []*stripe.CheckoutSessionCreateLineItemParams{
 			{
 				Price:    stripe.String(reservation.Reservation.PriceID.String),
@@ -135,4 +138,45 @@ func (p *PaymentHandler) CreatePaymentSession(ctx context.Context, req *connect.
 		Url: s.URL,
 	}), nil
 
+}
+
+func (p *PaymentHandler) ValidatePaymentSession(ctx context.Context, req *connect.Request[service.ValidatePaymentSessionRequest]) (*connect.Response[service.ValidatePaymentSessionResponse], error) {
+	s, err := p.sc.V1CheckoutSessions.Retrieve(ctx, req.Msg.SessionId, nil)
+	if err != nil {
+		p.log.Error("failed to get checkout session", "error", err)
+
+		return connect.NewResponse(&service.ValidatePaymentSessionResponse{
+			Valid: false,
+		}), nil
+	}
+
+	if s.PaymentStatus != stripe.CheckoutSessionPaymentStatusPaid {
+		return connect.NewResponse(&service.ValidatePaymentSessionResponse{
+			Valid: false,
+		}), nil
+	}
+
+	reservation, err := p.reservationStore.Get(ctx, req.Msg.GetReservationId())
+	if err != nil {
+		p.log.Error("failed to get reservation", "error", err)
+		return nil, err
+	}
+
+	if reservation == nil {
+		return connect.NewResponse(&service.ValidatePaymentSessionResponse{
+			Valid: false,
+		}), nil
+	}
+	if !reservation.Reservation.Paid {
+		reservation.Reservation.Paid = true
+		err = p.reservationStore.Update(ctx, &reservation.Reservation)
+		if err != nil {
+			p.log.Error("failed to update reservation", "error", err)
+			return nil, err
+		}
+	}
+
+	return connect.NewResponse(&service.ValidatePaymentSessionResponse{
+		Valid: true,
+	}), nil
 }

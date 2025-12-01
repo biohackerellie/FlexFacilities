@@ -282,8 +282,6 @@ const updateReservationQuery = `UPDATE reservation SET
 	total_hours = :totalHours,
 	in_person = :inPerson,
 	paid = :paid,
-	payment_url = :paymentUrl,
-	payment_link_id = :paymentLinkId,
 	insurance_link = :insuranceLink,
 	gcal_eventid = :gcalEventid
 WHERE id = :id`
@@ -297,8 +295,6 @@ func (s *ReservationStore) Update(ctx context.Context, reservation *models.Reser
 		"totalHours":    reservation.TotalHours,
 		"inPerson":      reservation.InPerson,
 		"paid":          reservation.Paid,
-		"paymentUrl":    reservation.PaymentUrl,
-		"paymentLinkId": reservation.PaymentLinkID,
 		"insuranceLink": reservation.InsuranceLink,
 		"gcalEventid":   reservation.GCalEventID,
 		"id":            reservation.ID,

@@ -71,7 +71,7 @@ tasks:
     desc: start dev go server
     dir: "{{.API_ROOT}}"
     cmds:
-      - air -c .air.toml -- -env ../.env
+      - air -c .air.toml 
   dev:www:
     desc: start dev www server
     dir: "{{.WWW_ROOT}}" 

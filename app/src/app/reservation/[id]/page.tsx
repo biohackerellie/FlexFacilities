@@ -38,7 +38,11 @@ async function Suspensed({ id }: { id: string }) {
   const reservation = data.reservation;
   const { name, phone, details } = reservation;
   const user = await getUser(reservation.userId, session, token);
-  const pricing = await getReservationPricing(id, session, token);
+  const pricing = await getReservationPricing(
+    reservation.priceId,
+    session,
+    token,
+  );
 
   return (
     <div className='hidden flex-col flex-wrap justify-between sm:flex'>
