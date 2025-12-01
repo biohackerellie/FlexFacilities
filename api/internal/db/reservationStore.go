@@ -155,7 +155,8 @@ INSERT INTO reservation (
     category_id,
 		rrule,
 		rdates,
-		exdates
+		exdates,
+		price_id
 ) VALUES (
     :user_id,
     :event_name,
@@ -172,7 +173,8 @@ INSERT INTO reservation (
     :category_id,
 		:rrule,
 		:rdates,
-		:exdates
+		:exdates,
+		:price_id
 )
 RETURNING id`
 
@@ -194,14 +196,9 @@ func (s *ReservationStore) Create(ctx context.Context, reservation *models.Reser
 		"phone":         reservation.Phone,
 		"category_id":   reservation.CategoryID,
 		"rrule":         reservation.RRule,
-		"rdates":        nil,
-		"exdates":       nil,
-	}
-	if reservation.RDates != nil && len(*reservation.RDates) > 0 {
-		args["rdates"] = reservation.RDates
-	}
-	if reservation.EXDates != nil && len(*reservation.EXDates) > 0 {
-		args["exdates"] = reservation.EXDates
+		"rdates":        reservation.RDates,
+		"exdates":       reservation.EXDates,
+		"price_id":      reservation.PriceID,
 	}
 	rows, err := s.db.NamedQueryContext(ctx, createReservationQuery, args)
 	if err != nil {
@@ -285,8 +282,6 @@ const updateReservationQuery = `UPDATE reservation SET
 	total_hours = :totalHours,
 	in_person = :inPerson,
 	paid = :paid,
-	payment_url = :paymentUrl,
-	payment_link_id = :paymentLinkId,
 	insurance_link = :insuranceLink,
 	gcal_eventid = :gcalEventid
 WHERE id = :id`
@@ -300,8 +295,6 @@ func (s *ReservationStore) Update(ctx context.Context, reservation *models.Reser
 		"totalHours":    reservation.TotalHours,
 		"inPerson":      reservation.InPerson,
 		"paid":          reservation.Paid,
-		"paymentUrl":    reservation.PaymentUrl,
-		"paymentLinkId": reservation.PaymentLinkID,
 		"insuranceLink": reservation.InsuranceLink,
 		"gcalEventid":   reservation.GCalEventID,
 		"id":            reservation.ID,
@@ -370,13 +363,9 @@ const updateReservationDatesQuery = `UPDATE reservation_date SET
 	WHERE id = :id`
 
 func (s *ReservationStore) UpdateDate(ctx context.Context, date *models.ReservationDate) error {
-	var calId string
-	if date.GcalEventid != nil {
-		calId = *date.GcalEventid
-	}
 	params := map[string]any{
 		"approved":     date.Approved.String(),
-		"gcal_eventid": calId,
+		"gcal_eventid": date.GcalEventid,
 		"local_start":  date.LocalStart,
 		"local_end":    date.LocalEnd,
 		"id":           date.ID,
@@ -483,4 +472,17 @@ func (s *ReservationStore) Aggregate(ctx context.Context) ([]models.Aggregate, e
 		return nil, err
 	}
 	return aggregates, nil
+}
+
+const updatePaymentIDQuery = `UPDATE reservation SET payment_id = :payment_id WHERE id = :id`
+
+func (s *ReservationStore) UpdatePaymentIntent(ctx context.Context, id int64, paymentID string) error {
+	params := map[string]any{
+		"payment_id": paymentID,
+		"id":         id,
+	}
+	if _, err := s.db.NamedExecContext(ctx, updatePaymentIDQuery, params); err != nil {
+		return err
+	}
+	return nil
 }

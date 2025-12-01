@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"api/internal/models"
-	"errors"
 
 	"api/internal/ports"
 	service "api/internal/proto/facilities"
@@ -11,17 +10,20 @@ import (
 	"log/slog"
 
 	"connectrpc.com/connect"
+	"github.com/stripe/stripe-go/v83"
 )
 
 type FacilityHandler struct {
 	log           *slog.Logger
 	calendar      *calendar.Calendar
 	facilityStore ports.FacilityStore
+
+	sc *stripe.Client
 }
 
-func NewFacilityHandler(facilityStore ports.FacilityStore, log *slog.Logger, calendar *calendar.Calendar) *FacilityHandler {
+func NewFacilityHandler(facilityStore ports.FacilityStore, log *slog.Logger, calendar *calendar.Calendar, sc *stripe.Client) *FacilityHandler {
 	log.With(slog.Group("Core_Handler", slog.String("name", "facility")))
-	return &FacilityHandler{facilityStore: facilityStore, log: log, calendar: calendar}
+	return &FacilityHandler{facilityStore: facilityStore, log: log, calendar: calendar, sc: sc}
 }
 
 func (a *FacilityHandler) GetAllFacilities(ctx context.Context, req *connect.Request[service.GetAllFacilitiesRequest]) (*connect.Response[service.GetAllFacilitiesResponse], error) {
@@ -67,14 +69,13 @@ func (a *FacilityHandler) GetFacility(ctx context.Context, req *connect.Request[
 	facility := res.ToProto()
 	return connect.NewResponse(&service.FullFacility{
 		Facility:      facility.Facility,
-		Categories:    facility.Categories,
+		Pricing:       facility.Pricing,
 		ReservationId: facility.ReservationId,
 		Building:      facility.Building,
 	}), nil
 }
 func (a *FacilityHandler) GetFacilityCategories(ctx context.Context, req *connect.Request[service.GetFacilityCategoriesRequest]) (*connect.Response[service.GetFacilityCategoriesResponse], error) {
-	ids := []int64{req.Msg.GetId()}
-	res, err := a.facilityStore.GetCategories(ctx, ids)
+	res, err := a.facilityStore.GetCategories(ctx)
 
 	if err != nil {
 		return nil, err
@@ -99,12 +100,8 @@ func (a *FacilityHandler) GetBuildingFacilities(ctx context.Context, req *connec
 }
 func (a *FacilityHandler) CreateFacility(ctx context.Context, req *connect.Request[service.CreateFacilityRequest]) (*connect.Response[service.CreateFacilityResponse], error) {
 	facility := models.ToFacility(req.Msg.GetFacility())
-	categories := models.ToCategories(req.Msg.GetCategories())
 
-	err := a.facilityStore.Create(ctx, &models.FacilityWithCategories{
-		Facility:   *facility,
-		Categories: categories,
-	})
+	err := a.facilityStore.Create(ctx, facility)
 
 	if err != nil {
 		return nil, err
@@ -145,14 +142,13 @@ func (a *FacilityHandler) GetAllEvents(ctx context.Context, req *connect.Request
 
 	result := make([]*service.BuildingWithEvents, len(buildings))
 	for i, building := range buildings {
-
-		calId := building.GoogleCalendarID
-		if calId == nil || *calId == "" {
+		if !building.GoogleCalendarID.Valid {
 			continue
 		}
+		calId := building.GoogleCalendarID.String
 
-		a.log.Debug("GetAllEvents", "calId", *calId)
-		res, err := a.calendar.ListEvents(*calId)
+		a.log.Debug("GetAllEvents", "calId", calId)
+		res, err := a.calendar.ListEvents(calId)
 		if err != nil {
 
 			continue
@@ -216,11 +212,14 @@ func (a *FacilityHandler) GetEventsByBuilding(ctx context.Context, req *connect.
 	if err != nil {
 		return nil, err
 	}
+
 	calendarID := building.GoogleCalendarID
-	if calendarID == nil {
-		return nil, errors.New("building has no calendar")
+	if !calendarID.Valid {
+		return connect.NewResponse(&service.GetEventsByBuildingResponse{
+			Events: []*service.Event{},
+		}), nil
 	}
-	res, err := a.calendar.ListEvents(*calendarID)
+	res, err := a.calendar.ListEvents(calendarID.String)
 	if err != nil {
 		return nil, err
 	}
@@ -248,6 +247,16 @@ func (a *FacilityHandler) GetCategory(ctx context.Context, req *connect.Request[
 	return connect.NewResponse(category.ToProto()), nil
 }
 
+func (a *FacilityHandler) GetCategories(ctx context.Context, req *connect.Request[service.GetCategoriesRequest]) (*connect.Response[service.GetCategoriesResponse], error) {
+	categories, err := a.facilityStore.GetCategories(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return connect.NewResponse(&service.GetCategoriesResponse{
+		Categories: models.ToProtoCategories(categories),
+	}), nil
+}
+
 func (a *FacilityHandler) GetAllCoords(ctx context.Context, req *connect.Request[service.GetAllCoordsRequest]) (*connect.Response[service.GetAllCoordsResponse], error) {
 	coords, err := a.facilityStore.GetBuildingCoordinates(ctx)
 	if err != nil {
@@ -259,4 +268,68 @@ func (a *FacilityHandler) GetAllCoords(ctx context.Context, req *connect.Request
 	return connect.NewResponse(&service.GetAllCoordsResponse{
 		Data: models.CoordsToProto(coords),
 	}), nil
+}
+
+func (a *FacilityHandler) GetProducts(ctx context.Context, req *connect.Request[service.GetProductsRequest]) (*connect.Response[service.GetProductsResponse], error) {
+	params := &stripe.ProductListParams{}
+	params.Limit = stripe.Int64(100)
+
+	list := a.sc.V1Products.List(ctx, params)
+	productNames := make(map[string]string, 0)
+	for p := range list {
+		productNames[p.ID] = p.Name
+	}
+	a.log.Debug("GetProducts", "products", productNames)
+	var result []*service.ProductWithPricing
+	for _, productId := range productNames {
+		pricing, err := a.facilityStore.GetProductPricingWithCategories(ctx, productId)
+		if err != nil {
+			a.log.Error("error getting pricing from db", "error", err)
+			return nil, err
+		}
+		if len(pricing) == 0 {
+			continue
+		}
+		pricingProto := make([]*service.PricingWithCategory, len(pricing))
+		for i, p := range pricing {
+			pricingProto[i] = p.ToProto()
+		}
+		result = append(result, &service.ProductWithPricing{
+			ProductId:   productId,
+			ProductName: productNames[productId],
+			Pricing:     pricingProto,
+		})
+	}
+
+	return connect.NewResponse(&service.GetProductsResponse{
+		Data: result,
+	}), nil
+}
+
+func (a *FacilityHandler) GetPricing(ctx context.Context, req *connect.Request[service.GetPricingRequest]) (*connect.Response[service.PricingWithCategory], error) {
+	pricing, err := a.facilityStore.GetPricing(ctx, req.Msg.GetPricingId())
+
+	if err != nil {
+		a.log.Error("error getting pricing from db", "error", err)
+		return nil, err
+	}
+
+	price, err := a.sc.V1Prices.Retrieve(ctx, pricing.ID, nil)
+	if err != nil {
+		a.log.Error("error getting price from stripe", "error", err)
+		return nil, err
+	}
+	pricing.Price = float64(price.UnitAmount) / 100
+	category, err := a.facilityStore.GetCategory(ctx, pricing.CategoryID)
+	if err != nil {
+		a.log.Error("error getting category", "error", err)
+		return nil, err
+	}
+	result := models.PricingWithCategory{
+		Pricing:             pricing,
+		CategoryName:        category.Name,
+		CategoryDescription: category.Description,
+	}
+
+	return connect.NewResponse(result.ToProto()), nil
 }

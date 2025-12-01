@@ -8,7 +8,7 @@ RUN go mod download
 
 COPY . .
 
-RUN CGO_ENABLED=0 go build -ldflags="-s -w" -o ./bin/api .
+RUN CGO_ENABLED=0 go build -ldflags="-s -w -X 'main.AppEnv=production'" -o ./bin/api .
 
 FROM gcr.io/distroless/static
 ENV APP_ENV=production

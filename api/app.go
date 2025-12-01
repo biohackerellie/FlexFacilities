@@ -24,29 +24,36 @@ import (
 	"github.com/joho/godotenv"
 )
 
-var log *slog.Logger
+var (
+	log    *slog.Logger
+	AppEnv = "development"
+)
 
 func Run(ctx context.Context, stdout io.Writer, getenv func(string, string) string) error {
 
-	ctx, cancel := context.WithCancel(ctx)
-	defer cancel()
-	config, err := config.New(getenv)
-	if err != nil {
-		return err
-	}
-	logLevel := config.LogLevel
-	if logLevel == "" {
-		logLevel = "info"
-	}
-	verboseLogging := config.VerboseLogging == "true"
-
-	local := config.AppEnv != "production"
+	local := AppEnv != "production"
 	if local {
 		err := godotenv.Load("../.env")
 		if err != nil {
 			return err
 		}
 	}
+
+	config, err := config.New(getenv, AppEnv)
+	if err != nil {
+		return err
+	}
+	if config.AppEnv != "production" {
+		local = true
+	}
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
+	logLevel := config.LogLevel
+	if logLevel == "" {
+		logLevel = "info"
+	}
+	verboseLogging := config.VerboseLogging == "true"
+
 	logOptions := logger.LogOptions(strings.TrimSpace(strings.ToLower(logLevel)), verboseLogging, local)
 	var withContext *logger.ContextLogger
 	if local {
@@ -60,7 +67,7 @@ func Run(ctx context.Context, stdout io.Writer, getenv func(string, string) stri
 	log = slog.New(withContext)
 	slog.SetDefault(log)
 
-	log.Info("Starting server", "local", local, "log_level", logLevel, "verbose_logging", verboseLogging)
+	log.Info("Starting server", "local", local, "app_env", config.AppEnv, "log_level", logLevel, "verbose_logging", verboseLogging)
 	db := repository.InitDB(ctx, config.DatabaseURL)
 	defer db.Close()
 

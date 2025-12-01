@@ -3,7 +3,6 @@ import * as React from 'react';
 import { ThemeProviders } from '@/components/contexts/providers/ThemeProvider';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
-
 import './styles/globals.css';
 import { Toaster } from 'sonner';
 import Footer from '@/components/ui/footer';

@@ -9,7 +9,7 @@ export interface FormData {
   // Step 2
   eventName: string;
   details: string;
-  categoryID: string;
+  pricingID: string;
   name: string;
   phone: string;
 
@@ -43,7 +43,7 @@ const initialFormData: FormData = {
   facilityID: '',
   eventName: '',
   details: '',
-  categoryID: '',
+  pricingID: '',
   name: '',
   phone: '',
   techSupport: false,

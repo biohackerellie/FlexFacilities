@@ -330,7 +330,7 @@ const notificationUsersByBuildingQuery = `SELECT user_id FROM notifications WHER
 const toEmailsInQuery = `SELECT email FROM users WHERE id IN (?)`
 
 func (s *UserStore) NotificationUsersByBuilding(ctx context.Context, buildingID int64) ([]string, error) {
-	var ids []int64
+	var ids []string
 	if err := s.db.SelectContext(ctx, &ids, notificationUsersByBuildingQuery, buildingID); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return []string{}, nil

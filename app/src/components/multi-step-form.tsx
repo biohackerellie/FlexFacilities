@@ -15,7 +15,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import type { getFacilities } from '@/lib/actions/facilities';
+import type { getAllProducts, getFacilities } from '@/lib/actions/facilities';
 import { createReservation } from '@/lib/actions/reservations';
 import { getErrorMessage } from '@/lib/errors';
 import { useFormStore } from '@/lib/form-store';
@@ -45,11 +45,13 @@ const FORM_STEPS = [
 
 interface MultiStepFormProps {
   facilitiesPromise: Promise<Awaited<ReturnType<typeof getFacilities>>>;
+  getAllProductsPromise: Promise<Awaited<ReturnType<typeof getAllProducts>>>;
   userID: string;
 }
 
 export function MultiStepForm({
   facilitiesPromise,
+  getAllProductsPromise,
   userID,
 }: MultiStepFormProps) {
   const { currentStep, nextStep, previousStep, resetForm, formData } =
@@ -102,6 +104,7 @@ export function MultiStepForm({
                 key='step-1'
                 onNext={nextStep}
                 facilitiesPromise={facilitiesPromise}
+                productsPromise={getAllProductsPromise}
                 userID={userID}
               />
             )}

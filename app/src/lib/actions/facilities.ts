@@ -74,6 +74,21 @@ export async function getAllBuildingNames() {
   return response;
 }
 
+export async function getAllProducts(session: string, token: string) {
+  'use cache: private';
+  const { data, error } = await client
+    .withAuth(session, token)
+    .facilities()
+    .getProducts({});
+
+  if (error) {
+    logger.error('Error fetching products', { 'error ': error });
+    return null;
+  }
+  cacheTag('products');
+  return data;
+}
+
 type ReturnType = {
   events: IEvent[];
   buildings: Building[];

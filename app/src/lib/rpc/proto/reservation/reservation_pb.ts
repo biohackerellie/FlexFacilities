@@ -20,7 +20,7 @@ import {
 export const file_proto_reservation_reservation: GenFile =
   /*@__PURE__*/
   fileDesc(
-    'CiNwcm90by9yZXNlcnZhdGlvbi9yZXNlcnZhdGlvbi5wcm90bxIPYXBpLnJlc2VydmF0aW9uIqYGCgtSZXNlcnZhdGlvbhIOCgJpZBgBIAEoA0ICMAESDwoHdXNlcl9pZBgCIAEoCRISCgpldmVudF9uYW1lGAMgASgJEhcKC2ZhY2lsaXR5X2lkGAQgASgDQgIwARIQCghhcHByb3ZlZBgFIAEoCRISCgpjcmVhdGVkX2F0GAYgASgJEhIKCnVwZGF0ZWRfYXQYByABKAkSFAoHZGV0YWlscxgIIAEoCUgAiAEBEgwKBGZlZXMYCSABKAkSEQoJaW5zdXJhbmNlGAogASgIEhgKC2Rvb3JfYWNjZXNzGAsgASgISAGIAQESGgoNZG9vcnNfZGV0YWlscxgMIAEoCUgCiAEBEgwKBG5hbWUYDSABKAkSGQoMdGVjaF9kZXRhaWxzGA4gASgJSAOIAQESGQoMdGVjaF9zdXBwb3J0GA8gASgISASIAQESEgoFcGhvbmUYECABKAlIBYgBARIXCgtjYXRlZ29yeV9pZBgRIAEoA0ICMAESGAoLdG90YWxfaG91cnMYEiABKAFIBogBARIRCglpbl9wZXJzb24YEyABKAgSDAoEcGFpZBgUIAEoCBIYCgtwYXltZW50X3VybBgVIAEoCUgHiAEBEhwKD3BheW1lbnRfbGlua19pZBgWIAEoCUgIiAEBEhsKDmluc3VyYW5jZV9saW5rGBcgASgJSAmIAQESFQoNY29zdF9vdmVycmlkZRgYIAEoCRISCgVycnVsZRgZIAEoCUgKiAEBEg4KBnJkYXRlcxgaIAMoCRIPCgdleGRhdGVzGBsgAygJEhkKDGdjYWxfZXZlbnRpZBgcIAEoCUgLiAEBQgoKCF9kZXRhaWxzQg4KDF9kb29yX2FjY2Vzc0IQCg5fZG9vcnNfZGV0YWlsc0IPCg1fdGVjaF9kZXRhaWxzQg8KDV90ZWNoX3N1cHBvcnRCCAoGX3Bob25lQg4KDF90b3RhbF9ob3Vyc0IOCgxfcGF5bWVudF91cmxCEgoQX3BheW1lbnRfbGlua19pZEIRCg9faW5zdXJhbmNlX2xpbmtCCAoGX3JydWxlQg8KDV9nY2FsX2V2ZW50aWQiowEKD1Jlc2VydmF0aW9uRGF0ZRIOCgJpZBgBIAEoA0ICMAESGgoOcmVzZXJ2YXRpb25faWQYAiABKANCAjABEhAKCGFwcHJvdmVkGAMgASgJEhkKDGdjYWxfZXZlbnRpZBgEIAEoCUgAiAEBEhMKC2xvY2FsX3N0YXJ0GAUgASgJEhEKCWxvY2FsX2VuZBgGIAEoCUIPCg1fZ2NhbF9ldmVudGlkIlMKEVJlY3VycmVuY2VQYXR0ZXJuEgwKBGZyZXEYASABKAkSEgoKYnlfd2Vla2RheRgCIAMoCRINCgV1bnRpbBgDIAEoCRINCgVjb3VudBgEIAEoBSIoCgpPY2N1cnJlbmNlEg0KBXN0YXJ0GAEgASgJEgsKA2VuZBgCIAEoCSJ7Cg5SZXNlcnZhdGlvbkZlZRIOCgJpZBgBIAEoA0ICMAESFwoPYWRkaXRpb25hbF9mZWVzGAIgASgJEhYKCWZlZXNfdHlwZRgDIAEoCUgAiAEBEhoKDnJlc2VydmF0aW9uX2lkGAQgASgDQgIwAUIMCgpfZmVlc190eXBlIqQBCg9GdWxsUmVzZXJ2YXRpb24SMQoLcmVzZXJ2YXRpb24YASABKAsyHC5hcGkucmVzZXJ2YXRpb24uUmVzZXJ2YXRpb24SLwoFZGF0ZXMYAiADKAsyIC5hcGkucmVzZXJ2YXRpb24uUmVzZXJ2YXRpb25EYXRlEi0KBGZlZXMYAyADKAsyHy5hcGkucmVzZXJ2YXRpb24uUmVzZXJ2YXRpb25GZWUinwEKF0Z1bGxSZXNXaXRoRmFjaWxpdHlOYW1lEhIKCmV2ZW50X25hbWUYASABKAkSFQoNZmFjaWxpdHlfbmFtZRgCIAEoCRIYChByZXNlcnZhdGlvbl9kYXRlGAMgASgJEhAKCGFwcHJvdmVkGAQgASgJEhEKCXVzZXJfbmFtZRgFIAEoCRIaCg5yZXNlcnZhdGlvbl9pZBgGIAEoA0ICMAEiTAoSQWxsUGVuZGluZ1Jlc3BvbnNlEjYKBGRhdGEYASADKAsyKC5hcGkucmVzZXJ2YXRpb24uRnVsbFJlc1dpdGhGYWNpbGl0eU5hbWUihQEKEUFsbFNvcnRlZFJlc3BvbnNlEjYKBHBhc3QYASADKAsyKC5hcGkucmVzZXJ2YXRpb24uRnVsbFJlc1dpdGhGYWNpbGl0eU5hbWUSOAoGZnV0dXJlGAIgAygLMiguYXBpLnJlc2VydmF0aW9uLkZ1bGxSZXNXaXRoRmFjaWxpdHlOYW1lIkAKHlVwZGF0ZVJlc2VydmF0aW9uU3RhdHVzUmVxdWVzdBIOCgJpZBgBIAEoA0ICMAESDgoGc3RhdHVzGAIgASgJIkYKI1VwZGF0ZVJlc2VydmF0aW9uRGF0ZXNTdGF0dXNSZXF1ZXN0Eg8KA2lkcxgBIAMoA0ICMAESDgoGc3RhdHVzGAIgASgJIiYKJFVwZGF0ZVJlc2VydmF0aW9uRGF0ZXNTdGF0dXNSZXNwb25zZSJRChdBbGxSZXNlcnZhdGlvbnNSZXNwb25zZRI2CgxyZXNlcnZhdGlvbnMYASADKAsyIC5hcGkucmVzZXJ2YXRpb24uRnVsbFJlc2VydmF0aW9uIlEKF1JlcXVlc3RUaGlzV2Vla1Jlc3BvbnNlEjYKDHJlc2VydmF0aW9ucxgBIAMoCzIgLmFwaS5yZXNlcnZhdGlvbi5GdWxsUmVzZXJ2YXRpb24iVgocQXBwcm92ZWRSZXNlcnZhdGlvbnNSZXNwb25zZRI2CgxyZXNlcnZhdGlvbnMYASADKAsyIC5hcGkucmVzZXJ2YXRpb24uRnVsbFJlc2VydmF0aW9uIlUKG1BlbmRpbmdSZXNlcnZhdGlvbnNSZXNwb25zZRI2CgxyZXNlcnZhdGlvbnMYASADKAsyIC5hcGkucmVzZXJ2YXRpb24uRnVsbFJlc2VydmF0aW9uIloKGFVzZXJSZXNlcnZhdGlvbnNSZXNwb25zZRI+CgxyZXNlcnZhdGlvbnMYASADKAsyKC5hcGkucmVzZXJ2YXRpb24uRnVsbFJlc1dpdGhGYWNpbGl0eU5hbWUiGwoZR2V0QWxsUmVzZXJ2YXRpb25zUmVxdWVzdCInChVHZXRSZXNlcnZhdGlvblJlcXVlc3QSDgoCaWQYASABKANCAjABIhUKE1JlcXVlc3RDb3VudFJlcXVlc3QiKQoUUmVxdWVzdENvdW50UmVzcG9uc2USEQoFY291bnQYASABKANCAjABIhwKGkdldFJlcXVlc3RzVGhpc1dlZWtSZXF1ZXN0ItUEChhDcmVhdGVSZXNlcnZhdGlvblJlcXVlc3QSDwoHdXNlcl9pZBgBIAEoCRISCgpldmVudF9uYW1lGAIgASgJEhcKC2ZhY2lsaXR5X2lkGAMgASgDQgIwARIPCgdkZXRhaWxzGAQgASgJEhcKC2NhdGVnb3J5X2lkGAUgASgDQgIwARIMCgRuYW1lGAYgASgJEg0KBXBob25lGAcgASgJEhQKDHRlY2hfc3VwcG9ydBgIIAEoCBIZCgx0ZWNoX2RldGFpbHMYCSABKAlIAIgBARITCgtkb29yX2FjY2VzcxgKIAEoCBIaCg1kb29yc19kZXRhaWxzGAsgASgJSAGIAQESMAoLb2NjdXJyZW5jZXMYDCADKAsyGy5hcGkucmVzZXJ2YXRpb24uT2NjdXJyZW5jZRIXCgpzdGFydF9kYXRlGA0gASgJSAKIAQESFwoKc3RhcnRfdGltZRgOIAEoCUgDiAEBEhUKCGVuZF9kYXRlGA8gASgJSASIAQESFQoIZW5kX3RpbWUYECABKAlIBYgBARI4CgdwYXR0ZXJuGBEgASgLMiIuYXBpLnJlc2VydmF0aW9uLlJlY3VycmVuY2VQYXR0ZXJuSAaIAQESDgoGcmRhdGVzGBIgAygJEg8KB2V4ZGF0ZXMYEyADKAlCDwoNX3RlY2hfZGV0YWlsc0IQCg5fZG9vcnNfZGV0YWlsc0INCgtfc3RhcnRfZGF0ZUINCgtfc3RhcnRfdGltZUILCglfZW5kX2RhdGVCCwoJX2VuZF90aW1lQgoKCF9wYXR0ZXJuIisKGUNyZWF0ZVJlc2VydmF0aW9uUmVzcG9uc2USDgoCaWQYASABKANCAjABIk0KGFVwZGF0ZVJlc2VydmF0aW9uUmVxdWVzdBIxCgtyZXNlcnZhdGlvbhgBIAEoCzIcLmFwaS5yZXNlcnZhdGlvbi5SZXNlcnZhdGlvbiIbChlVcGRhdGVSZXNlcnZhdGlvblJlc3BvbnNlIioKGERlbGV0ZVJlc2VydmF0aW9uUmVxdWVzdBIOCgJpZBgBIAEoA0ICMAEiGwoZRGVsZXRlUmVzZXJ2YXRpb25SZXNwb25zZSIqChdVc2VyUmVzZXJ2YXRpb25zUmVxdWVzdBIPCgd1c2VyX2lkGAEgASgJIk8KHUNyZWF0ZVJlc2VydmF0aW9uRGF0ZXNSZXF1ZXN0Ei4KBGRhdGUYASADKAsyIC5hcGkucmVzZXJ2YXRpb24uUmVzZXJ2YXRpb25EYXRlIiAKHkNyZWF0ZVJlc2VydmF0aW9uRGF0ZXNSZXNwb25zZSIgCh5VcGRhdGVSZXNlcnZhdGlvbkRhdGVzUmVzcG9uc2UiIAoeRGVsZXRlUmVzZXJ2YXRpb25EYXRlc1Jlc3BvbnNlIh4KHENyZWF0ZVJlc2VydmF0aW9uRmVlUmVzcG9uc2UiHgocVXBkYXRlUmVzZXJ2YXRpb25GZWVSZXNwb25zZSIeChxEZWxldGVSZXNlcnZhdGlvbkZlZVJlc3BvbnNlIk8KHVVwZGF0ZVJlc2VydmF0aW9uRGF0ZXNSZXF1ZXN0Ei4KBGRhdGUYASADKAsyIC5hcGkucmVzZXJ2YXRpb24uUmVzZXJ2YXRpb25EYXRlIi8KHURlbGV0ZVJlc2VydmF0aW9uRGF0ZXNSZXF1ZXN0Eg4KAmlkGAEgAygDQgIwASJLChtDcmVhdGVSZXNlcnZhdGlvbkZlZVJlcXVlc3QSLAoDZmVlGAEgAygLMh8uYXBpLnJlc2VydmF0aW9uLlJlc2VydmF0aW9uRmVlIksKG1VwZGF0ZVJlc2VydmF0aW9uRmVlUmVxdWVzdBIsCgNmZWUYASABKAsyHy5hcGkucmVzZXJ2YXRpb24uUmVzZXJ2YXRpb25GZWUiLQobRGVsZXRlUmVzZXJ2YXRpb25GZWVSZXF1ZXN0Eg4KAmlkGAEgASgDQgIwASIkChJDb3N0UmVkdWNlclJlcXVlc3QSDgoCaWQYASABKANCAjABIiMKE0Nvc3RSZWR1Y2VyUmVzcG9uc2USDAoEY29zdBgBIAEoCTLyEAoSUmVzZXJ2YXRpb25TZXJ2aWNlEm8KEkdldEFsbFJlc2VydmF0aW9ucxIqLmFwaS5yZXNlcnZhdGlvbi5HZXRBbGxSZXNlcnZhdGlvbnNSZXF1ZXN0GiguYXBpLnJlc2VydmF0aW9uLkFsbFJlc2VydmF0aW9uc1Jlc3BvbnNlIgOQAgESXwoOR2V0UmVzZXJ2YXRpb24SJi5hcGkucmVzZXJ2YXRpb24uR2V0UmVzZXJ2YXRpb25SZXF1ZXN0GiAuYXBpLnJlc2VydmF0aW9uLkZ1bGxSZXNlcnZhdGlvbiIDkAIBEmAKDFJlcXVlc3RDb3VudBIkLmFwaS5yZXNlcnZhdGlvbi5SZXF1ZXN0Q291bnRSZXF1ZXN0GiUuYXBpLnJlc2VydmF0aW9uLlJlcXVlc3RDb3VudFJlc3BvbnNlIgOQAgEScQoTR2V0UmVxdWVzdHNUaGlzV2VlaxIrLmFwaS5yZXNlcnZhdGlvbi5HZXRSZXF1ZXN0c1RoaXNXZWVrUmVxdWVzdBooLmFwaS5yZXNlcnZhdGlvbi5SZXF1ZXN0VGhpc1dlZWtSZXNwb25zZSIDkAIBEmoKEUNyZWF0ZVJlc2VydmF0aW9uEikuYXBpLnJlc2VydmF0aW9uLkNyZWF0ZVJlc2VydmF0aW9uUmVxdWVzdBoqLmFwaS5yZXNlcnZhdGlvbi5DcmVhdGVSZXNlcnZhdGlvblJlc3BvbnNlEmoKEVVwZGF0ZVJlc2VydmF0aW9uEikuYXBpLnJlc2VydmF0aW9uLlVwZGF0ZVJlc2VydmF0aW9uUmVxdWVzdBoqLmFwaS5yZXNlcnZhdGlvbi5VcGRhdGVSZXNlcnZhdGlvblJlc3BvbnNlEnYKF1VwZGF0ZVJlc2VydmF0aW9uU3RhdHVzEi8uYXBpLnJlc2VydmF0aW9uLlVwZGF0ZVJlc2VydmF0aW9uU3RhdHVzUmVxdWVzdBoqLmFwaS5yZXNlcnZhdGlvbi5VcGRhdGVSZXNlcnZhdGlvblJlc3BvbnNlEmoKEURlbGV0ZVJlc2VydmF0aW9uEikuYXBpLnJlc2VydmF0aW9uLkRlbGV0ZVJlc2VydmF0aW9uUmVxdWVzdBoqLmFwaS5yZXNlcnZhdGlvbi5EZWxldGVSZXNlcnZhdGlvblJlc3BvbnNlEmwKEFVzZXJSZXNlcnZhdGlvbnMSKC5hcGkucmVzZXJ2YXRpb24uVXNlclJlc2VydmF0aW9uc1JlcXVlc3QaKS5hcGkucmVzZXJ2YXRpb24uVXNlclJlc2VydmF0aW9uc1Jlc3BvbnNlIgOQAgESeQoWQ3JlYXRlUmVzZXJ2YXRpb25EYXRlcxIuLmFwaS5yZXNlcnZhdGlvbi5DcmVhdGVSZXNlcnZhdGlvbkRhdGVzUmVxdWVzdBovLmFwaS5yZXNlcnZhdGlvbi5DcmVhdGVSZXNlcnZhdGlvbkRhdGVzUmVzcG9uc2USeQoWVXBkYXRlUmVzZXJ2YXRpb25EYXRlcxIuLmFwaS5yZXNlcnZhdGlvbi5VcGRhdGVSZXNlcnZhdGlvbkRhdGVzUmVxdWVzdBovLmFwaS5yZXNlcnZhdGlvbi5VcGRhdGVSZXNlcnZhdGlvbkRhdGVzUmVzcG9uc2USiwEKHFVwZGF0ZVJlc2VydmF0aW9uRGF0ZXNTdGF0dXMSNC5hcGkucmVzZXJ2YXRpb24uVXBkYXRlUmVzZXJ2YXRpb25EYXRlc1N0YXR1c1JlcXVlc3QaNS5hcGkucmVzZXJ2YXRpb24uVXBkYXRlUmVzZXJ2YXRpb25EYXRlc1N0YXR1c1Jlc3BvbnNlEnkKFkRlbGV0ZVJlc2VydmF0aW9uRGF0ZXMSLi5hcGkucmVzZXJ2YXRpb24uRGVsZXRlUmVzZXJ2YXRpb25EYXRlc1JlcXVlc3QaLy5hcGkucmVzZXJ2YXRpb24uRGVsZXRlUmVzZXJ2YXRpb25EYXRlc1Jlc3BvbnNlEnMKFENyZWF0ZVJlc2VydmF0aW9uRmVlEiwuYXBpLnJlc2VydmF0aW9uLkNyZWF0ZVJlc2VydmF0aW9uRmVlUmVxdWVzdBotLmFwaS5yZXNlcnZhdGlvbi5DcmVhdGVSZXNlcnZhdGlvbkZlZVJlc3BvbnNlEnMKFFVwZGF0ZVJlc2VydmF0aW9uRmVlEiwuYXBpLnJlc2VydmF0aW9uLlVwZGF0ZVJlc2VydmF0aW9uRmVlUmVxdWVzdBotLmFwaS5yZXNlcnZhdGlvbi5VcGRhdGVSZXNlcnZhdGlvbkZlZVJlc3BvbnNlEnMKFERlbGV0ZVJlc2VydmF0aW9uRmVlEiwuYXBpLnJlc2VydmF0aW9uLkRlbGV0ZVJlc2VydmF0aW9uRmVlUmVxdWVzdBotLmFwaS5yZXNlcnZhdGlvbi5EZWxldGVSZXNlcnZhdGlvbkZlZVJlc3BvbnNlElgKC0Nvc3RSZWR1Y2VyEiMuYXBpLnJlc2VydmF0aW9uLkNvc3RSZWR1Y2VyUmVxdWVzdBokLmFwaS5yZXNlcnZhdGlvbi5Db3N0UmVkdWNlclJlc3BvbnNlEmUKDUdldEFsbFBlbmRpbmcSKi5hcGkucmVzZXJ2YXRpb24uR2V0QWxsUmVzZXJ2YXRpb25zUmVxdWVzdBojLmFwaS5yZXNlcnZhdGlvbi5BbGxQZW5kaW5nUmVzcG9uc2UiA5ACARJsChVBbGxTb3J0ZWRSZXNlcnZhdGlvbnMSKi5hcGkucmVzZXJ2YXRpb24uR2V0QWxsUmVzZXJ2YXRpb25zUmVxdWVzdBoiLmFwaS5yZXNlcnZhdGlvbi5BbGxTb3J0ZWRSZXNwb25zZSIDkAIBQrcBChNjb20uYXBpLnJlc2VydmF0aW9uQhBSZXNlcnZhdGlvblByb3RvUAFaMWFwaS9pbnRlcm5hbC9wcm90by9yZXNlcnZhdGlvbjtyZXNlcnZhdGlvbnNlcnZpY2WiAgNBUliqAg9BcGkuUmVzZXJ2YXRpb27KAg9BcGlcUmVzZXJ2YXRpb27iAhtBcGlcUmVzZXJ2YXRpb25cR1BCTWV0YWRhdGHqAhBBcGk6OlJlc2VydmF0aW9uYgZwcm90bzM',
+    'CiNwcm90by9yZXNlcnZhdGlvbi9yZXNlcnZhdGlvbi5wcm90bxIPYXBpLnJlc2VydmF0aW9uIsAECgtSZXNlcnZhdGlvbhIOCgJpZBgBIAEoA0ICMAESDwoHdXNlcl9pZBgCIAEoCRISCgpldmVudF9uYW1lGAMgASgJEhcKC2ZhY2lsaXR5X2lkGAQgASgDQgIwARIQCghhcHByb3ZlZBgFIAEoCRISCgpjcmVhdGVkX2F0GAYgASgJEhIKCnVwZGF0ZWRfYXQYByABKAkSDwoHZGV0YWlscxgIIAEoCRIMCgRmZWVzGAkgASgJEhEKCWluc3VyYW5jZRgKIAEoCBITCgtkb29yX2FjY2VzcxgLIAEoCBIVCg1kb29yc19kZXRhaWxzGAwgASgJEgwKBG5hbWUYDSABKAkSFAoMdGVjaF9kZXRhaWxzGA4gASgJEhQKDHRlY2hfc3VwcG9ydBgPIAEoCBINCgVwaG9uZRgQIAEoCRIXCgtjYXRlZ29yeV9pZBgRIAEoA0ICMAESEwoLdG90YWxfaG91cnMYEiABKAESEQoJaW5fcGVyc29uGBMgASgIEgwKBHBhaWQYFCABKAgSEwoLcGF5bWVudF91cmwYFSABKAkSFwoPcGF5bWVudF9saW5rX2lkGBYgASgJEhYKDmluc3VyYW5jZV9saW5rGBcgASgJEhUKDWNvc3Rfb3ZlcnJpZGUYGCABKAkSDQoFcnJ1bGUYGSABKAkSDgoGcmRhdGVzGBogAygJEg8KB2V4ZGF0ZXMYGyADKAkSFAoMZ2NhbF9ldmVudGlkGBwgASgJEhAKCHByaWNlX2lkGB0gASgJIo0BCg9SZXNlcnZhdGlvbkRhdGUSDgoCaWQYASABKANCAjABEhoKDnJlc2VydmF0aW9uX2lkGAIgASgDQgIwARIQCghhcHByb3ZlZBgDIAEoCRIUCgxnY2FsX2V2ZW50aWQYBCABKAkSEwoLbG9jYWxfc3RhcnQYBSABKAkSEQoJbG9jYWxfZW5kGAYgASgJIlMKEVJlY3VycmVuY2VQYXR0ZXJuEgwKBGZyZXEYASABKAkSEgoKYnlfd2Vla2RheRgCIAMoCRINCgV1bnRpbBgDIAEoCRINCgVjb3VudBgEIAEoBSIoCgpPY2N1cnJlbmNlEg0KBXN0YXJ0GAEgASgJEgsKA2VuZBgCIAEoCSJoCg5SZXNlcnZhdGlvbkZlZRIOCgJpZBgBIAEoA0ICMAESFwoPYWRkaXRpb25hbF9mZWVzGAIgASgJEhEKCWZlZXNfdHlwZRgDIAEoCRIaCg5yZXNlcnZhdGlvbl9pZBgEIAEoA0ICMAEipAEKD0Z1bGxSZXNlcnZhdGlvbhIxCgtyZXNlcnZhdGlvbhgBIAEoCzIcLmFwaS5yZXNlcnZhdGlvbi5SZXNlcnZhdGlvbhIvCgVkYXRlcxgCIAMoCzIgLmFwaS5yZXNlcnZhdGlvbi5SZXNlcnZhdGlvbkRhdGUSLQoEZmVlcxgDIAMoCzIfLmFwaS5yZXNlcnZhdGlvbi5SZXNlcnZhdGlvbkZlZSKfAQoXRnVsbFJlc1dpdGhGYWNpbGl0eU5hbWUSEgoKZXZlbnRfbmFtZRgBIAEoCRIVCg1mYWNpbGl0eV9uYW1lGAIgASgJEhgKEHJlc2VydmF0aW9uX2RhdGUYAyABKAkSEAoIYXBwcm92ZWQYBCABKAkSEQoJdXNlcl9uYW1lGAUgASgJEhoKDnJlc2VydmF0aW9uX2lkGAYgASgDQgIwASJMChJBbGxQZW5kaW5nUmVzcG9uc2USNgoEZGF0YRgBIAMoCzIoLmFwaS5yZXNlcnZhdGlvbi5GdWxsUmVzV2l0aEZhY2lsaXR5TmFtZSKFAQoRQWxsU29ydGVkUmVzcG9uc2USNgoEcGFzdBgBIAMoCzIoLmFwaS5yZXNlcnZhdGlvbi5GdWxsUmVzV2l0aEZhY2lsaXR5TmFtZRI4CgZmdXR1cmUYAiADKAsyKC5hcGkucmVzZXJ2YXRpb24uRnVsbFJlc1dpdGhGYWNpbGl0eU5hbWUiQAoeVXBkYXRlUmVzZXJ2YXRpb25TdGF0dXNSZXF1ZXN0Eg4KAmlkGAEgASgDQgIwARIOCgZzdGF0dXMYAiABKAkiRgojVXBkYXRlUmVzZXJ2YXRpb25EYXRlc1N0YXR1c1JlcXVlc3QSDwoDaWRzGAEgAygDQgIwARIOCgZzdGF0dXMYAiABKAkiJgokVXBkYXRlUmVzZXJ2YXRpb25EYXRlc1N0YXR1c1Jlc3BvbnNlIlEKF0FsbFJlc2VydmF0aW9uc1Jlc3BvbnNlEjYKDHJlc2VydmF0aW9ucxgBIAMoCzIgLmFwaS5yZXNlcnZhdGlvbi5GdWxsUmVzZXJ2YXRpb24iUQoXUmVxdWVzdFRoaXNXZWVrUmVzcG9uc2USNgoMcmVzZXJ2YXRpb25zGAEgAygLMiAuYXBpLnJlc2VydmF0aW9uLkZ1bGxSZXNlcnZhdGlvbiJWChxBcHByb3ZlZFJlc2VydmF0aW9uc1Jlc3BvbnNlEjYKDHJlc2VydmF0aW9ucxgBIAMoCzIgLmFwaS5yZXNlcnZhdGlvbi5GdWxsUmVzZXJ2YXRpb24iVQobUGVuZGluZ1Jlc2VydmF0aW9uc1Jlc3BvbnNlEjYKDHJlc2VydmF0aW9ucxgBIAMoCzIgLmFwaS5yZXNlcnZhdGlvbi5GdWxsUmVzZXJ2YXRpb24iWgoYVXNlclJlc2VydmF0aW9uc1Jlc3BvbnNlEj4KDHJlc2VydmF0aW9ucxgBIAMoCzIoLmFwaS5yZXNlcnZhdGlvbi5GdWxsUmVzV2l0aEZhY2lsaXR5TmFtZSIbChlHZXRBbGxSZXNlcnZhdGlvbnNSZXF1ZXN0IicKFUdldFJlc2VydmF0aW9uUmVxdWVzdBIOCgJpZBgBIAEoA0ICMAEiFQoTUmVxdWVzdENvdW50UmVxdWVzdCIpChRSZXF1ZXN0Q291bnRSZXNwb25zZRIRCgVjb3VudBgBIAEoA0ICMAEiHAoaR2V0UmVxdWVzdHNUaGlzV2Vla1JlcXVlc3QixgMKGENyZWF0ZVJlc2VydmF0aW9uUmVxdWVzdBIPCgd1c2VyX2lkGAEgASgJEhIKCmV2ZW50X25hbWUYAiABKAkSFwoLZmFjaWxpdHlfaWQYAyABKANCAjABEg8KB2RldGFpbHMYBCABKAkSEgoKcHJpY2luZ19pZBgFIAEoCRIMCgRuYW1lGAYgASgJEg0KBXBob25lGAcgASgJEhQKDHRlY2hfc3VwcG9ydBgIIAEoCBIUCgx0ZWNoX2RldGFpbHMYCSABKAkSEwoLZG9vcl9hY2Nlc3MYCiABKAgSFQoNZG9vcnNfZGV0YWlscxgLIAEoCRIwCgtvY2N1cnJlbmNlcxgMIAMoCzIbLmFwaS5yZXNlcnZhdGlvbi5PY2N1cnJlbmNlEhIKCnN0YXJ0X2RhdGUYDSABKAkSEgoKc3RhcnRfdGltZRgOIAEoCRIQCghlbmRfZGF0ZRgPIAEoCRIQCghlbmRfdGltZRgQIAEoCRIzCgdwYXR0ZXJuGBEgASgLMiIuYXBpLnJlc2VydmF0aW9uLlJlY3VycmVuY2VQYXR0ZXJuEg4KBnJkYXRlcxgSIAMoCRIPCgdleGRhdGVzGBMgAygJIisKGUNyZWF0ZVJlc2VydmF0aW9uUmVzcG9uc2USDgoCaWQYASABKANCAjABIk0KGFVwZGF0ZVJlc2VydmF0aW9uUmVxdWVzdBIxCgtyZXNlcnZhdGlvbhgBIAEoCzIcLmFwaS5yZXNlcnZhdGlvbi5SZXNlcnZhdGlvbiIbChlVcGRhdGVSZXNlcnZhdGlvblJlc3BvbnNlIioKGERlbGV0ZVJlc2VydmF0aW9uUmVxdWVzdBIOCgJpZBgBIAEoA0ICMAEiGwoZRGVsZXRlUmVzZXJ2YXRpb25SZXNwb25zZSIqChdVc2VyUmVzZXJ2YXRpb25zUmVxdWVzdBIPCgd1c2VyX2lkGAEgASgJIk8KHUNyZWF0ZVJlc2VydmF0aW9uRGF0ZXNSZXF1ZXN0Ei4KBGRhdGUYASADKAsyIC5hcGkucmVzZXJ2YXRpb24uUmVzZXJ2YXRpb25EYXRlIiAKHkNyZWF0ZVJlc2VydmF0aW9uRGF0ZXNSZXNwb25zZSIgCh5VcGRhdGVSZXNlcnZhdGlvbkRhdGVzUmVzcG9uc2UiIAoeRGVsZXRlUmVzZXJ2YXRpb25EYXRlc1Jlc3BvbnNlIh4KHENyZWF0ZVJlc2VydmF0aW9uRmVlUmVzcG9uc2UiHgocVXBkYXRlUmVzZXJ2YXRpb25GZWVSZXNwb25zZSIeChxEZWxldGVSZXNlcnZhdGlvbkZlZVJlc3BvbnNlIk8KHVVwZGF0ZVJlc2VydmF0aW9uRGF0ZXNSZXF1ZXN0Ei4KBGRhdGUYASADKAsyIC5hcGkucmVzZXJ2YXRpb24uUmVzZXJ2YXRpb25EYXRlIi8KHURlbGV0ZVJlc2VydmF0aW9uRGF0ZXNSZXF1ZXN0Eg4KAmlkGAEgAygDQgIwASJLChtDcmVhdGVSZXNlcnZhdGlvbkZlZVJlcXVlc3QSLAoDZmVlGAEgAygLMh8uYXBpLnJlc2VydmF0aW9uLlJlc2VydmF0aW9uRmVlIksKG1VwZGF0ZVJlc2VydmF0aW9uRmVlUmVxdWVzdBIsCgNmZWUYASABKAsyHy5hcGkucmVzZXJ2YXRpb24uUmVzZXJ2YXRpb25GZWUiLQobRGVsZXRlUmVzZXJ2YXRpb25GZWVSZXF1ZXN0Eg4KAmlkGAEgASgDQgIwASIkChJDb3N0UmVkdWNlclJlcXVlc3QSDgoCaWQYASABKANCAjABIiMKE0Nvc3RSZWR1Y2VyUmVzcG9uc2USDAoEY29zdBgBIAEoCTLyEAoSUmVzZXJ2YXRpb25TZXJ2aWNlEm8KEkdldEFsbFJlc2VydmF0aW9ucxIqLmFwaS5yZXNlcnZhdGlvbi5HZXRBbGxSZXNlcnZhdGlvbnNSZXF1ZXN0GiguYXBpLnJlc2VydmF0aW9uLkFsbFJlc2VydmF0aW9uc1Jlc3BvbnNlIgOQAgESXwoOR2V0UmVzZXJ2YXRpb24SJi5hcGkucmVzZXJ2YXRpb24uR2V0UmVzZXJ2YXRpb25SZXF1ZXN0GiAuYXBpLnJlc2VydmF0aW9uLkZ1bGxSZXNlcnZhdGlvbiIDkAIBEmAKDFJlcXVlc3RDb3VudBIkLmFwaS5yZXNlcnZhdGlvbi5SZXF1ZXN0Q291bnRSZXF1ZXN0GiUuYXBpLnJlc2VydmF0aW9uLlJlcXVlc3RDb3VudFJlc3BvbnNlIgOQAgEScQoTR2V0UmVxdWVzdHNUaGlzV2VlaxIrLmFwaS5yZXNlcnZhdGlvbi5HZXRSZXF1ZXN0c1RoaXNXZWVrUmVxdWVzdBooLmFwaS5yZXNlcnZhdGlvbi5SZXF1ZXN0VGhpc1dlZWtSZXNwb25zZSIDkAIBEmoKEUNyZWF0ZVJlc2VydmF0aW9uEikuYXBpLnJlc2VydmF0aW9uLkNyZWF0ZVJlc2VydmF0aW9uUmVxdWVzdBoqLmFwaS5yZXNlcnZhdGlvbi5DcmVhdGVSZXNlcnZhdGlvblJlc3BvbnNlEmoKEVVwZGF0ZVJlc2VydmF0aW9uEikuYXBpLnJlc2VydmF0aW9uLlVwZGF0ZVJlc2VydmF0aW9uUmVxdWVzdBoqLmFwaS5yZXNlcnZhdGlvbi5VcGRhdGVSZXNlcnZhdGlvblJlc3BvbnNlEnYKF1VwZGF0ZVJlc2VydmF0aW9uU3RhdHVzEi8uYXBpLnJlc2VydmF0aW9uLlVwZGF0ZVJlc2VydmF0aW9uU3RhdHVzUmVxdWVzdBoqLmFwaS5yZXNlcnZhdGlvbi5VcGRhdGVSZXNlcnZhdGlvblJlc3BvbnNlEmoKEURlbGV0ZVJlc2VydmF0aW9uEikuYXBpLnJlc2VydmF0aW9uLkRlbGV0ZVJlc2VydmF0aW9uUmVxdWVzdBoqLmFwaS5yZXNlcnZhdGlvbi5EZWxldGVSZXNlcnZhdGlvblJlc3BvbnNlEmwKEFVzZXJSZXNlcnZhdGlvbnMSKC5hcGkucmVzZXJ2YXRpb24uVXNlclJlc2VydmF0aW9uc1JlcXVlc3QaKS5hcGkucmVzZXJ2YXRpb24uVXNlclJlc2VydmF0aW9uc1Jlc3BvbnNlIgOQAgESeQoWQ3JlYXRlUmVzZXJ2YXRpb25EYXRlcxIuLmFwaS5yZXNlcnZhdGlvbi5DcmVhdGVSZXNlcnZhdGlvbkRhdGVzUmVxdWVzdBovLmFwaS5yZXNlcnZhdGlvbi5DcmVhdGVSZXNlcnZhdGlvbkRhdGVzUmVzcG9uc2USeQoWVXBkYXRlUmVzZXJ2YXRpb25EYXRlcxIuLmFwaS5yZXNlcnZhdGlvbi5VcGRhdGVSZXNlcnZhdGlvbkRhdGVzUmVxdWVzdBovLmFwaS5yZXNlcnZhdGlvbi5VcGRhdGVSZXNlcnZhdGlvbkRhdGVzUmVzcG9uc2USiwEKHFVwZGF0ZVJlc2VydmF0aW9uRGF0ZXNTdGF0dXMSNC5hcGkucmVzZXJ2YXRpb24uVXBkYXRlUmVzZXJ2YXRpb25EYXRlc1N0YXR1c1JlcXVlc3QaNS5hcGkucmVzZXJ2YXRpb24uVXBkYXRlUmVzZXJ2YXRpb25EYXRlc1N0YXR1c1Jlc3BvbnNlEnkKFkRlbGV0ZVJlc2VydmF0aW9uRGF0ZXMSLi5hcGkucmVzZXJ2YXRpb24uRGVsZXRlUmVzZXJ2YXRpb25EYXRlc1JlcXVlc3QaLy5hcGkucmVzZXJ2YXRpb24uRGVsZXRlUmVzZXJ2YXRpb25EYXRlc1Jlc3BvbnNlEnMKFENyZWF0ZVJlc2VydmF0aW9uRmVlEiwuYXBpLnJlc2VydmF0aW9uLkNyZWF0ZVJlc2VydmF0aW9uRmVlUmVxdWVzdBotLmFwaS5yZXNlcnZhdGlvbi5DcmVhdGVSZXNlcnZhdGlvbkZlZVJlc3BvbnNlEnMKFFVwZGF0ZVJlc2VydmF0aW9uRmVlEiwuYXBpLnJlc2VydmF0aW9uLlVwZGF0ZVJlc2VydmF0aW9uRmVlUmVxdWVzdBotLmFwaS5yZXNlcnZhdGlvbi5VcGRhdGVSZXNlcnZhdGlvbkZlZVJlc3BvbnNlEnMKFERlbGV0ZVJlc2VydmF0aW9uRmVlEiwuYXBpLnJlc2VydmF0aW9uLkRlbGV0ZVJlc2VydmF0aW9uRmVlUmVxdWVzdBotLmFwaS5yZXNlcnZhdGlvbi5EZWxldGVSZXNlcnZhdGlvbkZlZVJlc3BvbnNlElgKC0Nvc3RSZWR1Y2VyEiMuYXBpLnJlc2VydmF0aW9uLkNvc3RSZWR1Y2VyUmVxdWVzdBokLmFwaS5yZXNlcnZhdGlvbi5Db3N0UmVkdWNlclJlc3BvbnNlEmUKDUdldEFsbFBlbmRpbmcSKi5hcGkucmVzZXJ2YXRpb24uR2V0QWxsUmVzZXJ2YXRpb25zUmVxdWVzdBojLmFwaS5yZXNlcnZhdGlvbi5BbGxQZW5kaW5nUmVzcG9uc2UiA5ACARJsChVBbGxTb3J0ZWRSZXNlcnZhdGlvbnMSKi5hcGkucmVzZXJ2YXRpb24uR2V0QWxsUmVzZXJ2YXRpb25zUmVxdWVzdBoiLmFwaS5yZXNlcnZhdGlvbi5BbGxTb3J0ZWRSZXNwb25zZSIDkAIBQrcBChNjb20uYXBpLnJlc2VydmF0aW9uQhBSZXNlcnZhdGlvblByb3RvUAFaMWFwaS9pbnRlcm5hbC9wcm90by9yZXNlcnZhdGlvbjtyZXNlcnZhdGlvbnNlcnZpY2WiAgNBUliqAg9BcGkuUmVzZXJ2YXRpb27KAg9BcGlcUmVzZXJ2YXRpb27iAhtBcGlcUmVzZXJ2YXRpb25cR1BCTWV0YWRhdGHqAhBBcGk6OlJlc2VydmF0aW9uYgZwcm90bzM',
   );
 
 /**
@@ -63,9 +63,9 @@ export type Reservation = Message<'api.reservation.Reservation'> & {
   updatedAt: string;
 
   /**
-   * @generated from field: optional string details = 8;
+   * @generated from field: string details = 8;
    */
-  details?: string;
+  details: string;
 
   /**
    * pgtype.Numeric as string
@@ -80,14 +80,14 @@ export type Reservation = Message<'api.reservation.Reservation'> & {
   insurance: boolean;
 
   /**
-   * @generated from field: optional bool door_access = 11;
+   * @generated from field: bool door_access = 11;
    */
-  doorAccess?: boolean;
+  doorAccess: boolean;
 
   /**
-   * @generated from field: optional string doors_details = 12;
+   * @generated from field: string doors_details = 12;
    */
-  doorsDetails?: string;
+  doorsDetails: string;
 
   /**
    * @generated from field: string name = 13;
@@ -95,19 +95,19 @@ export type Reservation = Message<'api.reservation.Reservation'> & {
   name: string;
 
   /**
-   * @generated from field: optional string tech_details = 14;
+   * @generated from field: string tech_details = 14;
    */
-  techDetails?: string;
+  techDetails: string;
 
   /**
-   * @generated from field: optional bool tech_support = 15;
+   * @generated from field: bool tech_support = 15;
    */
-  techSupport?: boolean;
+  techSupport: boolean;
 
   /**
-   * @generated from field: optional string phone = 16;
+   * @generated from field: string phone = 16;
    */
-  phone?: string;
+  phone: string;
 
   /**
    * @generated from field: int64 category_id = 17 [jstype = JS_STRING];
@@ -115,9 +115,9 @@ export type Reservation = Message<'api.reservation.Reservation'> & {
   categoryId: string;
 
   /**
-   * @generated from field: optional double total_hours = 18;
+   * @generated from field: double total_hours = 18;
    */
-  totalHours?: number;
+  totalHours: number;
 
   /**
    * @generated from field: bool in_person = 19;
@@ -130,19 +130,19 @@ export type Reservation = Message<'api.reservation.Reservation'> & {
   paid: boolean;
 
   /**
-   * @generated from field: optional string payment_url = 21;
+   * @generated from field: string payment_url = 21;
    */
-  paymentUrl?: string;
+  paymentUrl: string;
 
   /**
-   * @generated from field: optional string payment_link_id = 22;
+   * @generated from field: string payment_link_id = 22;
    */
-  paymentLinkId?: string;
+  paymentLinkId: string;
 
   /**
-   * @generated from field: optional string insurance_link = 23;
+   * @generated from field: string insurance_link = 23;
    */
-  insuranceLink?: string;
+  insuranceLink: string;
 
   /**
    * pgtype.Numeric as string
@@ -152,9 +152,9 @@ export type Reservation = Message<'api.reservation.Reservation'> & {
   costOverride: string;
 
   /**
-   * @generated from field: optional string rrule = 25;
+   * @generated from field: string rrule = 25;
    */
-  rrule?: string;
+  rrule: string;
 
   /**
    * @generated from field: repeated string rdates = 26;
@@ -167,9 +167,14 @@ export type Reservation = Message<'api.reservation.Reservation'> & {
   exdates: string[];
 
   /**
-   * @generated from field: optional string gcal_eventid = 28;
+   * @generated from field: string gcal_eventid = 28;
    */
-  gcalEventid?: string;
+  gcalEventid: string;
+
+  /**
+   * @generated from field: string price_id = 29;
+   */
+  priceId: string;
 };
 
 /**
@@ -200,9 +205,9 @@ export type ReservationDate = Message<'api.reservation.ReservationDate'> & {
   approved: string;
 
   /**
-   * @generated from field: optional string gcal_eventid = 4;
+   * @generated from field: string gcal_eventid = 4;
    */
-  gcalEventid?: string;
+  gcalEventid: string;
 
   /**
    * @generated from field: string local_start = 5;
@@ -300,9 +305,9 @@ export type ReservationFee = Message<'api.reservation.ReservationFee'> & {
   additionalFees: string;
 
   /**
-   * @generated from field: optional string fees_type = 3;
+   * @generated from field: string fees_type = 3;
    */
-  feesType?: string;
+  feesType: string;
 
   /**
    * @generated from field: int64 reservation_id = 4 [jstype = JS_STRING];
@@ -695,9 +700,9 @@ export type CreateReservationRequest =
     details: string;
 
     /**
-     * @generated from field: int64 category_id = 5 [jstype = JS_STRING];
+     * @generated from field: string pricing_id = 5;
      */
-    categoryId: string;
+    pricingId: string;
 
     /**
      * @generated from field: string name = 6;
@@ -715,9 +720,9 @@ export type CreateReservationRequest =
     techSupport: boolean;
 
     /**
-     * @generated from field: optional string tech_details = 9;
+     * @generated from field: string tech_details = 9;
      */
-    techDetails?: string;
+    techDetails: string;
 
     /**
      * @generated from field: bool door_access = 10;
@@ -725,9 +730,9 @@ export type CreateReservationRequest =
     doorAccess: boolean;
 
     /**
-     * @generated from field: optional string doors_details = 11;
+     * @generated from field: string doors_details = 11;
      */
-    doorsDetails?: string;
+    doorsDetails: string;
 
     /**
      * @generated from field: repeated api.reservation.Occurrence occurrences = 12;
@@ -735,27 +740,27 @@ export type CreateReservationRequest =
     occurrences: Occurrence[];
 
     /**
-     * @generated from field: optional string start_date = 13;
+     * @generated from field: string start_date = 13;
      */
-    startDate?: string;
+    startDate: string;
 
     /**
-     * @generated from field: optional string start_time = 14;
+     * @generated from field: string start_time = 14;
      */
-    startTime?: string;
+    startTime: string;
 
     /**
-     * @generated from field: optional string end_date = 15;
+     * @generated from field: string end_date = 15;
      */
-    endDate?: string;
+    endDate: string;
 
     /**
-     * @generated from field: optional string end_time = 16;
+     * @generated from field: string end_time = 16;
      */
-    endTime?: string;
+    endTime: string;
 
     /**
-     * @generated from field: optional api.reservation.RecurrencePattern pattern = 17;
+     * @generated from field: api.reservation.RecurrencePattern pattern = 17;
      */
     pattern?: RecurrencePattern;
 

@@ -5,6 +5,7 @@ import (
 	"api/internal/lib/utils"
 	authMux "api/internal/proto/auth/authserviceconnect"
 	facilityMux "api/internal/proto/facilities/facilitiesserviceconnect"
+	paymentMux "api/internal/proto/payments/paymentsserviceconnect"
 	reservationMux "api/internal/proto/reservation/reservationserviceconnect"
 	userMux "api/internal/proto/users/usersserviceconnect"
 	utilityMux "api/internal/proto/utility/utilityserviceconnect"
@@ -33,6 +34,9 @@ func NewServer(handlers *handlers.Handlers, log *slog.Logger) *http.ServeMux {
 
 	authPath, authHandler := authMux.NewAuthHandler(handlers.Auth, panicInterceptor)
 	api.Handle(authPath, handlers.Auth.AuthMiddleware(authHandler))
+
+	paymentPath, paymentHandler := paymentMux.NewPaymentsServiceHandler(handlers.PaymentHandler, panicInterceptor)
+	api.Handle(paymentPath, handlers.Auth.AuthMiddleware(paymentHandler))
 
 	api.Handle(utilityMux.NewUtilityServiceHandler(handlers.UtilityHandler, panicInterceptor))
 

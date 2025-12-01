@@ -6,8 +6,6 @@ import (
 	"database/sql"
 	"errors"
 	"log/slog"
-
-	"github.com/jmoiron/sqlx"
 )
 
 type FacilityStore struct {
@@ -33,11 +31,16 @@ func (f *FacilityStore) Get(ctx context.Context, id int64) (*models.FullFacility
 		return nil, err
 	}
 
-	if err := f.db.SelectContext(ctx, &categories, "SELECT * FROM category WHERE facility_id = $1", id); err != nil {
+	if err := f.db.SelectContext(ctx, &categories, "SELECT * FROM category"); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			categories = []models.Category{}
 		}
 		return nil, err
+	}
+	catMap := make(map[int64]models.Category)
+
+	for _, category := range categories {
+		catMap[category.ID] = category
 	}
 	var reservationIds []int64
 	if err := f.db.SelectContext(ctx, &reservationIds, "SELECT id FROM reservation WHERE facility_id = $1", id); err != nil {
@@ -56,10 +59,26 @@ func (f *FacilityStore) Get(ctx context.Context, id int64) (*models.FullFacility
 		return nil, err
 
 	}
+	var pricing []models.Pricing
+	if err := f.db.SelectContext(ctx, &pricing, "SELECT * FROM pricing WHERE product_id = $1", facility.ProductID); err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			pricing = []models.Pricing{}
+		}
+		return nil, err
+	}
+	var finalPricing []models.PricingWithCategory
+	for _, pricing := range pricing {
+		finalPricing = append(finalPricing, models.PricingWithCategory{
+			Pricing:             pricing,
+			CategoryName:        catMap[pricing.CategoryID].Name,
+			CategoryDescription: catMap[pricing.CategoryID].Description,
+		})
+	}
+
 	facilityWithCategories := &models.FullFacility{
 		Facility:       &facility,
 		Building:       &building,
-		Categories:     categories,
+		Pricing:        finalPricing,
 		ReservationIDs: reservationIds,
 	}
 	return facilityWithCategories, nil
@@ -91,23 +110,25 @@ func (f *FacilityStore) GetBuilding(ctx context.Context, id int64) (*models.Buil
 	return &building, nil
 }
 
-const allCategoriesInQuery = `SELECT * FROM category WHERE facility_id IN (?)`
+const getAllCategoriesQuery = `SELECT * FROM category`
 const getAllFacilitiesForBuildingQuery = `SELECT * FROM facility WHERE building_id = $1`
 const getAllFacilitiesQuery = `SELECT * FROM facility`
 
-func (f *FacilityStore) GetAll(ctx context.Context) ([]*models.BuildingWithFacilities, error) {
-
+func (f *FacilityStore) GetAll(ctx context.Context) ([]models.BuildingWithFacilities, error) {
 	var buildings []models.Building
 	if err := f.db.SelectContext(ctx, &buildings, getAllBuildingsQuery); err != nil {
 		f.log.ErrorContext(ctx, "error getting buildings", "err", err)
 		return nil, err
 	}
-	result := make([]*models.BuildingWithFacilities, len(buildings))
+	if len(buildings) == 0 {
+		return nil, errors.New("no buildings found")
+	}
+	result := make([]models.BuildingWithFacilities, len(buildings))
 	for i, building := range buildings {
-		var facilities []*models.Facility
+		var facilities []models.Facility
 		if err := f.db.SelectContext(ctx, &facilities, getAllFacilitiesForBuildingQuery, building.ID); err != nil {
 			if errors.Is(err, sql.ErrNoRows) {
-				facilities = []*models.Facility{}
+				facilities = []models.Facility{}
 			}
 			f.log.ErrorContext(ctx, "error getting facilities, db", "err", err)
 
@@ -117,33 +138,10 @@ func (f *FacilityStore) GetAll(ctx context.Context) ([]*models.BuildingWithFacil
 		if len(facilities) == 0 {
 			return result, nil
 		}
-		facilityIds := make([]int64, len(facilities))
-		for i, facility := range facilities {
-			facilityIds[i] = facility.ID
-		}
 
-		categories, err := f.GetCategories(ctx, facilityIds)
-		if err != nil {
-			f.log.ErrorContext(ctx, "error getting categories", "err", err)
-			return nil, err
-		}
-
-		categoriesByFacility := make(map[int64][]models.Category)
-
-		for _, category := range categories {
-			categoriesByFacility[category.FacilityID] = append(categoriesByFacility[category.FacilityID], category)
-		}
-		facilityWithCategories := make([]*models.FacilityWithCategories, len(facilities))
-		for i, facility := range facilities {
-			facilityWithCategories[i] = &models.FacilityWithCategories{
-				Facility:   *facility,
-				Categories: categoriesByFacility[facility.ID],
-			}
-		}
-
-		result[i] = &models.BuildingWithFacilities{
+		result[i] = models.BuildingWithFacilities{
 			Building:   building,
-			Facilities: facilityWithCategories,
+			Facilities: facilities,
 		}
 	}
 	return result, nil
@@ -160,14 +158,9 @@ func (f *FacilityStore) GetAllFacilities(ctx context.Context) ([]*models.Facilit
 	}
 	return facilities, nil
 }
-func (f *FacilityStore) GetCategories(ctx context.Context, ids []int64) ([]models.Category, error) {
+func (f *FacilityStore) GetCategories(ctx context.Context) ([]models.Category, error) {
 	var categories []models.Category
-	query, args, err := sqlx.In(allCategoriesInQuery, ids)
-	if err != nil {
-		return nil, err
-	}
-	query = f.db.Rebind(query)
-	err = f.db.SelectContext(ctx, &categories, query, args...)
+	err := f.db.SelectContext(ctx, &categories, getAllCategoriesQuery)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			categories = []models.Category{}
@@ -188,37 +181,22 @@ func (f *FacilityStore) GetByBuilding(ctx context.Context, buildingID int64) (*m
 		return nil, err
 	}
 
-	var facilities []*models.Facility
+	var facilities []models.Facility
 	if err := f.db.SelectContext(ctx, &facilities, "SELECT * FROM facility WHERE building_id = $1", building.ID); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			facilities = []*models.Facility{}
+			facilities = []models.Facility{}
 		}
 		return nil, err
 	}
-	facilityIds := make([]int64, len(facilities))
-	for i, facility := range facilities {
-		facilityIds[i] = facility.ID
-	}
-	categories, err := f.GetCategories(ctx, facilityIds)
+	categories, err := f.GetCategories(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	categoriesByFacility := make(map[int64][]models.Category)
-
-	for _, category := range categories {
-		categoriesByFacility[category.FacilityID] = append(categoriesByFacility[category.FacilityID], category)
-	}
-	facilityWithCategories := make([]*models.FacilityWithCategories, len(facilities))
-	for i, facility := range facilities {
-		facilityWithCategories[i] = &models.FacilityWithCategories{
-			Facility:   *facility,
-			Categories: categoriesByFacility[facility.ID],
-		}
-	}
 	return &models.BuildingWithFacilities{
 		Building:   building,
-		Facilities: facilityWithCategories,
+		Facilities: facilities,
+		Categories: categories,
 	}, nil
 
 }
@@ -227,59 +205,25 @@ const createFacilityQuery = `INSERT INTO facility (
 	name,
 	image_path,
 	capacity,
-	google_calendar_id
-	building_id
-) VALUES (:name, :image_path, :capacity, :google_calendar_id, :building_id) RETURNING *`
-const createCategoryQuery = `INSERT INTO category (
-	name,
-	description,
-	price,
-	facility_id
-) VALUES (:name, :description, :price, :facility_id)
-`
+	google_calendar_id,
+	building_id,
+	product_id
+) VALUES (:name, :image_path, :capacity, :google_calendar_id, :building_id, :product_id) RETURNING *`
 
-func (f *FacilityStore) Create(ctx context.Context, input *models.FacilityWithCategories) error {
-	categories := input.Categories
-	var facility models.Facility
+func (f *FacilityStore) Create(ctx context.Context, input *models.Facility) error {
 	params := map[string]any{
-		"name":               input.Facility.Name,
-		"image_path":         input.Facility.ImagePath,
-		"capacity":           input.Facility.Capacity,
-		"google_calendar_id": input.Facility.GoogleCalendarID,
-		"building_id":        input.Facility.BuildingID,
+		"name":               input.Name,
+		"image_path":         input.ImagePath,
+		"capacity":           input.Capacity,
+		"google_calendar_id": input.GoogleCalendarID,
+		"building_id":        input.BuildingID,
+		"product_id":         input.ProductID,
 	}
-	tx, err := f.db.Beginx()
+	_, err := f.db.NamedExecContext(ctx, createFacilityQuery, params)
 	if err != nil {
 		return err
 	}
-	defer func() { _ = tx.Rollback() }()
-	txStmt, err := tx.PrepareNamedContext(ctx, createFacilityQuery)
-	if err != nil {
-		return err
-	}
-	defer func() { _ = txStmt.Close() }() //nolint:errcheck // ctxStmt.Close()
-	err = txStmt.QueryRowxContext(ctx, params).StructScan(&facility)
-	if err != nil {
-		return err
-	}
-	txCatStmt, err := tx.PrepareNamedContext(ctx, createCategoryQuery)
-	if err != nil {
-		return err
-	}
-	defer func() { _ = txCatStmt.Close() }() //nolint:errcheck // txCatStmt.Close()
-	facilityID := facility.ID
-	for _, category := range categories {
-		catParams := map[string]any{
-			"name":        category.Name,
-			"description": category.Description,
-			"price":       category.Price,
-			"facility_id": facilityID,
-		}
-		if _, err := txCatStmt.ExecContext(ctx, catParams); err != nil {
-			return err
-		}
-	}
-	return tx.Commit()
+	return nil
 }
 
 const updateFacilityQuery = `UPDATE facility SET
@@ -315,45 +259,6 @@ func (f *FacilityStore) Delete(ctx context.Context, id int64) error {
 	return err
 }
 
-const allFacilitiesInQuery = `SELECT * FROM facility WHERE id IN (?)`
-
-func (f *FacilityStore) GetAllIn(ctx context.Context, ids []int64) ([]*models.FacilityWithCategories, error) {
-	var facilities []*models.Facility
-	query, args, err := sqlx.In(allFacilitiesInQuery, ids)
-	if err != nil {
-		return nil, err
-	}
-	query = f.db.Rebind(query)
-	err = f.db.SelectContext(ctx, &facilities, query, args...)
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return nil, nil
-		}
-		return nil, err
-	}
-	if len(facilities) == 0 {
-		return []*models.FacilityWithCategories{}, nil
-	}
-
-	categories, err := f.GetCategories(ctx, ids)
-	if err != nil {
-		return nil, err
-	}
-	facilityWithCategories := make([]*models.FacilityWithCategories, len(facilities))
-	categoriesByFacility := make(map[int64][]models.Category)
-	for _, category := range categories {
-		categoriesByFacility[category.FacilityID] = append(categoriesByFacility[category.FacilityID], category)
-	}
-	for i, facility := range facilities {
-		facilityWithCategories[i] = &models.FacilityWithCategories{
-			Facility:   *facility,
-			Categories: categoriesByFacility[facility.ID],
-		}
-	}
-	return facilityWithCategories, nil
-
-}
-
 const editCategoryQuery = ` UPDATE category SET
 	name = :name,
 	description = :description,
@@ -365,7 +270,6 @@ func (f *FacilityStore) EditCategory(ctx context.Context, category *models.Categ
 	params := map[string]any{
 		"name":        category.Name,
 		"description": category.Description,
-		"price":       category.Price,
 		"id":          category.ID,
 	}
 	stmt, err := f.db.PrepareNamedContext(ctx, editCategoryQuery)
@@ -396,4 +300,58 @@ func (f *FacilityStore) GetBuildingCoordinates(ctx context.Context) ([]models.Bu
 		return nil, err
 	}
 	return coords, nil
+}
+
+const getPricingFromFacilityAndCategoryQuery = `SELECT p.*
+	FROM pricing AS p
+	JOIN facility AS f
+		ON f.product_id = p.product_id
+	WHERE f.facility_id = :facility_id
+		AND p.category_id = :category_id;
+`
+
+func (f *FacilityStore) GetPricingByFacilityAndCategory(ctx context.Context, facilityID, categoryID int64) (models.Pricing, error) {
+	var pricing models.Pricing
+	args := map[string]any{
+		"facility_id": facilityID,
+		"category_id": categoryID,
+	}
+	err := f.db.GetContext(ctx, &pricing, getPricingFromFacilityAndCategoryQuery, args)
+	return pricing, err
+}
+
+func (f *FacilityStore) GetProductPricingWithCategories(ctx context.Context, productID string) ([]models.PricingWithCategory, error) {
+	var pricing []models.Pricing
+	if err := f.db.SelectContext(ctx, &pricing, "SELECT * FROM pricing WHERE product_id = $1", productID); err != nil {
+		return nil, err
+	}
+	if len(pricing) == 0 {
+		return nil, errors.New("no pricing found")
+	}
+
+	var categories []models.Category
+	if err := f.db.SelectContext(ctx, &categories, "SELECT * FROM category"); err != nil {
+		return nil, err
+	}
+	catMap := make(map[int64]models.Category, len(categories))
+	for _, cat := range categories {
+		catMap[cat.ID] = cat
+	}
+	var finalPricing []models.PricingWithCategory
+	for _, pricing := range pricing {
+		finalPricing = append(finalPricing, models.PricingWithCategory{
+			Pricing:             pricing,
+			CategoryName:        catMap[pricing.CategoryID].Name,
+			CategoryDescription: catMap[pricing.CategoryID].Description,
+		})
+	}
+	return finalPricing, nil
+}
+func (f *FacilityStore) GetPricing(ctx context.Context, pricingID string) (models.Pricing, error) {
+	f.log.Debug("getting pricing", "pricing_id", pricingID)
+	var pricing models.Pricing
+	if err := f.db.GetContext(ctx, &pricing, "SELECT * FROM pricing WHERE id = $1", pricingID); err != nil {
+		return models.Pricing{}, err
+	}
+	return pricing, nil
 }

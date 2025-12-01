@@ -30,17 +30,20 @@ type UserStore interface {
 type FacilityStore interface {
 	Get(ctx context.Context, id int64) (*models.FullFacility, error)
 	GetAllBuildings(ctx context.Context) ([]*models.Building, error)
-	GetAll(ctx context.Context) ([]*models.BuildingWithFacilities, error)
+	GetAll(ctx context.Context) ([]models.BuildingWithFacilities, error)
 	GetAllFacilities(ctx context.Context) ([]*models.Facility, error)
 	GetByBuilding(ctx context.Context, buildingID int64) (*models.BuildingWithFacilities, error)
 	GetBuilding(ctx context.Context, id int64) (*models.Building, error)
-	GetCategories(ctx context.Context, ids []int64) ([]models.Category, error)
-	Create(ctx context.Context, input *models.FacilityWithCategories) error
+	GetCategories(ctx context.Context) ([]models.Category, error)
+	Create(ctx context.Context, input *models.Facility) error
 	Update(ctx context.Context, input *models.Facility) error
 	Delete(ctx context.Context, id int64) error
 	EditCategory(ctx context.Context, category *models.Category) error
 	GetCategory(ctx context.Context, id int64) (*models.Category, error)
 	GetBuildingCoordinates(ctx context.Context) ([]models.BuildingCoords, error)
+	GetPricingByFacilityAndCategory(ctx context.Context, faciltyID, categoryID int64) (models.Pricing, error)
+	GetProductPricingWithCategories(ctx context.Context, productID string) ([]models.PricingWithCategory, error)
+	GetPricing(ctx context.Context, pricingID string) (models.Pricing, error)
 }
 
 type ReservationStore interface {
@@ -61,6 +64,7 @@ type ReservationStore interface {
 	GetFees(ctx context.Context, ids []int64) ([]models.ReservationFee, error)
 	GetFutureDates(ctx context.Context) ([]models.ReservationDate, error)
 	Aggregate(ctx context.Context) ([]models.Aggregate, error)
+	UpdatePaymentIntent(ctx context.Context, id int64, paymentID string) error
 }
 
 type BrandingStore interface {

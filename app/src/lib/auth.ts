@@ -1,4 +1,5 @@
 import { cookies } from 'next/headers';
+import { cache } from 'react';
 import { client } from './rpc';
 import type { Session, UserRole } from './types';
 
@@ -22,9 +23,7 @@ async function fetchSession(session: string, token: string) {
   return data;
 }
 
-export const auth = async (): Promise<Session | null> => {
-  // DO NOT CACHE: Auth state depends on request-specific cookies
-  // Caching causes users to get stale auth results in production
+export const auth = cache(async (): Promise<Session | null> => {
   const cookieStore = await cookies();
   let session = '';
   let token = '';
@@ -46,4 +45,4 @@ export const auth = async (): Promise<Session | null> => {
     ...data,
     userRole: parseRole(data?.userRole),
   } as Session;
-};
+});

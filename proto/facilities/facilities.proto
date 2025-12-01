@@ -7,27 +7,28 @@ option go_package = "api/internal/proto/facilities;facilitiesservice";
 message Facility {
   int64 id = 1;
   string name = 2;
-  optional string image_path = 3;
-  optional int64 capacity = 4;
+  string image_path = 3;
+  int64 capacity = 4;
   string created_at = 5;  // RFC3339 string
   string updated_at = 6;  // RFC3339 string
   string google_calendar_id = 7;
-  optional int64 building_id = 8;
+  int64 building_id = 8;
+  string product_id = 9;
 }
 
 message Building {
   int64 id = 1;
   string name = 2;
   string address = 3;
-  optional string image_path = 4;
-  optional string google_calendar_id = 5;
-  optional double latitude = 6;
-  optional double longitude = 7;
+  string image_path = 4;
+  string google_calendar_id = 5;
+  double latitude = 6;
+  double longitude = 7;
 }
 
 message BuildingWithFacilities {
   Building building = 1;
-  repeated FacilityWithCategories facilities = 2;
+  repeated Facility facilities = 2;
 }
 
 message BuildingWithEvents {
@@ -39,13 +40,14 @@ message Category {
   int64 id = 1;
   string name = 2;
   string description = 3;
-  double price = 4;
-  int64 facility_id = 5;
 }
 
-message FacilityWithCategories {
-  Facility facility = 1;
-  repeated Category categories = 2;
+message Pricing {
+  string id = 1;
+  string product_id = 2;
+  double price = 3;
+  int64 category_id = 4;
+  string unit_label = 5;
 }
 
 message Event {
@@ -88,6 +90,10 @@ service FacilitiesService {
   rpc UpdateFacility (UpdateFacilityRequest) returns (UpdateFacilityResponse);
   rpc DeleteFacility (DeleteFacilityRequest) returns (DeleteFacilityResponse);
   rpc UpdateFacilityCategory (UpdateFacilityCategoryRequest) returns (Category);
+  rpc GetCategories (GetCategoriesRequest) returns (GetCategoriesResponse){
+    option idempotency_level = NO_SIDE_EFFECTS;
+  };
+    
   rpc GetCategory (GetCategoryRequest) returns (Category){
     option idempotency_level = NO_SIDE_EFFECTS;
   };
@@ -95,10 +101,24 @@ service FacilitiesService {
   rpc GetAllCoords (GetAllCoordsRequest) returns (GetAllCoordsResponse){
     option idempotency_level = NO_SIDE_EFFECTS;
   };
-  
+
+  rpc GetProducts (GetProductsRequest) returns (GetProductsResponse){
+    option idempotency_level = NO_SIDE_EFFECTS;
+  };
+  rpc GetPricing (GetPricingRequest) returns (PricingWithCategory){
+    option idempotency_level = NO_SIDE_EFFECTS;
+  };
+}
+
+message GetPricingRequest {
+  string pricing_id = 1;
 }
 
 
+message GetCategoriesRequest {}
+message GetCategoriesResponse {
+  repeated Category categories = 1;
+}
 message coords {
   int64 id = 1;
   string building = 2;
@@ -170,12 +190,10 @@ message GetBuildingFacilitiesResponse {
 
 message CreateFacilityRequest {
   Facility facility = 1;
-  repeated Category categories = 2;
 }
 
 message UpdateFacilityRequest {
   Facility facility = 1;
-  repeated Category categories = 2;
 }
 
 message DeleteFacilityRequest {
@@ -188,11 +206,32 @@ message UpdateFacilityCategoryRequest {
 }
 message CreateFacilityResponse {}
 message UpdateFacilityResponse {}
+message PricingWithCategory {
+  string id = 1;
+  string product_id = 2;
+  double price = 3;
+  int64  category_id = 4;
+  string unit_label = 5;
+  string category_name = 6;
+  string category_description = 7;
+}
 
 
 message FullFacility {
   Facility facility = 1;
-  repeated Category categories = 2;
+  repeated PricingWithCategory pricing = 2;
   repeated int64 reservation_id = 3;
   Building building = 4;
+}
+
+
+message GetProductsRequest {}
+
+message ProductWithPricing {
+  string product_id = 1;
+  string product_name = 2;
+  repeated PricingWithCategory pricing = 3;
+}
+message GetProductsResponse {
+  repeated ProductWithPricing data = 1;
 }

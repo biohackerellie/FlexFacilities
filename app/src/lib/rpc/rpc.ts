@@ -11,6 +11,7 @@ import {
   ReservationService,
   UsersService,
 } from './proto';
+import { PaymentsService } from './proto/payments/payments_pb';
 import { UtilityService } from './proto/utility/utility_pb';
 
 export class RPC {
@@ -47,6 +48,9 @@ export class RPC {
   }
   utility() {
     return this.getWrapped(UtilityService);
+  }
+  payments() {
+    return this.getWrapped(PaymentsService);
   }
 
   withAuth(session: string, token: string) {

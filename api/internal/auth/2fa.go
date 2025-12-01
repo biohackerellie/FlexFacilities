@@ -56,6 +56,11 @@ func (s *Auth) ResetPassword(ctx context.Context, req *connect.Request[service.L
 	if err != nil {
 		return nil, err
 	}
+
+	refreshToken, err := createToken(user.ID, user.Name, user.Email, user.Provider, user.Role, s.key, absoluteExpiration.Abs())
+	if err != nil {
+		return nil, err
+	}
 	response := &service.LoginResponse{}
 	w := connect.NewResponse(response)
 	cookie := &http.Cookie{
@@ -73,7 +78,7 @@ func (s *Auth) ResetPassword(ctx context.Context, req *connect.Request[service.L
 	sessionID := utils.GenerateRandomID()
 
 	session := &models.Session{
-		RefreshToken: &accessToken,
+		RefreshToken: models.CheckNullString(refreshToken),
 		UserID:       user.ID,
 		Provider:     user.Provider,
 		CreatedAt:    utils.TimeToPgTimestamptz(time.Now()),
@@ -142,13 +147,19 @@ func (s *Auth) Verify(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
+
 	s.SetJWTCookie(w, accessToken)
 
+	refreshToken, err := createToken(user.ID, user.Name, user.Email, user.Provider, user.Role, s.key, absoluteExpiration.Abs())
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
 	sessionID := utils.GenerateRandomID()
 
 	session := &models.Session{
 		ID:           sessionID,
-		RefreshToken: &accessToken,
+		RefreshToken: models.CheckNullString(refreshToken),
 		UserID:       user.ID,
 		Provider:     user.Provider,
 		CreatedAt:    utils.TimeToPgTimestamptz(time.Now()),
@@ -206,7 +217,7 @@ func (s *Auth) Verify2FACode(ctx context.Context, req *connect.Request[service.V
 	sessionID := utils.GenerateRandomID()
 
 	session := &models.Session{
-		RefreshToken: &refreshToken,
+		RefreshToken: models.CheckNullString(refreshToken), //refreshToken,
 		UserID:       user.ID,
 		Provider:     user.Provider,
 		CreatedAt:    utils.TimeToPgTimestamptz(time.Now()),

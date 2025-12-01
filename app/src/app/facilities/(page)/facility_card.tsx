@@ -5,15 +5,12 @@ import shimmer from '@/components/shimmer';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import type { Building, FacilityWithCategories } from '@/lib/types';
+import type { Building, Facility } from '@/lib/types';
 import { toBase64 } from '@/lib/utils';
 
-export default function FacilityCard(
-  facility: FacilityWithCategories,
-  building?: Building,
-) {
-  const idString = facility.facility?.id?.toString() ?? '';
-  if (!facility.facility) return null;
+export default function FacilityCard(facility?: Facility, building?: Building) {
+  const idString = facility?.id?.toString() ?? '';
+  if (!facility) return null;
 
   return (
     <Card className='relative h-[280px] w-auto hover:cursor-pointer hover:border-blue-400  sm:h-auto sm:w-auto'>
@@ -25,10 +22,10 @@ export default function FacilityCard(
             }
           >
             <AspectRatio ratio={4 / 3}>
-              {facility.facility?.imagePath ? (
+              {facility?.imagePath ? (
                 <Image
-                  src={`/api/files${facility.facility?.imagePath}`}
-                  alt={`${facility.facility?.name}`}
+                  src={`/api/files${facility?.imagePath}`}
+                  alt={`${facility?.name}`}
                   fill
                   className='rounded-md object-cover h-full w-full'
                   placeholder={`data:image/svg+xml;base64,${toBase64(shimmer(700, 475))}`}
@@ -39,7 +36,7 @@ export default function FacilityCard(
               ) : (
                 <Image
                   src='/logo.png'
-                  alt={`${facility.facility?.name}`}
+                  alt={`${facility?.name}`}
                   sizes='(max-width: 480px) (max-height: 350px)'
                   fill
                   className='rounded-md object-cover grayscale opacity-20 dark:opacity-50  dark:brightness-[0.2] h-full w-full'
@@ -49,9 +46,7 @@ export default function FacilityCard(
           </Suspense>
         </CardHeader>
         <CardContent className='mt-2 space-y-1 text-center'>
-          <p className='text-lg font-bold leading-none'>
-            {facility.facility?.name}
-          </p>
+          <p className='text-lg font-bold leading-none'>{facility?.name}</p>
           <p className='text-lg font-medium leading-none'>
             {building?.address ?? ''}
           </p>

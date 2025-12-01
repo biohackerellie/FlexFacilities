@@ -114,9 +114,9 @@ export default async function reservationLayout({
 function range(reservationDates: ReservationDate[]): string {
   let dateRange = '';
   if (reservationDates.length > 1) {
-    dateRange = `${reservationDates[0]?.localStart} - ${reservationDates[reservationDates.length - 1]?.localEnd}`;
+    dateRange = `${new Date(reservationDates[0]?.localStart!).toDateString()} - ${new Date(reservationDates[reservationDates.length - 1]?.localEnd!).toDateString()}`;
   } else if (reservationDates.length === 1) {
-    dateRange = `${reservationDates[0]?.localStart}`;
+    dateRange = `${new Date(reservationDates[0]?.localStart!).toDateString()} `;
   } else {
     dateRange = 'no upcoming dates';
   }

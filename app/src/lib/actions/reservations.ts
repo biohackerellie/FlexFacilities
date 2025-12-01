@@ -17,7 +17,7 @@ export async function createReservation(formData: CreateReservationSchema) {
     eventName: formData.eventName,
     facilityId: formData.facilityID,
     details: formData.details,
-    categoryId: formData.categoryID,
+    pricingId: formData.pricingID,
     name: formData.name,
     phone: formData.phone,
     techSupport: formData.techSupport,
@@ -87,14 +87,16 @@ export async function getReservation(
   return data;
 }
 
-export async function getReservationCategory(
+export async function getReservationPricing(
   id: string,
   session: string,
   token: string,
 ) {
-  'use cache';
+  'use cache: private';
   const authed = client.withAuth(session, token);
-  const { data, error } = await authed.facilities().getCategory({ id: id });
+  const { data, error } = await authed
+    .facilities()
+    .getPricing({ pricingId: id });
   if (error) {
     logger.error('Error fetching reservation', { 'error ': error });
     return null;
@@ -103,7 +105,7 @@ export async function getReservationCategory(
 }
 
 export async function costReducer(id: string, session: string, token: string) {
-  'use cache';
+  'use cache: private';
   const authed = client.withAuth(session, token);
   const { data, error } = await authed.reservations().costReducer({ id: id });
 
@@ -130,6 +132,10 @@ export async function updateReservation(reservation: Reservation) {
     return { message: error.message };
   }
   revalidateTag('reservations', 'max');
+  revalidateTag(`reservation-${reservation.id}`, 'max');
+  revalidatePath(`/reservation/${reservation.id}`, 'layout');
+  revalidatePath(`/admin/reservations`, 'page');
+
   return { message: 'success' };
 }
 
@@ -215,6 +221,7 @@ export async function DeleteReservation(id: string) {
     throw error;
   }
   revalidateTag('reservations', 'max');
+  revalidatePath('/admin/reservations', 'page');
 }
 
 export async function DeleteDates(ids: string[]) {

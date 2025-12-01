@@ -65,7 +65,7 @@ export default function ReservationOptions() {
   return (
     <AlertDialog>
       <DropdownMenu>
-        <DropdownMenuTrigger>
+        <DropdownMenuTrigger asChild>
           <Button variant='ghost'>Options</Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align='end'>

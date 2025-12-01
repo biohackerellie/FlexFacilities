@@ -24,7 +24,7 @@ func (a *UserHandler) GetUserByEmail(ctx context.Context, req *connect.Request[s
 		return nil, err
 	}
 
-	return connect.NewResponse(user.ToProtoWithPassword()), nil
+	return connect.NewResponse(user.ToProto()), nil
 }
 func (a *UserHandler) GetUser(ctx context.Context, req *connect.Request[service.GetUserRequest]) (*connect.Response[service.Users], error) {
 	user, err := a.userStore.Get(ctx, req.Msg.GetId())
