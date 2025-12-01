@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"api/internal/models"
+	"sort"
 
 	"api/internal/ports"
 	service "api/internal/proto/facilities"
@@ -66,7 +67,24 @@ func (a *FacilityHandler) GetFacility(ctx context.Context, req *connect.Request[
 	if res == nil {
 		return connect.NewResponse(&service.FullFacility{}), nil
 	}
+
+	for i, p := range res.Pricing {
+		price, err := a.sc.V1Prices.Retrieve(ctx, p.ID, nil)
+		if err != nil {
+			a.log.Error("error getting price from stripe", "error", err)
+			p.Price = 0
+			continue
+		}
+		p.Price = float64(price.UnitAmount) / 100
+
+		res.Pricing[i] = p
+	}
+	sort.Slice(res.Pricing, func(i, j int) bool {
+		return res.Pricing[i].Price < res.Pricing[j].Price
+	})
+
 	facility := res.ToProto()
+	a.log.Debug("GetFacility", "facility", facility.Pricing)
 	return connect.NewResponse(&service.FullFacility{
 		Facility:      facility.Facility,
 		Pricing:       facility.Pricing,

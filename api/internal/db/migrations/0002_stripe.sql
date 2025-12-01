@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS pricing (
   id TEXT NOT NULL PRIMARY KEY, -- either price id from stripe or generated uuid. distinguishable by price_ prefix
   product_id TEXT NOT NULL, -- product id from stripe
   category_id BIGINT NOT NULL, -- pricing category
-  unit_label TEXT DEFAULT 'hour'::text NOT NULL
+  unit_label TEXT DEFAULT 'hour'::text NOT NULL,
   CONSTRAINT unique_product_category UNIQUE (product_id, category_id)
 );
 

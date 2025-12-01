@@ -40,7 +40,7 @@ type Facility struct {
 	UpdatedAt        pgtype.Timestamptz `db:"updated_at" json:"updated_at"`
 	GoogleCalendarID string             `db:"google_calendar_id" json:"google_calendar_id"`
 	BuildingID       int64              `db:"building_id" json:"building_id"`
-	// ProductID        *string            `db:"product_id" json:"product_id"`
+	ProductID        *string            `db:"product_id" json:"product_id"`
 }
 
 type Category struct {

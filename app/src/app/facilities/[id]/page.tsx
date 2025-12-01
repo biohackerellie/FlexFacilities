@@ -175,7 +175,7 @@ export default async function FacilityPage({
                           </TooltipContent>
                         </Tooltip>
                         <p className='col-span-1 col-start-3 text-right text-lg font-semibold'>
-                          ${category.price}/${category.unitLabel}
+                          ${category.price}/{category.unitLabel}
                         </p>
                       </div>
                     ))}
