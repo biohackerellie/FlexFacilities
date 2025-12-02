@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"api/internal/models"
+	"fmt"
 	"sort"
 
 	"api/internal/ports"
@@ -11,6 +12,7 @@ import (
 	"log/slog"
 
 	"connectrpc.com/connect"
+	"github.com/patrickmn/go-cache"
 	"github.com/stripe/stripe-go/v83"
 )
 
@@ -18,16 +20,22 @@ type FacilityHandler struct {
 	log           *slog.Logger
 	calendar      *calendar.Calendar
 	facilityStore ports.FacilityStore
-
-	sc *stripe.Client
+	cache         *cache.Cache
+	sc            *stripe.Client
 }
 
-func NewFacilityHandler(facilityStore ports.FacilityStore, log *slog.Logger, calendar *calendar.Calendar, sc *stripe.Client) *FacilityHandler {
+func NewFacilityHandler(facilityStore ports.FacilityStore, log *slog.Logger, calendar *calendar.Calendar, cache *cache.Cache, sc *stripe.Client) *FacilityHandler {
 	log.With(slog.Group("Core_Handler", slog.String("name", "facility")))
-	return &FacilityHandler{facilityStore: facilityStore, log: log, calendar: calendar, sc: sc}
+	return &FacilityHandler{facilityStore: facilityStore, log: log, calendar: calendar, cache: cache, sc: sc}
 }
 
 func (a *FacilityHandler) GetAllFacilities(ctx context.Context, req *connect.Request[service.GetAllFacilitiesRequest]) (*connect.Response[service.GetAllFacilitiesResponse], error) {
+	cached, ok := a.cache.Get("facilities")
+	if ok {
+		return connect.NewResponse(&service.GetAllFacilitiesResponse{
+			Buildings: cached.([]*service.BuildingWithFacilities),
+		}), nil
+	}
 	facilities, err := a.facilityStore.GetAll(ctx)
 	if err != nil {
 		return nil, err
@@ -38,6 +46,7 @@ func (a *FacilityHandler) GetAllFacilities(ctx context.Context, req *connect.Req
 		protoFacilities[i] = facility.ToProto()
 	}
 
+	a.cache.Set("facilities", protoFacilities, 0)
 	return connect.NewResponse(&service.GetAllFacilitiesResponse{
 		Buildings: protoFacilities,
 	}), nil
@@ -59,6 +68,11 @@ func (a *FacilityHandler) GetAllBuildings(ctx context.Context, req *connect.Requ
 }
 
 func (a *FacilityHandler) GetFacility(ctx context.Context, req *connect.Request[service.GetFacilityRequest]) (*connect.Response[service.FullFacility], error) {
+	key := fmt.Sprintf("facility-%d", req.Msg.GetId())
+	cached, ok := a.cache.Get(key)
+	if ok {
+		return connect.NewResponse(cached.(*service.FullFacility)), nil
+	}
 	res, err := a.facilityStore.Get(ctx, req.Msg.GetId())
 
 	if err != nil {
@@ -82,15 +96,9 @@ func (a *FacilityHandler) GetFacility(ctx context.Context, req *connect.Request[
 	sort.Slice(res.Pricing, func(i, j int) bool {
 		return res.Pricing[i].Price < res.Pricing[j].Price
 	})
-
 	facility := res.ToProto()
-	a.log.Debug("GetFacility", "facility", facility.Pricing)
-	return connect.NewResponse(&service.FullFacility{
-		Facility:      facility.Facility,
-		Pricing:       facility.Pricing,
-		ReservationId: facility.ReservationId,
-		Building:      facility.Building,
-	}), nil
+	a.cache.Set(key, facility, cache.DefaultExpiration)
+	return connect.NewResponse(facility), nil
 }
 func (a *FacilityHandler) GetFacilityCategories(ctx context.Context, req *connect.Request[service.GetFacilityCategoriesRequest]) (*connect.Response[service.GetFacilityCategoriesResponse], error) {
 	res, err := a.facilityStore.GetCategories(ctx)
@@ -124,6 +132,7 @@ func (a *FacilityHandler) CreateFacility(ctx context.Context, req *connect.Reque
 	if err != nil {
 		return nil, err
 	}
+	a.cache.Delete("facilities")
 	return connect.NewResponse(&service.CreateFacilityResponse{}), nil
 
 }
@@ -132,6 +141,9 @@ func (a *FacilityHandler) UpdateFacility(ctx context.Context, req *connect.Reque
 	if err != nil {
 		return nil, err
 	}
+
+	a.cache.Delete("facilities")
+	a.cache.Delete(fmt.Sprintf("facility-%d", req.Msg.GetFacility().GetId()))
 	return connect.NewResponse(&service.UpdateFacilityResponse{}), nil
 
 }
@@ -140,6 +152,7 @@ func (a *FacilityHandler) DeleteFacility(ctx context.Context, req *connect.Reque
 	if err != nil {
 		return nil, err
 	}
+	a.cache.Delete("facilities")
 	return connect.NewResponse(&service.DeleteFacilityResponse{}), nil
 }
 
@@ -153,6 +166,10 @@ func (a *FacilityHandler) UpdateFacilityCategory(ctx context.Context, req *conne
 }
 
 func (a *FacilityHandler) GetAllEvents(ctx context.Context, req *connect.Request[service.GetAllEventsRequest]) (*connect.Response[service.GetAllEventsResponse], error) {
+	cached, ok := a.cache.Get("events")
+	if ok {
+		return connect.NewResponse(cached.(*service.GetAllEventsResponse)), nil
+	}
 	buildings, err := a.facilityStore.GetAllBuildings(ctx)
 	if err != nil {
 		return nil, err
@@ -188,13 +205,19 @@ func (a *FacilityHandler) GetAllEvents(ctx context.Context, req *connect.Request
 			Events:   events,
 		}
 	}
-
+	a.cache.Set("events", &service.GetAllEventsResponse{
+		Data: result,
+	}, cache.DefaultExpiration)
 	return connect.NewResponse(&service.GetAllEventsResponse{
 		Data: result,
 	}), nil
 }
 
 func (a *FacilityHandler) GetEventsByFacility(ctx context.Context, req *connect.Request[service.GetEventsByFacilityRequest]) (*connect.Response[service.GetEventsByFacilityResponse], error) {
+	cached, ok := a.cache.Get(fmt.Sprintf("events-%d", req.Msg.GetId()))
+	if ok {
+		return connect.NewResponse(cached.(*service.GetEventsByFacilityResponse)), nil
+	}
 	fac, err := a.facilityStore.Get(ctx, req.Msg.GetId())
 	if err != nil {
 		return nil, err
@@ -220,12 +243,19 @@ func (a *FacilityHandler) GetEventsByFacility(ctx context.Context, req *connect.
 			Title:       event.Summary,
 		}
 	}
+	a.cache.Set(fmt.Sprintf("events-%d", req.Msg.GetId()), &service.GetEventsByFacilityResponse{
+		Events: events,
+	}, cache.DefaultExpiration)
 	return connect.NewResponse(&service.GetEventsByFacilityResponse{
 		Events: events,
 	}), nil
 }
 
 func (a *FacilityHandler) GetEventsByBuilding(ctx context.Context, req *connect.Request[service.GetEventsByBuildingRequest]) (*connect.Response[service.GetEventsByBuildingResponse], error) {
+	cached, ok := a.cache.Get(fmt.Sprintf("events-%d", req.Msg.GetId()))
+	if ok {
+		return connect.NewResponse(cached.(*service.GetEventsByBuildingResponse)), nil
+	}
 	building, err := a.facilityStore.GetBuilding(ctx, req.Msg.GetId())
 	if err != nil {
 		return nil, err
@@ -252,6 +282,9 @@ func (a *FacilityHandler) GetEventsByBuilding(ctx context.Context, req *connect.
 			Title:       event.Summary,
 		}
 	}
+	a.cache.Set(fmt.Sprintf("events-%d", req.Msg.GetId()), &service.GetEventsByBuildingResponse{
+		Events: events,
+	}, cache.DefaultExpiration)
 	return connect.NewResponse(&service.GetEventsByBuildingResponse{
 		Events: events,
 	}), nil
@@ -276,6 +309,10 @@ func (a *FacilityHandler) GetCategories(ctx context.Context, req *connect.Reques
 }
 
 func (a *FacilityHandler) GetAllCoords(ctx context.Context, req *connect.Request[service.GetAllCoordsRequest]) (*connect.Response[service.GetAllCoordsResponse], error) {
+	cached, ok := a.cache.Get("coords")
+	if ok {
+		return connect.NewResponse(cached.(*service.GetAllCoordsResponse)), nil
+	}
 	coords, err := a.facilityStore.GetBuildingCoordinates(ctx)
 	if err != nil {
 		return nil, err
@@ -283,12 +320,19 @@ func (a *FacilityHandler) GetAllCoords(ctx context.Context, req *connect.Request
 	if len(coords) == 0 {
 		return connect.NewResponse(&service.GetAllCoordsResponse{}), nil
 	}
+	a.cache.Set("coords", &service.GetAllCoordsResponse{
+		Data: models.CoordsToProto(coords),
+	}, cache.DefaultExpiration)
 	return connect.NewResponse(&service.GetAllCoordsResponse{
 		Data: models.CoordsToProto(coords),
 	}), nil
 }
 
 func (a *FacilityHandler) GetProducts(ctx context.Context, req *connect.Request[service.GetProductsRequest]) (*connect.Response[service.GetProductsResponse], error) {
+	cached, ok := a.cache.Get("products")
+	if ok {
+		return connect.NewResponse(cached.(*service.GetProductsResponse)), nil
+	}
 	params := &stripe.ProductListParams{}
 	params.Limit = stripe.Int64(100)
 
@@ -319,12 +363,20 @@ func (a *FacilityHandler) GetProducts(ctx context.Context, req *connect.Request[
 		})
 	}
 
+	a.cache.Set("products", &service.GetProductsResponse{
+		Data: result,
+	}, cache.DefaultExpiration)
+
 	return connect.NewResponse(&service.GetProductsResponse{
 		Data: result,
 	}), nil
 }
 
 func (a *FacilityHandler) GetPricing(ctx context.Context, req *connect.Request[service.GetPricingRequest]) (*connect.Response[service.PricingWithCategory], error) {
+	cached, ok := a.cache.Get(fmt.Sprintf("pricing-%s", req.Msg.GetPricingId()))
+	if ok {
+		return connect.NewResponse(cached.(*service.PricingWithCategory)), nil
+	}
 	pricing, err := a.facilityStore.GetPricing(ctx, req.Msg.GetPricingId())
 
 	if err != nil {
@@ -348,6 +400,8 @@ func (a *FacilityHandler) GetPricing(ctx context.Context, req *connect.Request[s
 		CategoryName:        category.Name,
 		CategoryDescription: category.Description,
 	}
+
+	a.cache.Set(fmt.Sprintf("pricing-%s", req.Msg.GetPricingId()), result.ToProto(), cache.DefaultExpiration)
 
 	return connect.NewResponse(result.ToProto()), nil
 }

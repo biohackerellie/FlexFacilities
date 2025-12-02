@@ -7,12 +7,12 @@ import (
 	"api/pkg/calendar"
 	"api/pkg/files"
 	"fmt"
-	"log/slog"
-	"time"
-
 	"github.com/biohackerellie/flexauth"
 	"github.com/biohackerellie/flexauth/providers/entra"
+	"github.com/patrickmn/go-cache"
 	"github.com/stripe/stripe-go/v83"
+	"log/slog"
+	"time"
 )
 
 type Handlers struct {
@@ -45,8 +45,11 @@ func New(dbService *repository.DBService, log *slog.Logger, config *config.Confi
 		log.Error("Could not load timezone", "error", err)
 		panic(err)
 	}
+
+	c := cache.New(10*time.Minute, 15*time.Minute)
+
 	userHandler := NewUserHandler(dbService.UserStore, log)
-	facilityHandler := NewFacilityHandler(dbService.FacilityStore, log, cal, stripeClient)
+	facilityHandler := NewFacilityHandler(dbService.FacilityStore, log, cal, c, stripeClient)
 	reservationHandler := NewReservationHandler(dbService.ReservationStore, dbService.UserStore, dbService.FacilityStore, log, timezone, config, cal, stripeClient)
 	utilityHandler := NewUtilityHandler(dbService.ReservationStore, dbService.BrandingStore, log, timezone)
 	paymentHandler := NewPaymentHandler(log, config, dbService.FacilityStore, dbService.ReservationStore, stripeClient)
