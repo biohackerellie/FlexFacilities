@@ -11,6 +11,7 @@ require (
 	github.com/joho/godotenv v1.5.1
 	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/stripe/stripe-go/v83 v83.2.1
+	github.com/stripe/stripe-go/v84 v84.0.0
 	github.com/teambition/rrule-go v1.8.2
 	golang.org/x/oauth2 v0.33.0
 	google.golang.org/api v0.257.0
